@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "سوق الملخصات الجامعية",
@@ -49,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ar">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Tajawal:wght@400;500;600&display=swap"
@@ -57,6 +57,7 @@ export default function RootLayout({
         />
       </head>
       <body
+        dir="rtl"
         style={{
           fontFamily: "Tajawal, sans-serif",
           width: "100%",
