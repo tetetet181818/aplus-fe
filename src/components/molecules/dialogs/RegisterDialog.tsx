@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -30,18 +30,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { universities } from "@/constants/index";
+import { universities } from "@/constants";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Image from "next/image";
 import successImage from "../../../../public/success-icon.png";
+import useAuth from "@/hooks/useAuth";
+import { RegisterCredentials } from "@/types";
 
 interface RegisterProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToLogin: () => void;
 }
+
+const initialValues: RegisterCredentials = {
+  fullName: "",
+  email: "",
+  password: "",
+  university: "",
+};
 
 const RegisterDialog = ({
   isOpen,
@@ -52,21 +61,21 @@ const RegisterDialog = ({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [activeTab, setActiveTab] = useState("register");
   const [registeredEmail, setRegisteredEmail] = useState("");
-  const loading = false;
+  const { registerUser, isRegisterLoading } = useAuth();
+  const togglePassword = useCallback(
+    () => setShowPassword((prev) => !prev),
+    []
+  );
 
   const formik = useFormik({
-    initialValues: {
-      full_name: "",
-      email: "",
-      password: "",
-      university: "",
-    },
+    initialValues,
     validationSchema: registerSchema,
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { resetForm }) => {
       if (!termsAccepted) return;
       setRegisteredEmail(values.email);
+      registerUser(values);
       resetForm();
       setActiveTab("verify");
     },
@@ -74,7 +83,7 @@ const RegisterDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl  scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent">
         <DialogHeader>
           {activeTab === "register" && (
             <>
@@ -89,43 +98,36 @@ const RegisterDialog = ({
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
-          {/* Register Tab */}
           <TabsContent value="register">
             <form onSubmit={formik.handleSubmit} className="mt-4 space-y-5">
-              {/* Full Name */}
               <div className="space-y-2">
-                <Label htmlFor="full_name">اسم المستخدم</Label>
+                <Label htmlFor="fullName">اسم المستخدم</Label>
                 <div className="relative">
                   <User className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
-                    id="full_name"
-                    name="full_name"
-                    className="pr-10"
+                    id="fullName"
                     placeholder="اكتب اسمك هنا"
-                    value={formik.values.full_name}
-                    onChange={formik.handleChange}
+                    className="pr-10"
+                    {...formik.getFieldProps("fullName")}
                   />
                 </div>
-                {formik.errors.full_name && (
+                {formik.errors.fullName && (
                   <p className="text-xs text-red-500">
-                    {formik.errors.full_name}
+                    {formik.errors.fullName}
                   </p>
                 )}
               </div>
 
-              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email">البريد الإلكتروني</Label>
                 <div className="relative">
                   <Mail className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="email"
-                    name="email"
                     type="email"
-                    className="pr-10"
                     placeholder="example@email.com"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
+                    className="pr-10"
+                    {...formik.getFieldProps("email")}
                   />
                 </div>
                 {formik.errors.email && (
@@ -133,7 +135,6 @@ const RegisterDialog = ({
                 )}
               </div>
 
-              {/* University */}
               <div className="space-y-2">
                 <Label htmlFor="university">الجامعة</Label>
                 <div className="relative">
@@ -163,24 +164,21 @@ const RegisterDialog = ({
                 )}
               </div>
 
-              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password">كلمة المرور</Label>
                 <div className="relative">
                   <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="********"
                     className="pr-10"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
+                    {...formik.getFieldProps("password")}
                   />
                   <button
                     type="button"
+                    onClick={togglePassword}
                     className="absolute left-3 top-1/2 -translate-y-1/2"
-                    onClick={() => setShowPassword(!showPassword)}
                     aria-label="إظهار أو إخفاء كلمة المرور"
                   >
                     {showPassword ? (
@@ -200,7 +198,6 @@ const RegisterDialog = ({
                 )}
               </div>
 
-              {/* Terms */}
               <div className="flex items-start gap-2">
                 <Checkbox
                   id="terms"
@@ -228,13 +225,14 @@ const RegisterDialog = ({
                 </label>
               </div>
 
-              {/* Submit */}
               <Button
                 type="submit"
                 className="w-full rounded-lg shadow-md hover:shadow-lg transition-all"
-                disabled={loading || formik.isSubmitting || !termsAccepted}
+                disabled={
+                  isRegisterLoading || formik.isSubmitting || !termsAccepted
+                }
               >
-                {loading || formik.isSubmitting ? (
+                {isRegisterLoading || formik.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     جاري التسجيل...
@@ -245,7 +243,6 @@ const RegisterDialog = ({
               </Button>
             </form>
 
-            {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -269,7 +266,6 @@ const RegisterDialog = ({
             </p>
           </TabsContent>
 
-          {/* Verify Tab */}
           <TabsContent value="verify" className="py-6 text-center space-y-4">
             <Image
               src={successImage}

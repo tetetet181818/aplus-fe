@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import GoogleLoginButton from "@/components/atoms/GoogleLoginButton";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 
 interface LoginProps {
   isOpen: boolean;
@@ -25,8 +26,7 @@ interface LoginProps {
 
 const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const loading = false;
-
+  const { loginUser, isLoginLoading } = useAuth();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: loginSchema,
@@ -35,6 +35,7 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       resetForm();
       setSubmitting(false);
+      loginUser(values);
     },
   });
 
@@ -128,9 +129,9 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
           <Button
             type="submit"
             className="w-full rounded-lg shadow-md hover:shadow-lg transition-all"
-            disabled={loading || formik.isSubmitting}
+            disabled={isLoginLoading || formik.isSubmitting}
           >
-            {loading || formik.isSubmitting ? (
+            {isLoginLoading || formik.isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 جارٍ الدخول...

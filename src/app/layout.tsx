@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
+import { Providers } from "@/utils/Providers";
+import Layout from "@/components/templates/Layout";
 
 export const metadata: Metadata = {
   title: "سوق الملخصات الجامعية",
@@ -64,7 +66,9 @@ export default function RootLayout({
           overflowX: "hidden",
         }}
       >
-        {children}
+        <Providers>
+          <Layout>{children}</Layout>
+        </Providers>
       </body>
     </html>
   );

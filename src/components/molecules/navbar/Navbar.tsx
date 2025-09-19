@@ -8,22 +8,14 @@ import DesktopNav from "@/components/molecules/navbar/DesktopNav";
 import MobileMenu from "@/components/molecules/navbar/MobileMenu";
 import LoginDialog from "@/components/molecules/dialogs/LoginDialog";
 import RegisterDialog from "@/components/molecules/dialogs/RegisterDialog";
-import { User } from "@/types";
+import useAuth from "@/hooks/useAuth";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // user demo data
-  const user: User = {
-    full_name: "Alaa",
-    email: "alaa@email.com",
-    password: "alaa@123",
-    role: "admin",
-  };
-  const loading = false;
+  const { user, isCheckAuthLoading, isAuthenticated, logoutUser } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -38,9 +30,9 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    console.log("Logout");
+    logoutUser();
   };
-
+  // console.log(isAuthenticated);
   return (
     <header
       dir="rtl"
@@ -63,12 +55,12 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <DesktopNav
-          isAuthenticated={false}
+          isAuthenticated={isAuthenticated}
           user={user}
           onLoginOpen={() => setIsLoginDialogOpen(true)}
           onRegisterOpen={() => setIsRegisterDialogOpen(true)}
           handleLogout={handleLogout}
-          loading={loading}
+          loading={isCheckAuthLoading}
         />
 
         {/* Mobile Hamburger */}
@@ -94,7 +86,7 @@ export default function Navbar() {
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         searchQuery={searchQuery}
-        isAuthenticated={false}
+        isAuthenticated={isAuthenticated}
         user={user}
         onLoginOpen={() => {
           setIsLoginDialogOpen(true);

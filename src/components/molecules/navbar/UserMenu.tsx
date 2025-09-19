@@ -34,7 +34,7 @@ export default function UserMenu({ handleLogout, user }: UserMenuProps) {
           >
             <Avatar className="h-8 w-8">
               <AvatarFallback>
-                {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
+                {user?.fullName?.charAt(0)?.toUpperCase() || "?"}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -43,7 +43,7 @@ export default function UserMenu({ handleLogout, user }: UserMenuProps) {
           <DropdownMenuLabel className="font-normal py-2">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {user.full_name}
+                {user.fullName}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
                 {user.email}
