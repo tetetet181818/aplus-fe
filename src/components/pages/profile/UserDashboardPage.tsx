@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
 import {
   User as UserIcon,
   BookOpen,
@@ -12,7 +11,6 @@ import {
   Heart,
 } from "lucide-react";
 
-import UserProfileCard from "@/components/pages/profile/UserProfileCard";
 import EditProfileDialog from "@/components/molecules/dialogs/EditProfileDialog";
 import UserNotesTab from "@/components/pages/profile/UserNotesTab";
 import PurchasedNotesTab from "@/components/pages/profile/PurchasedNotesTab";
@@ -36,7 +34,7 @@ const staticUser: User = {
   balance: 500,
   withdrawal_times: 2,
   password: "password",
-  role: "user",
+  role: "student",
   createdAt: "2025-09-01",
   updatedAt: "2025-09-01",
 };
@@ -74,7 +72,6 @@ const staticPurchasedNotes: PurchasedNote[] = [
   },
 ];
 
-// ----------------- Component -----------------
 const UserDashboardPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -84,7 +81,6 @@ const UserDashboardPage = () => {
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
   const activeTab = searchParams.get("tab") || "profile";
-  const [userTotalEarnings] = useState<number>(250);
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -95,19 +91,14 @@ const UserDashboardPage = () => {
   // ----------------- UI -----------------
   return (
     <>
-      <motion.div
-        className="py-8 px-4 md:px-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <UserProfileCard
+      <div className="py-8 px-4 md:px-6">
+        {/* <UserProfileCard
           currentUser={staticUser}
           onEditProfile={() => setIsEditProfileOpen(true)}
           userNotesCount={staticNotes.length}
           purchasedNotesCount={staticPurchasedNotes.length}
           totalEarnings={userTotalEarnings}
-        />
+        /> */}
 
         <Tabs
           value={activeTab}
@@ -171,7 +162,7 @@ const UserDashboardPage = () => {
                 setIsReviewDialogOpen(true);
               }}
               hasUserReviewed={() => false}
-              userId={staticUser.id}
+              userId={staticUser._id}
               onNavigate={router.push}
               onDownload={(note) => console.log("download note", note)}
               downloadLoading={false}
@@ -217,7 +208,7 @@ const UserDashboardPage = () => {
           }
           user={staticUser}
         />
-      </motion.div>
+      </div>
     </>
   );
 };

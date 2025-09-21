@@ -6,16 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Download, Loader, ShoppingBag } from "lucide-react";
 import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
+import { Note } from "@/types";
 
 // 1. تعريف نوع بيانات الملخص المشتَرى
-interface PurchasedNote {
-  id: string;
-  title: string;
-  description: string;
-  cover_url: string;
-  price: number;
-  university: string;
-  college: string;
+interface PurchasedNote extends Note {
   saleId: string;
 }
 
@@ -40,6 +34,7 @@ const staticNotes: PurchasedNote[] = [
     university: "جامعة الملك سعود",
     college: "كلية العلوم",
     saleId: "ORD-1001",
+    rating: [],
   },
   {
     id: "2",
@@ -51,6 +46,7 @@ const staticNotes: PurchasedNote[] = [
     university: "جامعة القاهرة",
     college: "كلية الهندسة",
     saleId: "ORD-1002",
+    rating: [],
   },
   {
     id: "3",
@@ -63,6 +59,7 @@ const staticNotes: PurchasedNote[] = [
     university: "جامعة عين شمس",
     college: "كلية الآداب",
     saleId: "ORD-1003",
+    rating: [],
   },
 ];
 
@@ -103,7 +100,7 @@ const PurchasedNotesTab = ({
                   alt={note.title}
                   width={500}
                   height={500}
-                  src={note.cover_url}
+                  src={note.cover_url || ""}
                   className="object-cover w-full h-full"
                   placeholder="blur"
                   blurDataURL="/placeholder-image.jpg"
@@ -111,7 +108,6 @@ const PurchasedNotesTab = ({
                 />
               </div>
 
-              {/* التفاصيل */}
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-start mb-1">

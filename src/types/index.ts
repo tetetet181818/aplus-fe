@@ -32,4 +32,6 @@ export interface Note {
   cover_url?: string;
   file_path?: string;
   rating: object[];
+  university: string;
+  college: string;
 }
