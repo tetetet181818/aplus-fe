@@ -8,6 +8,7 @@ const baseUrl =
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/auth` }),
+  tagTypes: ["Auth", "User"],
   endpoints: (builder) => ({
     checkAuth: builder.query({
       query: (token) => ({
@@ -17,10 +18,12 @@ export const authApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      providesTags: ["Auth"],
     }),
 
     verify: builder.mutation({
       query: (token) => `/verify?token=${token}`,
+      invalidatesTags: ["Auth"],
     }),
 
     register: builder.mutation({
@@ -29,6 +32,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      invalidatesTags: ["Auth", "User"],
     }),
 
     login: builder.mutation({
@@ -37,10 +41,12 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      invalidatesTags: ["Auth", "User"],
     }),
 
     getUser: builder.query({
       query: (id) => `users/${id}`,
+      providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
     logout: builder.mutation({
@@ -48,6 +54,7 @@ export const authApi = createApi({
         url: "/logout",
         method: "POST",
       }),
+      invalidatesTags: ["Auth", "User"],
     }),
 
     deleteAccount: builder.mutation({
@@ -55,6 +62,7 @@ export const authApi = createApi({
         url: "/delete-account",
         method: "POST",
       }),
+      invalidatesTags: ["Auth", "User"],
     }),
   }),
 });
