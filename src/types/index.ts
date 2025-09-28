@@ -1,3 +1,7 @@
+export interface Like {
+  noteId: string;
+}
+
 export type User = {
   _id: string;
   fullName: string;
@@ -7,6 +11,7 @@ export type User = {
   role: string;
   balance: number;
   withdrawal_times: number;
+  likesList?: Like[];
   createdAt: string;
   updatedAt: string;
 };
@@ -24,14 +29,59 @@ export interface LoginCredentials {
 }
 
 export interface Note {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   price: number;
   downloads?: number;
   cover_url?: string;
   file_path?: string;
-  rating: object[];
+  pagesNumber?: number;
+  subject: string;
+  year: number;
+  rating: number;
   university: string;
   college: string;
+  reviews: Review[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Review {
+  _id: string;
+  note_id: string;
+  user_id: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type FormValues = {
+  cover: File;
+  title: string;
+  price: number;
+  description: string;
+  university: string;
+  college: string;
+  subject: string;
+  pagesNumber: number;
+  year: number;
+  contactMethod: string;
+  fileUploaded: boolean;
+  imageUploaded: boolean;
+  termsAccepted: boolean;
+};
+
+export interface CreateNoteData {
+  title: string;
+  description: string;
+  price: number;
+  pages_number?: number;
+  subject: string;
+  year: number;
+  university: string;
+  college: string;
+  cover: File;
+  file: File;
 }

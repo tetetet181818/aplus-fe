@@ -53,7 +53,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <DesktopNav
           isAuthenticated={isAuthenticated}
           user={user}

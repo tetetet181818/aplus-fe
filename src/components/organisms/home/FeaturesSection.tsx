@@ -7,9 +7,8 @@ import {
   DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { JSX, ReactNode } from "react";
-
+import Link from "next/link";
 interface FeatureCardProps {
   icon: ReactNode;
   title: string;
@@ -121,7 +120,7 @@ const FeaturesSection = (): JSX.Element => {
             شارك — تعلم — اربح
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/notes" passHref legacyBehavior>
+            <Link href="/notes">
               <Button
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary/10 px-8 py-3 rounded-lg transition-colors"
@@ -129,7 +128,7 @@ const FeaturesSection = (): JSX.Element => {
                 تصفح الملخصات
               </Button>
             </Link>
-            <Link href="/signup" passHref legacyBehavior>
+            <Link href="/signup">
               <Button className="bg-primary hover:bg-primary/90 px-8 py-3 text-white rounded-lg transition-colors">
                 انضم الآن
               </Button>

@@ -33,9 +33,12 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      resetForm();
       setSubmitting(false);
-      loginUser(values);
+      const res = await loginUser(values);
+      if (res) {
+        resetForm();
+        onClose();
+      }
     },
   });
 

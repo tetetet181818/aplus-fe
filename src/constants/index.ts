@@ -12,14 +12,6 @@ import {
   BarChart3,
 } from "lucide-react";
 
-export const universities = [
-  "جامعة الملك سعود",
-  "جامعة الإمام محمد بن سعود ",
-  "جامعة الملك فهد للبترول والمعادن",
-  "جامعة الملك عبدالعزيز",
-  "جامعة الملك خالد",
-];
-
 export const universityColleges = {
   "جامعة الملك سعود": [
     "كلية الطب",
@@ -94,11 +86,11 @@ export const navigationItems = [
   },
 ];
 
-export const MAX_NOTES_PER_USER = 50;
-export const MAX_FILE_SIZE_MB = 30;
-export const MAX_PAGES_PER_NOTE = 300;
-export const ALLOWED_FILE_TYPES = ["application/pdf"];
-export const ALLOWED_FILE_TYPES_STRING = "pdf";
+export const MAX_NOTES_PER_USER: number = 50;
+export const MAX_FILE_SIZE_MB: number = 30;
+export const MAX_PAGES_PER_NOTE: number = 300;
+export const ALLOWED_FILE_TYPES: string[] = ["application/pdf"];
+export const ALLOWED_FILE_TYPES_STRING: string = "pdf";
 
 export const SAUDI_BANKS = [
   { name: "البنك الأهلي التجاري", code: "NCB" },
@@ -215,3 +207,75 @@ export const statusVariantMap = {
   rejected: "destructive",
   completed: "completed",
 };
+
+export const universityData = [
+  {
+    id: 1,
+    name: "جامعة الملك سعود",
+    colleges: [
+      "كلية الطب",
+      "كلية الهندسة",
+      "كلية علوم الحاسب",
+      "كلية الصيدلة",
+      "كلية إدارة الأعمال",
+      "كلية النشاط البدني والرياضي",
+      "كلية العمارة والتخطيط",
+    ],
+  },
+  {
+    id: 2,
+    name: "جامعة الملك فهد للبترول والمعادن",
+    colleges: [
+      "كلية الهندسة الكيميائية",
+      "كلية الهندسة الكهربائية",
+      "كلية الهندسة الميكانيكية",
+      "كلية هندسة الحاسب",
+      "كلية الهندسة المدنية",
+      "كلية الهندسة الصناعية",
+      "كلية علوم الحاسب",
+      "كلية إدارة الأعمال",
+      "كلية العلوم",
+    ],
+  },
+  {
+    id: 3,
+    name: "جامعة الملك عبدالعزيز",
+    colleges: [
+      "كلية الطب",
+      "كلية الهندسة",
+      "كلية علوم الحاسب",
+      "كلية الصيدلة",
+      "كلية إدارة الأعمال",
+      "كلية الإعلام",
+      "كلية الآداب",
+    ],
+  },
+  {
+    id: 4,
+    name: "جامعة الإمام محمد بن سعود",
+    colleges: [
+      "كلية الشريعة",
+      "كلية أصول الدين",
+      "كلية الطب",
+      "كلية القانون",
+      "كلية إدارة الأعمال",
+      "كلية الهندسة",
+      "كلية الإعلام",
+    ],
+  },
+  {
+    id: 5,
+    name: "جامعة الملك خالد",
+    colleges: [
+      "كلية الطب",
+      "كلية الهندسة",
+      "كلية الحاسب الآلي",
+      "كلية إدارة الأعمال",
+      "كلية الصيدلة",
+      "كلية العلوم الطبية التطبيقية",
+      "كلية التربية",
+    ],
+  },
+];
+
+export const universities = universityData.map((uni) => uni.name);

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -20,8 +21,17 @@ const DesktopNav = ({
   onLoginOpen,
   onRegisterOpen,
   handleLogout,
-  loading,
 }: DesktopNavProps) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) {
+    return <div>جاري تحميل...</div>;
+  }
+
   return (
     <nav className="hidden md:flex items-center gap-3">
       <Link href={"/notes"}>
@@ -30,7 +40,7 @@ const DesktopNav = ({
         </Button>
       </Link>
 
-      {loading ? null : isAuthenticated && user ? (
+      {isAuthenticated && user ? (
         <>
           <Link href="/add-note">
             <Button className="text-base bg-primary hover:bg-primary/90">

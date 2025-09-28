@@ -46,7 +46,16 @@ const staticNotes: PurchasedNote[] = [
     university: "جامعة القاهرة",
     college: "كلية الهندسة",
     saleId: "ORD-1002",
-    rating: [],
+    rating: 123,
+    subject: "فيزياء",
+    year: 2025,
+    reviews: [],
+    createdAt: "2025-09-01",
+    updatedAt: "2025-09-01",
+    pages_number: 123,
+    downloads: 123,
+    contact_method: "email",
+    owner_id: "1",
   },
   {
     id: "3",
@@ -69,7 +78,6 @@ const PurchasedNotesTab = ({
   onNavigate = (path) => console.log("Navigate to:", path),
   onDownload = (note) => console.log("Download note:", note),
   loading = false,
-  downloadLoading = false,
 }: Partial<PurchasedNotesTabProps>) => {
   if (!loading && notes?.length === 0) {
     return (
@@ -147,9 +155,9 @@ const PurchasedNotesTab = ({
                       onClick={() => onDownload(note)}
                       variant="outline"
                       className="border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600"
-                      disabled={downloadLoading}
+                      disabled={false}
                     >
-                      {downloadLoading ? (
+                      {false ? (
                         <>
                           <Loader className="size-5 animate-spin" />
                           <span>جاري التحميل</span>

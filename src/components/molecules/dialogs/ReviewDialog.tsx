@@ -26,16 +26,19 @@ interface ReviewDialogProps {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   noteTitle: string;
-  currentUser: User;
+  user: User;
   noteId: string;
-  addReviewToNote: (noteId: string, reviewData: any) => Promise<any>;
+  addReviewToNote: (
+    noteId: string,
+    reviewData: { rating: number; comment: string }
+  ) => Promise<void>;
 }
 
 const ReviewDialog = ({
   isOpen,
   onOpenChange,
   noteTitle,
-  currentUser,
+  user,
   noteId,
   addReviewToNote,
 }: ReviewDialogProps) => {
@@ -49,15 +52,12 @@ const ReviewDialog = ({
       const reviewData = {
         rating: values.rating,
         comment: values.comment,
-        userId: currentUser._id,
-        userName: currentUser.fullName,
-        userAvatar: currentUser.fullName.substring(0, 1).toUpperCase(),
+        userId: user._id,
+        userName: user.fullName,
+        userAvatar: user.fullName.substring(0, 1).toUpperCase(),
         created_at: new Date().toISOString(),
       };
-      const res = await addReviewToNote({
-        noteId,
-        reviewData,
-      });
+      const res = await addReviewToNote(noteId, reviewData);
 
       if (res) {
         onOpenChange(false);

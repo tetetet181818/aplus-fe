@@ -27,7 +27,7 @@ const CallToActionSection = (): JSX.Element => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6">
-          <Link href="/notes" passHref legacyBehavior>
+          <Link href="/notes">
             <Button
               size="lg"
               className="bg-white flex justify-center items-center gap-2 text-primary hover:bg-gray-100 hover:shadow-2xl transition-all hover:scale-105 w-full sm:w-auto px-8 py-3.5 text-base font-semibold rounded-xl"
@@ -38,7 +38,7 @@ const CallToActionSection = (): JSX.Element => {
             </Button>
           </Link>
 
-          <Link href="/add-note" passHref legacyBehavior>
+          <Link href="/add-note">
             <Button
               size="lg"
               variant="outline"

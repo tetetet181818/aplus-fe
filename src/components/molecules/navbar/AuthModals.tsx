@@ -11,17 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginSchema, registerSchema } from "@/utils/validation/authValidation";
-import { toast } from "@/components/ui/use-toast";
+import Link from "next/link";
+
+interface LoginDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onLogin: (values: { email: string; password: string }) => void;
+  onSwitchToRegister: () => void;
+}
 
 export const LoginDialog = ({
   isOpen,
   onOpenChange,
   onLogin,
   onSwitchToRegister,
-}) => {
+}: LoginDialogProps) => {
   const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -29,17 +35,16 @@ export const LoginDialog = ({
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         setLoading(true);
-        await onLogin(values);
-        onOpenChange(false);
+        const res = await onLogin(values);
+        if (res) {
+          onOpenChange(false);
+          resetForm();
+        }
       } catch (error) {
-        toast({
-          title: "خطأ في تسجيل الدخول",
-          description: error.message || "حدث خطأ أثناء تسجيل الدخول",
-          variant: "destructive",
-        });
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -95,7 +100,10 @@ export const LoginDialog = ({
             )}
           </div>
           <div className="text-sm text-right">
-            <Link to="#" className="font-medium text-primary hover:underline">
+            <Link
+              href="/forgot-password"
+              className="font-medium text-primary hover:underline"
+            >
               نسيت كلمة المرور؟
             </Link>
           </div>
@@ -123,12 +131,23 @@ export const LoginDialog = ({
   );
 };
 
+interface RegisterDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onRegister: (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => void;
+  onSwitchToLogin: () => void;
+}
+
 export const RegisterDialog = ({
   isOpen,
   onOpenChange,
   onRegister,
   onSwitchToLogin,
-}) => {
+}: RegisterDialogProps) => {
   const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -143,11 +162,6 @@ export const RegisterDialog = ({
         await onRegister(values);
         onOpenChange(false);
       } catch (error) {
-        toast({
-          title: "خطأ في التسجيل",
-          description: error.message || "حدث خطأ أثناء التسجيل",
-          variant: "destructive",
-        });
       } finally {
         setLoading(false);
       }
