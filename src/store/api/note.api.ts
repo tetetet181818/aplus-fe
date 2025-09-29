@@ -88,6 +88,36 @@ export const noteApi = createApi({
       }),
       invalidatesTags: ["Note"],
     }),
+
+    getUserNotes: builder.query({
+      query: ({ token }: { token: string }) => ({
+        url: `/my-notes`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Note"],
+    }),
+
+    getPurchasedNotes: builder.query({
+      query: ({ token }: { token: string }) => ({
+        url: `/purchased`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Note"],
+    }),
+
+    getLikedNotes: builder.query({
+      query: ({ token }: { token: string }) => ({
+        url: `/likes-notes`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Note"],
+    }),
   }),
 });
 
@@ -99,4 +129,7 @@ export const {
   useMakeUnlikeNoteMutation,
   useToggleLikeQuery,
   useDeleteNoteMutation,
+  useGetUserNotesQuery,
+  useGetPurchasedNotesQuery,
+  useGetLikedNotesQuery,
 } = noteApi;

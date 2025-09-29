@@ -15,26 +15,37 @@ import {
 import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
 import { Note } from "@/types";
-
-// -------- Typings --------
+import { useRouter } from "next/navigation";
 
 interface UserNotesTabProps {
   notes: Note[];
   onDeleteRequest: (note: Note) => void;
-  onNavigate: (path: string) => void;
+  router: ReturnType<typeof useRouter>;
   onDownloadRequest: (note: Note) => void;
+
+  /** Loading state for download actions */
   loading: boolean;
 }
 
-// -------- Component --------
+/**
+ * UserNotesTab Component
+ *
+ * Displays the user's notes in a card layout with actions:
+ * - View note
+ * - Download note
+ * - Edit note
+ * - Delete note
+ *
+ * If no notes are available, shows a friendly "No Results" component.
+ */
 const UserNotesTab = ({
   notes,
-  onDeleteRequest = (note) => console.log("Delete note:", note),
-  onNavigate = (path) => console.log("Navigate to:", path),
-  onDownloadRequest = (note) => console.log("Download note:", note),
-  loading = false,
-}: Partial<UserNotesTabProps>) => {
-  if (notes?.length === 0) {
+  onDeleteRequest,
+  onDownloadRequest,
+  router,
+  loading,
+}: UserNotesTabProps) => {
+  if (!notes || notes.length === 0) {
     return (
       <NoResults
         icon={<BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />}
@@ -42,7 +53,7 @@ const UserNotesTab = ({
         message="لم تقم بإضافة أي ملخصات بعد."
         actionButton={
           <Button
-            onClick={() => onNavigate("/add-note")}
+            onClick={() => router.push("/add-note")}
             className="flex items-center gap-2 w-full"
           >
             <PlusCircle className="h-4 w-4" />
@@ -55,13 +66,13 @@ const UserNotesTab = ({
 
   return (
     <div className="space-y-6">
-      {notes?.map((note) => (
+      {notes.map((note) => (
         <Card
-          key={note.id}
+          key={note._id}
           className="py-0 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
         >
           <div className="flex flex-col sm:flex-row">
-            {/* صورة الغلاف */}
+            {/* Note Cover */}
             <div className="relative w-full sm:w-1/3 lg:w-1/4 aspect-video sm:aspect-[4/3] bg-gradient-to-br from-blue-50 dark:from-gray-700 dark:to-gray-900">
               <Image
                 loading="lazy"
@@ -70,13 +81,11 @@ const UserNotesTab = ({
                 height={500}
                 src={note.cover_url || ""}
                 className="object-cover w-full h-full"
-                placeholder="blur"
-                blurDataURL="/placeholder-image.jpg"
                 sizes="(max-width: 639px) 100vw, (max-width: 1023px) 33vw, 25vw"
               />
             </div>
 
-            {/* التفاصيل */}
+            {/* Note Info */}
             <div className="p-4 flex-1 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-1">
@@ -91,12 +100,16 @@ const UserNotesTab = ({
                   {note.description}
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs mb-3">
-                  <Badge variant="outline">{note.university}</Badge>
-                  <Badge variant="outline">{note.subject}</Badge>
+                  {note.university && (
+                    <Badge variant="outline">{note.university}</Badge>
+                  )}
+                  {note.subject && (
+                    <Badge variant="outline">{note.subject}</Badge>
+                  )}
                 </div>
               </div>
 
-              {/* الأزرار */}
+              {/* Actions */}
               <div className="flex flex-col sm:flex-row justify-between items-center mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 sm:mb-0">
                   التحميلات: {note.downloads || 0} | التقييم:{" "}
@@ -106,7 +119,7 @@ const UserNotesTab = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => onNavigate(`/notes/${note.id}`)}
+                    onClick={() => router.push(`/notes/${note._id}`)}
                   >
                     <Eye className="h-4 w-4 ml-1" />
                     عرض
@@ -133,7 +146,7 @@ const UserNotesTab = ({
                     variant="ghost"
                     size="sm"
                     className="text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900"
-                    onClick={() => onNavigate(`/add-note/${note.id}`)}
+                    onClick={() => router.push(`/add-note/${note._id}`)}
                   >
                     <Edit className="h-4 w-4 ml-1" />
                     تعديل

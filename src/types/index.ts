@@ -10,7 +10,7 @@ export type User = {
   university: string;
   role: string;
   balance: number;
-  withdrawal_times: number;
+  withdrawalTimes: number;
   likesList?: Like[];
   createdAt: string;
   updatedAt: string;
@@ -84,4 +84,11 @@ export interface CreateNoteData {
   college: string;
   cover: File;
   file: File;
+}
+
+export interface withdrawalData {
+  amount: number;
+  accountName: string;
+  bankName: string;
+  iban: string;
 }

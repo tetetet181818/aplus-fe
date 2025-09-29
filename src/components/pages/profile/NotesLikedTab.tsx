@@ -3,12 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Heart } from "lucide-react";
+import { Eye, Heart, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import useNotes from "@/hooks/useNotes";
+import NoResults from "@/components/atoms/NoResults";
 
 interface Note {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   cover_url: string;
@@ -17,49 +20,28 @@ interface Note {
   college: string;
 }
 
-const NotesLikedTab = () => {
-  // بيانات ثابتة للتجربة (UI فقط)
-  const likedNotes: Note[] = [
-    {
-      id: "1",
-      title: "ملخص مادة الرياضيات",
-      description:
-        "ملخص شامل يغطي أساسيات التفاضل والتكامل مع أمثلة محلولة لتسهيل الفهم.",
-      cover_url:
-        "https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?w=800&q=80",
-      price: 25,
-      university: "جامعة الملك سعود",
-      college: "كلية العلوم",
-    },
-    {
-      id: "2",
-      title: "ملخص مادة الفيزياء",
-      description:
-        "ملاحظات مفصلة عن ميكانيكا الكم مع شروحات مبسطة ورسومات توضيحية.",
-      cover_url:
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80",
-      price: 30,
-      university: "جامعة القاهرة",
-      college: "كلية الهندسة",
-    },
-    {
-      id: "3",
-      title: "ملخص مادة الأدب العربي",
-      description:
-        "تحليل للنصوص الشعرية والنثرية مع أسئلة مراجعة تساعد على الاستعداد للامتحان.",
-      cover_url:
-        "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80",
-      price: 20,
-      university: "جامعة عين شمس",
-      college: "كلية الآداب",
-    },
-  ];
+const NotesLikedTab = ({ notes }: { notes: Note[] }) => {
+  const { removeNoteFromLikeList, unlikeLoading } = useNotes();
 
+  if (notes?.length === 0) {
+    return (
+      <NoResults
+        icon={<Heart className="h-12 w-12 text-blue-600" />}
+        title="لا يوجد ملخصات مفضلة"
+        message="لا يوجد ملخصات مفضلة"
+        actionButton={
+          <Button variant="default" className="mt-4">
+            <Link href="/notes"> ابحث عن ملخصات</Link>
+          </Button>
+        }
+      />
+    );
+  }
   return (
     <div className="space-y-6">
-      {likedNotes.map((note) => (
+      {notes?.map((note) => (
         <motion.div
-          key={note.id}
+          key={note._id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
@@ -140,16 +122,29 @@ const NotesLikedTab = () => {
                       size="sm"
                       className="w-full xs:w-auto py-5 text-white transition-colors"
                     >
-                      <Eye className="h-4 w-4 ml-1 text-white" />
-                      <span className="text-white">عرض التفاصيل</span>
+                      <Link
+                        className="flex items-center gap-1"
+                        href={`/notes/${note._id}`}
+                      >
+                        <Eye className="h-4 w-4 ml-1 text-white" />
+                        <span className="text-white">عرض التفاصيل</span>
+                      </Link>
                     </Button>
 
                     <Button
                       variant="ghost"
                       size="sm"
                       className="w-full xs:w-auto py-5 px-4 text-white bg-red-600 hover:bg-red-700 hover:text-white transition-colors"
+                      onClick={() =>
+                        removeNoteFromLikeList({ noteId: note._id })
+                      }
+                      disabled={unlikeLoading}
                     >
-                      <Heart className="h-4 w-4 ml-1 fill-current" />
+                      {unlikeLoading ? (
+                        <Loader2 className="h-4 w-4 ml-1 animate-spin" />
+                      ) : (
+                        <Heart className="h-4 w-4 ml-1 fill-current" />
+                      )}
                       <span>إزالة الإعجاب</span>
                     </Button>
                   </div>

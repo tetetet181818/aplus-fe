@@ -1,0 +1,15 @@
+{
+  "editor.fontFamily": "Fira Code",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "workbench.list.smoothScrolling": true,
+  "terminal.integrated.smoothScrolling": true,
+  "editor.smoothScrolling": true,
+  "editor.cursorBlinking": "expand",
+  "editor.tabSize": 2,
+  "editor.tabCompletion": "on",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "cSpell.autoFormatConfigFile": false,
+  "notebook.defaultFormatter": "esbenp.prettier-vscode"
+}

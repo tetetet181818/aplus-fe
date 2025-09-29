@@ -19,197 +19,189 @@ import ReviewDialog from "@/components/molecules/dialogs/ReviewDialog";
 import ProfileInfoTab from "@/components/pages/profile/ProfileInfoTab";
 import EarningsTab from "@/components/pages/profile/EarningsTab";
 import NotesLikedTab from "@/components/pages/profile/NotesLikedTab";
-import { Note, User } from "@/types";
 
-interface PurchasedNote extends Note {
-  saleId: string;
-}
+import useAuth from "@/hooks/useAuth";
+import { Skeleton } from "@/components/ui/skeleton";
+import useNotes from "@/hooks/useNotes";
+import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 
-// ----------------- Static Data -----------------
-const staticUser: User = {
-  _id: "u1",
-  fullName: "محمد علي أحمد",
-  email: "mohamed@example.com",
-  university: "جامعة الملك سعود",
-  balance: 500,
-  withdrawal_times: 2,
-  password: "password",
-  role: "student",
-  createdAt: "2025-09-01",
-  updatedAt: "2025-09-01",
-};
-
-const staticNotes: Note[] = [
-  {
-    id: "n1",
-    title: "ملخص الرياضيات",
-    description: "يغطي أساسيات التفاضل والتكامل مع أمثلة محلولة.",
-    price: 25,
-    downloads: 10,
-    cover_url:
-      "https://images.unsplash.com/photo-1509223197845-458d87318791?w=400&q=80",
-  },
-  {
-    id: "n2",
-    title: "ملخص الفيزياء",
-    description: "ملاحظات شاملة عن الميكانيكا الكلاسيكية.",
-    price: 30,
-    downloads: 5,
-    cover_url:
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=80",
-  },
-];
-
-const staticPurchasedNotes: PurchasedNote[] = [
-  {
-    id: "p1",
-    title: "ملخص الأدب العربي",
-    description: "تحليل النصوص الشعرية والنثرية مع أسئلة للمراجعة.",
-    price: 20,
-    saleId: "ORD-101",
-    cover_url:
-      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80",
-  },
-];
-
+/**
+ * UserDashboardPage
+ *
+ * A tabbed dashboard page where users can:
+ * - View and update profile info
+ * - Manage their own notes
+ * - See purchased notes and leave reviews
+ * - Check their earnings
+ * - Browse liked notes
+ *
+ * Displays skeleton placeholders while loading user data.
+ */
 const UserDashboardPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const { user, loading } = useAuth();
+  const {
+    userNotes,
+    userNotesLoading,
+    purchasedNotes,
+    purchasedNotesLoading,
+    likedNotes,
+    likedNotesLoading,
+  } = useNotes();
+  // Dialog states
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
+  // Current active tab (from URL query param)
   const activeTab = searchParams.get("tab") || "profile";
 
+  /**
+   * Update URL query param when the active tab changes
+   * @param value - the tab identifier
+   */
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("tab", value);
     router.replace(`/profile?${params.toString()}`);
   };
 
+  // ----------------- Skeleton Loading -----------------
+  if (loading) {
+    return (
+      <div className="py-8 px-4 md:px-6 space-y-6">
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-10 w-1/3" />
+          <Skeleton className="h-6 w-2/3" />
+          <Skeleton className="h-40 w-full rounded-md" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <Skeleton className="h-24 w-full rounded-md" />
+          <Skeleton className="h-24 w-full rounded-md" />
+          <Skeleton className="h-24 w-full rounded-md" />
+          <Skeleton className="h-24 w-full rounded-md" />
+        </div>
+      </div>
+    );
+  }
+
   // ----------------- UI -----------------
   return (
-    <>
-      <div className="py-8 px-4 md:px-6">
-        {/* <UserProfileCard
-          currentUser={staticUser}
-          onEditProfile={() => setIsEditProfileOpen(true)}
-          userNotesCount={staticNotes.length}
-          purchasedNotesCount={staticPurchasedNotes.length}
-          totalEarnings={userTotalEarnings}
-        /> */}
+    <div className="py-8 px-4 md:px-6">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-20">
+        <TabsList className="flex w-full flex-nowrap gap-2 bg-transparent p-2 rounded-2xl border border-gray-300 dark:border-gray-600 shadow-inner mb-6 overflow-x-auto scrollbar-hide">
+          {[
+            { value: "profile", icon: UserIcon, label: "معلوماتي" },
+            { value: "my-notes", icon: BookOpen, label: "ملخصاتي" },
+            { value: "purchased", icon: ShoppingBag, label: "مشترياتي" },
+            { value: "earnings", icon: DollarSign, label: "أرباحي" },
+            { value: "notesLiked", icon: Heart, label: "إعجاباتي" },
+          ].map(({ value, icon: Icon, label }) => (
+            <TabsTrigger
+              key={value}
+              value={value}
+              className="flex-shrink-0 min-w-[100px] sm:min-w-[120px] flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm font-medium transition-all duration-300
+        data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 
+        data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
+        hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105 rounded-xl sm:rounded-full border border-transparent
+        data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-400"
+            >
+              <Icon className="size-4 sm:size-5 flex-shrink-0" />
+              <span className="whitespace-nowrap">{label}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          className="mt-20"
-        >
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2 bg-muted/50 dark:bg-muted/30 p-1.5 rounded-lg mb-6">
-            {[
-              { value: "profile", icon: UserIcon, label: "معلوماتي" },
-              { value: "my-notes", icon: BookOpen, label: "ملخصاتي" },
-              { value: "purchased", icon: ShoppingBag, label: "مشترياتي" },
-              { value: "earnings", icon: DollarSign, label: "أرباحي" },
-              { value: "notesLiked", icon: Heart, label: "الاعجابات" },
-            ].map(({ value, icon: Icon, label }) => (
-              <TabsTrigger
-                key={value}
-                value={value}
-                className="flex flex-col md:flex-row items-center justify-center gap-1.5 py-2 px-3 text-sm font-medium transition-all
-                    data-[state=active]:bg-primary data-[state=active]:text-white
-                    data-[state=active]:shadow-sm rounded-md hover:bg-muted dark:hover:bg-muted/50"
-              >
-                <Icon className="h-4 w-4 flex-shrink-0" />
-                <span>{label}</span>
-              </TabsTrigger>
-            ))}
-          </TabsList>
+        {/* Profile Tab */}
+        <TabsContent value="profile" className="mt-6">
+          <ProfileInfoTab
+            user={user}
+            loading={false}
+            updateUserInfo={() => console.log("update user")}
+            deleteAccount={() => console.log("delete account")}
+            updateUserPassword={() => console.log("update password")}
+          />
+        </TabsContent>
 
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="mt-6">
-            <ProfileInfoTab
-              user={staticUser}
-              loading={false}
-              updateUserInfo={() => console.log("update user")}
-              deleteAccount={() => console.log("delete account")}
-              updateUserPassword={() => console.log("update password")}
-            />
-          </TabsContent>
-
-          {/* User Notes Tab */}
-          <TabsContent value="my-notes" className="mt-6">
+        {/* User Notes Tab */}
+        <TabsContent value="my-notes" className="mt-6">
+          {userNotesLoading ? (
+            <NoteCardSkeleton />
+          ) : (
             <UserNotesTab
-              notes={staticNotes}
+              notes={userNotes}
               onDeleteRequest={(note) => {
-                console.log("delete request", note);
                 setIsDeleteConfirmOpen(true);
+                console.log("delete request", note);
               }}
-              onNavigate={router.push}
+              router={router}
               onDownloadRequest={(note) =>
                 console.log("download request", note)
               }
-              loading={false}
+              loading={userNotesLoading}
             />
-          </TabsContent>
+          )}
+        </TabsContent>
 
-          {/* Purchased Notes Tab */}
-          <TabsContent value="purchased" className="mt-6">
+        {/* Purchased Notes Tab */}
+        <TabsContent value="purchased" className="mt-6">
+          {purchasedNotesLoading ? (
+            <NoteCardSkeleton />
+          ) : (
             <PurchasedNotesTab
-              notes={staticPurchasedNotes}
-              onReviewRequest={(note) => {
-                console.log("review request", note);
-                setIsReviewDialogOpen(true);
-              }}
-              hasUserReviewed={() => false}
-              userId={staticUser._id}
-              onNavigate={router.push}
+              notes={purchasedNotes}
+              router={router}
               onDownload={(note) => console.log("download note", note)}
               downloadLoading={false}
-              loading={false}
+              loading={purchasedNotesLoading}
             />
-          </TabsContent>
+          )}
+        </TabsContent>
 
-          {/* Earnings Tab */}
-          <TabsContent value="earnings" className="mt-6">
-            <EarningsTab
-              currentUser={staticUser}
-              getSellerNotes={() => Promise.resolve(staticNotes)}
-            />
-          </TabsContent>
+        {/* Earnings Tab */}
+        <TabsContent value="earnings" className="mt-6">
+          <EarningsTab currentUser={user} />
+        </TabsContent>
 
-          {/* Liked Notes Tab */}
-          <TabsContent value="notesLiked" className="mt-6">
-            <NotesLikedTab />
-          </TabsContent>
-        </Tabs>
+        {/* Liked Notes Tab */}
+        <TabsContent value="notesLiked" className="mt-6">
+          {likedNotesLoading ? (
+            <NoteCardSkeleton />
+          ) : (
+            <NotesLikedTab notes={likedNotes} />
+          )}
+        </TabsContent>
+      </Tabs>
 
-        <EditProfileDialog
-          isOpen={isEditProfileOpen}
-          onOpenChange={setIsEditProfileOpen}
-          user={staticUser}
-          onUpdateProfile={() => console.log("update profile")}
-          universities={["جامعة الملك سعود", "جامعة القاهرة"]}
-        />
+      {/* Edit Profile Dialog */}
+      <EditProfileDialog
+        isOpen={isEditProfileOpen}
+        onOpenChange={setIsEditProfileOpen}
+        currentUser={user}
+        onUpdateProfile={() => console.log("update profile")}
+        universities={["جامعة الملك سعود", "جامعة القاهرة"]}
+      />
 
-        <DeleteConfirmationDialog
-          isOpen={isDeleteConfirmOpen}
-          onOpenChange={setIsDeleteConfirmOpen}
-          onConfirm={() => console.log("confirm delete")}
-          itemName={"ملخص تجريبي"}
-        />
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmationDialog
+        isOpen={isDeleteConfirmOpen}
+        onOpenChange={setIsDeleteConfirmOpen}
+        onConfirm={() => console.log("confirm delete")}
+        itemName={"ملخص تجريبي"}
+      />
 
-        <ReviewDialog
-          isOpen={isReviewDialogOpen}
-          onOpenChange={setIsReviewDialogOpen}
-          noteTitle={"ملخص تجريبي"}
-          onSubmit={(rating: number, comment: string) =>
-            console.log("submit review", rating, comment)
-          }
-          user={staticUser}
-        />
-      </div>
-    </>
+      <ReviewDialog
+        isOpen={isReviewDialogOpen}
+        onOpenChange={setIsReviewDialogOpen}
+        noteTitle={"ملخص تجريبي"}
+        user={user}
+        noteId={""}
+        addReviewToNote={() => {
+          console.log("add review to note");
+        }}
+      />
+    </div>
   );
 };
 
