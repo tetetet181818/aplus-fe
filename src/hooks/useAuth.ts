@@ -2,12 +2,14 @@
 
 import {
   useCheckAuthQuery,
+  useDeleteAccountMutation,
+  useForgetPasswordMutation,
   useLoginMutation,
   useRegisterMutation,
+  useUpdateUserInfoMutation,
 } from "@/store/api/auth.api";
-import { LoginCredentials, RegisterCredentials } from "@/types";
+import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
 
 export default function useAuth() {
   let token: string | undefined = undefined;
@@ -16,12 +18,19 @@ export default function useAuth() {
     token = getCookie("access_token");
   }
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = getCookie("isAuthenticated");
+
   const { data, isLoading: isCheckAuthLoading } = useCheckAuthQuery(token);
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
+  const [deleteAccount, { isLoading: deleteAccountLoading }] =
+    useDeleteAccountMutation();
+  const [updateUserInfo, { isLoading: updateUserInfoLoading }] =
+    useUpdateUserInfoMutation();
 
+  const [forgetPassword, { isLoading: forgetPasswordLoading }] =
+    useForgetPasswordMutation();
   const registerUser = async (credentials: RegisterCredentials) => {
     try {
       const response = await register(credentials);
@@ -31,17 +40,11 @@ export default function useAuth() {
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, [token]);
-
   const loginUser = async (credentials: LoginCredentials) => {
     try {
       const response = await login(credentials);
       setCookie("access_token", `Bearer ${response.data.token}`, { path: "/" });
-      setIsAuthenticated(true);
+      setCookie("isAuthenticated", "true", { path: "/" });
       toast.success(response.data.message);
       return response.data;
     } catch (error) {
@@ -51,7 +54,42 @@ export default function useAuth() {
 
   const logoutUser = () => {
     deleteCookie("access_token");
-    setIsAuthenticated(false);
+    deleteCookie("isAuthenticated");
+  };
+
+  const handelDeleteAccount = async () => {
+    try {
+      const response = await deleteAccount({ token: token || "" });
+      toast.success(response.data.message);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleForgetPassword = async ({ email }: { email: string }) => {
+    try {
+      const response = await forgetPassword({ email });
+      if (response) {
+        toast.success(response?.data?.message);
+      }
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handelUpdateUserInfo = async (data: UpdateUserInfo) => {
+    try {
+      const response = await updateUserInfo({
+        token: token || "",
+        data,
+      });
+      toast.success(response.data.message);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {
@@ -63,7 +101,17 @@ export default function useAuth() {
     isLoginLoading,
     isAuthenticated,
     logoutUser,
-    loading: isCheckAuthLoading || isLoginLoading || isRegisterLoading,
+    loading:
+      isCheckAuthLoading ||
+      isLoginLoading ||
+      isRegisterLoading ||
+      deleteAccountLoading ||
+      updateUserInfoLoading,
+    handelDeleteAccount,
+    updateUserInfo,
+    handelUpdateUserInfo,
+    handleForgetPassword,
+    forgetPasswordLoading,
   };
 }
 

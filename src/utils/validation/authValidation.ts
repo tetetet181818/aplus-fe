@@ -33,10 +33,6 @@ export const registerSchema = Yup.object({
 });
 
 export const updateSchema = Yup.object({
-  fullName: Yup.string()
-    .min(2, "الاسم الأول يجب أن يكون على الأقل حرفين")
-    .max(50, "الاسم الأول يجب أن يكون أقل من 50 حرف")
-    .required("الاسم الأول مطلوب"),
   university: Yup.string().optional(),
 });
 export const passwordSchema = Yup.object({
@@ -44,7 +40,6 @@ export const passwordSchema = Yup.object({
   confirmPassword: Yup.string().required("تاكيد كلمه المرور مطلوب "),
 });
 export const resetPasswordValidation = Yup.object({
-  email: Yup.string().required("البريد الإلكتروني مطلوب"),
   password: Yup.string()
     .min(6, "كلمة المرور يجب أن تتكون من 6 أحرف على الأقل")
     .required("كلمة المرور مطلوبة"),

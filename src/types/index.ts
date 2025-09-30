@@ -92,3 +92,11 @@ export interface withdrawalData {
   bankName: string;
   iban: string;
 }
+
+export interface UpdateUserInfo {
+  university: string;
+}
+
+export interface forgetPasswordData {
+  email: string;
+}

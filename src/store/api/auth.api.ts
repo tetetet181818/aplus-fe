@@ -1,3 +1,4 @@
+import { UpdateUserInfo } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl =
@@ -58,9 +59,32 @@ export const authApi = createApi({
     }),
 
     deleteAccount: builder.mutation({
-      query: () => ({
+      query: ({ token }: { token: string }) => ({
         url: "/delete-account",
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+
+    updateUserInfo: builder.mutation({
+      query: ({ token, data }: { token: string; data: UpdateUserInfo }) => ({
+        url: `/update-user`,
+        method: "PUT",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: data,
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+    forgetPassword: builder.mutation({
+      query: (email) => ({
+        url: "/forget-password",
         method: "POST",
+        body: email,
       }),
       invalidatesTags: ["Auth", "User"],
     }),
@@ -75,4 +99,6 @@ export const {
   useGetUserQuery,
   useLogoutMutation,
   useDeleteAccountMutation,
+  useUpdateUserInfoMutation,
+  useForgetPasswordMutation,
 } = authApi;

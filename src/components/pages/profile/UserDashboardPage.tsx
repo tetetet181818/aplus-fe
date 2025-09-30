@@ -11,7 +11,6 @@ import {
   Heart,
 } from "lucide-react";
 
-import EditProfileDialog from "@/components/molecules/dialogs/EditProfileDialog";
 import UserNotesTab from "@/components/pages/profile/UserNotesTab";
 import PurchasedNotesTab from "@/components/pages/profile/PurchasedNotesTab";
 import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
@@ -21,8 +20,8 @@ import EarningsTab from "@/components/pages/profile/EarningsTab";
 import NotesLikedTab from "@/components/pages/profile/NotesLikedTab";
 
 import useAuth from "@/hooks/useAuth";
-import { Skeleton } from "@/components/ui/skeleton";
 import useNotes from "@/hooks/useNotes";
+import { Skeleton } from "@/components/ui/skeleton";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 
 /**
@@ -41,6 +40,7 @@ const UserDashboardPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading } = useAuth();
+
   const {
     userNotes,
     userNotesLoading,
@@ -49,8 +49,8 @@ const UserDashboardPage = () => {
     likedNotes,
     likedNotesLoading,
   } = useNotes();
+
   // Dialog states
-  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
@@ -61,6 +61,7 @@ const UserDashboardPage = () => {
    * Update URL query param when the active tab changes
    * @param value - the tab identifier
    */
+
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("tab", value);
@@ -115,13 +116,7 @@ const UserDashboardPage = () => {
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="mt-6">
-          <ProfileInfoTab
-            user={user}
-            loading={false}
-            updateUserInfo={() => console.log("update user")}
-            deleteAccount={() => console.log("delete account")}
-            updateUserPassword={() => console.log("update password")}
-          />
+          <ProfileInfoTab user={user} loading={loading} />
         </TabsContent>
 
         {/* User Notes Tab */}
@@ -173,15 +168,6 @@ const UserDashboardPage = () => {
           )}
         </TabsContent>
       </Tabs>
-
-      {/* Edit Profile Dialog */}
-      <EditProfileDialog
-        isOpen={isEditProfileOpen}
-        onOpenChange={setIsEditProfileOpen}
-        currentUser={user}
-        onUpdateProfile={() => console.log("update profile")}
-        universities={["جامعة الملك سعود", "جامعة القاهرة"]}
-      />
 
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
