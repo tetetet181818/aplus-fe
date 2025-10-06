@@ -11,8 +11,8 @@ import useAuth from "@/hooks/useAuth";
 
 /** declare props */
 interface ResetPasswordProps {
-  userId: string;
-  resetPasswordToken: string;
+  userId: string | null;
+  resetPasswordToken: string | null;
 }
 
 /**
@@ -37,8 +37,8 @@ export default function ResetPassword({
       try {
         resetForm();
         handleResetPassword({
-          userId,
-          resetPasswordToken,
+          userId: userId || "",
+          resetPasswordToken: resetPasswordToken || "",
           newPassword: values.password,
         });
       } catch (err) {
