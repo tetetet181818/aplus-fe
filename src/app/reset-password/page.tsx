@@ -5,14 +5,20 @@ import ResetPassword from "@/components/pages/ResetPassword";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordWrapper() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const resetPasswordToken = searchParams.get("resetPasswordToken");
 
   return (
+    <ResetPassword userId={userId} resetPasswordToken={resetPasswordToken} />
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
     <Suspense fallback={<LoadingSpinner />}>
-      <ResetPassword userId={userId} resetPasswordToken={resetPasswordToken} />
+      <ResetPasswordWrapper />
     </Suspense>
   );
 }
