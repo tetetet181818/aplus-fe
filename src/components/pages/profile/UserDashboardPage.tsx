@@ -14,7 +14,6 @@ import {
 import UserNotesTab from "@/components/pages/profile/UserNotesTab";
 import PurchasedNotesTab from "@/components/pages/profile/PurchasedNotesTab";
 import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
-import ReviewDialog from "@/components/molecules/dialogs/ReviewDialog";
 import ProfileInfoTab from "@/components/pages/profile/ProfileInfoTab";
 import EarningsTab from "@/components/pages/profile/EarningsTab";
 import NotesLikedTab from "@/components/pages/profile/NotesLikedTab";
@@ -52,7 +51,6 @@ const UserDashboardPage = () => {
 
   // Dialog states
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
   // Current active tab (from URL query param)
   const activeTab = searchParams.get("tab") || "profile";
@@ -175,17 +173,6 @@ const UserDashboardPage = () => {
         onOpenChange={setIsDeleteConfirmOpen}
         onConfirm={() => console.log("confirm delete")}
         itemName={"ملخص تجريبي"}
-      />
-
-      <ReviewDialog
-        isOpen={isReviewDialogOpen}
-        onOpenChange={setIsReviewDialogOpen}
-        noteTitle={"ملخص تجريبي"}
-        user={user}
-        noteId={""}
-        addReviewToNote={() => {
-          console.log("add review to note");
-        }}
       />
     </div>
   );
