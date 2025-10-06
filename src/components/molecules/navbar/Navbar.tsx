@@ -32,7 +32,6 @@ export default function Navbar() {
   const handleLogout = () => {
     logoutUser();
   };
-  // console.log(isAuthenticated);
   return (
     <header
       dir="rtl"
@@ -99,7 +98,6 @@ export default function Navbar() {
         onSearchQueryChange={(e) => setSearchQuery(e.target.value)}
         onSearchSubmit={(e) => {
           e.preventDefault();
-          console.log("Search submitted with query:", searchQuery);
         }}
       />
 

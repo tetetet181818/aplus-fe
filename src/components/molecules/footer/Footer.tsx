@@ -14,7 +14,7 @@ const Footer = () => {
       title: "روابط سريعة",
       links: [
         { href: "/", text: "الرئيسية" },
-        { href: "/FAQPage", text: "الأسئلة الشائعة" },
+        { href: "/faq", text: "الأسئلة الشائعة" },
         { href: "/notes", text: "تصفح الملخصات" },
         { href: "/add-note", text: "إضافة ملخص" },
         { href: "/profile", text: "الملف الشخصي" },

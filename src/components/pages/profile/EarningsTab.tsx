@@ -1,10 +1,11 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
 
+import { Card, CardContent } from "@/components/ui/card";
 import WithdrawalForm from "./WithdrawalForm";
 import FinanceDashboard from "./EarningsInfo";
 import { User } from "@/types";
-import { useFormik } from "formik";
+import { useFormik, FormikHelpers } from "formik";
+import useWithdrawals from "@/hooks/useWithdrawals";
 
 interface EarningsTabProps {
   currentUser: User;
@@ -17,7 +18,16 @@ interface Withdrawal {
   transactionId: string;
 }
 
+interface WithdrawalFormValues {
+  accountHolderName: string;
+  bankName: string;
+  iban: string;
+  withdrawalAmount: number;
+}
+
 const EarningsTab = ({ currentUser }: EarningsTabProps) => {
+  const { handleCreateWithdrawal, createWithdrawalLoading } = useWithdrawals();
+
   const availableBalance = currentUser?.balance || 0;
 
   const withdrawalHistory: Withdrawal[] = [
@@ -47,18 +57,30 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
     },
   ];
 
-  const isProcessingWithdrawal = false;
   const currentNetEarnings = availableBalance * 0.9;
-  const loading = false;
 
-  const formik = useFormik({
+  const formik = useFormik<WithdrawalFormValues>({
     initialValues: {
       accountHolderName: "",
       bankName: "",
       iban: "",
       withdrawalAmount: 0,
     },
-    onSubmit: () => {},
+    onSubmit: async (
+      values: WithdrawalFormValues,
+      { resetForm }: FormikHelpers<WithdrawalFormValues>
+    ) => {
+      const res = await handleCreateWithdrawal({
+        amount: values.withdrawalAmount,
+        accountName: values.accountHolderName,
+        bankName: values.bankName,
+        iban: values.iban,
+      });
+
+      if (res) {
+        resetForm();
+      }
+    },
   });
 
   return (
@@ -69,14 +91,14 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
       />
 
       <div>
-        {currentUser.withdrawal_times > 0 ? (
+        {currentUser.withdrawalTimes > 0 ? (
           <WithdrawalForm
             formik={formik}
-            isProcessingWithdrawal={isProcessingWithdrawal}
+            loading={createWithdrawalLoading}
             netEarnings={currentNetEarnings}
-            remainingWithdrawals={currentUser.withdrawal_times}
-            maxWithdrawalsPerMonth={currentUser.withdrawal_times}
-            loading={loading}
+            remainingWithdrawals={currentUser.withdrawalTimes}
+            maxWithdrawalsPerMonth={currentUser.withdrawalTimes}
+            isProcessingWithdrawal={createWithdrawalLoading}
           />
         ) : (
           <Card className="border-destructive/20 bg-destructive/10">

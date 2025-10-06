@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -67,14 +66,6 @@ const FinanceDashboard = ({
   availableBalance,
   withdrawalHistory,
 }: EarningsInfoProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-  }, []);
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "مكتمل":
@@ -142,14 +133,10 @@ const FinanceDashboard = ({
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10">
-              {isLoading ? (
-                <div className="h-12 bg-white/20 rounded-lg animate-pulse"></div>
-              ) : (
-                <p className="text-4xl font-bold tracking-tight">
-                  {formatCurrency(availableBalance)}{" "}
-                  <span className="text-xl font-medium">ريال</span>
-                </p>
-              )}
+              <p className="text-4xl font-bold tracking-tight">
+                {formatCurrency(availableBalance)}{" "}
+                <span className="text-xl font-medium">ريال</span>
+              </p>
             </CardContent>
           </Card>
         </motion.div>

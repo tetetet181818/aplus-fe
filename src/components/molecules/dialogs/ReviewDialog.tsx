@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import StarRatingInput from "@/components/atoms/StarRatingInput";
-import { User } from "@/types";
+import { Loader2 } from "lucide-react";
 
 const validationSchema = yup.object().shape({
   rating: yup
@@ -26,21 +26,26 @@ interface ReviewDialogProps {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   noteTitle: string;
-  user: User;
   noteId: string;
   addReviewToNote: (
     noteId: string,
     reviewData: { rating: number; comment: string }
   ) => Promise<void>;
+  loading: boolean;
 }
 
+/**
+ * 💬 ReviewDialog Component
+ * Displays a dialog for users to add a star rating and comment
+ * on a specific note. Uses Formik for validation and form handling.
+ */
 const ReviewDialog = ({
   isOpen,
   onOpenChange,
   noteTitle,
-  user,
   noteId,
   addReviewToNote,
+  loading,
 }: ReviewDialogProps) => {
   const formik = useFormik({
     initialValues: {
@@ -52,17 +57,10 @@ const ReviewDialog = ({
       const reviewData = {
         rating: values.rating,
         comment: values.comment,
-        userId: user._id,
-        userName: user.fullName,
-        userAvatar: user.fullName.substring(0, 1).toUpperCase(),
-        created_at: new Date().toISOString(),
       };
-      const res = await addReviewToNote(noteId, reviewData);
-
-      if (res) {
-        onOpenChange(false);
-        resetForm();
-      }
+      await addReviewToNote(noteId, reviewData);
+      resetForm();
+      onOpenChange(false);
     },
   });
 
@@ -82,6 +80,7 @@ const ReviewDialog = ({
         </DialogHeader>
 
         <form onSubmit={formik.handleSubmit} className="space-y-4 py-4">
+          {/* Star Rating Field */}
           <div>
             <Label htmlFor="rating" className="mb-2 block font-medium">
               تقييمك (النجوم)
@@ -97,6 +96,7 @@ const ReviewDialog = ({
             )}
           </div>
 
+          {/* Comment Field */}
           <div>
             <Label htmlFor="comment" className="font-medium">
               تعليقك
@@ -118,11 +118,26 @@ const ReviewDialog = ({
             )}
           </div>
 
+          {/* Buttons */}
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="destructive" type="button" onClick={handleClose}>
+            <Button
+              variant="destructive"
+              type="button"
+              onClick={handleClose}
+              disabled={loading}
+            >
               إلغاء
             </Button>
-            <Button type="submit">إرسال التقييم</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  جاري الإرسال...
+                </div>
+              ) : (
+                "إرسال التقييم"
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

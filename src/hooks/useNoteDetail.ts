@@ -10,8 +10,10 @@ import {
 import { downloadFile } from "@/utils/downloadFile";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import useNotes from "./useNotes";
 
 export default function useNoteDetail(id: string) {
+  const { handlePurchaseNote } = useNotes();
   const router = useRouter();
   let token: string | null = null;
   if (typeof window !== "undefined") {
@@ -28,7 +30,7 @@ export default function useNoteDetail(id: string) {
   const [deleteNote, { isLoading: deleteNoteLoading }] =
     useDeleteNoteMutation();
 
-  const handlePurchase = () => console.log("تم الشراء");
+  const handlePurchase = () => handlePurchaseNote({ noteId: id });
   const handleReviewRequest = () => console.log("طلب المراجعة");
   const handleDownloadFile = ({
     noteUrl,

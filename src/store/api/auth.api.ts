@@ -1,3 +1,4 @@
+import { UpdateUserInfo } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl =
@@ -58,11 +59,62 @@ export const authApi = createApi({
     }),
 
     deleteAccount: builder.mutation({
-      query: () => ({
+      query: ({ token }: { token: string }) => ({
         url: "/delete-account",
-        method: "POST",
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+        },
       }),
       invalidatesTags: ["Auth", "User"],
+    }),
+
+    updateUserInfo: builder.mutation({
+      query: ({ token, data }: { token: string; data: UpdateUserInfo }) => ({
+        url: `/update-user`,
+        method: "PUT",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: data,
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+    forgetPassword: builder.mutation({
+      query: (email) => ({
+        url: "/forget-password",
+        method: "POST",
+        body: email,
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+
+    resetPassword: builder.mutation({
+      query: ({
+        userId,
+        resetPasswordToken,
+        newPassword,
+      }: {
+        userId: string;
+        resetPasswordToken: string;
+        newPassword: string;
+      }) => ({
+        url: `/reset-password`,
+        method: "POST",
+        body: { userId, resetPasswordToken, newPassword },
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+
+    getUserById: builder.query({
+      query: ({ id, token }: { id: string; token: string }) => ({
+        url: `/${id}`,
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Auth", "User"],
     }),
   }),
 });
@@ -75,4 +127,8 @@ export const {
   useGetUserQuery,
   useLogoutMutation,
   useDeleteAccountMutation,
+  useUpdateUserInfoMutation,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+  useGetUserByIdQuery,
 } = authApi;

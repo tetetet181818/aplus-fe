@@ -7,9 +7,8 @@ import {
 } from "@/components/ui/dialog";
 import { useFormik } from "formik";
 import { updateSchema } from "@/utils/validation/authValidation";
-import { Loader2, User as UserIcon, Building2 } from "lucide-react";
+import { Loader2, Building2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,19 +17,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { universities } from "@/constants/index";
-import { User } from "@/types";
+import { UpdateUserInfo, User } from "@/types";
 
 interface UpdateInfoDialogProps {
   isOpen: boolean;
   onClose: () => void;
   user: User;
   loading: boolean;
-  updateUserInfo: (data: {
-    id: string;
-    fullName: string;
-    email: string;
-    university: string;
-  }) => Promise<void>;
+  handelUpdateUserInfo: (data: UpdateUserInfo) => Promise<User>;
 }
 
 export default function UpdateInfoDialog({
@@ -38,23 +32,26 @@ export default function UpdateInfoDialog({
   onClose,
   user,
   loading,
-  updateUserInfo,
+  handelUpdateUserInfo,
 }: UpdateInfoDialogProps) {
   const formik = useFormik({
     initialValues: {
-      fullName: user?.fullName || "",
-      email: user?.email || "",
       university: user?.university || "",
     },
     validationSchema: updateSchema,
     onSubmit: async (values) => {
-      await updateUserInfo({ id: user?._id, ...values });
+      const res = await handelUpdateUserInfo(values);
+
+      if (res) {
+        onClose();
+      }
     },
   });
 
   const handleUniversityChange = (value: string) => {
     formik.setFieldValue("university", value);
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -63,32 +60,6 @@ export default function UpdateInfoDialog({
           <DialogDescription>قم بتحديث معلومات حسابك</DialogDescription>
         </DialogHeader>
         <form onSubmit={formik.handleSubmit} className="mt-4 space-y-4">
-          {/* Username */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">اسم المستخدم</Label>
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <UserIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                id="fullName"
-                name="fullName"
-                className="pr-10" // Adjusted for RTL
-                value={formik.values.fullName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                readOnly
-                disabled={true}
-              />
-            </div>
-            {formik.touched.fullName && formik.errors.fullName && (
-              <p className="text-sm text-red-500">{formik.errors.fullName}</p>
-            )}
-            <p className="text-xs text-gray-500">
-              * لا يمكنك التعديل علي اسم المستخدم
-            </p>
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="university">الجامعة</Label>
             <div className="relative">
@@ -99,13 +70,13 @@ export default function UpdateInfoDialog({
                 name="university"
                 value={formik.values.university}
                 onValueChange={handleUniversityChange}
-                onBlur={() => formik.setFieldTouched("university", true)}
-                className="pr-10"
               >
                 <SelectTrigger
                   id="university"
                   className={
-                    !formik.values.university ? "text-muted-foreground" : ""
+                    !formik.values.university
+                      ? "text-muted-foreground w-full"
+                      : "w-full"
                   }
                 >
                   <SelectValue placeholder="اختر الجامعة" />
@@ -131,8 +102,7 @@ export default function UpdateInfoDialog({
           >
             {loading || formik.isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin ml-2" />{" "}
-                {/* Changed mr to ml for RTL */}
+                <Loader2 className="w-4 h-4 animate-spin ml-2" />
                 جاري التحديث...
               </>
             ) : (

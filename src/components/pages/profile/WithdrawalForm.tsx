@@ -18,27 +18,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormikProps } from "formik";
+import { SAUDI_BANKS } from "@/constants/index";
 
 // ----------------- Typings -----------------
-interface WithdrawalFormValues {
+export interface WithdrawalFormValues {
   accountHolderName: string;
   bankName: string;
   iban: string;
   withdrawalAmount: number;
 }
 
-interface FormikMock {
-  values: WithdrawalFormValues;
-  touched: Record<string, boolean>;
-  errors: Record<string, string>;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent) => void;
-  setFieldValue: (field: string, value: any) => void;
-}
-
 interface WithdrawalFormProps {
-  formik: FormikMock;
+  formik: FormikProps<WithdrawalFormValues>;
   isProcessingWithdrawal: boolean;
   netEarnings: number;
   remainingWithdrawals: number;
@@ -47,41 +39,16 @@ interface WithdrawalFormProps {
 }
 
 // ----------------- Static Data -----------------
-const SAUDI_BANKS = [
-  { code: "001", name: "البنك الأهلي السعودي" },
-  { code: "002", name: "بنك الرياض" },
-  { code: "003", name: "البنك السعودي الفرنسي" },
-];
-
-const mockFormik: FormikMock = {
-  values: {
-    accountHolderName: "محمد عبدالله الأحمدي",
-    bankName: "البنك الأهلي السعودي",
-    iban: "SA1234567890123456789012",
-    withdrawalAmount: 100,
-  },
-  touched: {},
-  errors: {},
-  handleChange: () => {},
-  handleBlur: () => {},
-  handleSubmit: (e) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  },
-  setFieldValue: (field, value) => {
-    console.log(`Set ${field} = ${value}`);
-  },
-};
 
 // ----------------- Component -----------------
 export default function WithdrawalForm({
-  formik = mockFormik,
-  isProcessingWithdrawal = false,
-  netEarnings = 250,
-  remainingWithdrawals = 2,
-  maxWithdrawalsPerMonth = 3,
-  loading = false,
-}: Partial<WithdrawalFormProps>) {
+  formik,
+  isProcessingWithdrawal,
+  netEarnings,
+  remainingWithdrawals,
+  maxWithdrawalsPerMonth,
+  loading,
+}: WithdrawalFormProps) {
   return (
     <Card className="shadow-lg border-gray-200 dark:border-gray-700">
       <CardHeader>
@@ -114,7 +81,7 @@ export default function WithdrawalForm({
             formik={formik}
             disabled={isProcessingWithdrawal}
             placeholder="الحد الأدنى 50 ريال"
-            min="50"
+            min={50}
             max={netEarnings}
           />
 
@@ -123,10 +90,7 @@ export default function WithdrawalForm({
             maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
           />
 
-          <SubmitButton
-            isProcessing={loading}
-            disabled={loading || netEarnings < 50 || remainingWithdrawals <= 0}
-          />
+          <SubmitButton isProcessing={loading} disabled={loading} />
 
           <FormMessages
             netEarnings={netEarnings}
@@ -152,7 +116,7 @@ const FormField = ({
   label: string;
   id: keyof WithdrawalFormValues;
   type?: string;
-  formik: FormikMock;
+  formik: FormikProps<WithdrawalFormValues>;
   disabled: boolean;
   placeholder?: string;
   min?: string | number;
@@ -187,7 +151,7 @@ const BankSelectField = ({
   formik,
   disabled,
 }: {
-  formik: FormikMock;
+  formik: FormikProps<WithdrawalFormValues>;
   disabled: boolean;
 }) => (
   <div className="mb-4">
@@ -199,11 +163,11 @@ const BankSelectField = ({
       value={formik.values.bankName}
       disabled={disabled}
     >
-      <SelectTrigger className="h-11">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="اختر البنك" />
       </SelectTrigger>
       <SelectContent>
-        {SAUDI_BANKS.map((bank) => (
+        {SAUDI_BANKS?.map((bank) => (
           <SelectItem key={bank.code} value={bank.name}>
             {bank.name}
           </SelectItem>
@@ -222,7 +186,7 @@ const IbanField = ({
   formik,
   disabled,
 }: {
-  formik: FormikMock;
+  formik: FormikProps<WithdrawalFormValues>;
   disabled: boolean;
 }) => (
   <div className="mb-4">

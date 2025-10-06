@@ -11,7 +11,6 @@ import {
   NoteAuthorInfo,
   NoteActions,
   NotePurchaseConfirmationDialog,
-  NoteDeleteConfirmationDialog,
 } from "@/components/organisms/notes/NoteDetailComponents";
 import ReviewDialog from "@/components/molecules/dialogs/ReviewDialog";
 import Head from "next/head";
@@ -19,6 +18,8 @@ import NoteReviews from "@/components/organisms/notes/NoteReviews";
 import useNoteDetail from "@/hooks/useNoteDetail";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/useAuth";
+import { useState } from "react";
+import useNotes from "@/hooks/useNotes";
 
 /**
  * Note detail page component with skeleton loader and error handling.
@@ -34,7 +35,6 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     note,
     loading,
     handlePurchase,
-    handleReviewRequest,
     addNoteToLikeList,
     handleDownloadFile,
     removeNoteFromLikeList,
@@ -44,7 +44,16 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     handleDeleteNote,
   } = useNoteDetail(id);
   const { user, isAuthenticated } = useAuth();
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
+
   const router = useRouter();
+
+  const {
+    handelAddReviewToNote,
+    addReviewLoading,
+    handelRemoveReviewFromNote,
+    removeReviewLoading,
+  } = useNotes();
 
   if (!loading && !note) {
     return (
@@ -85,6 +94,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     );
   }
   const isOwner = note?.owner_id === user?._id;
+
   return (
     <>
       <Head>
@@ -117,7 +127,14 @@ const NoteDetailPage = ({ id }: { id: string }) => {
 
             <NoteImage src={note.cover_url} alt={note.title} />
             <NoteDescription description={note.description} />
-            <NoteReviews loading={loading} reviews={note?.reviews} />
+            <NoteReviews
+              user={user}
+              loading={loading}
+              reviews={note?.reviews}
+              noteId={note?._id}
+              removeReviewFromNote={handelRemoveReviewFromNote}
+              removeReviewLoading={removeReviewLoading}
+            />
           </div>
 
           <div className="lg:col-span-1 space-y-6">
@@ -148,7 +165,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
 
             <NoteActions
               isOwner={isOwner}
-              hasPurchased={false}
+              hasPurchased={note.purchased_by?.includes(user?._id)}
               price={note.price}
               loading={loading}
               onPurchase={handlePurchase}
@@ -162,8 +179,10 @@ const NoteDetailPage = ({ id }: { id: string }) => {
                 })
               }
               downloadLoading={false}
-              onReview={handleReviewRequest}
-              alreadyReviewed={false}
+              onReview={() => setIsReviewDialogOpen(true)}
+              alreadyReviewed={note?.reviews?.some(
+                (review: { userId: string }) => review.userId === user?._id
+              )}
               isAuthenticated={isAuthenticated}
               contactMethod={note.contactMethod}
             />
@@ -178,27 +197,16 @@ const NoteDetailPage = ({ id }: { id: string }) => {
           notePrice={note.price}
         />
 
-        {false && (
-          <NoteDeleteConfirmationDialog
-            isOpen={false}
-            loading={false}
-            onOpenChange={() => {}}
-            onConfirm={() => {}}
-            noteTitle={note.title}
-          />
-        )}
-
         {ReviewDialog && (
           <ReviewDialog
-            isOpen={false}
-            onOpenChange={() => {}}
+            isOpen={isReviewDialogOpen}
+            onOpenChange={() => setIsReviewDialogOpen(!isReviewDialogOpen)}
             noteTitle={note.title}
-            user={user}
             noteId={note._id}
             addReviewToNote={async (noteId, reviewData) => {
-              console.log("noteId", noteId);
-              console.log("reviewData", reviewData);
+              handelAddReviewToNote({ noteId, reviewData });
             }}
+            loading={addReviewLoading}
           />
         )}
       </main>

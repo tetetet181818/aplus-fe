@@ -71,7 +71,12 @@ export const navigationItems = [
     href: "/dashboard",
   },
   { title: "الطلاب", icon: Users, id: "students", href: "/dashboard/students" },
-  { title: "الملفات", icon: FileText, id: "files", href: "/dashboard/files" },
+  {
+    title: "الملفات",
+    icon: FileText,
+    id: "files",
+    href: "/dashboard/notes",
+  },
   {
     title: "المبيعات",
     icon: DollarSign,
