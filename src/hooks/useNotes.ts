@@ -1,24 +1,25 @@
 "use client";
 import { useState } from "react";
 import {
+  useAddReviewToNoteMutation,
   useCreateNoteMutation,
   useGetAllNotesQuery,
   useGetLikedNotesQuery,
   useGetPurchasedNotesQuery,
   useGetUserNotesQuery,
   useMakeUnlikeNoteMutation,
+  usePurchaseNoteMutation,
+  useRemoveReviewFromNoteMutation,
+  useUpdateReviewFromNoteMutation,
 } from "@/store/api/note.api";
-import { CreateNoteData } from "@/types";
+import { CreateNoteData, ReviewData } from "@/types";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 export default function useNotes() {
-  const router = useRouter();
   let token: string | null = null;
   if (typeof window !== "undefined") {
     token = window.localStorage.getItem("access_token");
   }
-
   // Pagination states
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -34,7 +35,72 @@ export default function useNotes() {
   const { data: userNotes, isLoading: userNotesLoading } = useGetUserNotesQuery(
     { token: token || "" }
   );
+  const [addReviewToNote, { isLoading: addReviewLoading }] =
+    useAddReviewToNoteMutation();
 
+  const handelAddReviewToNote = async ({
+    noteId,
+    reviewData,
+  }: {
+    noteId: string;
+    reviewData: ReviewData;
+  }) => {
+    const res = await addReviewToNote({
+      token: token || "",
+      noteId,
+      reviewData,
+    });
+
+    if (res) {
+      toast.success(res?.data?.message);
+    }
+  };
+
+  const [removeReviewFromNote, { isLoading: removeReviewLoading }] =
+    useRemoveReviewFromNoteMutation();
+
+  const handelRemoveReviewFromNote = async ({
+    noteId,
+    reviewId,
+  }: {
+    noteId: string;
+    reviewId: string;
+  }) => {
+    const res = await removeReviewFromNote({
+      noteId,
+      reviewId,
+      token: token || "",
+    });
+
+    if (res) {
+      toast.success(res?.data?.message);
+    }
+  };
+
+  const [updateReviewFromNote, { isLoading: updateReviewLoading }] =
+    useUpdateReviewFromNoteMutation();
+
+  const handleUpdateReview = async ({
+    noteId,
+    reviewId,
+    reviewData,
+  }: {
+    noteId: string;
+    reviewId: string;
+    reviewData: ReviewData;
+  }) => {
+    const res = await updateReviewFromNote({
+      noteId,
+      reviewId,
+      reviewData,
+      token: token || "",
+    });
+    if (res) {
+      toast.success(res?.data?.message);
+    }
+
+    return res?.data;
+  };
   const { data: purchasedNotes, isLoading: purchasedNotesLoading } =
     useGetPurchasedNotesQuery({ token: token || "" });
 
@@ -46,8 +112,8 @@ export default function useNotes() {
       const res = await createNote({ noteData, token: token! });
       if (res?.data?.message) {
         toast.success("تم إضافة الملخص بنجاح");
-        router.push("/");
       }
+      return res?.data;
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ ");
@@ -60,8 +126,19 @@ export default function useNotes() {
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
     useMakeUnlikeNoteMutation();
 
+  const [purchaseNote, { isLoading: purchaseLoading }] =
+    usePurchaseNoteMutation();
+
   const removeNoteFromLikeList = async ({ noteId }: { noteId: string }) => {
     const res = await makeUnlikeNote({ noteId, token: token || "" });
+
+    if (res) {
+      toast.success(res?.data?.message);
+    }
+  };
+
+  const handlePurchaseNote = async ({ noteId }: { noteId: string }) => {
+    const res = await purchaseNote({ noteId, token: token || "" });
 
     if (res) {
       toast.success(res?.data?.message);
@@ -105,6 +182,14 @@ export default function useNotes() {
     likedNotes: likedNotes?.data,
     removeNoteFromLikeList,
     unlikeLoading,
+    purchaseLoading,
+    handlePurchaseNote,
+    handelAddReviewToNote,
+    addReviewLoading,
+    handelRemoveReviewFromNote,
+    removeReviewLoading,
+    handleUpdateReview,
+    updateReviewLoading,
     // Pagination handlers
     pagination: {
       total,

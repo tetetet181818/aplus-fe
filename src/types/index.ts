@@ -32,6 +32,7 @@ export interface Note {
   _id: string;
   title: string;
   description: string;
+  owner_id: string;
   price: number;
   downloads?: number;
   cover_url?: string;
@@ -42,6 +43,8 @@ export interface Note {
   rating: number;
   university: string;
   college: string;
+  isPublish: boolean;
+  contactMethod: string;
   reviews: Review[];
   createdAt: string;
   updatedAt: string;
@@ -58,6 +61,10 @@ export interface Review {
 }
 
 export type FormValues = {
+  files: {
+    file: File | null;
+    cover: File | null;
+  };
   cover: File;
   title: string;
   price: number;
@@ -99,4 +106,69 @@ export interface UpdateUserInfo {
 
 export interface forgetPasswordData {
   email: string;
+}
+
+export interface Student {
+  _id: string;
+  fullName: string;
+  email: string;
+  balance: number;
+  university: string;
+}
+
+/**
+ * Represents a sales transaction / payment record.
+ */
+
+export interface Sale {
+  _id: string;
+  user_id: string;
+  note_id: string;
+  amount: number;
+  status: string;
+  payment_method: string;
+  note_title: string;
+  invoice_id: string;
+  message: string;
+  platform_fee: string;
+  buyerId: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AcceptedWithdrawal {
+  routingNumber: string;
+  routingDate: string;
+}
+
+export interface Withdrawal {
+  _id: string;
+
+  userId: string;
+
+  amount: number;
+
+  status: "pending" | "accepted" | "rejected" | "completed";
+
+  adminNotes?: string;
+
+  accountName: string;
+
+  bankName: string;
+
+  iban: string;
+
+  routingNumber?: string;
+
+  routingDate?: Date;
+
+  createdAt?: Date;
+
+  updatedAt?: Date;
+}
+
+export interface ReviewData {
+  rating: number;
+  comment: string;
 }

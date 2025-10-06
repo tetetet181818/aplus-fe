@@ -30,7 +30,7 @@ interface ProfileInfoTabProps {
 }
 
 const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
-  const { handelDeleteAccount, handelUpdateUserInfo } = useAuth();
+  const { handleDeleteAccount, handleUpdateUserInfo } = useAuth();
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
 
@@ -84,7 +84,7 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
             <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3 justify-center">
               <Button>
                 <Link
-                  href="/reset-password"
+                  href="/forget-password"
                   className="flex items-center gap-1"
                 >
                   <Edit3 className="size-4" />
@@ -121,12 +121,12 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
         onClose={() => setOpenDialogUpdate(false)}
         user={user}
         loading={Boolean(loading)}
-        handelUpdateUserInfo={handelUpdateUserInfo}
+        handelUpdateUserInfo={handleUpdateUserInfo}
       />
       <DeleteConfirmationDialog
         isOpen={openDialogDelete}
         onOpenChange={() => setOpenDialogDelete(false)}
-        onConfirm={handelDeleteAccount}
+        onConfirm={handleDeleteAccount}
         itemName={user.fullName}
         loading={Boolean(loading)}
       />

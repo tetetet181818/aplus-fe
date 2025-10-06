@@ -6,17 +6,14 @@ import * as Yup from "yup";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import BasicInfo from "./BasicInfo";
 import UploadFileNote from "./UploadFileNote";
 import UploadCoverNote from "./UploadCoverNote";
 import ReviewNote from "./ReviewNote";
 import useNotes from "@/hooks/useNotes";
+import SuccessUploadNoteDialog from "@/components/molecules/dialogs/SuccessUploadNoteDialog";
 
-/**
- * Initial values for AddNoteForm
- */
+/** Default form values */
 const initialValues = {
   basic: {
     title: "",
@@ -26,7 +23,7 @@ const initialValues = {
     college: "",
     subject: "",
     pagesNumber: 0,
-    year: null as number | null,
+    year: new Date().getFullYear(),
     contactMethod: "",
   },
   files: {
@@ -38,9 +35,7 @@ const initialValues = {
   },
 };
 
-/**
- * Yup validation schemas for each form step
- */
+/** Validation schema per section */
 const validationSchemas = {
   basic: Yup.object({
     title: Yup.string().required("العنوان مطلوب"),
@@ -76,47 +71,28 @@ const validationSchemas = {
   }),
 };
 
-/**
- * Build FormData from form values for API submission
- * @param values - Form values from Formik
- * @returns FormData object ready for upload
- */
+/** Build FormData for API submission */
 function buildFormData(values: typeof initialValues): FormData {
   const formData = new FormData();
 
-  formData.append("title", values.basic.title);
-  formData.append("price", values.basic.price.toString());
-  formData.append("description", values.basic.description);
-  formData.append("university", values.basic.university);
-  formData.append("college", values.basic.college);
-  formData.append("subject", values.basic.subject);
-  formData.append("pagesNumber", values.basic.pagesNumber.toString());
-  if (values.basic.year !== null) {
-    formData.append("year", values.basic.year.toString());
-  }
-  formData.append("contactMethod", values.basic.contactMethod);
+  Object.entries(values.basic).forEach(([key, val]) => {
+    if (val !== null && val !== undefined) formData.append(key, String(val));
+  });
 
-  if (values.files.cover) {
-    formData.append("cover", values.files.cover);
-  }
-  if (values.files.file) {
-    formData.append("file", values.files.file);
-  }
+  if (values.files.cover) formData.append("cover", values.files.cover);
+  if (values.files.file) formData.append("file", values.files.file);
 
-  formData.append(
-    "termsAccepted",
-    values.review.termsAccepted ? "true" : "false"
-  );
-
+  formData.append("termsAccepted", String(values.review.termsAccepted));
   return formData;
 }
 
 /**
- * Multi-step form component for adding a new note
+ * Multi-step form for creating a new note
  */
 const AddNoteForm = () => {
   const [tab, setTab] = useState("basic");
-  const { handleCreateNote } = useNotes();
+  const { handleCreateNote, createNoteLoading } = useNotes();
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
 
   const formik = useFormik({
     initialValues,
@@ -125,79 +101,85 @@ const AddNoteForm = () => {
       files: validationSchemas.files,
       review: validationSchemas.review,
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const formData = buildFormData(values);
-      console.log(formData);
-      await handleCreateNote(formData);
+      const res = await handleCreateNote(formData);
+
+      if (res) {
+        setOpenSuccessDialog(true);
+        resetForm();
+      }
     },
   });
 
   const tabs = ["basic", "file", "cover", "review"];
-  const tabIndex = tabs.indexOf(tab);
-  const progress = ((tabIndex + 1) / tabs.length) * 100;
+  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100;
 
   return (
-    <div dir="rtl" className="min-h-screen py-8 md:px-6">
-      <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-        <Card className="w-full shadow-xl border-0 rounded-2xl overflow-hidden">
-          <div className="bg-white py-4 px-6 border-b">
-            <div dir="rtl" className="flex items-center justify-between mb-2">
-              <span className="text-sm font-bold text-blue-600">
-                {progress}%
-              </span>
-              <span className="text-sm font-medium text-gray-600">
-                تقدم الإضافة
-              </span>
+    <>
+      <div dir="rtl" className="min-h-screen py-8 md:px-6">
+        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+          <Card className="w-full shadow-xl border-0 rounded-2xl overflow-hidden">
+            {/* Progress Header */}
+            <div className="bg-white py-4 px-6 border-b">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-bold text-blue-600">
+                  {progress.toFixed(0)}%
+                </span>
+                <span className="text-sm font-medium text-gray-600">
+                  تقدم الإضافة
+                </span>
+              </div>
+              <Progress
+                value={progress}
+                className="h-2 bg-gray-200 [&>div]:!left-0 [&>div]:!right-0 transform rotate-180"
+              />
             </div>
-            <Progress
-              value={progress}
-              className="h-2 bg-gray-200 [&>div]:!left-0 [&>div]:!right-0 transform rotate-180"
-            />
-          </div>
 
-          <CardContent className="p-0" dir="rtl">
-            <Tabs value={tab} onValueChange={setTab} className="w-full">
-              <TabsContent value="basic" className="p-6">
-                <BasicInfo formik={formik} />
-                <div className="flex justify-start pt-6">
-                  <Button
-                    type="button"
-                    onClick={() => setTab("file")}
-                    className="gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={
-                      !!formik.errors.basic &&
-                      Object.keys(formik.errors.basic).length > 0
-                    }
-                  >
-                    التالي <ArrowLeft className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TabsContent>
+            {/* Form Steps */}
+            <CardContent className="p-0" dir="rtl">
+              <Tabs value={tab} onValueChange={setTab} className="w-full">
+                {/* Step 1 */}
+                <TabsContent value="basic" className="p-6">
+                  <BasicInfo formik={formik} nextTab={() => setTab("file")} />
+                </TabsContent>
 
-              <TabsContent value="file" className="p-6">
-                <UploadFileNote
-                  formik={formik}
-                  prevTab={() => setTab("basic")}
-                  nextTab={() => setTab("cover")}
-                />
-              </TabsContent>
+                {/* Step 2 */}
+                <TabsContent value="file" className="p-6">
+                  <UploadFileNote
+                    formik={formik}
+                    prevTab={() => setTab("basic")}
+                    nextTab={() => setTab("cover")}
+                  />
+                </TabsContent>
 
-              <TabsContent value="cover" className="p-6">
-                <UploadCoverNote
-                  formik={formik}
-                  prevTab={() => setTab("file")}
-                  nextTab={() => setTab("review")}
-                />
-              </TabsContent>
+                {/* Step 3 */}
+                <TabsContent value="cover" className="p-6">
+                  <UploadCoverNote
+                    formik={formik}
+                    prevTab={() => setTab("file")}
+                    nextTab={() => setTab("review")}
+                  />
+                </TabsContent>
 
-              <TabsContent value="review" className="p-6">
-                <ReviewNote formik={formik} prevTab={() => setTab("cover")} />
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </form>
-    </div>
+                {/* Step 4 */}
+                <TabsContent value="review" className="p-6">
+                  <ReviewNote
+                    loading={createNoteLoading}
+                    formik={formik}
+                    prevTab={() => setTab("cover")}
+                  />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </form>
+      </div>
+      <SuccessUploadNoteDialog
+        open={openSuccessDialog}
+        onOpenChange={setOpenSuccessDialog}
+      />
+    </>
   );
 };
 

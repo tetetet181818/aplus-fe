@@ -1,5 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+"use client";
+
+import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import {
   Star,
   MessageSquare,
@@ -7,10 +9,11 @@ import {
   ArrowDown,
   ArrowUpCircle,
   ArrowDownCircle,
+  Loader2,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import formatArabicDate from "@/utils/formateTime";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -18,10 +21,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
+import formatArabicDate from "@/utils/formateTime";
+import { User } from "@/types";
+import ReviewSkeletonItem from "@/components/skeletons/ReviewSkeletonItem";
+import UpdateReviewsDialog from "@/components/molecules/dialogs/UpdateReviewsDialog";
 
-// Types for the ReviewItem props
+/** ===================== Types ===================== */
+
+/**
+ * @typedef {Object} Review
+ * @property {string} _id - Unique identifier of the review.
+ * @property {string} [userName] - Name of the reviewer.
+ * @property {number} rating - Rating value (1–5).
+ * @property {string} [comment] - Review text/comment.
+ * @property {string} [createdAt] - Date when the review was created.
+ * @property {string} [userId] - ID of the user who posted the review.
+ */
 interface Review {
+  _id: string;
   userName?: string;
   rating: number;
   comment?: string;
@@ -29,31 +47,57 @@ interface Review {
   userId?: string;
 }
 
-const ReviewSkeletonItem = () => (
-  <div className="flex gap-4 py-4">
-    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-    <div className="flex-1 space-y-2">
-      <div className="flex justify-between">
-        <div className="h-4 w-1/3 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-        <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="h-3 w-3 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"
-            ></div>
-          ))}
-        </div>
-      </div>
-      <div className="space-y-1">
-        <div className="h-3 w-full rounded bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-        <div className="h-3 w-4/5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-      </div>
-      <div className="h-2 w-1/4 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-    </div>
-  </div>
-);
+/**
+ * @typedef {Object} NoteReviewsProps
+ * @property {boolean} loading - Whether the reviews are still being loaded.
+ * @property {Review[]} reviews - Array of user reviews.
+ * @property {User} user - Currently authenticated user.
+ * @property {(params: {noteId: string; reviewId: string}) => Promise<void>} removeReviewFromNote - Function to remove a review.
+ * @property {boolean} removeReviewLoading - Whether the delete action is in progress.
+ * @property {string} noteId - ID of the note these reviews belong to.
+ */
+interface NoteReviewsProps {
+  loading: boolean;
+  reviews: Review[];
+  user: User;
+  removeReviewFromNote: (params: {
+    noteId: string;
+    reviewId: string;
+  }) => Promise<void>;
+  removeReviewLoading: boolean;
+  noteId: string;
+}
 
-const ReviewItem = ({ review }: { review: Review }) => (
+/** ===================== Review Item ===================== */
+
+/**
+ * Displays a single review item with edit/delete controls.
+ * @param {Object} props
+ * @param {Review} props.review - Review data.
+ * @param {User} props.user - Current user data.
+ * @param {(params: {noteId: string; reviewId: string}) => Promise<void>} props.removeReviewFromNote - Delete handler.
+ * @param {boolean} props.removeReviewLoading - Delete button loading state.
+ * @param {string} props.noteId - ID of the associated note.
+ * @param {(updateReview: boolean) => void} props.setUpdateReview - Handler to toggle update dialog.
+ */
+const ReviewItem = ({
+  review,
+  user,
+  removeReviewFromNote,
+  removeReviewLoading,
+  noteId,
+  setUpdateReview,
+}: {
+  review: Review;
+  user: User;
+  removeReviewFromNote: (params: {
+    noteId: string;
+    reviewId: string;
+  }) => Promise<void>;
+  removeReviewLoading: boolean;
+  noteId: string;
+  setUpdateReview: (updateReview: boolean) => void;
+}) => (
   <motion.div
     className="flex gap-4 py-4"
     initial={{ opacity: 0, y: 10 }}
@@ -62,16 +106,18 @@ const ReviewItem = ({ review }: { review: Review }) => (
   >
     <Avatar className="h-10 w-10 flex-shrink-0">
       <AvatarFallback className="bg-blue-100 text-blue-600">
-        {review.userName?.charAt(0) || "U"}
+        {review.userName?.charAt(0) ?? "U"}
       </AvatarFallback>
     </Avatar>
+
     <div className="flex-1 min-w-0">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
         <h4 className="font-semibold text-gray-800 dark:text-white truncate">
           {review.userName || "مستخدم مجهول"}
         </h4>
+
         <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
-          {[...Array(5)].map((_, i) => (
+          {Array.from({ length: 5 }, (_, i) => (
             <Star
               key={i}
               className={cn(
@@ -84,37 +130,75 @@ const ReviewItem = ({ review }: { review: Review }) => (
           ))}
         </div>
       </div>
+
       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words">
         {review.comment || "لا يوجد تعليق"}
       </p>
+
       <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
         {review.createdAt
           ? formatArabicDate(review.createdAt)
           : "تاريخ غير معروف"}
       </p>
+
+      {review.userId === user._id && (
+        <div className="flex gap-2 mt-4">
+          <Button
+            variant="default"
+            className="mt-1"
+            onClick={() => setUpdateReview(true)}
+          >
+            تعديل
+          </Button>
+          <Button
+            variant="destructive"
+            className="mt-1 flex items-center gap-2"
+            onClick={() =>
+              removeReviewFromNote({
+                noteId,
+                reviewId: review._id,
+              })
+            }
+            disabled={removeReviewLoading}
+          >
+            {removeReviewLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                جاري الحذف...
+              </>
+            ) : (
+              "حذف"
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   </motion.div>
 );
 
-interface SortSelectorProps {
+/** ===================== Sort Selector ===================== */
+
+/**
+ * Dropdown selector for sorting reviews.
+ * @param {Object} props
+ * @param {string} props.sortOption - Current sort selection.
+ * @param {(option: string) => void} props.setSortOption - Callback to set sorting.
+ */
+const SortSelector = ({
+  sortOption,
+  setSortOption,
+}: {
   sortOption: string;
   setSortOption: (option: string) => void;
-}
-
-const SortSelector = ({ sortOption, setSortOption }: SortSelectorProps) => {
+}) => {
   const getDescription = useCallback((option: string): string => {
-    switch (option) {
-      case "latest":
-        return "سيتم عرض أحدث العناصر أولاً";
-      case "oldest":
-        return "سيتم عرض أقدم العناصر أولاً";
-      case "highest":
-        return "سيتم عرض أعلى التقييمات أولاً";
-      case "lowest":
-        return "سيتم عرض أدنى التقييمات أولاً";
-      default:
-        return "سيتم عرض أحدث العناصر أولاً";
-    }
+    const desc: Record<string, string> = {
+      latest: "سيتم عرض أحدث العناصر أولاً",
+      oldest: "سيتم عرض أقدم العناصر أولاً",
+      highest: "سيتم عرض أعلى التقييمات أولاً",
+      lowest: "سيتم عرض أدنى التقييمات أولاً",
+    };
+    return desc[option] || desc.latest;
   }, []);
 
   return (
@@ -135,40 +219,25 @@ const SortSelector = ({ sortOption, setSortOption }: SortSelectorProps) => {
         </SelectTrigger>
 
         <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg rtl text-right dark:bg-gray-800 dark:border-gray-700">
-          <SelectItem
-            value="latest"
-            className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150 text-right flex items-center justify-start dark:hover:bg-blue-900/20"
-          >
+          <SelectItem value="latest">
             <div className="flex items-center">
               <ArrowUp className="h-5 w-5 ml-2 text-blue-500" />
               <span>الأحدث</span>
             </div>
           </SelectItem>
-
-          <SelectItem
-            value="oldest"
-            className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150 text-right flex items-center justify-start dark:hover:bg-blue-900/20"
-          >
+          <SelectItem value="oldest">
             <div className="flex items-center">
               <ArrowDown className="h-5 w-5 ml-2 text-blue-500" />
               <span>الأقدم</span>
             </div>
           </SelectItem>
-
-          <SelectItem
-            value="highest"
-            className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150 text-right flex items-center justify-start dark:hover:bg-blue-900/20"
-          >
+          <SelectItem value="highest">
             <div className="flex items-center">
               <ArrowUpCircle className="h-5 w-5 ml-2 text-blue-500" />
               <span>الأعلى تقييماً</span>
             </div>
           </SelectItem>
-
-          <SelectItem
-            value="lowest"
-            className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150 text-right flex items-center justify-start dark:hover:bg-blue-900/20"
-          >
+          <SelectItem value="lowest">
             <div className="flex items-center">
               <ArrowDownCircle className="h-5 w-5 ml-2 text-blue-500" />
               <span>الأدنى تقييماً</span>
@@ -184,15 +253,44 @@ const SortSelector = ({ sortOption, setSortOption }: SortSelectorProps) => {
   );
 };
 
-// Type for the reviewsList state and props
-interface NoteReviewsProps {
-  loading: boolean;
-  reviews: Review[];
-}
+/** ===================== NoteReviews ===================== */
 
-const NoteReviews = ({ reviews, loading }: NoteReviewsProps) => {
+/**
+ * Displays all reviews for a specific note with sort options, loading states, and update/delete actions.
+ * @component
+ * @param {NoteReviewsProps} props
+ */
+const NoteReviews = ({
+  reviews,
+  loading,
+  user,
+  removeReviewFromNote,
+  noteId,
+  removeReviewLoading,
+}: NoteReviewsProps) => {
   const [sortOption, setSortOption] = useState<string>("latest");
+  const [updateReview, setUpdateReview] = useState(false);
 
+  /** Sorts reviews according to selected option. */
+  const sortedReviews = [...(reviews || [])].sort((a, b) => {
+    const dateA = new Date(a.createdAt ?? "").getTime();
+    const dateB = new Date(b.createdAt ?? "").getTime();
+
+    switch (sortOption) {
+      case "latest":
+        return dateB - dateA;
+      case "oldest":
+        return dateA - dateB;
+      case "highest":
+        return b.rating - a.rating;
+      case "lowest":
+        return a.rating - b.rating;
+      default:
+        return 0;
+    }
+  });
+
+  /** Skeleton loader */
   if (loading) {
     return (
       <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
@@ -203,7 +301,7 @@ const NoteReviews = ({ reviews, loading }: NoteReviewsProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="divide-y divide-gray-200 dark:divide-gray-700">
-          {[...Array(3)].map((_, i) => (
+          {Array.from({ length: 3 }, (_, i) => (
             <ReviewSkeletonItem key={i} />
           ))}
         </CardContent>
@@ -211,7 +309,8 @@ const NoteReviews = ({ reviews, loading }: NoteReviewsProps) => {
     );
   }
 
-  if (!reviews || reviews.length === 0) {
+  /** Empty state */
+  if (!reviews?.length) {
     return (
       <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
         <CardHeader>
@@ -229,6 +328,7 @@ const NoteReviews = ({ reviews, loading }: NoteReviewsProps) => {
     );
   }
 
+  /** Render list */
   return (
     <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
       <CardHeader>
@@ -240,12 +340,27 @@ const NoteReviews = ({ reviews, loading }: NoteReviewsProps) => {
           <SortSelector sortOption={sortOption} setSortOption={setSortOption} />
         </div>
       </CardHeader>
+
       <CardContent className="divide-y divide-gray-200 dark:divide-gray-700">
-        {reviews.map((review, index) => (
-          <ReviewItem
-            key={`${review.userId}_${review.createdAt}_${index}`}
-            review={review}
-          />
+        {sortedReviews.map((review, index) => (
+          <>
+            <ReviewItem
+              key={`${review._id}_${index}`}
+              review={review}
+              user={user}
+              removeReviewFromNote={removeReviewFromNote}
+              removeReviewLoading={removeReviewLoading}
+              noteId={noteId}
+              setUpdateReview={setUpdateReview}
+            />
+
+            <UpdateReviewsDialog
+              open={updateReview}
+              onOpenChange={() => setUpdateReview(false)}
+              noteId={noteId}
+              reviewId={review._id}
+            />
+          </>
         ))}
       </CardContent>
     </Card>

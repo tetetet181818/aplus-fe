@@ -57,7 +57,6 @@ export const NoteHeader = ({
   toggleLike,
 }: NoteHeaderProps) => {
   if (!title) {
-    console.error("NoteHeader: Missing required prop 'title'");
     return (
       <Card className="shadow-lg border-red-200 dark:border-red-700">
         <CardHeader>
@@ -481,30 +480,38 @@ export const NoteActions = ({
     </Card>
   );
 };
-
-const ContactMethod = ({ method }: { method: string }) => {
+interface ContactMethodProps {
+  method?: string;
+}
+export const ContactMethod = ({ method }: ContactMethodProps) => {
   if (!method) return null;
+
+  const isEmail = method.includes("@");
+  const isPhone =
+    !isEmail && /^(\+?\d{1,3}[- ]?)?\d{8,15}$/.test(method.trim());
 
   return (
     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-        {method.includes("@") ? (
+        {isEmail ? (
           <Mail className="h-4 w-4 ml-2 text-primary" />
         ) : (
           <Phone className="h-4 w-4 ml-2 text-primary" />
         )}
         تواصل مع البائع:
       </h3>
-      {method.includes("@") ? (
+
+      {isEmail ? (
         <a
           href={`mailto:${method}`}
           className="text-primary hover:underline break-all"
-          onClick={(e) => {
-            if (!method.startsWith("mailto:")) {
-              e.preventDefault();
-              console.error("Invalid email format");
-            }
-          }}
+        >
+          {method}
+        </a>
+      ) : isPhone ? (
+        <a
+          href={`tel:${method.replace(/\s+/g, "")}`}
+          className="text-primary hover:underline break-all"
         >
           {method}
         </a>
@@ -561,66 +568,6 @@ export const NotePurchaseConfirmationDialog = ({
             className="bg-primary hover:bg-primary/90"
           >
             {notePrice > 0 ? "تأكيد الشراء" : "الحصول على الملخص"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-interface NoteDeleteConfirmationDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-  noteTitle: string;
-  loading: boolean;
-}
-
-export const NoteDeleteConfirmationDialog = ({
-  isOpen,
-  onOpenChange,
-  onConfirm,
-  noteTitle,
-  loading,
-}: NoteDeleteConfirmationDialogProps) => {
-  const handleConfirm = () => {
-    try {
-      if (typeof onConfirm === "function") {
-        onConfirm();
-      }
-    } catch (error) {
-      console.error("Error confirming deletion:", error);
-    } finally {
-      onOpenChange(false);
-    }
-  };
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>تأكيد عملية الحذف</DialogTitle>
-          <DialogDescription>
-            {noteTitle
-              ? `هل أنت متأكد أنك تريد حذف ملخص "${noteTitle}"؟ لا يمكن التراجع عن هذا الإجراء.`
-              : "هل أنت متأكد أنك تريد حذف هذا الملخص؟ لا يمكن التراجع عن هذا الإجراء."}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="destructive">إلغاء</Button>
-          <Button
-            onClick={handleConfirm}
-            className="bg-red-600 hover:bg-red-700"
-          >
-            {loading ? (
-              <>
-                {" "}
-                <Loader className="size-4 mx-2" />
-                جاري الحذف
-              </>
-            ) : (
-              "تأكيد الحذف"
-            )}
           </Button>
         </DialogFooter>
       </DialogContent>

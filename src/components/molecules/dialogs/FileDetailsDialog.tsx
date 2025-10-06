@@ -1,13 +1,21 @@
 import { useCallback, memo } from "react";
 import formatArabicDate from "@/utils/formateTime";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Image from "next/image";
+import { Note } from "@/types";
+import { FileDown } from "lucide-react";
 
 interface FileDetailsDialogProps {
   open: boolean;
   onClose: () => void;
-  item: any;
+  item: Note | null;
 }
 
 const FileDetailsDialog = memo(
@@ -20,24 +28,29 @@ const FileDetailsDialog = memo(
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rtl">
           <div className="space-y-6 py-2">
-            <h1 className="text-2xl md:text-3xl font-bold text-blue-600 text-right">
-              {item?.title}
-            </h1>
+            <DialogHeader>
+              <DialogTitle className="text-2xl md:text-3xl font-bold text-blue-600">
+                {item?.title}
+              </DialogTitle>
+            </DialogHeader>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-right">
-              <DetailItem label="الكلية:" value={item?.college} />
-              <DetailItem label="الجامعة:" value={item?.university} />
-              <DetailItem label="المادة:" value={item?.subject} />
-              <DetailItem label="السنة:" value={item?.year} />
-              <DetailItem label="عدد الصفحات:" value={item?.pages_number} />
+              <DetailItem label="الكلية:" value={item?.college || ""} />
+              <DetailItem label="الجامعة:" value={item?.university || ""} />
+              <DetailItem label="المادة:" value={item?.subject || ""} />
+              <DetailItem label="السنة:" value={String(item?.year || "")} />
+              <DetailItem
+                label="عدد الصفحات:"
+                value={String(item?.pagesNumber || "")}
+              />
               <DetailItem
                 label="السعر:"
                 value={item?.price ? `${item.price} ر.س` : "غير محدد"}
               />
-              <DetailItem label="التنزيلات:" value={item?.downloads || 0} />
+              <DetailItem label="التنزيلات:" value={String(item?.downloads)} />
               <DetailItem
                 label="تاريخ الإنشاء:"
-                value={formatArabicDate(item?.created_at)}
+                value={formatArabicDate(item?.createdAt || "")}
               />
             </div>
 
@@ -52,17 +65,17 @@ const FileDetailsDialog = memo(
               </div>
             )}
 
-            {item?.contact_method && (
+            {item?.contactMethod && (
               <div className="text-right">
                 <h3 className="font-semibold text-lg mb-2 text-gray-800">
                   طريقة التواصل:
                 </h3>
                 <a
-                  href={`tel:${item.contact_method}`}
+                  href={`mailto:${item.contactMethod}`}
                   className="text-blue-600 hover:text-blue-800 transition-colors duration-200 font-medium"
                   aria-label="اتصال على الرقم"
                 >
-                  {item.contact_method}
+                  {item.contactMethod}
                 </a>
               </div>
             )}
@@ -86,33 +99,20 @@ const FileDetailsDialog = memo(
               </div>
             )}
 
-            {item?.file_url && (
+            {item?.file_path && (
               <div className="text-right">
                 <h3 className="font-semibold text-lg mb-2 text-gray-800">
                   الملف:
                 </h3>
                 <a
-                  href={item.file_url}
+                  href={item.file_path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
                   aria-label="عرض ملف PDF"
                 >
                   <span>عرض PDF</span>
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
+                  <FileDown className="size-4" />
                 </a>
               </div>
             )}

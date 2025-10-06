@@ -1,6 +1,5 @@
 import React from "react";
 
-import { motion } from "framer-motion";
 import {
   FileText,
   Users,
@@ -15,11 +14,6 @@ import {
 } from "lucide-react";
 
 const TermsOfServicePage = () => {
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
   const ListItem = ({
     icon,
     title,
@@ -29,7 +23,7 @@ const TermsOfServicePage = () => {
     title: string;
     children: React.ReactNode;
   }) => (
-    <motion.div variants={sectionVariants} className="mb-8">
+    <div className="mb-8">
       <div className="flex items-start">
         <div className="flex-shrink-0 mr-4 mt-1">
           {icon
@@ -49,29 +43,18 @@ const TermsOfServicePage = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-      className=" mx-auto py-12 px-4 md:px-6 bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900 min-h-screen"
-    >
+    <div className=" mx-auto py-12 px-4 md:px-6 bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
       <header className="text-center mb-12">
-        <motion.div
-          variants={sectionVariants}
-          className="inline-block p-4 bg-primary/10 dark:bg-primary-light/10 rounded-full mb-4"
-        >
+        <div className="inline-block p-4 bg-primary/10 dark:bg-primary-light/10 rounded-full mb-4">
           <FileText className="h-12 w-12 text-primary dark:text-primary-light" />
-        </motion.div>
-        <motion.h1
-          variants={sectionVariants}
-          className="text-4xl md:text-5xl text-primary font-bold  mb-4"
-        >
+        </div>
+        <h1 className="text-4xl md:text-5xl text-primary font-bold  mb-4">
           شروط الاستخدام – منصة أ+
-        </motion.h1>
+        </h1>
       </header>
 
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl">
@@ -312,7 +295,7 @@ const TermsOfServicePage = () => {
           </ul>
         </ListItem>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

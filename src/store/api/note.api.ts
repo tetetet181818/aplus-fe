@@ -1,4 +1,4 @@
-import { CreateNoteData } from "@/types";
+import { CreateNoteData, ReviewData } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl =
@@ -37,6 +37,17 @@ export const noteApi = createApi({
           Authorization: `${token}`,
         },
         body: noteData,
+      }),
+      invalidatesTags: ["Note"],
+    }),
+
+    purchaseNote: builder.mutation({
+      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+        url: `/${noteId}/purchase`,
+        method: "POST",
+        headers: {
+          Authorization: `${token}`,
+        },
       }),
       invalidatesTags: ["Note"],
     }),
@@ -118,6 +129,65 @@ export const noteApi = createApi({
       }),
       providesTags: ["Note"],
     }),
+
+    addReviewToNote: builder.mutation({
+      query: ({
+        token,
+        noteId,
+        reviewData,
+      }: {
+        noteId: string;
+        reviewData: ReviewData;
+        token: string;
+      }) => ({
+        url: `/${noteId}/add-review`,
+        method: "POST",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: reviewData,
+      }),
+      invalidatesTags: ["Note"],
+    }),
+    removeReviewFromNote: builder.mutation({
+      query: ({
+        token,
+        noteId,
+        reviewId,
+      }: {
+        noteId: string;
+        reviewId: string;
+        token: string;
+      }) => ({
+        url: `/${noteId}/reviews/${reviewId}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      invalidatesTags: ["Note"],
+    }),
+    updateReviewFromNote: builder.mutation({
+      query: ({
+        token,
+        noteId,
+        reviewId,
+        reviewData,
+      }: {
+        noteId: string;
+        reviewId: string;
+        reviewData: ReviewData;
+        token: string;
+      }) => ({
+        url: `/${noteId}/reviews/${reviewId}`,
+        method: "PUT",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: reviewData,
+      }),
+      invalidatesTags: ["Note"],
+    }),
   }),
 });
 
@@ -132,4 +202,8 @@ export const {
   useGetUserNotesQuery,
   useGetPurchasedNotesQuery,
   useGetLikedNotesQuery,
+  usePurchaseNoteMutation,
+  useAddReviewToNoteMutation,
+  useRemoveReviewFromNoteMutation,
+  useUpdateReviewFromNoteMutation,
 } = noteApi;

@@ -7,23 +7,40 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import { resetPasswordValidation } from "@/utils/validation/authValidation";
+import useAuth from "@/hooks/useAuth";
+
+/** declare props */
+interface ResetPasswordProps {
+  userId: string;
+  resetPasswordToken: string;
+}
 
 /**
  * ResetPassword Component
  * Renders a form to set a new password with validation.
  */
-export default function ResetPassword() {
+
+export default function ResetPassword({
+  userId,
+  resetPasswordToken,
+}: ResetPasswordProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const loading = false;
+
+  const { handleResetPassword } = useAuth();
 
   const formik = useFormik({
     initialValues: { password: "", confirmPassword: "" },
     validationSchema: resetPasswordValidation,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log(values);
         resetForm();
+        handleResetPassword({
+          userId,
+          resetPasswordToken,
+          newPassword: values.password,
+        });
       } catch (err) {
         console.error(err);
       }

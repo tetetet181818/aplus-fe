@@ -88,6 +88,34 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth", "User"],
     }),
+
+    resetPassword: builder.mutation({
+      query: ({
+        userId,
+        resetPasswordToken,
+        newPassword,
+      }: {
+        userId: string;
+        resetPasswordToken: string;
+        newPassword: string;
+      }) => ({
+        url: `/reset-password`,
+        method: "POST",
+        body: { userId, resetPasswordToken, newPassword },
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+
+    getUserById: builder.query({
+      query: ({ id, token }: { id: string; token: string }) => ({
+        url: `/${id}`,
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Auth", "User"],
+    }),
   }),
 });
 
@@ -101,4 +129,6 @@ export const {
   useDeleteAccountMutation,
   useUpdateUserInfoMutation,
   useForgetPasswordMutation,
+  useResetPasswordMutation,
+  useGetUserByIdQuery,
 } = authApi;

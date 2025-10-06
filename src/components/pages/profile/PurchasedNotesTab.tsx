@@ -28,8 +28,7 @@ const PurchasedNotesTab = ({
   loading,
   downloadLoading,
 }: PurchasedNotesTabProps) => {
-  // Empty state
-  if (!loading && notes.length === 0) {
+  if (!loading && notes?.length === 0) {
     return (
       <NoResults
         icon={<ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />}
@@ -44,7 +43,7 @@ const PurchasedNotesTab = ({
 
   return (
     <div className="space-y-6">
-      {notes.map((note) => (
+      {notes?.map((note) => (
         <Card
           key={note._id}
           className="py-0 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"

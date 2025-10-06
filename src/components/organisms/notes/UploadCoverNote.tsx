@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, ImageUp, X, Upload } from "lucide-react";
-import Image from "next/image";
+"use client";
+
 import React, { useRef, useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, ImageUp, Upload, X } from "lucide-react";
 import { FormikProps } from "formik";
 import { FormValues } from "@/types";
 
-/**
- * Component for uploading and previewing cover image in the note creation form
- */
+/** Upload and preview cover image step in Add Note form */
 export default function UploadCoverNote({
   formik,
   prevTab,
@@ -21,24 +21,15 @@ export default function UploadCoverNote({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      processFile(file);
-    }
-  };
-
   const processFile = (file: File) => {
-    if (!file.type.match("image/jpeg") && !file.type.match("image/png")) {
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
       alert("الرجاء اختيار صورة بصيغة JPG أو PNG فقط");
       return;
     }
-
     if (file.size > 5 * 1024 * 1024) {
       alert("حجم الصورة يجب أن لا يتجاوز 5MB");
       return;
     }
-
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
@@ -48,36 +39,22 @@ export default function UploadCoverNote({
     reader.readAsDataURL(file);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) processFile(file);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      processFile(files[0]);
-    }
+    const file = e.dataTransfer.files?.[0];
+    if (file) processFile(file);
   };
 
   const removeImage = () => {
     setPreviewUrl(null);
     formik.setFieldValue("files.cover", null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
@@ -90,15 +67,21 @@ export default function UploadCoverNote({
             ? "border-green-500"
             : "border-gray-300 hover:border-gray-400"
         }`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+        }}
         onDrop={handleDrop}
       >
         <input
           type="file"
           ref={fileInputRef}
-          onChange={handleFileChange}
           accept=".jpg,.jpeg,.png"
+          onChange={handleFileChange}
           className="hidden"
         />
 
@@ -108,14 +91,14 @@ export default function UploadCoverNote({
               <Image
                 src={previewUrl}
                 alt="Preview"
-                className="max-h-64 max-w-full rounded-lg shadow-md object-cover"
                 width={500}
                 height={500}
+                className="max-h-64 max-w-full rounded-lg shadow-md object-cover"
               />
               <button
                 type="button"
                 onClick={removeImage}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -138,11 +121,10 @@ export default function UploadCoverNote({
               <p className="text-gray-500">أو</p>
               <Button
                 type="button"
-                onClick={triggerFileInput}
+                onClick={() => fileInputRef.current?.click()}
                 className="gap-2 bg-blue-600 hover:bg-blue-700"
               >
-                <Upload className="h-4 w-4" />
-                اختر صورة من الجهاز
+                <Upload className="h-4 w-4" /> اختر صورة من الجهاز
               </Button>
             </div>
             <div className="text-xs text-gray-400 space-y-1">
@@ -158,11 +140,11 @@ export default function UploadCoverNote({
           <h4 className="font-medium text-gray-800 mb-2">
             مواصفات الصورة المثالية:
           </h4>
-          <ul className="text-sm text-gray-600 space-y-1">
-            <li>• نسبة الأبعاد: 16:9 (مثالية للعرض)</li>
-            <li>• الدقة: 1200x675 بكسل أو أعلى</li>
-            <li>• الخلفية: فاتحة وواضحة</li>
-            <li>• الحجم: لا تتجاوز 5MB</li>
+          <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+            <li>نسبة الأبعاد: 16:9 (مثالية للعرض)</li>
+            <li>الدقة: 1200x675 بكسل أو أعلى</li>
+            <li>الخلفية: فاتحة وواضحة</li>
+            <li>الحجم: لا يتجاوز 5MB</li>
           </ul>
         </div>
       )}
