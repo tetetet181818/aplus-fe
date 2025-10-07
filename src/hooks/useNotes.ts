@@ -137,12 +137,29 @@ export default function useNotes() {
     }
   };
 
-  const handlePurchaseNote = async ({ noteId }: { noteId: string }) => {
-    const res = await purchaseNote({ noteId, token: token || "" });
+  const handlePurchaseNote = async ({
+    noteId,
+    invoice_id,
+    status,
+    message,
+  }: {
+    noteId: string;
+    invoice_id: string;
+    status: string;
+    message: string;
+  }) => {
+    const res = await purchaseNote({
+      noteId,
+      invoice_id,
+      status,
+      message,
+      token: token || "",
+    });
 
     if (res) {
       toast.success(res?.data?.message);
     }
+    return res;
   };
 
   // ---- Pagination Logic ----

@@ -42,11 +42,28 @@ export const noteApi = createApi({
     }),
 
     purchaseNote: builder.mutation({
-      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+      query: ({
+        noteId,
+        token,
+        invoice_id,
+        status,
+        message,
+      }: {
+        noteId: string;
+        token: string;
+        invoice_id: string;
+        status: string;
+        message: string;
+      }) => ({
         url: `/${noteId}/purchase`,
         method: "POST",
         headers: {
           Authorization: `${token}`,
+        },
+        body: {
+          invoice_id,
+          status,
+          message,
         },
       }),
       invalidatesTags: ["Note"],
@@ -188,6 +205,27 @@ export const noteApi = createApi({
       }),
       invalidatesTags: ["Note"],
     }),
+
+    createPaymentLink: builder.mutation({
+      query: ({
+        noteId,
+        userId,
+        amount,
+        token,
+      }: {
+        noteId: string;
+        userId: string;
+        amount: string;
+        token: string;
+      }) => ({
+        url: `/create-payment-link?userId=${userId}&noteId=${noteId}&amount=${amount}`,
+        method: "POST",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      invalidatesTags: ["Note"],
+    }),
   }),
 });
 
@@ -206,4 +244,5 @@ export const {
   useAddReviewToNoteMutation,
   useRemoveReviewFromNoteMutation,
   useUpdateReviewFromNoteMutation,
+  useCreatePaymentLinkMutation,
 } = noteApi;

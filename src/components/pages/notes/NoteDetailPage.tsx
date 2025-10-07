@@ -42,6 +42,9 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     toggleLike,
     deleteNoteLoading,
     handleDeleteNote,
+    confirmPurchase,
+    isPurchaseConfirmOpen,
+    setIsPurchaseConfirmOpen,
   } = useNoteDetail(id);
   const { user, isAuthenticated } = useAuth();
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
@@ -190,9 +193,9 @@ const NoteDetailPage = ({ id }: { id: string }) => {
         </div>
 
         <NotePurchaseConfirmationDialog
-          isOpen={false}
-          onOpenChange={() => {}}
-          onConfirm={handlePurchase}
+          isOpen={isPurchaseConfirmOpen}
+          onOpenChange={() => setIsPurchaseConfirmOpen(!isPurchaseConfirmOpen)}
+          onConfirm={confirmPurchase}
           noteTitle={note.title}
           notePrice={note.price}
         />
