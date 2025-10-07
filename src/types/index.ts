@@ -172,3 +172,14 @@ export interface ReviewData {
   rating: number;
   comment: string;
 }
+
+export interface notificationType {
+  _id: string;
+  userId: string;
+  title: string;
+  message: string;
+  read: boolean;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+}
