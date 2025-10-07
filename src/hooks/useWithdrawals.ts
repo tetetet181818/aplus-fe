@@ -3,6 +3,7 @@
 import {
   useCreateWithdrawalMutation,
   useGetAllWithdrawalsQuery,
+  useGetMeWithdrawalsQuery,
 } from "@/store/api/withdrawal.api";
 import { withdrawalData } from "@/types";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,9 @@ export default function useWithdrawals() {
   if (typeof window !== "undefined") {
     token = window.localStorage.getItem("access_token");
   }
+
+  const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
+    useGetMeWithdrawalsQuery({ token: token! });
 
   const { data: withdrawals, isLoading: withdrawalsLoading } =
     useGetAllWithdrawalsQuery({ token: token! });
@@ -38,6 +42,8 @@ export default function useWithdrawals() {
   return {
     withdrawals: withdrawals?.data,
     withdrawalsLoading,
+    meWithdrawals: meWithdrawals?.data,
+    meWithdrawalsLoading,
     createWithdrawalLoading,
     handleCreateWithdrawal,
   };

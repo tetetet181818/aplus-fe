@@ -2,20 +2,13 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import WithdrawalForm from "./WithdrawalForm";
-import FinanceDashboard from "./EarningsInfo";
+import FinanceDashboard from "./FinanceDashboard";
 import { User } from "@/types";
 import { useFormik, FormikHelpers } from "formik";
 import useWithdrawals from "@/hooks/useWithdrawals";
 
 interface EarningsTabProps {
   currentUser: User;
-}
-
-interface Withdrawal {
-  amount: number;
-  status: "مكتمل" | "قيد المراجعة" | "مرفوض";
-  date: string;
-  transactionId: string;
 }
 
 interface WithdrawalFormValues {
@@ -26,36 +19,14 @@ interface WithdrawalFormValues {
 }
 
 const EarningsTab = ({ currentUser }: EarningsTabProps) => {
-  const { handleCreateWithdrawal, createWithdrawalLoading } = useWithdrawals();
+  const {
+    handleCreateWithdrawal,
+    createWithdrawalLoading,
+    meWithdrawals,
+    meWithdrawalsLoading,
+  } = useWithdrawals();
 
   const availableBalance = currentUser?.balance || 0;
-
-  const withdrawalHistory: Withdrawal[] = [
-    {
-      amount: 250,
-      status: "مكتمل",
-      date: "2025-09-01",
-      transactionId: "TXN-1001",
-    },
-    {
-      amount: 500,
-      status: "قيد المراجعة",
-      date: "2025-09-08",
-      transactionId: "TXN-1002",
-    },
-    {
-      amount: 120,
-      status: "مرفوض",
-      date: "2025-09-12",
-      transactionId: "TXN-1003",
-    },
-    {
-      amount: 300,
-      status: "مكتمل",
-      date: "2025-09-15",
-      transactionId: "TXN-1004",
-    },
-  ];
 
   const currentNetEarnings = availableBalance * 0.9;
 
@@ -87,7 +58,8 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
     <div className="space-y-6 lg:px-10 sm:px-0">
       <FinanceDashboard
         availableBalance={availableBalance}
-        withdrawalHistory={withdrawalHistory}
+        meWithdrawals={meWithdrawals}
+        loading={meWithdrawalsLoading}
       />
 
       <div>
