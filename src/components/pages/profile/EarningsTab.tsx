@@ -63,13 +63,13 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
       />
 
       <div>
-        {currentUser.withdrawalTimes > 0 ? (
+        {currentUser?.withdrawalTimes > 0 ? (
           <WithdrawalForm
             formik={formik}
             loading={createWithdrawalLoading}
             netEarnings={currentNetEarnings}
-            remainingWithdrawals={currentUser.withdrawalTimes}
-            maxWithdrawalsPerMonth={currentUser.withdrawalTimes}
+            remainingWithdrawals={currentUser?.withdrawalTimes}
+            maxWithdrawalsPerMonth={currentUser?.withdrawalTimes}
             isProcessingWithdrawal={createWithdrawalLoading}
           />
         ) : (

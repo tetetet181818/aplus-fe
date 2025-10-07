@@ -117,7 +117,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               title={note.title}
               price={note.price}
               rating={note.rating}
-              noteId={note._id}
+              noteId={note?._id}
               addNoteToLikeList={addNoteToLikeList}
               removeNoteFromLikeList={removeNoteFromLikeList}
               user={user}
