@@ -122,7 +122,7 @@ const ReviewItem = ({
               key={i}
               className={cn(
                 "h-3 w-3",
-                i < (review.rating || 0)
+                i < (review?.rating || 0)
                   ? "text-yellow-400 fill-yellow-400"
                   : "text-gray-300 dark:text-gray-600"
               )}
@@ -132,16 +132,16 @@ const ReviewItem = ({
       </div>
 
       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words">
-        {review.comment || "لا يوجد تعليق"}
+        {review?.comment || "لا يوجد تعليق"}
       </p>
 
       <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-        {review.createdAt
-          ? formatArabicDate(review.createdAt)
+        {review?.createdAt
+          ? formatArabicDate(review?.createdAt)
           : "تاريخ غير معروف"}
       </p>
 
-      {review.userId === user._id && (
+      {review?.userId === user?._id && (
         <div className="flex gap-2 mt-4">
           <Button
             variant="default"
@@ -156,7 +156,7 @@ const ReviewItem = ({
             onClick={() =>
               removeReviewFromNote({
                 noteId,
-                reviewId: review._id,
+                reviewId: review?._id,
               })
             }
             disabled={removeReviewLoading}
@@ -345,7 +345,7 @@ const NoteReviews = ({
         {sortedReviews.map((review, index) => (
           <>
             <ReviewItem
-              key={`${review._id}_${index}`}
+              key={`${review?._id}_${index}`}
               review={review}
               user={user}
               removeReviewFromNote={removeReviewFromNote}
@@ -358,7 +358,7 @@ const NoteReviews = ({
               open={updateReview}
               onOpenChange={() => setUpdateReview(false)}
               noteId={noteId}
-              reviewId={review._id}
+              reviewId={review?._id}
             />
           </>
         ))}

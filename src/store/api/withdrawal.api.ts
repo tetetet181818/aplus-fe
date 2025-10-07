@@ -12,6 +12,17 @@ export const withdrawalApi = createApi({
   tagTypes: ["Withdrawal"],
 
   endpoints: (builder) => ({
+    getMeWithdrawals: builder.query({
+      query: ({ token }: { token: string }) => ({
+        url: "/me",
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Withdrawal"],
+    }),
+
     createWithdrawal: builder.mutation({
       query: ({
         token,
@@ -27,6 +38,7 @@ export const withdrawalApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      invalidatesTags: ["Withdrawal"],
     }),
 
     getAllWithdrawals: builder.query({
@@ -37,6 +49,7 @@ export const withdrawalApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      providesTags: ["Withdrawal"],
     }),
 
     getSingleWithdrawal: builder.query({
@@ -53,6 +66,7 @@ export const withdrawalApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      providesTags: ["Withdrawal"],
     }),
 
     updateWithdrawal: builder.mutation({
@@ -69,6 +83,7 @@ export const withdrawalApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      invalidatesTags: ["Withdrawal"],
     }),
 
     deleteWithdrawal: builder.mutation({
@@ -85,6 +100,7 @@ export const withdrawalApi = createApi({
           Authorization: `${token}`,
         },
       }),
+      invalidatesTags: ["Withdrawal"],
     }),
   }),
 });
@@ -95,4 +111,5 @@ export const {
   useGetSingleWithdrawalQuery,
   useUpdateWithdrawalMutation,
   useDeleteWithdrawalMutation,
+  useGetMeWithdrawalsQuery,
 } = withdrawalApi;

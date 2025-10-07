@@ -91,6 +91,8 @@ export const navigationItems = [
   },
 ];
 
+export const platformFeePercent: number = 15;
+export const paymentProcessingPercent: number = 2.75;
 export const MAX_NOTES_PER_USER: number = 50;
 export const MAX_FILE_SIZE_MB: number = 30;
 export const MAX_PAGES_PER_NOTE: number = 300;
