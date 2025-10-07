@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Search,
   LogOut,
   LogIn,
   UserPlus,
@@ -17,6 +15,7 @@ import {
 import { motion } from "framer-motion";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
 import { JSX } from "react";
+import { notificationType } from "@/types";
 
 interface User {
   role?: string;
@@ -26,27 +25,31 @@ interface User {
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  searchQuery: string;
-  onSearchQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearchSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   isAuthenticated: boolean;
   onLoginOpen: () => void;
   onRegisterOpen: () => void;
   user?: User | null;
   handleLogout: () => void;
+  notifications: notificationType[];
+  notificationLoading: boolean;
+  handleReadAllNotification: () => void;
+  handelClearAllNotification: () => void;
+  handleMakeNotificationRead: (id: string) => void;
 }
 
 const MobileMenu = ({
   isOpen,
   onClose,
-  searchQuery,
-  onSearchQueryChange,
-  onSearchSubmit,
   isAuthenticated,
   onLoginOpen,
   onRegisterOpen,
   user,
   handleLogout,
+  notifications,
+  notificationLoading,
+  handleReadAllNotification,
+  handelClearAllNotification,
+  handleMakeNotificationRead,
 }: MobileMenuProps): JSX.Element | null => {
   if (!isOpen) return null;
 
@@ -65,25 +68,6 @@ const MobileMenu = ({
       aria-label="Mobile navigation menu"
     >
       <div className="py-4 px-5 space-y-4">
-        <form
-          onSubmit={onSearchSubmit}
-          className="relative w-full"
-          role="search"
-        >
-          <Search
-            className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden="true"
-          />
-          <Input
-            type="search"
-            placeholder="ابحث عن ملخصات..."
-            className="w-full pr-10 pl-4 h-11"
-            value={searchQuery}
-            onChange={onSearchQueryChange}
-            aria-label="Search for summaries"
-          />
-        </form>
-
         <div className="flex flex-col space-y-2">
           <Link href="/notes">
             <Button
@@ -168,7 +152,13 @@ const MobileMenu = ({
                 تسجيل الخروج
               </Button>
 
-              <NotificationBell />
+              <NotificationBell
+                notifications={notifications}
+                notificationLoading={notificationLoading}
+                onReadAll={handleReadAllNotification}
+                onClearAll={handelClearAllNotification}
+                handleMakeNotificationRead={handleMakeNotificationRead}
+              />
             </>
           ) : (
             <>

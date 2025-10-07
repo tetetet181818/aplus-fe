@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import UserMenu from "./UserMenu";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
-import { User } from "@/types/index";
+import { notificationType, User } from "@/types/index";
 
 interface DesktopNavProps {
   isAuthenticated: boolean;
@@ -12,7 +12,11 @@ interface DesktopNavProps {
   onLoginOpen: () => void;
   onRegisterOpen: () => void;
   handleLogout: () => void;
-  loading: boolean;
+  notificationLoading: boolean;
+  handleReadAllNotification: () => void;
+  handelClearAllNotification: () => void;
+  handleMakeNotificationRead: (id: string) => void;
+  notifications: notificationType[];
 }
 
 const DesktopNav = ({
@@ -21,6 +25,11 @@ const DesktopNav = ({
   onLoginOpen,
   onRegisterOpen,
   handleLogout,
+  notifications,
+  notificationLoading,
+  handleReadAllNotification,
+  handelClearAllNotification,
+  handleMakeNotificationRead,
 }: DesktopNavProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -49,7 +58,14 @@ const DesktopNav = ({
             </Button>
           </Link>
           <UserMenu handleLogout={handleLogout} user={user} />
-          <NotificationBell />
+
+          <NotificationBell
+            notifications={notifications}
+            notificationLoading={notificationLoading}
+            onReadAll={handleReadAllNotification}
+            onClearAll={handelClearAllNotification}
+            handleMakeNotificationRead={handleMakeNotificationRead}
+          />
         </>
       ) : (
         <>

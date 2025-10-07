@@ -4,19 +4,28 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Award } from "lucide-react";
+
 import DesktopNav from "@/components/molecules/navbar/DesktopNav";
 import MobileMenu from "@/components/molecules/navbar/MobileMenu";
 import LoginDialog from "@/components/molecules/dialogs/LoginDialog";
 import RegisterDialog from "@/components/molecules/dialogs/RegisterDialog";
 import useAuth from "@/hooks/useAuth";
+import useNotifications from "@/hooks/useNotifications";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { user, isCheckAuthLoading, isAuthenticated, logoutUser } = useAuth();
+  const { user, isAuthenticated, logoutUser } = useAuth();
+  const {
+    notifications,
+    notificationLoading,
 
+    handleReadAllNotification,
+    handelClearAllNotification,
+    handleMakeNotificationRead,
+  } = useNotifications(user?._id || "");
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const switchToRegister = () => {
@@ -58,7 +67,11 @@ export default function Navbar() {
           onLoginOpen={() => setIsLoginDialogOpen(true)}
           onRegisterOpen={() => setIsRegisterDialogOpen(true)}
           handleLogout={handleLogout}
-          loading={isCheckAuthLoading}
+          notifications={notifications}
+          notificationLoading={notificationLoading}
+          handleReadAllNotification={handleReadAllNotification}
+          handelClearAllNotification={handelClearAllNotification}
+          handleMakeNotificationRead={handleMakeNotificationRead}
         />
 
         {/* Mobile Hamburger */}
@@ -83,7 +96,6 @@ export default function Navbar() {
       <MobileMenu
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        searchQuery={searchQuery}
         isAuthenticated={isAuthenticated}
         user={user}
         onLoginOpen={() => {
@@ -95,10 +107,11 @@ export default function Navbar() {
           setIsMenuOpen(false);
         }}
         handleLogout={handleLogout}
-        onSearchQueryChange={(e) => setSearchQuery(e.target.value)}
-        onSearchSubmit={(e) => {
-          e.preventDefault();
-        }}
+        notifications={notifications}
+        notificationLoading={notificationLoading}
+        handleReadAllNotification={handleReadAllNotification}
+        handelClearAllNotification={handelClearAllNotification}
+        handleMakeNotificationRead={handleMakeNotificationRead}
       />
 
       {/* Auth Dialogs */}
