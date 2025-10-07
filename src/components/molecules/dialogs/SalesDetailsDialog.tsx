@@ -18,6 +18,7 @@ import {
   FileText,
   MessageSquare,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCallback } from "react";
@@ -51,7 +52,7 @@ const paymentMethodMap: Record<string, string> = {
   wallet: "محفظة إلكترونية",
 };
 
-const paymentMethodIcons: Record<string, any> = {
+const paymentMethodIcons: Record<string, LucideIcon> = {
   bank: CreditCard,
   card: CreditCard,
   wallet: CreditCard,
@@ -82,7 +83,7 @@ export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
     className,
     validateLink = true,
   }: {
-    icon?: any;
+    icon?: LucideIcon;
     label: string;
     value: string | number | null | undefined;
     isLink?: boolean;

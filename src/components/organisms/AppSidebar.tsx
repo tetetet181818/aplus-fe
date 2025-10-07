@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import { BookOpen, LucideIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +14,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function AppSidebar({
   navigationItems,
@@ -22,9 +23,11 @@ export default function AppSidebar({
     id: string;
     title: string;
     href: string;
-    icon: any;
+    icon: LucideIcon;
   }[];
 }) {
+  const pathname = usePathname();
+
   return (
     <Sidebar className="border-0 shadow-xl" side="right">
       <SidebarHeader className="border-b mt-16 border-muted/20 bg-gradient-to-r from-primary/5 to-blue-500/5">
@@ -37,30 +40,42 @@ export default function AppSidebar({
           </h2>
         </div>
       </SidebarHeader>
+
       <SidebarContent className="bg-gradient-to-b from-background to-muted/20">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2">
             التنقل
           </SidebarGroupLabel>
+
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1 px-2">
-              {navigationItems?.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <Link href={item.href}>
-                    <SidebarMenuButton
-                      className="w-full justify-start px-4 py-3 rounded-xl transition-all duration-200 hover:bg-primary/10 data-[active=true]:bg-primary/15 data-[active=true]:text-primary data-[active=true]:shadow-md"
-                      aria-label={item.title}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span className="font-medium">{item.title}</span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
+              {navigationItems?.map((item) => {
+                const isActive = pathname === item.href;
+
+                return (
+                  <SidebarMenuItem key={item.id}>
+                    <Link href={item.href}>
+                      <SidebarMenuButton
+                        aria-label={item.title}
+                        className={`w-full justify-start px-4 py-6 rounded-xl transition-all duration-200 flex items-center gap-3
+                          ${
+                            isActive
+                              ? "bg-blue-600 text-white shadow-md"
+                              : "text-foreground"
+                          }`}
+                      >
+                        <item.icon className="size-5" />
+                        <span className="font-medium">{item.title}</span>
+                      </SidebarMenuButton>
+                    </Link>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarRail />
     </Sidebar>
   );

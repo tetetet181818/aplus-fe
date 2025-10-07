@@ -11,6 +11,7 @@ import {
   Download,
   BarChart3,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export const universityColleges = {
   "جامعة الملك سعود": [
@@ -63,7 +64,14 @@ export const universityColleges = {
   ],
 };
 
-export const navigationItems = [
+export type NavigationItem = {
+  title: string;
+  icon: LucideIcon;
+  id: string;
+  href: string;
+};
+
+export const navigationItems: NavigationItem[] = [
   {
     title: "لوحة التحكم",
     icon: BarChart3,

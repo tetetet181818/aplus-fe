@@ -4,13 +4,18 @@ export default function FilterPanelContainer({
   filters,
   onFilterChange,
   onClearFilters,
-  universities,
   years,
 }: {
-  filters: any;
+  filters: {
+    university: string;
+    college: string;
+    year: string;
+    maxPrice: string;
+    subject: string;
+    sortBy: string;
+  };
   onFilterChange: (type: string, value: string) => void;
   onClearFilters: () => void;
-  universities: string[];
   years: number[];
 }) {
   return (
@@ -18,7 +23,6 @@ export default function FilterPanelContainer({
       filters={filters}
       onFilterChange={onFilterChange}
       onClearFilters={onClearFilters}
-      universities={universities}
       years={years}
     />
   );
