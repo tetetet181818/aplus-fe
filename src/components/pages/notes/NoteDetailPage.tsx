@@ -164,6 +164,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               authorId={note.owner_id}
               authorName={note?.ownerData?.fullName}
               isOwner={isOwner}
+              user={user}
             />
 
             <NoteActions

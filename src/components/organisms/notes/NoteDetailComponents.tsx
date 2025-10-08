@@ -55,6 +55,7 @@ export const NoteHeader = ({
   removeNoteFromLikeList,
   likeLoading,
   toggleLike,
+  user,
 }: NoteHeaderProps) => {
   if (!title) {
     return (
@@ -76,33 +77,34 @@ export const NoteHeader = ({
             <CardTitle className="text-3xl font-extrabold text-gray-800 dark:text-white">
               {title || "عنوان غير متوفر"}
             </CardTitle>
-
-            {toggleLike ? (
-              <Button
-                className="mt-2"
-                onClick={() => removeNoteFromLikeList({ noteId })}
-                variant="destructive"
-                disabled={likeLoading}
-              >
-                {likeLoading ? (
-                  <Loader2 className="size-5 animate-spin" />
-                ) : (
-                  "إلغاء الإعجاب بالملخص"
-                )}
-              </Button>
-            ) : (
-              <Button
-                className="mt-2"
-                onClick={() => addNoteToLikeList({ noteId })}
-                disabled={likeLoading}
-              >
-                {likeLoading ? (
-                  <Loader2 className="size-5 animate-spin" />
-                ) : (
-                  "الإعجاب بالملخص"
-                )}
-              </Button>
-            )}
+            {user ? (
+              toggleLike ? (
+                <Button
+                  className="mt-2"
+                  onClick={() => removeNoteFromLikeList({ noteId })}
+                  variant="destructive"
+                  disabled={likeLoading}
+                >
+                  {likeLoading ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    "إلغاء الإعجاب بالملخص"
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  className="mt-2"
+                  onClick={() => addNoteToLikeList({ noteId })}
+                  disabled={likeLoading}
+                >
+                  {likeLoading ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    "الإعجاب بالملخص"
+                  )}
+                </Button>
+              )
+            ) : null}
           </div>
 
           <div className="flex flex-col items-end gap-2">
@@ -276,12 +278,14 @@ interface NoteAuthorInfoProps {
   authorId: string;
   authorName: string;
   isOwner: boolean;
+  user: User;
 }
 
 export const NoteAuthorInfo = ({
   authorId,
   authorName,
   isOwner,
+  user,
 }: NoteAuthorInfoProps) => {
   if (!authorId || !authorName) {
     return (
@@ -319,11 +323,13 @@ export const NoteAuthorInfo = ({
           <p className="font-semibold text-lg text-gray-800 dark:text-white">
             {authorName || "بائع غير معروف"}
           </p>
-          <Link href={isOwner ? "/profile" : `/seller/${authorId}`}>
-            <Button variant="link" className="text-primary p-0 h-auto">
-              {isOwner ? "إدارة حسابي" : "عرض ملف البائع"}
-            </Button>
-          </Link>
+          {user && (
+            <Link href={isOwner ? "/profile" : `/seller/${authorId}`}>
+              <Button variant="link" className="text-primary p-0 h-auto">
+                {isOwner ? "إدارة حسابي" : "عرض ملف البائع"}
+              </Button>
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
