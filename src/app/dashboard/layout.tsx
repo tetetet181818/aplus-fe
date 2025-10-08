@@ -9,11 +9,31 @@ import AppSidebar from "@/components/organisms/AppSidebar";
 import { Separator } from "@/components/ui/separator";
 import { Activity } from "lucide-react";
 import Head from "next/head";
+import useAuth from "@/hooks/useAuth";
+import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
+import AccessDeniedPage from "@/components/organisms/AccessDeniedPage";
+import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/atoms/LoadingSpinner";
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const { user, isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!isAuthenticated) {
+    return <ShouldLoginPrompt onNavigate={router.push} />;
+  }
+
+  if (user?.role !== "admin") {
+    return <AccessDeniedPage onNavigate={router.push} />;
+  }
+
   return (
     <div dir="rtl">
       <Head>

@@ -23,6 +23,7 @@ import useNotes from "@/hooks/useNotes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 import useNoteDetail from "@/hooks/useNoteDetail";
+import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
 
 /**
  * UserDashboardPage
@@ -88,6 +89,10 @@ const UserDashboardPage = () => {
         </div>
       </div>
     );
+  }
+
+  if (!user) {
+    return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 
   // ----------------- UI -----------------

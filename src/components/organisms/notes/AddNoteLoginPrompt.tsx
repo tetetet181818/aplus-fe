@@ -8,7 +8,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
 
-const AddNoteLoginPrompt = ({ onNavigate }) => {
+const AddNoteLoginPrompt = ({
+  onNavigate,
+}: {
+  onNavigate: (path: string) => void;
+}) => {
   return (
     <div className=" py-12 px-4 md:px-6 flex justify-center items-center min-h-[calc(100vh-200px)]">
       <Card className="w-full max-w-md text-center shadow-xl">
