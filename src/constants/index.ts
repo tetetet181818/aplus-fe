@@ -222,6 +222,12 @@ export const statusVariantMap = {
   rejected: "destructive",
   completed: "completed",
 };
+export const staticWithdrawalStatuses = [
+  "pending",
+  "accepted",
+  "rejected",
+  "completed",
+];
 
 export const universityData = [
   {

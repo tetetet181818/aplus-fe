@@ -25,14 +25,10 @@ export default function WithdrawalDetailsDialog({
   selectedWithdrawal,
 }: Props) {
   const { token } = useAuth();
-
-  const { data, isLoading } = useGetSingleWithdrawalQuery(
-    {
-      token: token || "",
-      id: selectedWithdrawal || "",
-    },
-    { skip: !selectedWithdrawal }
-  );
+  const { data, isLoading } = useGetSingleWithdrawalQuery({
+    token: token || "",
+    id: selectedWithdrawal || "",
+  });
 
   const singleWithdrawal = data?.data?.withdrawal;
   const user = data?.data?.user;

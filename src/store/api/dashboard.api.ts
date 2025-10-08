@@ -26,12 +26,18 @@ export const dashboardApi = createApi({
         token,
         page,
         limit,
+        fullName,
+        university,
+        emailFilter,
       }: {
         token: string;
         page: number;
         limit: number;
+        fullName: string;
+        university: string;
+        emailFilter: string;
       }) => ({
-        url: `/users?page=${page}&limit=${limit}`,
+        url: `/users?page=${page}&limit=${limit}&fullName=${fullName}&university=${university}&email=${emailFilter}`,
         method: "GET",
         headers: {
           Authorization: `${token}`,
@@ -97,12 +103,24 @@ export const dashboardApi = createApi({
         token,
         page,
         limit,
+        title,
+        university,
+        collage,
+        year,
+        sortBy,
+        sortOrder,
       }: {
         token: string;
         page: number;
         limit: number;
+        title: string;
+        university: string;
+        collage: string;
+        year: string;
+        sortBy: string;
+        sortOrder: string;
       }) => ({
-        url: `/notes?page=${page}&limit=${limit}`,
+        url: `/notes?page=${page}&limit=${limit}&title=${title}&university=${university}&collage=${collage}&year=${year}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
         method: "GET",
         headers: {
           Authorization: `${token}`,
@@ -110,6 +128,7 @@ export const dashboardApi = createApi({
       }),
       providesTags: ["Dashboard"],
     }),
+
     makeNotePublish: builder.mutation({
       query: ({ token, id }: { token: string; id: string }) => ({
         url: `/notes/${id}/publish`,
@@ -120,6 +139,7 @@ export const dashboardApi = createApi({
       }),
       invalidatesTags: ["Dashboard"],
     }),
+
     makeNoteUnpublish: builder.mutation({
       query: ({ token, id }: { token: string; id: string }) => ({
         url: `/notes/${id}/unpublish`,
@@ -175,19 +195,33 @@ export const dashboardApi = createApi({
     getAllWithdrawals: builder.query({
       query: ({
         token,
-        page,
-        limit,
+        page = 1,
+        limit = 10,
+        status,
+        iban,
+        startDate,
+        endDate,
+        sortBy = "createdAt",
+        sortOrder = "desc",
       }: {
         token: string;
-        page: number;
-        limit: number;
-      }) => ({
-        url: `/withdrawals?page=${page}&limit=${limit}`,
-        method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
-      }),
+        page?: number;
+        limit?: number;
+        status?: string;
+        iban?: string;
+        startDate?: string;
+        endDate?: string;
+        sortBy?: string;
+        sortOrder?: "asc" | "desc";
+      }) => {
+        return {
+          url: `/withdrawals?page=${page}&limit=${limit}&status=${status}&iban=${iban}&startDate=${startDate}&endDate=${endDate}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
+          method: "GET",
+          headers: {
+            Authorization: `${token}`,
+          },
+        };
+      },
       providesTags: ["Dashboard"],
     }),
 

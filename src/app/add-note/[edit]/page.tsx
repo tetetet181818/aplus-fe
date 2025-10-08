@@ -1,7 +1,15 @@
 "use client";
-import AddNotePage from "@/components/organisms/notes/AddNotePage";
+import UpdateNotePage from "@/components/organisms/notes/UpdateNotePage";
 import { useParams } from "next/navigation";
+import useAuth from "@/hooks/useAuth";
 export default function Edit() {
   const { edit } = useParams();
-  return <AddNotePage edit={!!edit} />;
+  const { isAuthenticated, loading } = useAuth();
+  return (
+    <UpdateNotePage
+      isAuthenticated={isAuthenticated}
+      edit={edit as string}
+      loading={loading}
+    />
+  );
 }

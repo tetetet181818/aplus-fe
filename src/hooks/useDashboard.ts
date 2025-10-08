@@ -39,6 +39,11 @@ export default function useDashboard() {
   const [salePage, setSalePage] = useState(1);
   const [saleLimit, setSaleLimit] = useState(10);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [universityFilter, setUniversityFilter] = useState<string | null>(null);
+
+  const [emailFilter, setEmailFilter] = useState<string | null>(null);
+
   /** ----------------- Overview ----------------- */
   const { data, isLoading: overviewLoading } = useGetOverviewQuery({
     token: token || "",
@@ -55,6 +60,9 @@ export default function useDashboard() {
     token: token || "",
     page: userPage,
     limit: userLimit,
+    fullName: searchQuery || "",
+    university: universityFilter || "",
+    emailFilter: emailFilter || "",
   });
 
   const { data: usersStats } = useGetUsersStatsQuery({ token: token || "" });
@@ -76,6 +84,18 @@ export default function useDashboard() {
   };
 
   /** ----------------- Notes ----------------- */
+
+  const [searchTitleNote, setSearchTitleNote] = useState("");
+  const [universityFilterNote, setUniversityFilterNote] = useState<
+    string | null
+  >(null);
+  const [collageFilterNote, setCollageFilterNote] = useState<string | null>(
+    null
+  );
+  const [yearFilterNote, setYearFilterNote] = useState<string | null>(null);
+  const [sortByNote, setSortByNote] = useState<string>("createdAt");
+  const [sortOrderNote, setSortOrderNote] = useState<"asc" | "desc">("desc");
+
   const {
     data: notesResponse,
     isLoading: notesLoading,
@@ -84,6 +104,12 @@ export default function useDashboard() {
     token: token || "",
     page: notePage,
     limit: noteLimit,
+    title: searchTitleNote || "",
+    university: universityFilterNote || "",
+    collage: collageFilterNote || "",
+    year: yearFilterNote || "",
+    sortBy: sortByNote,
+    sortOrder: sortOrderNote,
   });
 
   const { data: notesStats } = useGetNotesStatsQuery({ token: token || "" });
@@ -130,6 +156,12 @@ export default function useDashboard() {
 
   const [withdrawalPage, setWithdrawalPage] = useState(1);
   const [withdrawalLimit, setWithdrawalLimit] = useState(10);
+  const [withdrawalStatus, setWithdrawalStatus] = useState<string>("all");
+  const [ibanFilter, setIbanFilter] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const {
     data: withdrawalsResponse,
@@ -139,6 +171,12 @@ export default function useDashboard() {
     token: token || "",
     page: withdrawalPage,
     limit: withdrawalLimit,
+    status: withdrawalStatus,
+    iban: ibanFilter,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
   });
 
   const { data: withdrawalsStats } = useGetWithdrawalStatsQuery({
@@ -317,6 +355,11 @@ export default function useDashboard() {
     usersLoading,
     userPage,
     userLimit,
+    searchQuery,
+    setSearchQuery,
+    universityFilter,
+    setEmailFilter,
+    setUniversityFilter,
     setUserPage,
     nextUserPage,
     prevUserPage,
@@ -339,6 +382,18 @@ export default function useDashboard() {
     handelUnpublishNote,
     publishLoading,
     unpublishLoading,
+    searchTitleNote,
+    setSearchTitleNote,
+    universityFilterNote,
+    setUniversityFilterNote,
+    collageFilterNote,
+    setCollageFilterNote,
+    yearFilterNote,
+    setYearFilterNote,
+    sortByNote,
+    setSortByNote,
+    sortOrderNote,
+    setSortOrderNote,
 
     /** sales */
     sales: salesResponse?.data?.sales || [],
@@ -371,6 +426,19 @@ export default function useDashboard() {
     rejectedWithdrawalLoading,
     handleCompleteWithdrawal,
     completedWithdrawalLoading,
+    ibanFilter,
+    setWithdrawalStatus,
+    setIbanFilter,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    refetchWithdrawals,
+    withdrawalStatus,
     loading:
       acceptedWithdrawalLoading ||
       rejectedWithdrawalLoading ||

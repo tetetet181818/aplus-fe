@@ -8,6 +8,7 @@ import { navigationItems } from "@/constants/index";
 import AppSidebar from "@/components/organisms/AppSidebar";
 import { Separator } from "@/components/ui/separator";
 import { Activity } from "lucide-react";
+import Head from "next/head";
 export default function DashboardLayout({
   children,
 }: {
@@ -15,6 +16,11 @@ export default function DashboardLayout({
 }) {
   return (
     <div dir="rtl">
+      <Head>
+        <title>لوحة التحكم | منصة أ+</title>
+        <meta name="description" content="لوحة التحكم | منصة أ+" />
+        <meta name="keywords" content="لوحة التحكم, منصة أ+" />
+      </Head>
       <SidebarProvider>
         <AppSidebar navigationItems={navigationItems} />
         <div className="flex flex-col w-full overflow-x-hidden">

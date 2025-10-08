@@ -7,18 +7,18 @@ import {
   useMakeLikeNoteMutation,
   useMakeUnlikeNoteMutation,
   useToggleLikeQuery,
+  useUpdateNoteMutation,
 } from "@/store/api/note.api";
 import { downloadFile } from "@/utils/downloadFile";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-// import useNotes from "./useNotes";
 import { useState } from "react";
 import useAuth from "./useAuth";
+import { UpdateNoteData } from "@/types";
 
 export default function useNoteDetail(id: string) {
   const { isAuthenticated, user } = useAuth();
   const [isPurchaseConfirmOpen, setIsPurchaseConfirmOpen] = useState(false);
-  // const { handlePurchaseNote } = useNotes();
   const router = useRouter();
   let token: string | null = null;
   if (typeof window !== "undefined") {
@@ -28,6 +28,24 @@ export default function useNoteDetail(id: string) {
   const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation();
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
     useMakeUnlikeNoteMutation();
+
+  const [updateNote, { isLoading: updateNoteLoading }] =
+    useUpdateNoteMutation();
+
+  const handleUpdateNote = async ({
+    noteId,
+    noteData,
+  }: {
+    noteId: string;
+    noteData: UpdateNoteData;
+  }) => {
+    const res = await updateNote({ noteId, noteData, token: token || "" });
+    if (res) {
+      toast.success(res?.data?.message);
+    }
+
+    return res?.data;
+  };
 
   const [createPaymentLink, { isLoading: createPaymentLinkLoading }] =
     useCreatePaymentLinkMutation();
@@ -124,5 +142,7 @@ export default function useNoteDetail(id: string) {
     setIsPurchaseConfirmOpen,
     handleCreatePaymentLink,
     createPaymentLinkLoading,
+    updateNoteLoading,
+    handleUpdateNote,
   };
 }

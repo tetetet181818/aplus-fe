@@ -11,5 +11,6 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "cSpell.autoFormatConfigFile": false,
-  "notebook.defaultFormatter": "esbenp.prettier-vscode"
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "cSpell.words": ["جديد"]
 }

@@ -1,5 +1,4 @@
 "use client";
-import Head from "next/head";
 import { FileText, Users } from "lucide-react";
 import StatCard from "@/components/atoms/StatCard";
 import RecentStudentsCard from "@/components/atoms/RecentStudentsCard";
@@ -14,11 +13,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Head>
-        <title>لوحة التحكم | منصة أ+</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
-
       <div className="flex-1 space-y-4 p-4 md:p-8 bg-gradient-to-br from-background via-muted/5 to-primary/5">
         <div className="space-y-8 animate-fade-in">
           <div className="space-y-2">

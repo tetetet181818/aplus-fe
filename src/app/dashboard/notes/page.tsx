@@ -1,16 +1,22 @@
 "use client";
 
+/**
+ * Notes Dashboard
+ * Displays uploaded notes with filters, search, pagination, and publish/unpublish actions.
+ * Responsive layout: Cards on mobile, Table on desktop.
+ */
+
 import {
   Download,
   ChevronLeft,
   ChevronRight,
   Search,
   School,
-  DollarSign,
   LinkIcon,
   Eye,
+  RotateCcw,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -41,16 +47,14 @@ import Link from "next/link";
 import FileDetailsDialog from "@/components/molecules/dialogs/FileDetailsDialog";
 import UnpublishDialog from "@/components/molecules/dialogs/UnpublishDialog";
 import PublishDialog from "@/components/molecules/dialogs/PublishDialog";
-import { Note } from "@/types";
 import ChartLineNotes from "@/components/organisms/dashboard/ChartLineNotes";
 import useDashboard from "@/hooks/useDashboard";
-import { universities } from "@/constants";
+import { Note } from "@/types";
+import { universityData } from "@/constants/index";
 
-/** Helper to truncate long text */
-const truncateText = (text: string, maxLength: number = 20) =>
-  text?.length > maxLength
-    ? `${text.substring(0, maxLength)}...`
-    : text || "N/A";
+/** Helper: truncate long text */
+const truncateText = (text: string, maxLength = 20) =>
+  text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text || "N/A";
 
 export default function NotesDashboard() {
   const {
@@ -66,55 +70,45 @@ export default function NotesDashboard() {
     handelUnpublishNote,
     publishLoading,
     unpublishLoading,
+    searchTitleNote,
+    setSearchTitleNote,
+    universityFilterNote,
+    setUniversityFilterNote,
+    collageFilterNote,
+    setCollageFilterNote,
+    yearFilterNote,
+    setYearFilterNote,
   } = useDashboard();
 
-  // const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<Note | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({
-    university: "",
-    college: "",
-    year: "",
-    priceMin: "",
-    priceOperator: "",
-  });
-  const [colleges, setColleges] = useState<string[]>([]);
   const [unpublishedNote, setUnpublishedNote] = useState(false);
   const [publishedNote, setPublishedNote] = useState(false);
 
-  /** update colleges list when university filter changes */
-  // useEffect(() => {
-  //   if (filters.university) {
-  //     const uniqueColleges = Array.from(
-  //       new Set(
-  //         notes
-  //           .map((n: Note) => n.university === filters.university && n.college)
-  //           .filter(Boolean)
-  //       )
-  //     ) as string[];
-  //     setColleges(uniqueColleges);
-  //   } else {
-  //     setColleges([]);
-  //   }
-  // }, [filters.university, notes]);
+  /** Dynamically get colleges based on selected university */
+  const collegeOptions = useMemo(() => {
+    const uni = universityData.find((u) => u.name === universityFilterNote);
+    return uni ? uni.colleges : [];
+  }, [universityFilterNote]);
 
-  /** reset filters */
+  /** Reset filters */
   const resetFilters = () => {
-    setFilters({
-      university: "",
-      college: "",
-      year: "",
-      priceMin: "",
-      priceOperator: "",
-    });
-    setSearchQuery("");
+    setSearchTitleNote("");
+    setUniversityFilterNote("");
+    setCollageFilterNote("");
+    setYearFilterNote("");
   };
 
-  /** table column config */
+  const hasActiveFilters =
+    searchTitleNote ||
+    universityFilterNote ||
+    collageFilterNote ||
+    yearFilterNote;
+
+  /** Table column config */
   const columns = [
-    { header: "العنوان", accessor: "title", customRender: truncateText },
-    { header: "الوصف", accessor: "description", customRender: truncateText },
+    { header: "العنوان", accessor: "title", render: truncateText },
+    { header: "الوصف", accessor: "description", render: truncateText },
     { header: "الجامعة", accessor: "university" },
     { header: "الكلية", accessor: "college" },
     { header: "المادة", accessor: "subject" },
@@ -122,77 +116,26 @@ export default function NotesDashboard() {
     {
       header: "صاحب الملخص",
       accessor: "owner_id",
-      customRender: (ownerId: string) => (
+      render: (ownerId: string) => (
         <Link
           href={`/seller/${ownerId}`}
-          className="hover:underline text-blue-500"
+          className="text-blue-500 hover:underline"
         >
-          {ownerId.slice(0, 10)}... <LinkIcon className="size-4 inline" />
+          {ownerId.slice(0, 10)}... <LinkIcon className="inline size-4" />
         </Link>
       ),
     },
     {
       header: "السعر",
       accessor: "price",
-      customRender: (p: number) => `${p} ر.س`,
+      render: (p: number) => `${p} ر.س`,
     },
     {
       header: "تاريخ الإضافة",
       accessor: "created_at",
-      customRender: (d: string) => new Date(d).toLocaleDateString(),
-    },
-    {
-      header: "الإجراءات",
-      customRender: (item: Note) => (
-        <div className="flex gap-2 justify-end">
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setIsDialogOpen(true);
-              setSelectedFile(item);
-            }}
-          >
-            <Eye className="size-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => alert(`تحميل ${item.file_path}`)}
-          >
-            <Download className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-    {
-      header: "النشر",
-      customRender: (item: Note) =>
-        item.isPublish ? (
-          <Button
-            variant="destructive"
-            onClick={() => {
-              setSelectedFile(item);
-              setUnpublishedNote(true);
-            }}
-          >
-            إلغاء النشر
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              setSelectedFile(item);
-              setPublishedNote(true);
-            }}
-          >
-            نشر
-          </Button>
-        ),
+      render: (d: string) => new Date(d).toLocaleDateString(),
     },
   ];
-
-  const hasActiveFilters =
-    searchQuery ||
-    Object.values(filters).some((val) => val !== "" && val !== null);
 
   return (
     <>
@@ -215,14 +158,6 @@ export default function NotesDashboard() {
                   {hasActiveFilters ? "نتائج البحث" : "جميع الملاحظات المتاحة"}
                 </CardDescription>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={resetFilters}
-                disabled={!hasActiveFilters}
-              >
-                مسح الفلاتر
-              </Button>
             </div>
 
             <ChartLineNotes
@@ -230,51 +165,51 @@ export default function NotesDashboard() {
               data={notesStats}
             />
 
+            {/* Filters */}
             <div className="flex flex-col gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="ابحث عن ملاحظة..."
                   className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTitleNote}
+                  onChange={(e) => setSearchTitleNote(e.target.value)}
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {/* university filter */}
+                {/* University Filter */}
                 <Select
-                  value={filters.university}
-                  onValueChange={(value) =>
-                    setFilters((p) => ({ ...p, university: value }))
-                  }
+                  value={universityFilterNote || ""}
+                  onValueChange={(value) => {
+                    setUniversityFilterNote(value);
+                    setCollageFilterNote("");
+                  }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <School className="h-4 w-4 opacity-70 mr-2" />
                     <SelectValue placeholder="كل الجامعات" />
                   </SelectTrigger>
                   <SelectContent>
-                    {universities.map((uni) => (
-                      <SelectItem key={uni} value={uni}>
-                        {uni}
+                    {universityData.map((uni) => (
+                      <SelectItem key={uni.id} value={uni.name}>
+                        {uni.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
-                {/* college filter */}
+                {/* College Filter */}
                 <Select
-                  value={filters.college}
-                  onValueChange={(value) =>
-                    setFilters((p) => ({ ...p, college: value }))
-                  }
-                  disabled={!filters.university}
+                  value={collageFilterNote || ""}
+                  onValueChange={setCollageFilterNote}
+                  disabled={!universityFilterNote}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="كل الكليات" />
                   </SelectTrigger>
                   <SelectContent>
-                    {colleges.map((col) => (
+                    {collegeOptions.map((col) => (
                       <SelectItem key={col} value={col}>
                         {col}
                       </SelectItem>
@@ -282,83 +217,177 @@ export default function NotesDashboard() {
                   </SelectContent>
                 </Select>
 
-                {/* year filter */}
+                {/* Year Filter */}
                 <Input
+                  className="w-full"
                   placeholder="السنة"
-                  value={filters.year}
-                  onChange={(e) =>
-                    setFilters((p) => ({ ...p, year: e.target.value }))
-                  }
+                  value={yearFilterNote || ""}
+                  onChange={(e) => setYearFilterNote(e.target.value)}
                 />
 
-                {/* price filter */}
-                <div className="flex gap-2 items-center">
-                  <DollarSign className="h-4 w-4 opacity-70" />
-                  <Select
-                    value={filters.priceOperator}
-                    onValueChange={(value) =>
-                      setFilters((p) => ({ ...p, priceOperator: value }))
-                    }
-                  >
-                    <SelectTrigger className="w-24">
-                      <SelectValue placeholder="-" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="gt">أكبر من</SelectItem>
-                      <SelectItem value="lt">أقل من</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    type="number"
-                    placeholder="المبلغ"
-                    className="flex-1"
-                    value={filters.priceMin}
-                    onChange={(e) =>
-                      setFilters((p) => ({ ...p, priceMin: e.target.value }))
-                    }
-                  />
-                </div>
+                {/* Reset Button */}
+                <Button
+                  className="w-full flex items-center gap-2"
+                  variant="outline"
+                  onClick={resetFilters}
+                  disabled={!hasActiveFilters}
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  مسح الفلاتر
+                </Button>
               </div>
             </div>
           </CardHeader>
 
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {columns.map((col, idx) => (
-                    <TableHead className="text-right" key={idx}>
-                      {col.header}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {notes?.map((note: Note) => (
-                  <TableRow key={note._id}>
-                    {columns.map((col, i) => (
-                      <TableCell key={i}>
-                        {col.customRender
-                          ? col.customRender(
-                              note[col.accessor as keyof typeof note] || note
-                            )
-                          : note[col.accessor as keyof typeof note] || "N/A"}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {/* Mobile View (Cards) */}
+            <div className="block md:hidden space-y-4">
+              {notes?.map((note: Note) => (
+                <Card key={note._id} className="border p-4 shadow-sm">
+                  <CardHeader className="p-0 mb-2">
+                    <CardTitle className="text-base">
+                      {truncateText(note.title, 40)}
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      {truncateText(note.description, 60)}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-0 space-y-1 text-sm">
+                    <p>الجامعة: {note.university}</p>
+                    <p>الكلية: {note.college}</p>
+                    <p>السنة: {note.year}</p>
+                    <p>السعر: {note.price} ر.س</p>
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setIsDialogOpen(true);
+                          setSelectedFile(note);
+                        }}
+                      >
+                        <Eye className="size-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => alert(`تحميل ${note.file_path}`)}
+                      >
+                        <Download className="size-4" />
+                      </Button>
+                      {note.isPublish ? (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedFile(note);
+                            setUnpublishedNote(true);
+                          }}
+                        >
+                          إلغاء النشر
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setSelectedFile(note);
+                            setPublishedNote(true);
+                          }}
+                        >
+                          نشر
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
 
+            {/* Desktop View (Table) */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {columns.map((col, i) => (
+                      <TableHead key={i} className="text-right">
+                        {col.header}
+                      </TableHead>
+                    ))}
+                    <TableHead className="text-right">الإجراءات</TableHead>
+                    <TableHead className="text-right">النشر</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {notes?.map((note: Note) => (
+                    <TableRow key={note._id}>
+                      {columns.map((col, i) => (
+                        <TableCell key={i}>
+                          {col.render
+                            ? col.render(
+                                note[col.accessor as keyof Note] as never
+                              )
+                            : (note[col.accessor as keyof Note] as never) ||
+                              "N/A"}
+                        </TableCell>
+                      ))}
+                      <TableCell>
+                        <div className="flex gap-2 justify-end">
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              setIsDialogOpen(true);
+                              setSelectedFile(note);
+                            }}
+                          >
+                            <Eye className="size-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => alert(`تحميل ${note.file_path}`)}
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {note.isPublish ? (
+                          <Button
+                            variant="destructive"
+                            onClick={() => {
+                              setSelectedFile(note);
+                              setUnpublishedNote(true);
+                            }}
+                          >
+                            إلغاء النشر
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => {
+                              setSelectedFile(note);
+                              setPublishedNote(true);
+                            }}
+                          >
+                            نشر
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Pagination */}
             {notesPagination && (
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
                 <span className="text-sm text-muted-foreground">
                   عرض {(notePage - 1) * noteLimit + 1}-
-                  {Math.min(notePage * noteLimit, notesPagination?.totalItems)}{" "}
-                  من {notesPagination?.totalItems}
+                  {Math.min(notePage * noteLimit, notesPagination.totalItems)}{" "}
+                  من {notesPagination.totalItems}
                 </span>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <Select
                     value={noteLimit.toString()}
                     onValueChange={(val) => changeNoteLimit(parseInt(val))}
@@ -385,12 +414,12 @@ export default function NotesDashboard() {
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                     <span className="text-sm">
-                      الصفحة {notePage} من {notesPagination?.totalPages || 1}
+                      الصفحة {notePage} من {notesPagination.totalPages || 1}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={notePage >= (notesPagination?.totalPages || 1)}
+                      disabled={notePage >= (notesPagination.totalPages || 1)}
                       onClick={nextNotePage}
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -403,6 +432,7 @@ export default function NotesDashboard() {
         </Card>
       </div>
 
+      {/* Dialogs */}
       <FileDetailsDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

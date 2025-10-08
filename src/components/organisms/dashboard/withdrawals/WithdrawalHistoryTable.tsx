@@ -7,14 +7,12 @@ import {
   MoreHorizontal,
   X,
   Check,
-  Trash2,
   Loader2,
   CheckCircle,
   Eye,
   Copy,
   Calendar as CalendarIcon,
 } from "lucide-react";
-import useDashboard from "@/hooks/useDashboard";
 import {
   Card,
   CardContent,
@@ -62,23 +60,29 @@ import { Withdrawal } from "@/types";
 
 /**
  * @component WithdrawalHistoryTable
- * @description
- * Displays and manages withdrawal requests. Handles details, instant acceptance,
- * rejection, and completion with routing number & date.
+ * @description Responsive withdrawals view — table on desktop, cards on mobile.
  */
-export default function WithdrawalHistoryTable() {
-  const {
-    withdrawals,
-    withdrawalsLoading,
-    withdrawalsPagination,
-    nextWithdrawalPage,
-    prevWithdrawalPage,
-    handleAcceptWithdrawal,
-    handleRejectWithdrawal,
-    handleCompleteWithdrawal,
-    loading,
-  } = useDashboard();
-
+export default function WithdrawalHistoryTable({
+  withdrawals,
+  withdrawalsLoading,
+  withdrawalsPagination,
+  nextWithdrawalPage,
+  prevWithdrawalPage,
+  handleAcceptWithdrawal,
+  handleRejectWithdrawal,
+  handleCompleteWithdrawal,
+  loading,
+}: {
+  withdrawals: Withdrawal[];
+  withdrawalsLoading: boolean;
+  withdrawalsPagination: () => void;
+  nextWithdrawalPage: () => void;
+  prevWithdrawalPage: () => void;
+  handleAcceptWithdrawal: (id: string) => void;
+  handleRejectWithdrawal: (id: string) => void;
+  handleCompleteWithdrawal: (id: string) => void;
+  loading: boolean;
+}) {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedWithdrawal, setSelectedWithdrawal] =
     useState<Withdrawal | null>(null);
@@ -90,21 +94,19 @@ export default function WithdrawalHistoryTable() {
   const [transferDate, setTransferDate] = useState<Date | null>(null);
   const [copiedIban, setCopiedIban] = useState<string | null>(null);
 
-  /** 🔹 Close dialog & reset form state */
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setTransferNumber("");
     setTransferDate(null);
     setActionType(null);
   };
-  /** 🔹 Copy IBAN to clipboard */
+
   const handleCopyIban = (iban: string) => {
     navigator.clipboard.writeText(iban);
     setCopiedIban(iban);
     setTimeout(() => setCopiedIban(null), 1000);
   };
 
-  /** 🔹 Handle withdrawal rejection or completion */
   const handleAction = async () => {
     if (!selectedWithdrawal || !actionType) return;
     const withdrawalId = selectedWithdrawal._id;
@@ -198,61 +200,6 @@ export default function WithdrawalHistoryTable() {
         </Badge>
       ),
     },
-    {
-      header: "الإجراءات",
-      customRender: (_: any, withdrawal: any) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreHorizontal className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-48 shadow-lg">
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedWithdrawal(withdrawal);
-                setOpenDetails(true);
-              }}
-            >
-              <Eye className="size-4 mr-2" /> عرض التفاصيل
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={() => handleInstantAccept(withdrawal)}
-              disabled={loading}
-            >
-              <Check className="size-4 mr-2 text-green-600" /> قبول الطلب
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedWithdrawal(withdrawal);
-                setActionType("reject");
-                setIsDialogOpen(true);
-              }}
-            >
-              <X className="size-4 mr-2 text-red-600" /> رفض الطلب
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedWithdrawal(withdrawal);
-                setActionType("complete");
-                setIsDialogOpen(true);
-              }}
-            >
-              <CheckCircle className="size-4 mr-2 text-green-800" /> إكمال
-              العملية
-            </DropdownMenuItem>
-
-            <DropdownMenuItem className="text-red-600">
-              <Trash2 className="size-4 mr-2" /> حذف الطلب
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
   ];
 
   return (
@@ -261,7 +208,6 @@ export default function WithdrawalHistoryTable() {
         <title>طلبات السحب | لوحة التحكم</title>
       </Head>
 
-      {/* 🧾 Withdrawals Table */}
       <Card>
         <CardHeader>
           <CardTitle>سجل طلبات السحب</CardTitle>
@@ -269,6 +215,7 @@ export default function WithdrawalHistoryTable() {
         </CardHeader>
 
         <CardContent>
+          {/* Loading skeleton */}
           {withdrawalsLoading ? (
             Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="flex gap-4 py-2">
@@ -277,44 +224,197 @@ export default function WithdrawalHistoryTable() {
                 ))}
               </div>
             ))
-          ) : withdrawals?.length ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {columns.map((c) => (
-                    <TableHead key={c.header} className="text-right">
-                      {c.header}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {withdrawals.map((withdrawal: Withdrawal) => (
-                  <TableRow key={withdrawal._id}>
-                    {columns.map((c) => (
-                      <TableCell key={c.header}>
-                        {c.customRender
-                          ? c.customRender(
-                              safeValue(
-                                withdrawal[
-                                  c.accessor as keyof typeof withdrawal
-                                ]
-                              ),
-                              withdrawal
-                            )
-                          : safeValue(
-                              withdrawal[c.accessor as keyof typeof withdrawal]
-                            )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
+          ) : !withdrawals?.length ? (
             <p className="text-center py-8 text-muted-foreground">
               لا توجد طلبات سحب حالياً
             </p>
+          ) : (
+            <>
+              {/*  Desktop Table */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      {columns.map((c) => (
+                        <TableHead key={c.header} className="text-right">
+                          {c.header}
+                        </TableHead>
+                      ))}
+                      <TableHead>الإجراءات</TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {withdrawals.map((w: Withdrawal) => (
+                      <TableRow key={w._id}>
+                        {columns.map((c) => (
+                          <TableCell key={c.header}>
+                            {c.customRender
+                              ? c.customRender(
+                                  w[c.accessor as keyof typeof w],
+                                  w
+                                )
+                              : safeValue(w[c.accessor as keyof typeof w])}
+                          </TableCell>
+                        ))}
+
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
+                                <MoreHorizontal className="size-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedWithdrawal(w);
+                                  setOpenDetails(true);
+                                }}
+                              >
+                                <Eye className="size-4 mr-2" />
+                                عرض التفاصيل
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleInstantAccept(w)}
+                              >
+                                <Check className="size-4 mr-2 text-green-600" />
+                                قبول
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedWithdrawal(w);
+                                  setActionType("reject");
+                                  setIsDialogOpen(true);
+                                }}
+                              >
+                                <X className="size-4 mr-2 text-red-600" />
+                                رفض
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedWithdrawal(w);
+                                  setActionType("complete");
+                                  setIsDialogOpen(true);
+                                }}
+                              >
+                                <CheckCircle className="size-4 mr-2 text-green-800" />
+                                إكمال العملية
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* 📱 Mobile Cards (with all actions) */}
+              <div className="flex flex-col gap-4 md:hidden">
+                {withdrawals.map((w: Withdrawal) => (
+                  <div
+                    key={w._id}
+                    className="p-4 border rounded-lg bg-muted/10 shadow-sm"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold text-lg">
+                        {w.accountName || "A/N"}
+                      </span>
+                      <Badge
+                        variant={
+                          String(
+                            statusVariantMap[
+                              w.status as keyof typeof statusVariantMap
+                            ]
+                          ) || "default"
+                        }
+                      >
+                        {String(
+                          statusLabelMap[
+                            w.status as keyof typeof statusLabelMap
+                          ]
+                        )}
+                      </Badge>
+                    </div>
+
+                    <p className="text-sm text-muted-foreground">
+                      البنك: {w.bankName || "A/N"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      IBAN: {w.iban || "A/N"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      المبلغ: {w.amount?.toLocaleString() || 0} ر.س
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      التاريخ:{" "}
+                      {w.createdAt
+                        ? new Date(w.createdAt).toLocaleDateString("ar-EG")
+                        : "A/N"}
+                    </p>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full flex justify-center items-center"
+                        >
+                          <MoreHorizontal className="mr-2 h-4 w-4" />
+                          العمليات
+                        </Button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent className="w-full">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedWithdrawal(w);
+                            setOpenDetails(true);
+                          }}
+                        >
+                          <Eye className="size-4 mr-2" />
+                          عرض التفاصيل
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => handleInstantAccept(w)}
+                        >
+                          <Check className="size-4 mr-2 text-green-600" />
+                          قبول الطلب
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedWithdrawal(w);
+                            setActionType("reject");
+                            setIsDialogOpen(true);
+                          }}
+                        >
+                          <X className="size-4 mr-2 text-red-600" />
+                          رفض الطلب
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedWithdrawal(w);
+                            setActionType("complete");
+                            setIsDialogOpen(true);
+                          }}
+                        >
+                          <CheckCircle className="size-4 mr-2 text-green-800" />
+                          إكمال العملية
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
 
           {/* Pagination */}
@@ -329,11 +429,11 @@ export default function WithdrawalHistoryTable() {
         </CardContent>
       </Card>
 
-      {/* 🪪 Withdrawal Details Dialog */}
+      {/* Dialogs */}
       <WithdrawalDetailsDialog
         open={openDetails}
         onClose={() => setOpenDetails(false)}
-        selectedWithdrawal={selectedWithdrawal?._id}
+        selectedWithdrawal={selectedWithdrawal?._id || ""}
       />
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

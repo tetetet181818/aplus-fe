@@ -93,6 +93,19 @@ export interface CreateNoteData {
   file: File;
 }
 
+export interface UpdateNoteData {
+  title: string;
+  description: string;
+  price: number;
+  pages_number?: number;
+  subject: string;
+  year: number;
+  university: string;
+  college: string;
+  cover: File;
+  file: File;
+}
+
 export interface withdrawalData {
   amount: number;
   accountName: string;

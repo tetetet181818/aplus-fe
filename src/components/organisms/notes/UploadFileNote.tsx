@@ -81,6 +81,7 @@ export default function UploadFileNote({
           variant="outline"
           onClick={() => fileInputRef.current?.click()}
           className="mt-5"
+          type="button"
         >
           رفع الملف
         </Button>

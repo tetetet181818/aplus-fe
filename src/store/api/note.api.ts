@@ -226,6 +226,26 @@ export const noteApi = createApi({
       }),
       invalidatesTags: ["Note"],
     }),
+
+    updateNote: builder.mutation({
+      query: ({
+        noteId,
+        token,
+        noteData,
+      }: {
+        noteId: string;
+        token: string;
+        noteData: CreateNoteData;
+      }) => ({
+        url: `update/${noteId}`,
+        method: "PUT",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: noteData,
+      }),
+      invalidatesTags: ["Note"],
+    }),
   }),
 });
 
@@ -245,4 +265,5 @@ export const {
   useRemoveReviewFromNoteMutation,
   useUpdateReviewFromNoteMutation,
   useCreatePaymentLinkMutation,
+  useUpdateNoteMutation,
 } = noteApi;
