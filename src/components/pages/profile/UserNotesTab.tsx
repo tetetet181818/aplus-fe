@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 interface UserNotesTabProps {
   notes: Note[];
-  onDeleteRequest: (note: Note) => void;
+  onDeleteRequest: (noteId: string) => void;
   router: ReturnType<typeof useRouter>;
   onDownloadRequest: (note: Note) => void;
 
@@ -154,7 +154,7 @@ const UserNotesTab = ({
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => onDeleteRequest(note)}
+                    onClick={() => onDeleteRequest(note?._id)}
                   >
                     <Trash className="h-4 w-4 ml-1" />
                     حذف

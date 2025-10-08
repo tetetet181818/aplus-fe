@@ -27,7 +27,6 @@ const DeleteConfirmationDialog = ({
   const handleConfirm = async () => {
     await onConfirm();
     onOpenChange(false);
-    window.location.href = "/";
   };
 
   return (

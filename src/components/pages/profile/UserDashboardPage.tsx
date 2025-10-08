@@ -22,6 +22,7 @@ import useAuth from "@/hooks/useAuth";
 import useNotes from "@/hooks/useNotes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
+import useNoteDetail from "@/hooks/useNoteDetail";
 
 /**
  * UserDashboardPage
@@ -39,7 +40,7 @@ const UserDashboardPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading } = useAuth();
-
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const {
     userNotes,
     userNotesLoading,
@@ -48,6 +49,10 @@ const UserDashboardPage = () => {
     likedNotes,
     likedNotesLoading,
   } = useNotes();
+
+  const { handleDeleteNote, deleteNoteLoading } = useNoteDetail(
+    itemToDelete || ""
+  );
 
   // Dialog states
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -124,9 +129,9 @@ const UserDashboardPage = () => {
           ) : (
             <UserNotesTab
               notes={userNotes}
-              onDeleteRequest={(note) => {
+              onDeleteRequest={(noteId: string) => {
                 setIsDeleteConfirmOpen(true);
-                console.log("delete request", note);
+                setItemToDelete(noteId);
               }}
               router={router}
               onDownloadRequest={(note) =>
@@ -171,8 +176,9 @@ const UserDashboardPage = () => {
       <DeleteConfirmationDialog
         isOpen={isDeleteConfirmOpen}
         onOpenChange={setIsDeleteConfirmOpen}
-        onConfirm={() => console.log("confirm delete")}
+        onConfirm={() => handleDeleteNote({ noteId: itemToDelete || "" })}
         itemName={"ملخص تجريبي"}
+        loading={deleteNoteLoading}
       />
     </div>
   );

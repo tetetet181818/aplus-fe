@@ -25,6 +25,7 @@ export default function useNoteDetail(id: string) {
     token = window.localStorage.getItem("access_token");
   }
   const { data: note, isLoading: getSingleLoading } = useGetSingleNoteQuery(id);
+
   const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation();
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
     useMakeUnlikeNoteMutation();
@@ -40,8 +41,9 @@ export default function useNoteDetail(id: string) {
     noteData: UpdateNoteData;
   }) => {
     const res = await updateNote({ noteId, noteData, token: token || "" });
-    if (res) {
+    if (res?.data) {
       toast.success(res?.data?.message);
+      router.push("/profile?tab=my-notes");
     }
 
     return res?.data;
@@ -108,7 +110,7 @@ export default function useNoteDetail(id: string) {
     const res = await deleteNote({ noteId, token: token || "" });
     if (res) {
       toast.success(res?.data?.message);
-      router.push("/notes");
+      router.push("/profile?tab=my-notes");
     }
   };
   const addNoteToLikeList = async ({ noteId }: { noteId: string }) => {
