@@ -1,16 +1,4 @@
 import { Mail, Clock, Info, AlertTriangle, Send } from "lucide-react";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "اتصل بنا | منصة أ+",
-  description:
-    "تواصل مع فريق دعم منصة أ+ للدراسة الجامعية عبر البريد الإلكتروني",
-  keywords: ["دعم فني", "اتصل بنا", "منصة أ+", "دراسة جامعية", "مساعدة"],
-  openGraph: {
-    title: "اتصل بنا | منصة أ+",
-    description: "تواصل مع فريق دعم منصة أ+ للدراسة الجامعية",
-  },
-};
 
 const ContactUsPage = () => {
   return (

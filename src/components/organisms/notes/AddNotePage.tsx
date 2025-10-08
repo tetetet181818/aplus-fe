@@ -5,12 +5,16 @@ import AddNoteForm from "./AddNoteForm";
 import AddNoteLoginPrompt from "./AddNoteLoginPrompt";
 import AddNotePageHeader from "./AddNotePageHeader";
 import useAuth from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/atoms/LoadingSpinner";
 
 const AddNotePage = () => {
   const router = useRouter();
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading && !isAuthenticated) {
+  const { user, loading } = useAuth();
+  console.log(user);
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  if (!user) {
     return <AddNoteLoginPrompt onNavigate={router.push} />;
   }
 
