@@ -15,6 +15,45 @@ import {
   Palette,
 } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "الأسئلة الشائعة – منصة أ+",
+  description:
+    "تعرف على إجابات أهم الأسئلة حول منصة أ+، مثل كيفية شراء وبيع الملخصات، طرق الدفع، حماية البيانات، ودعم المستخدمين. كل ما تحتاج معرفته في مكان واحد.",
+  keywords: [
+    "الأسئلة الشائعة",
+    "منصة أ+",
+    "شراء الملخصات",
+    "بيع الملخصات",
+    "الطلاب",
+    "طرق الدفع",
+    "الدعم الفني",
+    "الخصوصية",
+    "الأمان",
+    "التعليم الجامعي",
+    "ملخصات دراسية",
+  ],
+  authors: [{ name: "منصة أ+" }],
+  alternates: {
+    canonical: "https://aplusplatformsa.com/faq",
+  },
+  openGraph: {
+    title: "الأسئلة الشائعة – منصة أ+",
+    description:
+      "نجيب على أكثر الأسئلة شيوعًا حول استخدام منصة أ+، البيع والشراء، الخصوصية، والدعم الفني.",
+    url: "https://aplusplatformsa.com/faq",
+    siteName: "منصة أ+",
+    locale: "ar_SA",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "الأسئلة الشائعة – منصة أ+",
+    description:
+      "اطلع على إجابات أهم الأسئلة حول منصة أ+ وكيفية الاستفادة القصوى من خدماتها التعليمية.",
+  },
+};
 
 const faqData = [
   {
