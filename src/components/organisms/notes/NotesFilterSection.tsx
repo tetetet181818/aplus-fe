@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import FilterPanel from "@/components/pages/notes/FilterPanel";
 
 interface NotesFilterSectionProps {
@@ -22,12 +21,7 @@ export default function NotesFilterSection({
   resetFilters,
 }: NotesFilterSectionProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
-      transition={{ duration: 0.3 }}
-      className="mb-8"
-    >
+    <div className="mb-8">
       <FilterPanel
         years={years}
         filterUniversity={filterUniversity}
@@ -38,6 +32,6 @@ export default function NotesFilterSection({
         setFilterYear={setFilterYear}
         resetFilters={resetFilters}
       />
-    </motion.div>
+    </div>
   );
 }

@@ -17,6 +17,7 @@ export const noteApi = createApi({
         token,
         page,
         limit,
+        title,
         university,
         collage,
         year,
@@ -25,7 +26,7 @@ export const noteApi = createApi({
         maxPrice,
         minPrice,
       }) => ({
-        url: `/?page=${page}&sortOrder=${sortOrder}&limit=${limit}&university=${university}&collage=${collage}&year=${year}&maxDownloads=${maxDownloads}&maxPrice=${maxPrice}&minPrice=${minPrice}`,
+        url: `/?page=${page}&sortOrder=${sortOrder}&limit=${limit}&title=${title}&university=${university}&collage=${collage}&year=${year}&maxDownloads=${maxDownloads}&maxPrice=${maxPrice}&minPrice=${minPrice}`,
         method: "GET",
         headers: {
           Authorization: `${token}`,

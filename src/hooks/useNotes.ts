@@ -30,6 +30,7 @@ export default function useNotes() {
   const [maxDownloads, setMaxDownloads] = useState(false);
   const [maxPrice, setMaxPrice] = useState(false);
   const [minPrice, setMinPrice] = useState(false);
+  const [filterTitle, setFilterTitle] = useState("");
 
   // Fetch notes with pagination
   const {
@@ -47,6 +48,7 @@ export default function useNotes() {
     maxDownloads,
     maxPrice,
     minPrice,
+    title: filterTitle,
   });
 
   /** get users notes by token */
@@ -253,6 +255,8 @@ export default function useNotes() {
     setMaxDownloads,
     setMaxPrice,
     setMinPrice,
+    filterTitle,
+    setFilterTitle,
     // Pagination handlers
     pagination: {
       total,

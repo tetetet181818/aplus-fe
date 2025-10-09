@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 
 const NotesListPage = () => {
   /** UI state */
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchType, setSearchType] = useState<string>("file");
   const [showFilters, setShowFilters] = useState(false);
 
@@ -39,6 +38,8 @@ const NotesListPage = () => {
     setMaxPrice,
     setMinPrice,
     sortOrder,
+    filterTitle,
+    setFilterTitle,
   } = useNotes();
 
   const {
@@ -86,8 +87,8 @@ const NotesListPage = () => {
 
         {searchType === "file" && (
           <NotesSearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            searchQuery={filterTitle}
+            setSearchQuery={setFilterTitle}
             setSearchType={setSearchType}
           />
         )}
@@ -105,7 +106,7 @@ const NotesListPage = () => {
       {/* Filters */}
       {showFilters && searchType === "file" && (
         <NotesFilterSection
-          years={[2023, 2022, 2021]}
+          years={[2026, 2025, 2023, 2022, 2021]}
           filterUniversity={filterUniversity}
           setFilterUniversity={setFilterUniversity}
           filterCollage={filterCollage}

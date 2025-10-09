@@ -54,18 +54,11 @@ const NotesSortDropdown = memo(
 
     return (
       <div className="relative w-full md:w-64">
-        <label
-          htmlFor="sort-dropdown"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          ترتيب حسب:
-        </label>
-
         <div className="relative">
           <button
             id="sort-dropdown"
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-750 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            className="w-full flex items-center justify-between px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
