@@ -21,17 +21,26 @@ const NotesListPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchType, setSearchType] = useState<string>("file");
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    university: "",
-    college: "",
-    year: "",
-    maxPrice: "",
-    subject: "",
-    sortBy: "default",
-  });
 
   /** Hooks */
-  const { notes, notesLoading, pagination } = useNotes();
+  const {
+    notes,
+    notesLoading,
+    pagination,
+    filterUniversity,
+    setFilterUniversity,
+    filterCollage,
+    setFilterCollage,
+    filterYear,
+    setFilterYear,
+    resetFilters,
+    setSortOrder,
+    setMaxDownloads,
+    setMaxPrice,
+    setMinPrice,
+    sortOrder,
+  } = useNotes();
+
   const {
     allUsers,
     usersLoading,
@@ -83,17 +92,27 @@ const NotesListPage = () => {
           />
         )}
         {searchType === "file" && (
-          <NotesSortDropdown sortBy={filters.sortBy} onSortChange={() => {}} />
+          <NotesSortDropdown
+            sortBy={sortOrder}
+            onSortChange={setSortOrder}
+            setMaxDownloads={setMaxDownloads}
+            setMaxPrice={setMaxPrice}
+            setMinPrice={setMinPrice}
+          />
         )}
       </div>
 
       {/* Filters */}
       {showFilters && searchType === "file" && (
         <NotesFilterSection
-          filters={filters}
-          onFilterChange={() => {}}
-          onClearFilters={() => {}}
           years={[2023, 2022, 2021]}
+          filterUniversity={filterUniversity}
+          setFilterUniversity={setFilterUniversity}
+          filterCollage={filterCollage}
+          setFilterCollage={setFilterCollage}
+          filterYear={filterYear}
+          setFilterYear={setFilterYear}
+          resetFilters={resetFilters}
         />
       )}
 
@@ -103,12 +122,8 @@ const NotesListPage = () => {
           <NoteCardSkeleton />
         ) : (
           <>
-            <NotesResultsSection
-              filteredNotes={notes}
-              hasActiveFilters={false}
-              onClearFilters={() => {}}
-            />
-            {pagination && <Pagination pagination={pagination} />}
+            <NotesResultsSection filteredNotes={notes} />
+            {pagination?.total > 5 && <Pagination pagination={pagination} />}
           </>
         )
       ) : (

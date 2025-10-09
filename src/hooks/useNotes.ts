@@ -23,13 +23,31 @@ export default function useNotes() {
   // Pagination states
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+  const [filterUniversity, setFilterUniversity] = useState("");
+  const [filterCollage, setFilterCollage] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [maxDownloads, setMaxDownloads] = useState(false);
+  const [maxPrice, setMaxPrice] = useState(false);
+  const [minPrice, setMinPrice] = useState(false);
 
   // Fetch notes with pagination
   const {
     data,
     isLoading: notesLoading,
     isFetching,
-  } = useGetAllNotesQuery({ token, page, limit });
+  } = useGetAllNotesQuery({
+    token,
+    page,
+    limit,
+    university: filterUniversity,
+    collage: filterCollage,
+    year: filterYear,
+    sortOrder,
+    maxDownloads,
+    maxPrice,
+    minPrice,
+  });
 
   /** get users notes by token */
   const { data: userNotes, isLoading: userNotesLoading } = useGetUserNotesQuery(
@@ -161,6 +179,19 @@ export default function useNotes() {
     }
     return res;
   };
+  /**  ====================================== 
+                    Helpers
+  ====================================== */
+
+  const resetFilters = () => {
+    setFilterCollage("");
+    setFilterUniversity("");
+    setFilterYear("");
+    setSortOrder("desc");
+    setMaxDownloads(false);
+    setMaxPrice(false);
+    setMinPrice(false);
+  };
 
   // ---- Pagination Logic ----
   const total = data?.pagination?.total || 0;
@@ -207,6 +238,21 @@ export default function useNotes() {
     removeReviewLoading,
     handleUpdateReview,
     updateReviewLoading,
+    filterUniversity,
+    setFilterUniversity,
+    filterCollage,
+    setFilterCollage,
+    filterYear,
+    setFilterYear,
+    resetFilters,
+    sortOrder,
+    maxDownloads,
+    maxPrice,
+    minPrice,
+    setSortOrder,
+    setMaxDownloads,
+    setMaxPrice,
+    setMinPrice,
     // Pagination handlers
     pagination: {
       total,

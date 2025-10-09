@@ -13,9 +13,15 @@ const NotesSortDropdown = memo(
   ({
     sortBy,
     onSortChange,
+    setMaxDownloads,
+    setMaxPrice,
+    setMinPrice,
   }: {
     sortBy: string;
     onSortChange: (value: string) => void;
+    setMaxDownloads: (value: boolean) => void;
+    setMaxPrice: (value: boolean) => void;
+    setMinPrice: (value: boolean) => void;
   }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -24,10 +30,26 @@ const NotesSortDropdown = memo(
 
     const handleSelect = useCallback(
       (value: string) => {
+        setMaxDownloads(false);
+        setMaxPrice(false);
+        setMinPrice(false);
+
+        switch (value) {
+          case "downloads_desc":
+            setMaxDownloads(true);
+            break;
+          case "price_desc":
+            setMaxPrice(true);
+            break;
+          case "price_asc":
+            setMinPrice(true);
+            break;
+        }
+
         onSortChange(value);
         setIsOpen(false);
       },
-      [onSortChange]
+      [onSortChange, setMaxDownloads, setMaxPrice, setMinPrice]
     );
 
     return (

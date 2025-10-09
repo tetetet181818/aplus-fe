@@ -13,8 +13,19 @@ export const noteApi = createApi({
 
   endpoints: (builder) => ({
     getAllNotes: builder.query({
-      query: ({ token, page, limit }) => ({
-        url: `/?page=${page}&limit=${limit}`,
+      query: ({
+        token,
+        page,
+        limit,
+        university,
+        collage,
+        year,
+        sortOrder,
+        maxDownloads,
+        maxPrice,
+        minPrice,
+      }) => ({
+        url: `/?page=${page}&sortOrder=${sortOrder}&limit=${limit}&university=${university}&collage=${collage}&year=${year}&maxDownloads=${maxDownloads}&maxPrice=${maxPrice}&minPrice=${minPrice}`,
         method: "GET",
         headers: {
           Authorization: `${token}`,
@@ -166,6 +177,7 @@ export const noteApi = createApi({
       }),
       invalidatesTags: ["Note"],
     }),
+
     removeReviewFromNote: builder.mutation({
       query: ({
         token,
@@ -184,6 +196,7 @@ export const noteApi = createApi({
       }),
       invalidatesTags: ["Note"],
     }),
+
     updateReviewFromNote: builder.mutation({
       query: ({
         token,
