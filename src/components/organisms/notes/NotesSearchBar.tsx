@@ -11,14 +11,12 @@ interface NotesSearchBarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   setSearchType: (type: string) => void;
-  searchType: string;
 }
 
 export default function NotesSearchBar({
   searchQuery,
   setSearchQuery,
   setSearchType,
-  searchType,
 }: NotesSearchBarProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,11 +31,7 @@ export default function NotesSearchBar({
 
         <Input
           type="search"
-          placeholder={
-            searchType === "file"
-              ? "ابحث عن ملخصات، مواد، أو جامعات..."
-              : "ابحث عن المستخدمين..."
-          }
+          placeholder={"ابحث عن ملخصات، مواد، أو جامعات..."}
           className="flex-grow border-none bg-transparent shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none focus:shadow-none focus:border-none pr-8"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

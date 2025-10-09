@@ -1,25 +1,35 @@
 "use client";
 
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   useCheckAuthQuery,
   useDeleteAccountMutation,
   useForgetPasswordMutation,
+  useGetAllUsersQuery,
   useLoginMutation,
   useRegisterMutation,
   useResetPasswordMutation,
   useUpdateUserInfoMutation,
 } from "@/store/api/auth.api";
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
-import { toast } from "sonner";
 
 /**
- * Manage authentication state and user operations.
+ * Hook to manage authentication logic, user actions, and pagination for users.
  */
 export default function useAuth() {
+  /** Token from cookies */
   const token: string | undefined =
     typeof document !== "undefined" ? getCookie("access_token") : undefined;
 
-  const { data, isLoading: isCheckAuthLoading } = useCheckAuthQuery(token);
+  /** Pagination and filters */
+  const [currentPageUser, setCurrentPageUser] = useState(1);
+  const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
+  const [filterFullName, setFilterFullName] = useState("");
+
+  /** Queries & Mutations */
+  const { data: authData, isLoading: isCheckAuthLoading } =
+    useCheckAuthQuery(token);
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -31,13 +41,43 @@ export default function useAuth() {
     useForgetPasswordMutation();
   const [resetPassword, { isLoading: resetPasswordLoading }] =
     useResetPasswordMutation();
-  // const {} =
+
+  /** Fetch paginated users list */
+  const {
+    data: allUsers,
+    isLoading: usersLoading,
+    refetch: refetchUsers,
+  } = useGetAllUsersQuery({
+    token: token || "",
+    page: currentPageUser,
+    limit: currentUsersLimit,
+    fullName: filterFullName,
+  });
+
+  /** Pagination helpers */
+  const totalUsers = allUsers?.total || 0;
+  const totalPages = Math.ceil(totalUsers / currentUsersLimit) || 1;
+
+  const handleNextPage = () => {
+    if (currentPageUser < totalPages) {
+      setCurrentPageUser((prev) => prev + 1);
+      refetchUsers();
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPageUser > 1) {
+      setCurrentPageUser((prev) => prev - 1);
+      refetchUsers();
+    }
+  };
+
   /** Register new user */
   const registerUser = async (credentials: RegisterCredentials) => {
     try {
       const response = await register(credentials).unwrap();
-      toast.success(response.message);
-      return response;
+      toast.success(response?.data?.message);
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
@@ -51,8 +91,8 @@ export default function useAuth() {
       localStorage.setItem("isAuthenticated", "true");
       setCookie("access_token", `Bearer ${response.token}`, { path: "/" });
       setCookie("isAuthenticated", "true", { path: "/" });
-      toast.success(response.message);
-      return response;
+      toast.success(response?.data?.message);
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
@@ -72,9 +112,9 @@ export default function useAuth() {
   const handleDeleteAccount = async () => {
     try {
       const response = await deleteAccount({ token: token || "" }).unwrap();
-      toast.success(response.message);
+      toast.success(response?.data?.message);
       logoutUser();
-      return response;
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
@@ -84,8 +124,8 @@ export default function useAuth() {
   const handleForgetPassword = async ({ email }: { email: string }) => {
     try {
       const response = await forgetPassword({ email }).unwrap();
-      toast.success(response.message);
-      return response;
+      toast.success(response?.data?.message);
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
@@ -98,8 +138,8 @@ export default function useAuth() {
         token: token || "",
         data,
       }).unwrap();
-      toast.success(response.message);
-      return response;
+      toast.success(response?.data?.message);
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
@@ -121,16 +161,17 @@ export default function useAuth() {
         resetPasswordToken,
         newPassword,
       }).unwrap();
-      toast.success(response.message);
-      return response;
+      toast.success(response?.data?.message);
+      return response?.data;
     } catch (error) {
       console.error(error);
     }
   };
 
   return {
+    /** Auth */
     token,
-    user: data?.data?.[0],
+    user: authData?.data?.[0],
     isAuthenticated: getCookie("isAuthenticated") === "true",
     isCheckAuthLoading,
     isLoginLoading,
@@ -140,6 +181,22 @@ export default function useAuth() {
     forgetPasswordLoading,
     resetPasswordLoading,
 
+    /** Users & pagination */
+    allUsers: allUsers?.data?.data,
+    usersLoading,
+    currentPageUser,
+    currentUsersLimit,
+    totalUsers,
+    totalPages,
+    filterFullName,
+    setFilterFullName,
+    setCurrentUsersLimit,
+    handleNextPage,
+    handlePrevPage,
+    setCurrentPageUser,
+    refetchUsers,
+
+    /** Auth operations */
     registerUser,
     loginUser,
     logoutUser,
@@ -148,6 +205,7 @@ export default function useAuth() {
     handleUpdateUserInfo,
     handleResetPassword,
 
+    /** Combined loading state */
     loading:
       isCheckAuthLoading ||
       isLoginLoading ||
@@ -159,7 +217,9 @@ export default function useAuth() {
   };
 }
 
-/** Helpers: cookies */
+/** ------------------ Cookie Helpers ------------------ */
+
+/** Set cookie value */
 const setCookie = (
   name: string,
   value: string,
@@ -172,15 +232,15 @@ const setCookie = (
   document.cookie = cookieString;
 };
 
+/** Get cookie by name */
 export const getCookie = (name: string): string | undefined => {
-  if (typeof document === "undefined") {
-    return undefined;
-  }
+  if (typeof document === "undefined") return undefined;
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 };
 
+/** Delete cookie by name */
 const deleteCookie = (name: string) => {
   document.cookie = `${name}=; max-age=0; path=/`;
 };

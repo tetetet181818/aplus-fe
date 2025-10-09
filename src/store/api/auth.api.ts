@@ -116,6 +116,27 @@ export const authApi = createApi({
       }),
       providesTags: ["Auth", "User"],
     }),
+
+    getAllUsers: builder.query({
+      query: ({
+        token,
+        page,
+        limit,
+        fullName,
+      }: {
+        token: string;
+        page: number;
+        limit: number;
+        fullName: string;
+      }) => ({
+        url: `/all-users?page=${page}&limit=${limit}&fullName=${fullName}`,
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["Auth", "User"],
+    }),
   }),
 });
 
@@ -131,4 +152,5 @@ export const {
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useGetUserByIdQuery,
+  useGetAllUsersQuery,
 } = authApi;
