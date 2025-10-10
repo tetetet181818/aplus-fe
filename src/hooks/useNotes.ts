@@ -16,7 +16,11 @@ import { CreateNoteData, ReviewData } from "@/types";
 import { toast } from "sonner";
 
 export default function useNotes() {
-  const token: string | undefined = localStorage.getItem("access_token") || "";
+  let token = "";
+
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("access_token") || "";
+  }
   // Pagination states
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
