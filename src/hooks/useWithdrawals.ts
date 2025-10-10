@@ -11,10 +11,7 @@ import { toast } from "sonner";
 
 export default function useWithdrawals() {
   const router = useRouter();
-  let token: string | null = null;
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token");
-  }
+  const token: string | undefined = localStorage.getItem("access_token") || "";
 
   const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
     useGetMeWithdrawalsQuery({ token: token! });

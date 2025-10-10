@@ -12,14 +12,14 @@ export const authApi = createApi({
   tagTypes: ["Auth", "User"],
   endpoints: (builder) => ({
     checkAuth: builder.query({
-      query: (token) => ({
+      query: ({ token }: { token: string }) => ({
         url: `/check-auth`,
         method: "GET",
         headers: {
           Authorization: `${token}`,
         },
       }),
-      providesTags: ["Auth"],
+      providesTags: ["Auth", "User"],
     }),
 
     verify: builder.mutation({
@@ -137,6 +137,10 @@ export const authApi = createApi({
       }),
       providesTags: ["Auth", "User"],
     }),
+    signWithGoogle: builder.mutation({
+      query: () => "/google/login",
+      invalidatesTags: ["Auth", "User"],
+    }),
   }),
 });
 
@@ -153,4 +157,5 @@ export const {
   useResetPasswordMutation,
   useGetUserByIdQuery,
   useGetAllUsersQuery,
+  useSignWithGoogleMutation,
 } = authApi;

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useCallback } from "react";
-import { getCookie } from "@/utils/cookies";
+
 import {
   useAcceptedWithdrawalMutation,
   useCompletedWithdrawalMutation,
@@ -26,8 +26,7 @@ import { AcceptedWithdrawal } from "@/types";
  * Custom hook to fetch dashboard data (overview + users + notes + sales)
  */
 export default function useDashboard() {
-  const token: string | undefined =
-    typeof document !== "undefined" ? getCookie("access_token") : undefined;
+  const token: string | undefined = localStorage.getItem("access_token") || "";
 
   /** ----------------- Pagination State ----------------- */
   const [userPage, setUserPage] = useState(1);
