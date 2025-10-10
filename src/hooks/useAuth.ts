@@ -18,8 +18,11 @@ import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
  * Hook to manage authentication logic, user actions, and pagination for users.
  */
 export default function useAuth() {
-  /** Token from cookies */
-  const token: string | undefined = localStorage.getItem("access_token") || "";
+  let token = "";
+
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("access_token") || "";
+  }
 
   /** Pagination and filters */
   const [currentPageUser, setCurrentPageUser] = useState(1);

@@ -26,8 +26,11 @@ import { AcceptedWithdrawal } from "@/types";
  * Custom hook to fetch dashboard data (overview + users + notes + sales)
  */
 export default function useDashboard() {
-  const token: string | undefined = localStorage.getItem("access_token") || "";
+  let token = "";
 
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("access_token") || "";
+  }
   /** ----------------- Pagination State ----------------- */
   const [userPage, setUserPage] = useState(1);
   const [userLimit, setUserLimit] = useState(10);

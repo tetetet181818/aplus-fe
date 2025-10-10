@@ -20,7 +20,11 @@ export default function useNoteDetail(id: string) {
   const { isAuthenticated, user } = useAuth();
   const [isPurchaseConfirmOpen, setIsPurchaseConfirmOpen] = useState(false);
   const router = useRouter();
-  const token: string | undefined = localStorage.getItem("access_token") || "";
+  let token = "";
+
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("access_token") || "";
+  }
   const { data: note, isLoading: getSingleLoading } = useGetSingleNoteQuery(id);
 
   const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation();

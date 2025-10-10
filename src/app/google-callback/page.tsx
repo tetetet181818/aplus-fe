@@ -1,6 +1,7 @@
 import GoogleCallbackProvider from "@/components/atoms/GoogleCallbackProvider";
+import LoadingSpinner from "@/components/atoms/LoadingSpinner";
 import { Metadata } from "next";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Google Callback",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function GoogleCallback() {
   return (
-    <Suspense fallback={<GoogleCallbackProvider />}>
+    <Suspense fallback={<LoadingSpinner />}>
       <GoogleCallbackProvider />
     </Suspense>
   );
