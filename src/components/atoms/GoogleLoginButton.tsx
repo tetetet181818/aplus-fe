@@ -1,10 +1,14 @@
+"use client";
+// import { useSignWithGoogleMutation } from "@/store/api/auth.api";
+
 function GoogleLoginButton() {
-  const loadingWithGoogle = false;
-  const loginWithGoogle = () => {};
+  const loginWithGoogle = () => {
+    window.location.href =
+      "https://aplus-be.onrender.com/api/v1/auth/google/login";
+  };
   return (
     <button
       onClick={loginWithGoogle}
-      disabled={loadingWithGoogle}
       className="flex items-center justify-center gap-2 w-full py-2 bg-white border border-gray-300 rounded shadow-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
     >
       <svg
@@ -29,9 +33,7 @@ function GoogleLoginButton() {
           fill="#ea4335"
         />
       </svg>
-      <span>
-        {loadingWithGoogle ? "جارٍ الدخول..." : "تسجيل الدخول عبر Google"}
-      </span>
+      <span>تسجيل الدخول عبر Google</span>
     </button>
   );
 }

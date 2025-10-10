@@ -19,8 +19,7 @@ import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
  */
 export default function useAuth() {
   /** Token from cookies */
-  const token: string | undefined =
-    typeof document !== "undefined" ? getCookie("access_token") : undefined;
+  const token: string | undefined = localStorage.getItem("access_token") || "";
 
   /** Pagination and filters */
   const [currentPageUser, setCurrentPageUser] = useState(1);
@@ -28,8 +27,9 @@ export default function useAuth() {
   const [filterFullName, setFilterFullName] = useState("");
 
   /** Queries & Mutations */
-  const { data: authData, isLoading: isCheckAuthLoading } =
-    useCheckAuthQuery(token);
+  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery({
+    token: token || "",
+  });
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -88,9 +88,6 @@ export default function useAuth() {
     try {
       const response = await login(credentials).unwrap();
       localStorage.setItem("access_token", `Bearer ${response.token}`);
-      localStorage.setItem("isAuthenticated", "true");
-      setCookie("access_token", `Bearer ${response.token}`, { path: "/" });
-      setCookie("isAuthenticated", "true", { path: "/" });
       toast.success(response?.data?.message);
       return response?.data;
     } catch (error) {
@@ -172,7 +169,7 @@ export default function useAuth() {
     /** Auth */
     token,
     user: authData?.data?.[0],
-    isAuthenticated: getCookie("isAuthenticated") === "true",
+    isAuthenticated: !!token,
     isCheckAuthLoading,
     isLoginLoading,
     isRegisterLoading,
@@ -218,19 +215,6 @@ export default function useAuth() {
 }
 
 /** ------------------ Cookie Helpers ------------------ */
-
-/** Set cookie value */
-const setCookie = (
-  name: string,
-  value: string,
-  options: { [key: string]: string }
-) => {
-  let cookieString = `${name}=${value};`;
-  for (const option in options) {
-    cookieString += `${option}=${options[option]}; `;
-  }
-  document.cookie = cookieString;
-};
 
 /** Get cookie by name */
 export const getCookie = (name: string): string | undefined => {
