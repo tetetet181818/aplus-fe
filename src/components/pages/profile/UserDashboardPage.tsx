@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 import useNoteDetail from "@/hooks/useNoteDetail";
 import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
+import { downloadFile } from "@/utils/downloadFile";
 
 /**
  * UserDashboardPage
@@ -140,7 +141,10 @@ const UserDashboardPage = () => {
               }}
               router={router}
               onDownloadRequest={(note) =>
-                console.log("download request", note)
+                downloadFile({
+                  noteUrl: note.file_path as string,
+                  noteName: note.title as string,
+                })
               }
               loading={userNotesLoading}
             />
@@ -155,8 +159,12 @@ const UserDashboardPage = () => {
             <PurchasedNotesTab
               notes={purchasedNotes}
               router={router}
-              onDownload={(note) => console.log("download note", note)}
-              downloadLoading={false}
+              onDownload={(note) =>
+                downloadFile({
+                  noteUrl: note.file_path as string,
+                  noteName: note.title as string,
+                })
+              }
               loading={purchasedNotesLoading}
             />
           )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   useCheckAuthQuery,
@@ -13,26 +13,39 @@ import {
   useUpdateUserInfoMutation,
 } from "@/store/api/auth.api";
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
+import { deleteCookie, getCookie, setCookie } from "@/utils/cookies";
 
 /**
- * Hook to manage authentication logic, user actions, and pagination for users.
+ * Handles user authentication, session management, and account actions.
+ * Ensures token readiness before triggering checkAuth.
  */
 export default function useAuth() {
-  let token = "";
-
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token") || "";
-  }
-
+  /** Token state — waits for client storage before running queries */
+  const [token, setToken] = useState<string | null>(null);
+  const [isTokenReady, setIsTokenReady] = useState(false);
   /** Pagination and filters */
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
   const [filterFullName, setFilterFullName] = useState("");
 
+  /** Wait for token from localStorage or cookies on mount */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const storedToken =
+      localStorage.getItem("access_token") || getCookie("access_token") || "";
+    setToken(storedToken);
+    setIsTokenReady(true);
+  }, []);
+
   /** Queries & Mutations */
-  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery({
-    token: token || "",
-  });
+  const {
+    data: authData,
+    isLoading: isCheckAuthLoading,
+    refetch: refetchAuth,
+  } = useCheckAuthQuery(
+    { token: token || "" },
+    { skip: !isTokenReady || !token }
+  );
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -50,12 +63,15 @@ export default function useAuth() {
     data: allUsers,
     isLoading: usersLoading,
     refetch: refetchUsers,
-  } = useGetAllUsersQuery({
-    token: token || "",
-    page: currentPageUser,
-    limit: currentUsersLimit,
-    fullName: filterFullName,
-  });
+  } = useGetAllUsersQuery(
+    {
+      token: token || "",
+      page: currentPageUser,
+      limit: currentUsersLimit,
+      fullName: filterFullName,
+    },
+    { skip: !token }
+  );
 
   /** Pagination helpers */
   const totalUsers = allUsers?.total || 0;
@@ -79,22 +95,27 @@ export default function useAuth() {
   const registerUser = async (credentials: RegisterCredentials) => {
     try {
       const response = await register(credentials).unwrap();
-      toast.success(response?.data?.message);
-      return response?.data;
+      toast.success(response?.message);
+      return response;
     } catch (error) {
-      console.error(error);
+      console.error("Register Error:", error);
     }
   };
 
-  /** Login user */
+  /** Login user and store token */
   const loginUser = async (credentials: LoginCredentials) => {
     try {
       const response = await login(credentials).unwrap();
-      localStorage.setItem("access_token", `Bearer ${response.token}`);
-      toast.success(response?.data?.message);
-      return response?.data;
+      const bearerToken = `Bearer ${response.token}`;
+      localStorage.setItem("access_token", bearerToken);
+      setCookie("access_token", bearerToken);
+      setToken(bearerToken);
+      refetchAuth();
+      toast.success(response?.message || "تم تسجيل الدخول بنجاح");
+      return response;
     } catch (error) {
-      console.error(error);
+      console.error("Login Error:", error);
+      toast.error("حدث خطأ أثناء تسجيل الدخول");
     }
   };
 
@@ -104,19 +125,21 @@ export default function useAuth() {
     deleteCookie("isAuthenticated");
     localStorage.removeItem("access_token");
     localStorage.removeItem("isAuthenticated");
+    setToken(null);
     toast.success("تم تسجيل الخروج");
     window.location.reload();
   };
 
-  /** Delete account */
+  /** Delete user account */
   const handleDeleteAccount = async () => {
+    if (!token) return;
     try {
-      const response = await deleteAccount({ token: token || "" }).unwrap();
+      const response = await deleteAccount({ token }).unwrap();
       toast.success(response?.data?.message);
       logoutUser();
       return response?.data;
     } catch (error) {
-      console.error(error);
+      console.error("Delete Account Error:", error);
     }
   };
 
@@ -127,21 +150,19 @@ export default function useAuth() {
       toast.success(response?.data?.message);
       return response?.data;
     } catch (error) {
-      console.error(error);
+      console.error("Forget Password Error:", error);
     }
   };
 
   /** Update user info */
   const handleUpdateUserInfo = async (data: UpdateUserInfo) => {
+    if (!token) return;
     try {
-      const response = await updateUserInfo({
-        token: token || "",
-        data,
-      }).unwrap();
+      const response = await updateUserInfo({ token, data }).unwrap();
       toast.success(response?.data?.message);
       return response?.data;
     } catch (error) {
-      console.error(error);
+      console.error("Update Info Error:", error);
     }
   };
 
@@ -164,39 +185,45 @@ export default function useAuth() {
       toast.success(response?.data?.message);
       return response?.data;
     } catch (error) {
-      console.error(error);
+      console.error("Reset Password Error:", error);
     }
   };
 
+  /** Combined loading state */
+  const loading =
+    isCheckAuthLoading ||
+    isLoginLoading ||
+    isRegisterLoading ||
+    deleteAccountLoading ||
+    updateUserInfoLoading ||
+    forgetPasswordLoading ||
+    resetPasswordLoading;
+
   return {
-    /** Auth */
+    /** Auth state */
     token,
     user: authData?.data?.[0],
     isAuthenticated: !!token,
     isCheckAuthLoading,
-    isLoginLoading,
-    isRegisterLoading,
-    deleteAccountLoading,
-    updateUserInfoLoading,
-    forgetPasswordLoading,
-    resetPasswordLoading,
+    loading,
+    isTokenReady,
 
-    /** Users & pagination */
+    /** User management */
     allUsers: allUsers?.data?.data,
     usersLoading,
     currentPageUser,
+    setCurrentPageUser,
     currentUsersLimit,
+    setCurrentUsersLimit,
     totalUsers,
     totalPages,
     filterFullName,
     setFilterFullName,
-    setCurrentUsersLimit,
     handleNextPage,
     handlePrevPage,
-    setCurrentPageUser,
     refetchUsers,
 
-    /** Auth operations */
+    /** Actions */
     registerUser,
     loginUser,
     logoutUser,
@@ -204,30 +231,5 @@ export default function useAuth() {
     handleForgetPassword,
     handleUpdateUserInfo,
     handleResetPassword,
-
-    /** Combined loading state */
-    loading:
-      isCheckAuthLoading ||
-      isLoginLoading ||
-      isRegisterLoading ||
-      deleteAccountLoading ||
-      updateUserInfoLoading ||
-      forgetPasswordLoading ||
-      resetPasswordLoading,
   };
 }
-
-/** ------------------ Cookie Helpers ------------------ */
-
-/** Get cookie by name */
-export const getCookie = (name: string): string | undefined => {
-  if (typeof document === "undefined") return undefined;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift();
-};
-
-/** Delete cookie by name */
-const deleteCookie = (name: string) => {
-  document.cookie = `${name}=; max-age=0; path=/`;
-};

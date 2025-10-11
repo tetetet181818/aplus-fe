@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { setCookie } from "@/utils/cookies";
 
 export default function GoogleCallbackProvider() {
   const searchParams = useSearchParams();
@@ -17,9 +18,14 @@ export default function GoogleCallbackProvider() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
-      localStorage.setItem("access_token", `Bearer ${token}`);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("access_token", `Bearer ${token}`);
+        localStorage.setItem("isAuthenticated", "true");
+        setCookie("access_token", `Bearer ${token}`);
+        setCookie("isAuthenticated", "true");
+      }
     }
-    if (localStorage.getItem("access_token")) {
+    if (typeof window !== "undefined" && localStorage.getItem("access_token")) {
       router.push("/");
     }
   }, [searchParams, router]);

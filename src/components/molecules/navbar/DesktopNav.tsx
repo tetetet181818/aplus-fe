@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import UserMenu from "./UserMenu";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
-import { notificationType, User } from "@/types/index";
+import { Skeleton } from "@/components/ui/skeleton";
+import { notificationType, User } from "@/types";
 
+/**
+ * Desktop navigation bar.
+ * Renders navigation buttons, user menu, and notifications.
+ * Waits for token readiness before deciding what to show.
+ */
 interface DesktopNavProps {
   isAuthenticated: boolean;
-  user: User;
+  user: User | null;
   onLoginOpen: () => void;
   onRegisterOpen: () => void;
   handleLogout: () => void;
@@ -17,6 +22,8 @@ interface DesktopNavProps {
   handelClearAllNotification: () => void;
   handleMakeNotificationRead: (id: string) => void;
   notifications: notificationType[];
+  loading: boolean;
+  isTokenReady?: boolean;
 }
 
 const DesktopNav = ({
@@ -30,62 +37,69 @@ const DesktopNav = ({
   handleReadAllNotification,
   handelClearAllNotification,
   handleMakeNotificationRead,
+  loading,
+  isTokenReady = true,
 }: DesktopNavProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  if (!isLoaded) {
-    return <div>جاري تحميل...</div>;
+  // Show skeletons while global data or token is being fetched
+  if (loading || !isTokenReady) {
+    return (
+      <nav className="hidden md:flex items-center gap-3">
+        <Skeleton className="h-10 w-32 rounded-md" />
+        <Skeleton className="h-10 w-32 rounded-md" />
+        <Skeleton className="h-10 w-10 rounded-full" />
+        <Skeleton className="h-10 w-10 rounded-full" />
+      </nav>
+    );
   }
 
   return (
     <nav className="hidden md:flex items-center gap-3">
-      <Link href={"/notes"}>
+      <Link href="/notes">
         <Button variant="outline" className="text-base hover:bg-primary/10">
           تصفح الملخصات
         </Button>
       </Link>
 
-      {isAuthenticated && user ? (
-        <>
-          <Link href="/add-note">
-            <Button className="text-base bg-primary hover:bg-primary/90">
-              <PlusCircle size={18} className="ml-2" />
-              إضافة ملخص
-            </Button>
-          </Link>
-          <UserMenu handleLogout={handleLogout} user={user} />
+      {!loading &&
+        (isAuthenticated && user ? (
+          <>
+            <Link href="/add-note">
+              <Button className="text-base bg-primary hover:bg-primary/90">
+                <PlusCircle size={18} className="ml-2" />
+                إضافة ملخص
+              </Button>
+            </Link>
 
-          <NotificationBell
-            notifications={notifications}
-            notificationLoading={notificationLoading}
-            onReadAll={handleReadAllNotification}
-            onClearAll={handelClearAllNotification}
-            handleMakeNotificationRead={handleMakeNotificationRead}
-          />
-        </>
-      ) : (
-        <>
-          <Button
-            variant="outline"
-            onClick={onLoginOpen}
-            className="text-base border-primary text-primary hover:bg-primary/10 hover:text-primary"
-            aria-label="تسجيل الدخول"
-          >
-            تسجيل الدخول
-          </Button>
-          <Button
-            onClick={onRegisterOpen}
-            className="text-base bg-primary hover:bg-primary/90"
-            aria-label="إنشاء حساب"
-          >
-            إنشاء حساب
-          </Button>
-        </>
-      )}
+            <UserMenu handleLogout={handleLogout} user={user} />
+
+            <NotificationBell
+              notifications={notifications}
+              notificationLoading={notificationLoading}
+              onReadAll={handleReadAllNotification}
+              onClearAll={handelClearAllNotification}
+              handleMakeNotificationRead={handleMakeNotificationRead}
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              variant="outline"
+              onClick={onLoginOpen}
+              className="text-base border-primary text-primary hover:bg-primary/10 hover:text-primary"
+              aria-label="تسجيل الدخول"
+            >
+              تسجيل الدخول
+            </Button>
+
+            <Button
+              onClick={onRegisterOpen}
+              className="text-base bg-primary hover:bg-primary/90"
+              aria-label="إنشاء حساب"
+            >
+              إنشاء حساب
+            </Button>
+          </>
+        ))}
     </nav>
   );
 };

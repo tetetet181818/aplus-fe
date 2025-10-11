@@ -16,8 +16,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const { user, isAuthenticated, logoutUser } = useAuth();
+  const { user, isAuthenticated, logoutUser, loading, isTokenReady } =
+    useAuth();
   const {
     notifications,
     notificationLoading,
@@ -72,6 +72,8 @@ export default function Navbar() {
           handleReadAllNotification={handleReadAllNotification}
           handelClearAllNotification={handelClearAllNotification}
           handleMakeNotificationRead={handleMakeNotificationRead}
+          loading={loading}
+          isTokenReady={isTokenReady}
         />
 
         {/* Mobile Hamburger */}

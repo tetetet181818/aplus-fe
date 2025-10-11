@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Download, Loader, ShoppingBag } from "lucide-react";
+import { Eye, Download, ShoppingBag } from "lucide-react";
 import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
 import { Note } from "@/types";
@@ -18,7 +18,6 @@ interface PurchasedNotesTabProps {
   router: ReturnType<typeof useRouter>;
   onDownload: (note: PurchasedNote) => void;
   loading: boolean;
-  downloadLoading?: boolean;
 }
 
 const PurchasedNotesTab = ({
@@ -26,7 +25,6 @@ const PurchasedNotesTab = ({
   router,
   onDownload,
   loading,
-  downloadLoading,
 }: PurchasedNotesTabProps) => {
   if (!loading && notes?.length === 0) {
     return (
@@ -106,19 +104,9 @@ const PurchasedNotesTab = ({
                     onClick={() => onDownload(note)}
                     variant="outline"
                     className="border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600"
-                    disabled={downloadLoading}
                   >
-                    {downloadLoading ? (
-                      <>
-                        <Loader className="size-5 animate-spin" />
-                        <span>جاري التحميل</span>
-                      </>
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4 ml-1" />
-                        تحميل
-                      </>
-                    )}
+                    <Download className="h-4 w-4 ml-1" />
+                    تحميل
                   </Button>
                 </div>
               </div>

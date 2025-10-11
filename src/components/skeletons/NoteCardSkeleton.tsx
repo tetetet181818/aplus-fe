@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function NoteCardSkeleton() {
   return (
     <>
-      {Array.from({ length: 5 }).map((_, index) => (
+      {Array.from({ length: 8 }).map((_, index) => (
         <div className="flex flex-col gap-3" key={index}>
           <Card className="py-0 overflow-hidden shadow-md">
             <div className="flex flex-col sm:flex-row">

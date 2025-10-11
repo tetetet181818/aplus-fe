@@ -98,7 +98,6 @@ export default function useNoteDetail(id: string) {
     }
   };
 
-  const handleReviewRequest = () => console.log("طلب المراجعة");
   const handleDownloadFile = ({
     noteUrl,
     noteName,
@@ -131,7 +130,6 @@ export default function useNoteDetail(id: string) {
     note: note?.data,
     loading: getSingleLoading,
     handlePurchase,
-    handleReviewRequest,
     addNoteToLikeList,
     handleDownloadFile,
     removeNoteFromLikeList,

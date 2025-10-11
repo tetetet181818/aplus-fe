@@ -6,17 +6,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useVerifyMutation } from "@/store/api/auth.api";
 import { Loader } from "lucide-react";
+import { setCookie } from "@/utils/cookies";
 
 export default function VerifyClient() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
   const [verify, { isLoading, isSuccess, isError, error }] =
     useVerifyMutation();
-
   useEffect(() => {
     if (token) {
-      localStorage.setItem("access_token", `Bearer ${token}`);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("access_token", `Bearer ${token}`);
+        localStorage.setItem("isAuthenticated", "true");
+        setCookie("access_token", `Bearer ${token}`);
+        setCookie("isAuthenticated", "true");
+      }
       verify(token);
     }
   }, [token, verify]);

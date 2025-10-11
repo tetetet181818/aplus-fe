@@ -26,19 +26,20 @@ interface LoginProps {
 
 const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loginUser, isLoginLoading } = useAuth();
+  const { loginUser, loading } = useAuth();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: loginSchema,
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setSubmitting(false);
+      setSubmitting(true);
       const res = await loginUser(values);
       if (res) {
         resetForm();
         onClose();
       }
+      setSubmitting(false);
     },
   });
 
@@ -132,9 +133,9 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
           <Button
             type="submit"
             className="w-full rounded-lg shadow-md hover:shadow-lg transition-all"
-            disabled={isLoginLoading || formik.isSubmitting}
+            disabled={loading || formik.isSubmitting}
           >
-            {isLoginLoading || formik.isSubmitting ? (
+            {loading || formik.isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 جارٍ الدخول...

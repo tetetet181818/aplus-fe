@@ -39,6 +39,11 @@ import successImage from "../../../../public/success-icon.png";
 import useAuth from "@/hooks/useAuth";
 import { RegisterCredentials } from "@/types";
 
+/**
+ * Registration dialog component.
+ * Handles user registration, validation, and email verification UI.
+ * All inputs and selects are disabled when loading is true.
+ */
 interface RegisterProps {
   isOpen: boolean;
   onClose: () => void;
@@ -61,7 +66,8 @@ const RegisterDialog = ({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [activeTab, setActiveTab] = useState("register");
   const [registeredEmail, setRegisteredEmail] = useState("");
-  const { registerUser, isRegisterLoading } = useAuth();
+  const { registerUser, loading } = useAuth();
+
   const togglePassword = useCallback(
     () => setShowPassword((prev) => !prev),
     []
@@ -75,11 +81,16 @@ const RegisterDialog = ({
     onSubmit: async (values, { resetForm }) => {
       if (!termsAccepted) return;
       setRegisteredEmail(values.email);
-      registerUser(values);
-      resetForm();
-      setActiveTab("verify");
+      const res = await registerUser(values);
+      if (res) {
+        resetForm();
+        setActiveTab("verify");
+      }
     },
   });
+
+  const disabledClass =
+    "opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -100,6 +111,7 @@ const RegisterDialog = ({
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
           <TabsContent value="register">
             <form onSubmit={formik.handleSubmit} className="mt-4 space-y-5">
+              {/* Full Name */}
               <div className="space-y-2">
                 <Label htmlFor="fullName">اسم المستخدم</Label>
                 <div className="relative">
@@ -107,7 +119,8 @@ const RegisterDialog = ({
                   <Input
                     id="fullName"
                     placeholder="اكتب اسمك هنا"
-                    className="pr-10"
+                    className={`pr-10 ${loading ? disabledClass : ""}`}
+                    disabled={loading}
                     {...formik.getFieldProps("fullName")}
                   />
                 </div>
@@ -118,6 +131,7 @@ const RegisterDialog = ({
                 )}
               </div>
 
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email">البريد الإلكتروني</Label>
                 <div className="relative">
@@ -126,7 +140,8 @@ const RegisterDialog = ({
                     id="email"
                     type="email"
                     placeholder="example@email.com"
-                    className="pr-10"
+                    className={`pr-10 ${loading ? disabledClass : ""}`}
+                    disabled={loading}
                     {...formik.getFieldProps("email")}
                   />
                 </div>
@@ -135,6 +150,7 @@ const RegisterDialog = ({
                 )}
               </div>
 
+              {/* University */}
               <div className="space-y-2">
                 <Label htmlFor="university">الجامعة</Label>
                 <div className="relative">
@@ -144,8 +160,12 @@ const RegisterDialog = ({
                     onValueChange={(val) =>
                       formik.setFieldValue("university", val)
                     }
+                    disabled={loading}
                   >
-                    <SelectTrigger id="university" className="pr-10 w-full">
+                    <SelectTrigger
+                      id="university"
+                      className={`pr-10 w-full ${loading ? disabledClass : ""}`}
+                    >
                       <SelectValue placeholder="اختر الجامعة" />
                     </SelectTrigger>
                     <SelectContent>
@@ -164,6 +184,7 @@ const RegisterDialog = ({
                 )}
               </div>
 
+              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password">كلمة المرور</Label>
                 <div className="relative">
@@ -172,13 +193,17 @@ const RegisterDialog = ({
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="********"
-                    className="pr-10"
+                    className={`px-10  ${loading ? disabledClass : ""}`}
+                    disabled={loading}
                     {...formik.getFieldProps("password")}
                   />
                   <button
                     type="button"
                     onClick={togglePassword}
-                    className="absolute left-3 top-1/2 -translate-y-1/2"
+                    disabled={loading}
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 ${
+                      loading ? "cursor-not-allowed opacity-50" : ""
+                    }`}
                     aria-label="إظهار أو إخفاء كلمة المرور"
                   >
                     {showPassword ? (
@@ -198,11 +223,17 @@ const RegisterDialog = ({
                 )}
               </div>
 
-              <div className="flex items-start gap-2">
+              {/* Terms */}
+              <div
+                className={`flex items-start gap-2 ${
+                  loading ? "opacity-60 pointer-events-none" : ""
+                }`}
+              >
                 <Checkbox
                   id="terms"
                   checked={termsAccepted}
                   onCheckedChange={(checked) => setTermsAccepted(!!checked)}
+                  disabled={loading}
                 />
                 <label
                   htmlFor="terms"
@@ -225,14 +256,13 @@ const RegisterDialog = ({
                 </label>
               </div>
 
+              {/* Submit */}
               <Button
                 type="submit"
                 className="w-full rounded-lg shadow-md hover:shadow-lg transition-all"
-                disabled={
-                  isRegisterLoading || formik.isSubmitting || !termsAccepted
-                }
+                disabled={loading || formik.isSubmitting || !termsAccepted}
               >
-                {isRegisterLoading || formik.isSubmitting ? (
+                {loading || formik.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     جاري التسجيل...
@@ -243,6 +273,7 @@ const RegisterDialog = ({
               </Button>
             </form>
 
+            {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -252,20 +283,26 @@ const RegisterDialog = ({
               </div>
             </div>
 
-            <GoogleLoginButton />
+            {/* Google Button */}
+            <div className={loading ? "opacity-60 pointer-events-none" : ""}>
+              <GoogleLoginButton />
+            </div>
 
+            {/* Switch to login */}
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
               لديك حساب؟{" "}
               <button
                 type="button"
                 className="font-semibold text-primary hover:underline"
                 onClick={onSwitchToLogin}
+                disabled={loading}
               >
                 تسجيل الدخول
               </button>
             </p>
           </TabsContent>
 
+          {/* Verify Tab */}
           <TabsContent value="verify" className="py-6 text-center space-y-4">
             <Image
               src={successImage}

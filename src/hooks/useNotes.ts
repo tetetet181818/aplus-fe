@@ -182,6 +182,7 @@ export default function useNotes() {
     }
     return res;
   };
+
   /**  ====================================== 
                     Helpers
   ====================================== */
@@ -258,6 +259,7 @@ export default function useNotes() {
     setMinPrice,
     filterTitle,
     setFilterTitle,
+
     // Pagination handlers
     pagination: {
       total,

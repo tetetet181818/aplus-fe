@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/useAuth";
 import { useState } from "react";
 import useNotes from "@/hooks/useNotes";
+import { downloadFile } from "@/utils/downloadFile";
 
 /**
  * Note detail page component with skeleton loader and error handling.
@@ -36,7 +37,6 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     loading,
     handlePurchase,
     addNoteToLikeList,
-    handleDownloadFile,
     removeNoteFromLikeList,
     likeLoading,
     toggleLike,
@@ -57,7 +57,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     handelRemoveReviewFromNote,
     removeReviewLoading,
   } = useNotes();
-
+  console.log(note);
   if (!loading && !note) {
     return (
       <NoResults
@@ -177,9 +177,9 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               onDelete={() => handleDeleteNote({ noteId: note._id })}
               deleteLoading={deleteNoteLoading}
               onDownload={() =>
-                handleDownloadFile({
-                  noteUrl: note.file_path,
-                  noteName: note.title,
+                downloadFile({
+                  noteUrl: note.file_path as string,
+                  noteName: note.title as string,
                 })
               }
               downloadLoading={false}
