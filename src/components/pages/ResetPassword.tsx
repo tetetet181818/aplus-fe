@@ -5,9 +5,10 @@ import { useFormik } from "formik";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import { resetPasswordValidation } from "@/utils/validation/authValidation";
 import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 /** declare props */
 interface ResetPasswordProps {
@@ -24,11 +25,11 @@ export default function ResetPassword({
   userId,
   resetPasswordToken,
 }: ResetPasswordProps) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const loading = false;
 
-  const { handleResetPassword } = useAuth();
+  const { handleResetPassword, resetPasswordLoading } = useAuth();
 
   const formik = useFormik({
     initialValues: { password: "", confirmPassword: "" },
@@ -49,8 +50,11 @@ export default function ResetPassword({
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 border rounded-xl shadow-sm my-20">
-      <h2 className="text-2xl font-semibold text-center mb-4">
-        إعادة تعيين كلمة المرور
+      <h2 className="text-2xl font-semibold text-center mb-4 flex items-center justify-center gap-2">
+        <Button onClick={() => router.back()}>
+          <ArrowRight className="size-5" />
+        </Button>
+        <span className="text-primary">إعادة تعيين كلمة المرور</span>
       </h2>
       <p className="text-sm text-muted-foreground text-center mb-6">
         أدخل كلمة مرور جديدة لحسابك
@@ -68,7 +72,7 @@ export default function ResetPassword({
           onToggle={() => setShowPassword(!showPassword)}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          disabled={loading}
+          disabled={resetPasswordLoading}
         />
 
         {/* Confirm Password Field */}
@@ -84,11 +88,15 @@ export default function ResetPassword({
           onToggle={() => setShowConfirm(!showConfirm)}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          disabled={loading}
+          disabled={resetPasswordLoading}
         />
 
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? (
+        <Button
+          type="submit"
+          disabled={resetPasswordLoading}
+          className="w-full disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {resetPasswordLoading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin ml-2" />
               جاري الحفظ...
@@ -143,7 +151,7 @@ function PasswordField({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
-          className="pr-10"
+          className="pr-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100"
           placeholder={placeholder}
           disabled={disabled}
         />

@@ -3,11 +3,12 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { setCookie } from "@/utils/cookies";
+import useAuth from "@/hooks/useAuth";
 
 export default function GoogleCallbackProvider() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const { setToken } = useAuth();
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -18,17 +19,17 @@ export default function GoogleCallbackProvider() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
+      setCookie("access_token", `Bearer ${token}`);
+      setCookie("isAuthenticated", "true");
+      setToken(`Bearer ${token}`);
       if (typeof window !== "undefined") {
         localStorage.setItem("access_token", `Bearer ${token}`);
-        localStorage.setItem("isAuthenticated", "true");
-        setCookie("access_token", `Bearer ${token}`);
-        setCookie("isAuthenticated", "true");
       }
     }
     if (typeof window !== "undefined" && localStorage.getItem("access_token")) {
       router.push("/");
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, setToken]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/70 z-50">

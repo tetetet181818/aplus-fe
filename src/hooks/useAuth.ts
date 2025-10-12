@@ -14,12 +14,14 @@ import {
 } from "@/store/api/auth.api";
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
 import { deleteCookie, getCookie, setCookie } from "@/utils/cookies";
+import { useRouter } from "next/navigation";
 
 /**
  * Hook for real-time user authentication and management.
  * Reacts to token updates, syncs across tabs, and keeps user data fresh.
  */
 export default function useAuth() {
+  const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [isTokenReady, setIsTokenReady] = useState(false);
 
@@ -32,9 +34,9 @@ export default function useAuth() {
     if (typeof window === "undefined") return;
 
     const getStoredToken = () =>
-      localStorage.getItem("access_token") || getCookie("access_token") || "";
+      localStorage.getItem("access_token") || getCookie("access_token");
 
-    setToken(getStoredToken());
+    setToken(getStoredToken() || null);
     setIsTokenReady(true);
 
     // Listen for token changes in other tabs
@@ -153,6 +155,7 @@ export default function useAuth() {
     localStorage.removeItem("isAuthenticated");
     setToken(null);
     toast.success("تم تسجيل الخروج");
+    window.location.reload();
   }, []);
 
   const handleDeleteAccount = useCallback(async () => {
@@ -161,7 +164,7 @@ export default function useAuth() {
       const response = await deleteAccount({ token }).unwrap();
       toast.success(response?.message);
       logoutUser();
-      return response?.data;
+      return response;
     } catch (error) {
       console.error("Delete Account Error:", error);
     }
@@ -172,7 +175,7 @@ export default function useAuth() {
       try {
         const response = await forgetPassword({ email }).unwrap();
         toast.success(response?.message);
-        return response?.data;
+        return response;
       } catch (error) {
         console.error("Forget Password Error:", error);
       }
@@ -186,8 +189,8 @@ export default function useAuth() {
       try {
         const response = await updateUserInfo({ token, data }).unwrap();
         toast.success(response?.message);
-        refetchAuth(); // reflect new info in real time
-        return response?.data;
+        refetchAuth();
+        return response;
       } catch (error) {
         console.error("Update Info Error:", error);
       }
@@ -212,12 +215,15 @@ export default function useAuth() {
           newPassword,
         }).unwrap();
         toast.success(response?.message);
-        return response?.data;
+        if (response?.data) {
+          router.push("/");
+          return response?.data;
+        }
       } catch (error) {
         console.error("Reset Password Error:", error);
       }
     },
-    [resetPassword]
+    [resetPassword, router]
   );
 
   /** Auto-refetch auth on token change */
@@ -230,13 +236,12 @@ export default function useAuth() {
     isLoginLoading ||
     isRegisterLoading ||
     deleteAccountLoading ||
-    updateUserInfoLoading ||
-    forgetPasswordLoading ||
-    resetPasswordLoading;
+    updateUserInfoLoading;
 
   return {
     /** Auth state */
     token,
+    setToken,
     user: authData?.data?.[0],
     isAuthenticated: !!token && !!authData?.data?.[0],
     isCheckAuthLoading,
@@ -266,5 +271,7 @@ export default function useAuth() {
     handleForgetPassword,
     handleUpdateUserInfo,
     handleResetPassword,
+    forgetPasswordLoading,
+    resetPasswordLoading,
   };
 }

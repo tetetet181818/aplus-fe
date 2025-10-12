@@ -13,8 +13,14 @@ import Pagination from "@/components/atoms/Pagination";
 import useNotes from "@/hooks/useNotes";
 import useAuth from "@/hooks/useAuth";
 import UserModeSection from "./UserModeSection";
-import { SearchIcon } from "lucide-react";
+import { FileText, SearchIcon, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const NotesListPage = () => {
   /** UI state */
@@ -72,17 +78,34 @@ const NotesListPage = () => {
       {/* Search and Sort Bar */}
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
         {searchType === "user" && (
-          <div className="relative flex w-full items-center mr-4">
-            <SearchIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+          <>
+            <div className="relative flex w-full items-center mr-4">
+              <SearchIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
 
-            <Input
-              type="search"
-              placeholder={"ابحث عن المستخدمين..."}
-              className="pr-10"
-              value={filterFullName}
-              onChange={(e) => setFilterFullName(e.target.value)}
-            />
-          </div>
+              <Input
+                type="search"
+                placeholder={"ابحث عن المستخدمين..."}
+                className="pr-10"
+                value={filterFullName}
+                onChange={(e) => setFilterFullName(e.target.value)}
+              />
+            </div>
+            <Select onValueChange={(value) => setSearchType(value)}>
+              <SelectTrigger className="w-[60px]">
+                <SearchIcon className="size-5" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="user">
+                  <User className="size-5" />
+                  <span>المستخدم</span>
+                </SelectItem>
+                <SelectItem value="file">
+                  <FileText className="size-5" />
+                  <span>ملخصات</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </>
         )}
 
         {searchType === "file" && (

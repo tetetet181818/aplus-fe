@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { setCookie } from "@/utils/cookies";
 import { useVerifyMutation, useLazyCheckAuthQuery } from "@/store/api/auth.api";
+import useAuth from "@/hooks/useAuth";
 
 export default function VerifyClient() {
+  const { setToken } = useAuth();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [verify, { isLoading, isSuccess, isError, error }] =
@@ -20,11 +22,11 @@ export default function VerifyClient() {
     if (!token) return;
 
     const storeToken = (value: string) => {
+      setCookie("access_token", `Bearer ${value}`);
+      setCookie("isAuthenticated", "true");
+      setToken(`Bearer ${value}`);
       if (typeof window !== "undefined") {
         localStorage.setItem("access_token", `Bearer ${value}`);
-        localStorage.setItem("isAuthenticated", "true");
-        setCookie("access_token", `Bearer ${value}`);
-        setCookie("isAuthenticated", "true");
       }
     };
 
@@ -40,7 +42,7 @@ export default function VerifyClient() {
     };
 
     runVerification();
-  }, [token, verify, triggerCheckAuth]);
+  }, [token, verify, triggerCheckAuth, setToken]);
 
   const bgClass = isLoading
     ? "from-gray-50 to-gray-100"

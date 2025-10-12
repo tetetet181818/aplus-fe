@@ -41,7 +41,6 @@ export default function UpdateInfoDialog({
     validationSchema: updateSchema,
     onSubmit: async (values) => {
       const res = await handelUpdateUserInfo(values);
-
       if (res) {
         onClose();
       }
