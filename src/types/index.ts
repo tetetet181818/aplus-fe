@@ -138,6 +138,7 @@ export interface Sale {
   user_id: string;
   note_id: string;
   amount: number;
+  commission: number;
   status: string;
   payment_method: string;
   note_title: string;

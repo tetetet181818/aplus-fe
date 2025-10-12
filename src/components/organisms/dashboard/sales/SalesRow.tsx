@@ -13,12 +13,10 @@ interface SalesRowProps {
 export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
   const formatStatus = (status: string) => {
     switch (status) {
-      case "completed":
-        return { label: "مكتمل", variant: "default" as const };
-      case "pending":
-        return { label: "قيد الانتظار", variant: "secondary" as const };
-      default:
+      case "failed":
         return { label: "فشل", variant: "destructive" as const };
+      case "paid":
+        return { label: "مدفوع", variant: "default" as const };
     }
   };
 
@@ -31,9 +29,10 @@ export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
       <TableCell>{sale.invoice_id}</TableCell>
       <TableCell>
         {sale.amount} ر.س
-        {sale.platform_fee && (
+        {sale.commission && (
           <div className="text-xs text-muted-foreground">
-            عمولة: {sale.platform_fee} ر.س | طريقة الدفع: {sale.payment_method}
+            عمولة: {sale.commission || "N/A"} ر.س | طريقة الدفع:{" "}
+            {sale.payment_method || "N/A"}
           </div>
         )}
       </TableCell>
@@ -41,7 +40,7 @@ export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
         {new Date(sale.createdAt || "").toLocaleDateString("ar-EG")}
       </TableCell>
       <TableCell>
-        <Badge variant={status.variant}>{status.label}</Badge>
+        <Badge variant={status?.variant}>{status?.label}</Badge>
       </TableCell>
       <TableCell>
         <Button
@@ -50,9 +49,6 @@ export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
           onClick={() => onShowDetails(sale._id)}
         >
           <Eye className="h-4 w-4" />
-        </Button>
-        <Button size="sm" variant="outline" className="ml-2">
-          <Download className="h-4 w-4" />
         </Button>
       </TableCell>
     </TableRow>

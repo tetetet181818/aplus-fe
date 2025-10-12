@@ -125,7 +125,7 @@ export default function SalesDashboard() {
                   }}
                 />
 
-                {salesPagination && (
+                {salesPagination?.totalItems > 10 && (
                   <Pagination
                     currentPage={salePage}
                     totalPages={salesPagination?.totalPages}

@@ -4,6 +4,7 @@ import { noteApi } from "./api/note.api";
 import { withdrawalApi } from "./api/withdrawal.api";
 import { dashboardApi } from "./api/dashboard.api";
 import { notificationsApi } from "./api/notification.api";
+import { salesApi } from "./api/sales.api";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     [withdrawalApi.reducerPath]: withdrawalApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
+    [salesApi.reducerPath]: salesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -19,7 +21,8 @@ export const store = configureStore({
       noteApi.middleware,
       withdrawalApi.middleware,
       dashboardApi.middleware,
-      notificationsApi.middleware
+      notificationsApi.middleware,
+      salesApi.middleware
     ),
 });
 

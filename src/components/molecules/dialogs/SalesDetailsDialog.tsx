@@ -17,18 +17,21 @@ import {
   CreditCard,
   FileText,
   MessageSquare,
+  Mail,
+  Phone,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCallback } from "react";
-import { useGetSalesByIdQuery } from "@/store/api/dashboard.api";
 import useAuth from "@/hooks/useAuth";
+import { useGetSingleSaleQuery } from "@/store/api/sales.api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  sale: string | null;
+  salesId: string | null;
 }
 
 const statusVariantMap: Record<
@@ -58,69 +61,51 @@ const paymentMethodIcons: Record<string, LucideIcon> = {
   wallet: CreditCard,
 };
 
-export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
+export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
   const { token } = useAuth();
-  const { data } = useGetSalesByIdQuery({
+  const { data, isLoading } = useGetSingleSaleQuery({
     token: token || "",
-    id: sale || "",
+    saleId: salesId || "",
   });
-  const saleData = data?.data;
-  const handleCopyToClipboard = useCallback((text: string, label: string) => {
+
+  const saleData = data?.data?.sale;
+  const sellerData = data?.data?.seller;
+  const buyerData = data?.data?.buyer;
+
+  const handleCopy = useCallback((text: string, label: string) => {
     navigator.clipboard.writeText(text);
     toast.success(`تم نسخ ${label} بنجاح`);
   }, []);
-
-  const isValidId = (id: string) =>
-    id && typeof id === "string" && id.trim().length > 0;
 
   const DetailItem = ({
     icon: Icon,
     label,
     value,
-    isLink = false,
+    copyable,
+    isLink,
     href,
-    copyable = false,
-    className,
-    validateLink = true,
   }: {
     icon?: LucideIcon;
     label: string;
-    value: string | number | null | undefined;
+    value?: string | number | null;
+    copyable?: boolean;
     isLink?: boolean;
     href?: string;
-    copyable?: boolean;
-    className?: string;
-    validateLink?: boolean;
   }) => {
     if (!value) return null;
-
-    const shouldRenderAsLink =
-      isLink && (!validateLink || isValidId(String(value)));
-
     const content = (
-      <div className={cn("flex items-start gap-2", className)}>
-        {Icon && (
-          <Icon className="h-4 w-4 mt-1 text-muted-foreground flex-shrink-0" />
-        )}
+      <div className="flex items-start gap-2">
+        {Icon && <Icon className="h-4 w-4 mt-1 text-muted-foreground" />}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-muted-foreground mb-1">
-            {label}
-          </p>
+          <p className="text-sm text-muted-foreground mb-1">{label}</p>
           <div className="flex items-center gap-2">
-            <p
-              className={cn(
-                "text-base font-semibold text-foreground break-words",
-                shouldRenderAsLink && "hover:text-primary transition-colors"
-              )}
-            >
-              {value}
-            </p>
+            <span className="text-base font-semibold break-words">{value}</span>
             {copyable && (
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6 hover:bg-accent/20"
-                onClick={() => handleCopyToClipboard(String(value), label)}
+                onClick={() => handleCopy(String(value), label)}
               >
                 <Copy className="h-3 w-3" />
               </Button>
@@ -130,19 +115,39 @@ export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
       </div>
     );
 
-    return shouldRenderAsLink ? (
+    return isLink ? (
       <Link
         href={href || "#"}
-        className="block hover:bg-accent/5 rounded-lg p-2 -m-2 transition-colors"
+        className="block hover:bg-accent/5 rounded-lg p-2 -m-2"
       >
         {content}
       </Link>
     ) : (
-      <div className="rounded-lg p-2 -m-2">{content}</div>
+      <div className="p-2 -m-2">{content}</div>
     );
   };
 
-  if (!sale) {
+  /** Skeleton while loading */
+  if (isLoading) {
+    return (
+      <Dialog open={open} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl p-6 space-y-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Skeleton className="h-6 w-6 rounded-full" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+
+          <Skeleton className="h-32 w-full rounded-xl" />
+          <Skeleton className="h-40 w-full rounded-xl" />
+          <Skeleton className="h-40 w-full rounded-xl" />
+          <Skeleton className="h-40 w-full rounded-xl" />
+          <Skeleton className="h-20 w-full rounded-xl" />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (!saleData)
     return (
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent>
@@ -152,54 +157,92 @@ export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
         </DialogContent>
       </Dialog>
     );
-  }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto sm:max-w-2xl p-0">
-        <DialogHeader className="px-6 py-4 border-b">
-          <DialogTitle className="text-right text-xl font-bold flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+        {/* Header with gradient background and rounded corners */}
+        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
+          <DialogTitle className="text-xl font-bold flex items-center gap-2 text-gray-800">
+            {/* Icon with circular background */}
+            <div className="p-2 bg-blue-100 rounded-full">
+              <FileText className="h-5 w-5 text-blue-600" />
+            </div>
             تفاصيل المعاملة
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 p-6">
-          {/* Header */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-muted/30 rounded-xl">
-            <div>
-              <p className="text-sm text-muted-foreground">المبلغ</p>
-              <p className="text-2xl font-bold text-primary">
-                {saleData.amount} ر.س
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">الحالة</p>
-              <Badge
-                variant={statusVariantMap[saleData.status] || "secondary"}
-                className="text-sm px-3 py-1 rounded-full"
-              >
-                {statusLabelMap[saleData.status] || saleData.status}
-              </Badge>
+        <div className="p-6 space-y-6">
+          {/* Amount & Status Card with decorative shapes */}
+          <div className="relative bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-2xl border border-blue-200 overflow-hidden">
+            {/* Decorative circles in background */}
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-blue-200 rounded-full opacity-20"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-indigo-200 rounded-full opacity-30"></div>
+
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="text-center sm:text-left">
+                <p className="text-sm text-blue-600 font-medium mb-2">المبلغ</p>
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <CreditCard className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <p className="text-3xl font-bold text-gray-800">
+                    {saleData.amount} ر.س
+                  </p>
+                </div>
+              </div>
+              <div className="text-center sm:text-right">
+                <p className="text-sm text-blue-600 font-medium mb-2">الحالة</p>
+                <div className="flex justify-center sm:justify-end">
+                  <Badge
+                    variant={statusVariantMap[saleData.status] || "secondary"}
+                    className={cn(
+                      "text-sm px-4 py-2 rounded-full font-semibold shadow-sm",
+                      saleData.status === "completed" &&
+                        "bg-green-100 text-green-800 border-green-200",
+                      saleData.status === "pending" &&
+                        "bg-yellow-100 text-yellow-800 border-yellow-200",
+                      saleData.status === "failed" &&
+                        "bg-red-100 text-red-800 border-red-200"
+                    )}
+                  >
+                    {/* Status indicator dot */}
+                    <div
+                      className={cn(
+                        "w-2 h-2 rounded-full mr-2",
+                        saleData.status === "completed" && "bg-green-500",
+                        saleData.status === "pending" && "bg-yellow-500",
+                        saleData.status === "failed" && "bg-red-500"
+                      )}
+                    ></div>
+                    {statusLabelMap[saleData.status] || saleData.status}
+                  </Badge>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Payment */}
-          <div>
-            <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
-              <CreditCard className="h-5 w-5" /> معلومات الدفع
+          {/* Payment Info Section */}
+          <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <CreditCard className="h-5 w-5 text-blue-600" />
+              </div>
+              معلومات الدفع
             </h3>
-            <div className="space-y-3 mt-3">
-              <DetailItem
-                icon={paymentMethodIcons[saleData.payment_method]}
-                label="طريقة الدفع"
-                value={paymentMethodMap[saleData.payment_method]}
-              />
-              <DetailItem
-                icon={CreditCard}
-                label="رسوم المنصة"
-                value={`${saleData.platform_fee} ر.س`}
-              />
+            <div className="mt-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <DetailItem
+                  icon={paymentMethodIcons[saleData.payment_method]}
+                  label="طريقة الدفع"
+                  value={paymentMethodMap[saleData.payment_method]}
+                />
+                <DetailItem
+                  icon={CreditCard}
+                  label="رسوم المنصة"
+                  value={`${saleData.platform_fee} ر.س`}
+                />
+              </div>
               <DetailItem
                 icon={FileText}
                 label="رقم الفاتورة"
@@ -207,63 +250,122 @@ export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
                 copyable
               />
             </div>
-          </div>
+          </section>
 
-          {/* Note */}
-          <div>
-            <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
-              <FileText className="h-5 w-5" /> معلومات الملاحظة
+          {/* Note Info Section */}
+          <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <FileText className="h-5 w-5 text-green-600" />
+              </div>
+              معلومات الملاحظة
             </h3>
-            <div className="space-y-3 mt-3">
+            <div className="mt-4 space-y-4">
               <DetailItem
-                icon={FileText}
                 label="رقم الملاحظة"
                 value={saleData.note_id}
                 isLink
                 href={`/notes/${saleData.note_id}`}
                 copyable
-                validateLink={false}
               />
-              <DetailItem
-                icon={FileText}
-                label="عنوان الملاحظة"
-                value={saleData.note_title}
-                className="bg-muted/30 p-3 rounded-lg"
-              />
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                <DetailItem
+                  label="عنوان الملاحظة"
+                  value={saleData.note_title}
+                />
+              </div>
             </div>
-          </div>
+          </section>
 
-          {/* User */}
-          <div>
-            <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
-              <User className="h-5 w-5" /> معلومات المستخدم
-            </h3>
-            <div className="space-y-3 mt-3">
-              <DetailItem
-                label="معرف المشتري"
-                icon={User}
-                value={saleData.user_id}
-                isLink
-                href={`/seller/${saleData.user_id}`}
-                copyable
-              />
-              <DetailItem
-                label="معرف البائع"
-                icon={User}
-                value={saleData.buyerId}
-                isLink
-                href={`/seller/${saleData.buyerId}`}
-                copyable
-              />
-            </div>
-          </div>
+          {/* Seller Info Section */}
+          {sellerData && (
+            <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <User className="h-5 w-5 text-purple-600" />
+                </div>
+                بيانات البائع
+              </h3>
+              <div className="mt-4 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DetailItem
+                    icon={User}
+                    label="اسم البائع"
+                    value={sellerData.fullName}
+                  />
+                  <DetailItem
+                    icon={Mail}
+                    label="البريد"
+                    value={sellerData.email}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DetailItem
+                    icon={Phone}
+                    label="الهاتف"
+                    value={sellerData.phone}
+                  />
+                  <DetailItem
+                    label="معرف البائع"
+                    value={sellerData._id}
+                    isLink
+                    href={`/seller/${sellerData._id}`}
+                    copyable
+                  />
+                </div>
+              </div>
+            </section>
+          )}
 
-          {/* Dates */}
-          <div>
-            <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
-              <Calendar className="h-5 w-5" /> التواريخ
+          {/* Buyer Info Section */}
+          {buyerData && (
+            <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <User className="h-5 w-5 text-orange-600" />
+                </div>
+                بيانات المشتري
+              </h3>
+              <div className="mt-4 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DetailItem
+                    icon={User}
+                    label="اسم المشتري"
+                    value={buyerData.fullName}
+                  />
+                  <DetailItem
+                    icon={Mail}
+                    label="البريد"
+                    value={buyerData.email}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DetailItem
+                    icon={Phone}
+                    label="الهاتف"
+                    value={buyerData.phone}
+                  />
+                  <DetailItem
+                    label="معرف المشتري"
+                    value={buyerData._id}
+                    isLink
+                    href={`/seller/${buyerData._id}`}
+                    copyable
+                  />
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Dates Section */}
+          <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <Calendar className="h-5 w-5 text-red-600" />
+              </div>
+              التواريخ
             </h3>
-            <div className="space-y-3 mt-3">
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <DetailItem
                 icon={Calendar}
                 label="تاريخ الإنشاء"
@@ -283,20 +385,23 @@ export default function SalesDetailsDialog({ open, onClose, sale }: Props) {
                 }
               />
             </div>
-          </div>
+          </section>
 
-          {/* Message */}
+          {/* Message Section */}
           {saleData.message && (
-            <div>
-              <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" /> الرسالة
+            <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-gray-700">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <MessageSquare className="h-5 w-5 text-teal-600" />
+                </div>
+                الرسالة
               </h3>
-              <div className="bg-muted/30 p-4 rounded-lg mt-3">
-                <p className="text-foreground whitespace-pre-wrap">
+              <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-5 rounded-xl border border-teal-200 mt-4">
+                <p className="whitespace-pre-wrap leading-relaxed text-gray-700">
                   {saleData.message}
                 </p>
               </div>
-            </div>
+            </section>
           )}
         </div>
       </DialogContent>

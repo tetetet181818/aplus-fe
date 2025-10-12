@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import SalesRow from "./SalesRow";
 import { Sale } from "@/types";
-import { JSX } from "react";
 export default function SalesTable({
   sales,
   handleSort,
@@ -17,7 +16,7 @@ export default function SalesTable({
 }: {
   sales: Sale[];
   handleSort: (key: string) => void;
-  renderSortIcon: (key: string) => JSX.Element;
+  renderSortIcon: (key: string) => string;
   onShowDetails: (id: string) => void;
 }) {
   return (
