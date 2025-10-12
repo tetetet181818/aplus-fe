@@ -13,9 +13,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
 import { JSX } from "react";
-import { notificationType } from "@/types";
 
 interface User {
   role?: string;
@@ -30,11 +28,6 @@ interface MobileMenuProps {
   onRegisterOpen: () => void;
   user?: User | null;
   handleLogout: () => void;
-  notifications: notificationType[];
-  notificationLoading: boolean;
-  handleReadAllNotification: () => void;
-  handelClearAllNotification: () => void;
-  handleMakeNotificationRead: (id: string) => void;
 }
 
 const MobileMenu = ({
@@ -45,11 +38,6 @@ const MobileMenu = ({
   onRegisterOpen,
   user,
   handleLogout,
-  notifications,
-  notificationLoading,
-  handleReadAllNotification,
-  handelClearAllNotification,
-  handleMakeNotificationRead,
 }: MobileMenuProps): JSX.Element | null => {
   if (!isOpen) return null;
 
@@ -151,14 +139,6 @@ const MobileMenu = ({
                 <LogOut className="ml-3 h-5 w-5" aria-hidden="true" />
                 تسجيل الخروج
               </Button>
-
-              <NotificationBell
-                notifications={notifications}
-                notificationLoading={notificationLoading}
-                onReadAll={handleReadAllNotification}
-                onClearAll={handelClearAllNotification}
-                handleMakeNotificationRead={handleMakeNotificationRead}
-              />
             </>
           ) : (
             <>

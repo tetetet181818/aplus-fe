@@ -71,8 +71,11 @@ const NotesListPage = () => {
         showFilters={showFilters}
         itemCount={notes?.length}
         totalCount={notes?.length}
+        usersCount={allUsers?.length}
+        usersTotalCount={allUsers?.length}
         hasActiveFilters={false}
-        onClearFilters={() => {}}
+        onClearFilters={resetFilters}
+        searchType={searchType}
       />
 
       {/* Search and Sort Bar */}

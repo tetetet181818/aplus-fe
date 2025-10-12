@@ -11,6 +11,7 @@ import LoginDialog from "@/components/molecules/dialogs/LoginDialog";
 import RegisterDialog from "@/components/molecules/dialogs/RegisterDialog";
 import useAuth from "@/hooks/useAuth";
 import useNotifications from "@/hooks/useNotifications";
+import { NotificationBell } from "@/components/atoms/NotificationBell";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function Navbar() {
     handleReadAllNotification,
     handelClearAllNotification,
     handleMakeNotificationRead,
-  } = useNotifications(user?._id || "");
+  } = useNotifications();
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const switchToRegister = () => {
@@ -77,11 +78,20 @@ export default function Navbar() {
         />
 
         {/* Mobile Hamburger */}
-        <div className="md:hidden">
+        <div className="md:hidden flex justify-end items-center">
+          {isAuthenticated && (
+            <NotificationBell
+              notifications={notifications}
+              notificationLoading={notificationLoading}
+              onReadAll={handleReadAllNotification}
+              onClearAll={handelClearAllNotification}
+              handleMakeNotificationRead={handleMakeNotificationRead}
+            />
+          )}
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="rounded-lg hover:bg-gray-100 bg-gray-200 transition-colors"
             onClick={toggleMenu}
             aria-label="فتح وإغلاق القائمة"
           >
@@ -109,11 +119,6 @@ export default function Navbar() {
           setIsMenuOpen(false);
         }}
         handleLogout={handleLogout}
-        notifications={notifications}
-        notificationLoading={notificationLoading}
-        handleReadAllNotification={handleReadAllNotification}
-        handelClearAllNotification={handelClearAllNotification}
-        handleMakeNotificationRead={handleMakeNotificationRead}
       />
 
       {/* Auth Dialogs */}

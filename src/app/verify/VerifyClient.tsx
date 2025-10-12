@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
@@ -10,6 +10,7 @@ import { useVerifyMutation, useLazyCheckAuthQuery } from "@/store/api/auth.api";
 import useAuth from "@/hooks/useAuth";
 
 export default function VerifyClient() {
+  const router = useRouter();
   const { setToken } = useAuth();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -33,16 +34,20 @@ export default function VerifyClient() {
     const runVerification = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const res = await verify(token).unwrap();
-        storeToken(token);
-        await triggerCheckAuth({ token }).unwrap();
+        const res = await verify(token)
+          .unwrap()
+          .then((res) => {
+            storeToken(res.data.token);
+            triggerCheckAuth({ token }).unwrap();
+            router.push("/");
+          });
       } catch (err) {
         console.error("Verification failed:", err);
       }
     };
 
     runVerification();
-  }, [token, verify, triggerCheckAuth, setToken]);
+  }, [token, verify, triggerCheckAuth, setToken, router]);
 
   const bgClass = isLoading
     ? "from-gray-50 to-gray-100"

@@ -7,33 +7,62 @@ const NotesListHeader = ({
   showFilters,
   itemCount,
   totalCount,
+  usersCount,
+  usersTotalCount,
   hasActiveFilters,
   onClearFilters,
+  searchType,
 }: {
   onToggleFilters: () => void;
   showFilters: boolean;
   itemCount: number;
   totalCount: number;
+  usersCount: number;
+  usersTotalCount: number;
   hasActiveFilters: boolean;
   onClearFilters: () => void;
+  searchType: string;
 }) => {
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">تصفح الملخصات</h1>
-        <p className="text-sm text-muted-foreground">
-          {hasActiveFilters ? (
-            <>
-              عرض <span className="font-medium">{itemCount}</span> من أصل{" "}
-              <span className="font-medium">{totalCount}</span> ملخص
-            </>
-          ) : (
-            <>
-              إجمالي الملخصات المتاحة:{" "}
-              <span className="font-medium">{totalCount}</span>
-            </>
-          )}
-        </p>
+        {searchType === "user" && (
+          <h1 className="text-2xl font-bold tracking-tight">تصفح المستخدمين</h1>
+        )}
+        {searchType === "file" && (
+          <h1 className="text-2xl font-bold tracking-tight">تصفح الملخصات</h1>
+        )}
+        {searchType === "user" && (
+          <p className="text-sm text-muted-foreground">
+            {hasActiveFilters ? (
+              <>
+                عرض <span className="font-medium">{usersCount}</span> من أصل{" "}
+                <span className="font-medium">{usersTotalCount}</span> مستخدم
+              </>
+            ) : (
+              <>
+                إجمالي المستخدمين المسجلين:{" "}
+                <span className="font-medium">{usersTotalCount}</span>
+              </>
+            )}
+          </p>
+        )}
+
+        {searchType === "note" && (
+          <p className="text-sm text-muted-foreground">
+            {hasActiveFilters ? (
+              <>
+                عرض <span className="font-medium">{itemCount}</span> من أصل{" "}
+                <span className="font-medium">{totalCount}</span> ملخص
+              </>
+            ) : (
+              <>
+                إجمالي الملخصات المتاحة:{" "}
+                <span className="font-medium">{totalCount}</span>
+              </>
+            )}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center gap-2">
@@ -48,15 +77,17 @@ const NotesListHeader = ({
             مسح الفلاتر
           </Button>
         )}
-        <Button
-          variant={showFilters ? "default" : "outline"}
-          size="sm"
-          onClick={onToggleFilters}
-          className="flex items-center gap-1.5"
-        >
-          <Filter className="h-4 w-4" />
-          {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
-        </Button>
+        {searchType === "file" && (
+          <Button
+            variant={showFilters ? "default" : "outline"}
+            size="sm"
+            onClick={onToggleFilters}
+            className="flex items-center gap-1.5"
+          >
+            <Filter className="h-4 w-4" />
+            {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
+          </Button>
+        )}
       </div>
     </div>
   );
