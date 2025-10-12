@@ -99,7 +99,7 @@ const UserDashboardPage = () => {
   return (
     <div className="py-8 px-4 md:px-6">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-20">
-        <TabsList className="flex w-full flex-nowrap gap-2 bg-transparent p-2 rounded-2xl border border-gray-300 dark:border-gray-600 shadow-inner mb-6 overflow-x-auto scrollbar-hide">
+        <TabsList className="w-full h-auto grid grid-cols-1 md:grid-cols-5">
           {[
             { value: "profile", icon: UserIcon, label: "معلوماتي" },
             { value: "my-notes", icon: BookOpen, label: "ملخصاتي" },
@@ -110,18 +110,13 @@ const UserDashboardPage = () => {
             <TabsTrigger
               key={value}
               value={value}
-              className="flex-shrink-0 min-w-[100px] sm:min-w-[120px] flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm font-medium transition-all duration-300
-        data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 
-        data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
-        hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105 rounded-xl sm:rounded-full border border-transparent
-        data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-400"
+              className="py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:shadow-lg"
             >
-              <Icon className="size-4 sm:size-5 flex-shrink-0" />
-              <span className="whitespace-nowrap">{label}</span>
+              <Icon className="size-4" />
+              <span>{label}</span>
             </TabsTrigger>
           ))}
         </TabsList>
-
         {/* Profile Tab */}
         <TabsContent value="profile" className="mt-6">
           <ProfileInfoTab user={user} loading={loading} />
