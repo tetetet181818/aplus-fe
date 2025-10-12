@@ -2,28 +2,45 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useVerifyMutation } from "@/store/api/auth.api";
+import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { setCookie } from "@/utils/cookies";
+import { useVerifyMutation, useLazyCheckAuthQuery } from "@/store/api/auth.api";
 
 export default function VerifyClient() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [verify, { isLoading, isSuccess, isError, error }] =
     useVerifyMutation();
+  const [triggerCheckAuth, { data: authData, isLoading: authLoading }] =
+    useLazyCheckAuthQuery();
+
   useEffect(() => {
-    if (token) {
+    if (!token) return;
+
+    const storeToken = (value: string) => {
       if (typeof window !== "undefined") {
-        localStorage.setItem("access_token", `Bearer ${token}`);
+        localStorage.setItem("access_token", `Bearer ${value}`);
         localStorage.setItem("isAuthenticated", "true");
-        setCookie("access_token", `Bearer ${token}`);
+        setCookie("access_token", `Bearer ${value}`);
         setCookie("isAuthenticated", "true");
       }
-      verify(token);
-    }
-  }, [token, verify]);
+    };
+
+    const runVerification = async () => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const res = await verify(token).unwrap();
+        storeToken(token);
+        await triggerCheckAuth({ token }).unwrap();
+      } catch (err) {
+        console.error("Verification failed:", err);
+      }
+    };
+
+    runVerification();
+  }, [token, verify, triggerCheckAuth]);
 
   const bgClass = isLoading
     ? "from-gray-50 to-gray-100"
@@ -58,7 +75,7 @@ export default function VerifyClient() {
           </div>
         </div>
 
-        {isLoading && (
+        {isLoading || authLoading ? (
           <>
             <h1 className="text-2xl font-bold text-gray-700 mb-2">
               جاري التحقق...
@@ -67,9 +84,9 @@ export default function VerifyClient() {
               يتم التحقق من حسابك، يرجى الانتظار
             </p>
           </>
-        )}
+        ) : null}
 
-        {isSuccess && (
+        {isSuccess && !authLoading && (
           <>
             <h1 className="text-2xl font-bold text-green-600 mb-2">
               تم التحقق بنجاح
@@ -77,6 +94,12 @@ export default function VerifyClient() {
             <p className="text-gray-600 mb-6">
               تم حفظ التوكن الخاص بك، يمكنك الآن استخدام حسابك بشكل طبيعي.
             </p>
+            {authData?.data && (
+              <div className="bg-green-50 text-green-700 p-3 rounded-md mb-4 text-sm">
+                <p>مرحباً، {authData.data.name || "مستخدم"} 🎉</p>
+                <p>بريدك الإلكتروني: {authData.data.email}</p>
+              </div>
+            )}
           </>
         )}
 
@@ -84,16 +107,11 @@ export default function VerifyClient() {
           <>
             <h1 className="text-2xl font-bold text-red-600 mb-2">فشل التحقق</h1>
             <p className="text-gray-600 mb-6">
-              {(() => {
-                if (
-                  error &&
-                  "data" in error &&
-                  (error as { data: { message: string } }).data?.message
-                ) {
-                  return (error as { data: { message: string } }).data.message;
-                }
-                return "حدث خطأ أثناء التحقق من الرابط.";
-              })()}
+              {error &&
+              "data" in error &&
+              (error as { data: { message?: string } }).data?.message
+                ? (error as { data: { message: string } }).data.message
+                : "حدث خطأ أثناء التحقق من الرابط."}
             </p>
           </>
         )}

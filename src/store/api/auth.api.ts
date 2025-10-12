@@ -47,7 +47,7 @@ export const authApi = createApi({
 
     getUser: builder.query({
       query: (id) => `users/${id}`,
-      providesTags: (result, error, id) => [{ type: "User", id }],
+      providesTags: ["Auth", "User"],
     }),
 
     logout: builder.mutation({
@@ -146,6 +146,7 @@ export const authApi = createApi({
 
 export const {
   useCheckAuthQuery,
+  useLazyCheckAuthQuery,
   useVerifyMutation,
   useRegisterMutation,
   useLoginMutation,

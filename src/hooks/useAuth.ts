@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   useCheckAuthQuery,
@@ -16,37 +16,53 @@ import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
 import { deleteCookie, getCookie, setCookie } from "@/utils/cookies";
 
 /**
- * Handles user authentication, session management, and account actions.
- * Ensures token readiness before triggering checkAuth.
+ * Hook for real-time user authentication and management.
+ * Reacts to token updates, syncs across tabs, and keeps user data fresh.
  */
 export default function useAuth() {
-  /** Token state — waits for client storage before running queries */
   const [token, setToken] = useState<string | null>(null);
   const [isTokenReady, setIsTokenReady] = useState(false);
-  /** Pagination and filters */
+
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
   const [filterFullName, setFilterFullName] = useState("");
 
-  /** Wait for token from localStorage or cookies on mount */
+  /** Get token on mount and watch for cross-tab updates */
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const storedToken =
+
+    const getStoredToken = () =>
       localStorage.getItem("access_token") || getCookie("access_token") || "";
-    setToken(storedToken);
+
+    setToken(getStoredToken());
     setIsTokenReady(true);
+
+    // Listen for token changes in other tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "access_token") {
+        setToken(e.newValue);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  /** Queries & Mutations */
+  /** Auth query automatically updates when token changes */
   const {
     data: authData,
     isLoading: isCheckAuthLoading,
     refetch: refetchAuth,
   } = useCheckAuthQuery(
     { token: token || "" },
-    { skip: !isTokenReady || !token }
+    {
+      skip: !isTokenReady || !token,
+      pollingInterval: 60_000, // refresh user data every 1 minute
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    }
   );
 
+  /** Mutations */
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
   const [deleteAccount, { isLoading: deleteAccountLoading }] =
@@ -58,7 +74,7 @@ export default function useAuth() {
   const [resetPassword, { isLoading: resetPasswordLoading }] =
     useResetPasswordMutation();
 
-  /** Fetch paginated users list */
+  /** All users list (for admins) */
   const {
     data: allUsers,
     isLoading: usersLoading,
@@ -73,7 +89,6 @@ export default function useAuth() {
     { skip: !token }
   );
 
-  /** Pagination helpers */
   const totalUsers = allUsers?.total || 0;
   const totalPages = Math.ceil(totalUsers / currentUsersLimit) || 1;
 
@@ -91,109 +106,125 @@ export default function useAuth() {
     }
   };
 
-  /** Register new user */
-  const registerUser = async (credentials: RegisterCredentials) => {
-    try {
-      const response = await register(credentials).unwrap();
-      toast.success(response?.message);
-      return response;
-    } catch (error) {
-      console.error("Register Error:", error);
-      toast.error(
-        (error as { status: string; data: { message: string } })["data"]
-          ?.message || "حدث خطأ أثناء التسجيل"
-      );
-    }
-  };
+  /** === Auth actions === */
 
-  /** Login user and store token */
-  const loginUser = async (credentials: LoginCredentials) => {
-    try {
-      const response = await login(credentials).unwrap();
-      const bearerToken = `Bearer ${response.token}`;
-      localStorage.setItem("access_token", bearerToken);
-      setCookie("access_token", bearerToken);
-      setToken(bearerToken);
-      refetchAuth();
-      toast.success(response?.message || "تم تسجيل الدخول بنجاح");
-      return response;
-    } catch (error) {
-      console.error("Login Error:", error);
-      toast.error("حدث خطأ أثناء تسجيل الدخول");
-    }
-  };
+  const registerUser = useCallback(
+    async (credentials: RegisterCredentials) => {
+      try {
+        const response = await register(credentials).unwrap();
+        toast.success(response?.message);
+        return response;
+      } catch (error) {
+        console.error("Register Error:", error);
+        toast.error(
+          (error as { data?: { message?: string } })?.data?.message ||
+            "حدث خطأ أثناء التسجيل"
+        );
+      }
+    },
+    [register]
+  );
 
-  /** Logout user */
-  const logoutUser = () => {
+  const loginUser = useCallback(
+    async (credentials: LoginCredentials) => {
+      try {
+        const response = await login(credentials).unwrap();
+        const bearerToken = `Bearer ${response.token}`;
+        localStorage.setItem("access_token", bearerToken);
+        localStorage.setItem("isAuthenticated", "true");
+        setCookie("access_token", bearerToken);
+        setCookie("isAuthenticated", "true");
+        setToken(bearerToken);
+        toast.success(response?.message || "تم تسجيل الدخول بنجاح");
+        refetchAuth();
+        return response;
+      } catch (error) {
+        console.error("Login Error:", error);
+        toast.error("حدث خطأ أثناء تسجيل الدخول");
+      }
+    },
+    [login, refetchAuth]
+  );
+
+  const logoutUser = useCallback(() => {
     deleteCookie("access_token");
     deleteCookie("isAuthenticated");
     localStorage.removeItem("access_token");
     localStorage.removeItem("isAuthenticated");
     setToken(null);
     toast.success("تم تسجيل الخروج");
-    window.location.reload();
-  };
+  }, []);
 
-  /** Delete user account */
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = useCallback(async () => {
     if (!token) return;
     try {
       const response = await deleteAccount({ token }).unwrap();
-      toast.success(response?.data?.message);
+      toast.success(response?.message);
       logoutUser();
       return response?.data;
     } catch (error) {
       console.error("Delete Account Error:", error);
     }
-  };
+  }, [token, deleteAccount, logoutUser]);
 
-  /** Forget password */
-  const handleForgetPassword = async ({ email }: { email: string }) => {
-    try {
-      const response = await forgetPassword({ email }).unwrap();
-      toast.success(response?.data?.message);
-      return response?.data;
-    } catch (error) {
-      console.error("Forget Password Error:", error);
-    }
-  };
+  const handleForgetPassword = useCallback(
+    async ({ email }: { email: string }) => {
+      try {
+        const response = await forgetPassword({ email }).unwrap();
+        toast.success(response?.message);
+        return response?.data;
+      } catch (error) {
+        console.error("Forget Password Error:", error);
+      }
+    },
+    [forgetPassword]
+  );
 
-  /** Update user info */
-  const handleUpdateUserInfo = async (data: UpdateUserInfo) => {
-    if (!token) return;
-    try {
-      const response = await updateUserInfo({ token, data }).unwrap();
-      toast.success(response?.data?.message);
-      return response?.data;
-    } catch (error) {
-      console.error("Update Info Error:", error);
-    }
-  };
+  const handleUpdateUserInfo = useCallback(
+    async (data: UpdateUserInfo) => {
+      if (!token) return;
+      try {
+        const response = await updateUserInfo({ token, data }).unwrap();
+        toast.success(response?.message);
+        refetchAuth(); // reflect new info in real time
+        return response?.data;
+      } catch (error) {
+        console.error("Update Info Error:", error);
+      }
+    },
+    [token, updateUserInfo, refetchAuth]
+  );
 
-  /** Reset password */
-  const handleResetPassword = async ({
-    userId,
-    resetPasswordToken,
-    newPassword,
-  }: {
-    userId: string;
-    resetPasswordToken: string;
-    newPassword: string;
-  }) => {
-    try {
-      const response = await resetPassword({
-        userId,
-        resetPasswordToken,
-        newPassword,
-      }).unwrap();
-      toast.success(response?.data?.message);
-      return response?.data;
-    } catch (error) {
-      console.error("Reset Password Error:", error);
-    }
-  };
+  const handleResetPassword = useCallback(
+    async ({
+      userId,
+      resetPasswordToken,
+      newPassword,
+    }: {
+      userId: string;
+      resetPasswordToken: string;
+      newPassword: string;
+    }) => {
+      try {
+        const response = await resetPassword({
+          userId,
+          resetPasswordToken,
+          newPassword,
+        }).unwrap();
+        toast.success(response?.message);
+        return response?.data;
+      } catch (error) {
+        console.error("Reset Password Error:", error);
+      }
+    },
+    [resetPassword]
+  );
 
-  /** Combined loading state */
+  /** Auto-refetch auth on token change */
+  useEffect(() => {
+    if (token) refetchAuth();
+  }, [token, refetchAuth]);
+
   const loading =
     isCheckAuthLoading ||
     isLoginLoading ||
@@ -207,7 +238,7 @@ export default function useAuth() {
     /** Auth state */
     token,
     user: authData?.data?.[0],
-    isAuthenticated: !!token,
+    isAuthenticated: !!token && !!authData?.data?.[0],
     isCheckAuthLoading,
     loading,
     isTokenReady,

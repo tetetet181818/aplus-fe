@@ -51,7 +51,6 @@ const UserDashboardPage = () => {
     likedNotes,
     likedNotesLoading,
   } = useNotes();
-
   const { handleDeleteNote, deleteNoteLoading } = useNoteDetail(
     itemToDelete || ""
   );
