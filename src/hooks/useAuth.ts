@@ -99,6 +99,10 @@ export default function useAuth() {
       return response;
     } catch (error) {
       console.error("Register Error:", error);
+      toast.error(
+        (error as { status: string; data: { message: string } })["data"]
+          ?.message || "حدث خطأ أثناء التسجيل"
+      );
     }
   };
 
