@@ -1,26 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
-import { io } from "socket.io-client";
-import { useDispatch } from "react-redux";
 import {
-  notificationsApi,
   useClearAllNotificationMutation,
   useMakeNotificationReadMutation,
   useReadAllNotificationMutation,
 } from "@/store/api/notification.api";
 import { useGetUserNotificationsQuery } from "@/store/api/notification.api";
-import { notificationType } from "@/types";
 import useAuth from "./useAuth";
 
 /**
  * Custom hook to:
  * - Fetch all notifications for a user
- * - Listen for new real-time notifications via Socket.IO
- * - Play sound and show browser notification when a new one arrives
  */
-export default function useNotifications(userId: string) {
-  const dispatch = useDispatch();
+export default function useNotifications() {
   const { token } = useAuth();
 
   const {
@@ -58,29 +50,6 @@ export default function useNotifications(userId: string) {
     }
   };
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:9090"
-        : "https://aplus-backend.onrender.com";
-
-    const socket = io(url, { query: { userId } });
-
-    // ✅ Listen for new notification events
-    socket.on("notification", (notif: notificationType) => {
-      playSound();
-      showBrowserNotification(notif);
-
-      // Refresh cache for latest notifications
-      dispatch(notificationsApi.util.invalidateTags(["Notification"]));
-      refetch();
-    });
-
-    return () => socket.disconnect();
-  }, [userId, dispatch, refetch]);
-
   return {
     notifications: notifications?.data,
     notificationLoading,
@@ -90,19 +59,4 @@ export default function useNotifications(userId: string) {
     handelClearAllNotification,
     handleMakeNotificationRead,
   };
-}
-
-function playSound() {
-  const audio = new Audio("/notification.mp3");
-  audio.play().catch(() => {});
-}
-
-function showBrowserNotification(notif: notificationType) {
-  if (typeof window === "undefined") return;
-
-  if (Notification.permission === "granted") {
-    new Notification(notif.title, { body: notif.message });
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission();
-  }
 }

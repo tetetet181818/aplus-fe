@@ -6,9 +6,7 @@ import {
   Rocket,
   DollarSign,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { JSX, ReactNode } from "react";
-import Link from "next/link";
 interface FeatureCardProps {
   icon: ReactNode;
   title: string;
