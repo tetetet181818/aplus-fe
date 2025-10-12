@@ -119,21 +119,6 @@ const FeaturesSection = (): JSX.Element => {
           <p className="text-lg md:text-xl font-medium mb-8 text-primary dark:text-blue-300">
             شارك — تعلم — اربح
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/notes">
-              <Button
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/10 px-8 py-3 rounded-lg transition-colors"
-              >
-                تصفح الملخصات
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="bg-primary hover:bg-primary/90 px-8 py-3 text-white rounded-lg transition-colors">
-                انضم الآن
-              </Button>
-            </Link>
-          </div>
         </div>
       </div>
     </section>
