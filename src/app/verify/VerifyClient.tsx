@@ -39,7 +39,6 @@ export default function VerifyClient() {
           .then((res) => {
             storeToken(res.data.token);
             triggerCheckAuth({ token }).unwrap();
-            router.push("/");
           });
       } catch (err) {
         console.error("Verification failed:", err);

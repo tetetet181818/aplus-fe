@@ -127,26 +127,23 @@ export default function useAuth() {
     [register]
   );
 
-  const loginUser = useCallback(
-    async (credentials: LoginCredentials) => {
-      try {
-        const response = await login(credentials).unwrap();
-        const bearerToken = `Bearer ${response.token}`;
-        localStorage.setItem("access_token", bearerToken);
-        localStorage.setItem("isAuthenticated", "true");
-        setCookie("access_token", bearerToken);
-        setCookie("isAuthenticated", "true");
-        setToken(bearerToken);
-        toast.success(response?.message || "تم تسجيل الدخول بنجاح");
-        refetchAuth();
-        return response;
-      } catch (error) {
-        console.error("Login Error:", error);
-        toast.error("حدث خطأ أثناء تسجيل الدخول");
-      }
-    },
-    [login, refetchAuth]
-  );
+  const loginUser = async (credentials: LoginCredentials) => {
+    try {
+      const response = await login(credentials).unwrap();
+      const bearerToken = `Bearer ${response.token}`;
+      localStorage.setItem("access_token", bearerToken);
+      localStorage.setItem("isAuthenticated", "true");
+      setCookie("access_token", bearerToken);
+      setCookie("isAuthenticated", "true");
+      setToken(bearerToken);
+      toast.success(response?.message);
+      refetchAuth();
+      return response;
+    } catch (error) {
+      console.error("Login Error:", error);
+      toast.error((error as { data: { message?: string } })?.data?.message);
+    }
+  };
 
   const logoutUser = useCallback(() => {
     deleteCookie("access_token");

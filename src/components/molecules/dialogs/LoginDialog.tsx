@@ -18,34 +18,52 @@ import GoogleLoginButton from "@/components/atoms/GoogleLoginButton";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
 
+/** Props for LoginDialog */
 interface LoginProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToRegister: () => void;
 }
 
+/**
+ * LoginDialog — Modal for user login
+ * Validates credentials and visually highlights invalid inputs.
+ */
 const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginUser, loading } = useAuth();
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: loginSchema,
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setSubmitting(true);
+    onSubmit: async (values, { resetForm, setErrors }) => {
       const res = await loginUser(values);
-      if (res) {
-        resetForm();
-        onClose();
+      if (!res) {
+        // if login fails, show global error or mark both fields red
+        setErrors({
+          email: "خطأ في البريد الإلكتروني أو كلمة المرور",
+          password: "خطأ في البريد الإلكتروني أو كلمة المرور",
+        });
+        return;
       }
-      setSubmitting(false);
+      resetForm();
+      onClose();
     },
   });
 
+  /** Conditionally apply red border if error exists */
+  const getInputClass = (field: string) =>
+    `pr-10 border ${
+      formik.errors[field as keyof typeof formik.errors]
+        ? "border-red-500 focus-visible:ring-red-500"
+        : "border-gray-300 dark:border-gray-700"
+    } `;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md rounded-2xl shadow-2xl p-6 sm:p-8   scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent">
+      <DialogContent className="max-w-md rounded-2xl shadow-2xl p-6 sm:p-8 scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent">
         <DialogHeader className="text-center space-y-2">
           <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
             تسجيل الدخول
@@ -84,10 +102,10 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
                 id="email"
                 name="email"
                 type="email"
-                className="pr-10"
                 placeholder="example@email.com"
                 value={formik.values.email}
                 onChange={formik.handleChange}
+                className={getInputClass("email")}
               />
             </div>
             {formik.errors.email && (
@@ -105,9 +123,9 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="********"
-                className="pr-10"
                 value={formik.values.password}
                 onChange={formik.handleChange}
+                className={getInputClass("password")}
               />
               <button
                 type="button"
