@@ -57,7 +57,6 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     handelRemoveReviewFromNote,
     removeReviewLoading,
   } = useNotes();
-  console.log(note);
   if (!loading && !note) {
     return (
       <NoResults

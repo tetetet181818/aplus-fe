@@ -50,11 +50,7 @@ export default function useAuth() {
   }, []);
 
   /** Auth query automatically updates when token changes */
-  const {
-    data: authData,
-    isLoading: isCheckAuthLoading,
-    refetch: refetchAuth,
-  } = useCheckAuthQuery(
+  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery(
     { token: token || "" },
     {
       skip: !isTokenReady || !token,
@@ -137,7 +133,6 @@ export default function useAuth() {
       setCookie("isAuthenticated", "true");
       setToken(bearerToken);
       toast.success(response?.message);
-      refetchAuth();
       return response;
     } catch (error) {
       console.error("Login Error:", error);
@@ -186,13 +181,12 @@ export default function useAuth() {
       try {
         const response = await updateUserInfo({ token, data }).unwrap();
         toast.success(response?.message);
-        refetchAuth();
         return response;
       } catch (error) {
         console.error("Update Info Error:", error);
       }
     },
-    [token, updateUserInfo, refetchAuth]
+    [token, updateUserInfo]
   );
 
   const handleResetPassword = useCallback(
@@ -222,11 +216,6 @@ export default function useAuth() {
     },
     [resetPassword, router]
   );
-
-  /** Auto-refetch auth on token change */
-  useEffect(() => {
-    if (token) refetchAuth();
-  }, [token, refetchAuth]);
 
   const loading =
     isCheckAuthLoading ||

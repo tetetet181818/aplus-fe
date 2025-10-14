@@ -4,37 +4,42 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, ImageUp, Upload, X } from "lucide-react";
+import { AddNoteValues } from "./AddNoteForm";
 import { FormikProps } from "formik";
-import { FormValues } from "@/types";
+import { toast } from "sonner";
 
-/** Upload and preview cover image step in Add Note form */
+/** ========== Upload Cover Step (Updated) ========== */
 export default function UploadCoverNote({
   formik,
   prevTab,
   nextTab,
 }: {
-  formik: FormikProps<FormValues>;
+  formik: FormikProps<AddNoteValues>;
   prevTab: () => void;
-  nextTab: () => void;
+  nextTab: () => Promise<void> | void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  /** معالجة ملف الصورة */
   const processFile = (file: File) => {
-    if (!["image/jpeg", "image/png"].includes(file.type)) {
-      alert("الرجاء اختيار صورة بصيغة JPG أو PNG فقط");
+    if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
+      toast.error("الرجاء اختيار صورة بصيغة JPG أو PNG فقط");
       return;
     }
+
     if (file.size > 5 * 1024 * 1024) {
-      alert("حجم الصورة يجب أن لا يتجاوز 5MB");
+      toast.error("حجم الصورة يجب ألا يتجاوز 5MB");
       return;
     }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
       setPreviewUrl(result);
-      formik.setFieldValue("files.cover", file);
+      formik.setFieldValue("cover.cover", file);
+      toast.success("تم رفع الصورة بنجاح ✅");
     };
     reader.readAsDataURL(file);
   };
@@ -53,8 +58,28 @@ export default function UploadCoverNote({
 
   const removeImage = () => {
     setPreviewUrl(null);
-    formik.setFieldValue("files.cover", null);
+    formik.setFieldValue("cover.cover", null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  /** تحقق قبل الانتقال للخطوة التالية */
+  const handleNext = async () => {
+    try {
+      const errors = await formik.validateForm();
+      if (Object.keys(errors).length > 0) {
+        toast.error("تحقق من رفع صورة الغلاف قبل المتابعة");
+        return;
+      }
+
+      if (!formik.values.cover.cover) {
+        toast.error("الرجاء رفع صورة الغلاف أولاً");
+        return;
+      }
+
+      await nextTab();
+    } catch {
+      toast.error("حدث خطأ أثناء التحقق من الصورة");
+    }
   };
 
   return (
@@ -149,6 +174,7 @@ export default function UploadCoverNote({
         </div>
       )}
 
+      {/* أزرار التنقل */}
       <div dir="rtl" className="flex justify-between pt-4">
         <Button
           type="button"
@@ -160,9 +186,8 @@ export default function UploadCoverNote({
         </Button>
         <Button
           type="button"
-          onClick={nextTab}
-          disabled={!formik.values.files?.cover}
-          className="gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          onClick={handleNext}
+          className="gap-2 bg-blue-600 hover:bg-blue-700"
         >
           التالي <ArrowLeft className="h-4 w-4" />
         </Button>

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { useFormik } from "formik";
+import { useState, useMemo, useCallback, JSX } from "react";
+import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 import BasicInfo from "./BasicInfo";
 import UploadFileNote from "./UploadFileNote";
 import UploadCoverNote from "./UploadCoverNote";
@@ -13,8 +15,11 @@ import ReviewNote from "./ReviewNote";
 import useNotes from "@/hooks/useNotes";
 import SuccessUploadNoteDialog from "@/components/molecules/dialogs/SuccessUploadNoteDialog";
 
-/** Form value types */
-type AddNoteValues = {
+/* ============================================================
+ * Types
+ * ============================================================ */
+
+export type AddNoteValues = {
   basic: {
     title: string;
     price: number;
@@ -26,16 +31,15 @@ type AddNoteValues = {
     year: number | null;
     contactMethod: string;
   };
-  files: {
-    cover: File | null;
-    file: File | null;
-  };
-  review: {
-    termsAccepted: boolean;
-  };
+  file: { file: File | null };
+  cover: { cover: File | null };
+  review: { termsAccepted: boolean };
 };
 
-/** Default form values */
+/* ============================================================
+ * Initial Values
+ * ============================================================ */
+
 const initialValues: AddNoteValues = {
   basic: {
     title: "",
@@ -48,98 +52,141 @@ const initialValues: AddNoteValues = {
     year: new Date().getFullYear(),
     contactMethod: "",
   },
-  files: {
-    cover: null,
-    file: null,
-  },
-  review: {
-    termsAccepted: false,
-  },
+  file: { file: null },
+  cover: { cover: null },
+  review: { termsAccepted: false },
 };
 
-/** Validation schema per section */
-const validationSchemas = {
-  basic: Yup.object({
-    title: Yup.string().required("العنوان مطلوب"),
-    price: Yup.number().positive("يجب أن يكون موجب").required("السعر مطلوب"),
-    description: Yup.string().required("الوصف مطلوب"),
-    university: Yup.string().required("الجامعة مطلوبة"),
-    college: Yup.string().required("الكلية مطلوبة"),
-    subject: Yup.string().required("المادة مطلوبة"),
-    pagesNumber: Yup.number()
-      .positive("عدد الصفحات يجب أن يكون موجب")
-      .required("عدد الصفحات مطلوب"),
-    year: Yup.number().nullable(),
-    contactMethod: Yup.string()
-      .email("البريد الإلكتروني غير صالح")
-      .required("طريقة التواصل مطلوبة"),
-  }),
-  files: Yup.object({
-    cover: Yup.mixed<File>()
-      .required("يجب رفع الغلاف")
-      .test("fileType", "الغلاف يجب أن يكون صورة", (value) =>
-        value
-          ? ["image/jpeg", "image/png", "image/jpg"].includes(
-              (value as File).type
-            )
-          : false
-      ),
-    file: Yup.mixed<File>()
-      .required("يجب رفع الملف")
-      .test("fileType", "الملف يجب أن يكون PDF", (value) =>
-        value ? (value as File).type === "application/pdf" : false
-      ),
-  }),
-  review: Yup.object({
-    termsAccepted: Yup.boolean().oneOf([true], "يجب الموافقة على الشروط"),
-  }),
-};
+/* ============================================================
+ * Validation Schemas
+ * ============================================================ */
 
-/** Build FormData for API submission */
+const stepValidationSchemas = [
+  // Step 0: Basic Info
+  Yup.object({
+    basic: Yup.object({
+      title: Yup.string().required("العنوان مطلوب"),
+      price: Yup.number().positive("يجب أن يكون موجب").required("السعر مطلوب"),
+      description: Yup.string().required("الوصف مطلوب"),
+      university: Yup.string().required("الجامعة مطلوبة"),
+      college: Yup.string().required("الكلية مطلوبة"),
+      subject: Yup.string().required("المادة مطلوبة"),
+      pagesNumber: Yup.number()
+        .positive("عدد الصفحات يجب أن يكون موجب")
+        .required("عدد الصفحات مطلوب"),
+      year: Yup.number().nullable(),
+      contactMethod: Yup.string()
+        .email("البريد الإلكتروني غير صالح")
+        .required("طريقة التواصل مطلوبة"),
+    }),
+  }),
+  // Step 1: File Upload
+  Yup.object({
+    file: Yup.object({
+      file: Yup.mixed<File>()
+        .required("يجب رفع الملف")
+        .test("fileType", "الملف يجب أن يكون PDF", (v) =>
+          v ? v.type === "application/pdf" : false
+        ),
+    }),
+  }),
+  // Step 2: Cover Upload
+  Yup.object({
+    cover: Yup.object({
+      cover: Yup.mixed<File>()
+        .required("يجب رفع الغلاف")
+        .test("fileType", "الغلاف يجب أن يكون صورة", (v) =>
+          v ? ["image/jpeg", "image/png", "image/jpg"].includes(v.type) : false
+        ),
+    }),
+  }),
+  // Step 3: Review
+  Yup.object({
+    review: Yup.object({
+      termsAccepted: Yup.boolean().oneOf([true], "يجب الموافقة على الشروط"),
+    }),
+  }),
+];
+
+/* ============================================================
+ * Helper Functions
+ * ============================================================ */
+
+/** Build FormData for upload */
 function buildFormData(values: AddNoteValues): FormData {
   const formData = new FormData();
-
   Object.entries(values.basic).forEach(([key, val]) => {
     if (val !== null && val !== undefined) formData.append(key, String(val));
   });
-
-  if (values.files.cover) formData.append("cover", values.files.cover);
-  if (values.files.file) formData.append("file", values.files.file);
-
+  if (values.file.file) formData.append("file", values.file.file);
+  if (values.cover.cover) formData.append("cover", values.cover.cover);
   formData.append("termsAccepted", String(values.review.termsAccepted));
   return formData;
 }
 
-/**
- * Multi-step form for creating a new note
- */
-const AddNoteForm = () => {
-  const tabs = ["basic", "file", "cover", "review"] as const;
-  type TabKey = (typeof tabs)[number];
-  const [tab, setTab] = useState<TabKey>("basic");
+/** Get progress percentage */
+function getProgress(currentStep: number, totalSteps: number): number {
+  return ((currentStep + 1) / totalSteps) * 100;
+}
+
+/** Simple animation variants */
+const motionVariants = {
+  initial: { opacity: 0, x: 40 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -40 },
+};
+
+/* ============================================================
+ * Component
+ * ============================================================ */
+
+const AddNoteForm = (): JSX.Element => {
   const { handleCreateNote, createNoteLoading } = useNotes();
+  const steps = useMemo(
+    () => [
+      { key: "basic", component: BasicInfo },
+      { key: "file", component: UploadFileNote },
+      { key: "cover", component: UploadCoverNote },
+      { key: "review", component: ReviewNote },
+    ],
+    []
+  );
+
+  const [currentStep, setCurrentStep] = useState(0);
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
 
-  const formik = useFormik<AddNoteValues>({
+  const formik: FormikProps<AddNoteValues> = useFormik<AddNoteValues>({
     initialValues,
-    validationSchema: Yup.object({
-      basic: validationSchemas.basic,
-      files: validationSchemas.files,
-      review: validationSchemas.review,
-    }),
+    validateOnBlur: false,
+    validateOnChange: false,
+    validationSchema: stepValidationSchemas[currentStep],
     onSubmit: async (values, { resetForm }) => {
       const formData = buildFormData(values);
-      const res = await handleCreateNote(formData);
-
-      if (res) {
-        setOpenSuccessDialog(true);
+      const success = await handleCreateNote(formData);
+      if (success) {
+        toast.success("تم رفع المذكرة بنجاح!");
         resetForm();
+        setCurrentStep(0);
+        setOpenSuccessDialog(true);
       }
     },
   });
 
-  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100;
+  const nextStep = useCallback(async () => {
+    await stepValidationSchemas[currentStep].validate(formik.values, {
+      abortEarly: false,
+    });
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  }, [currentStep, formik.values, steps.length]);
 
+  const prevStep = useCallback(() => {
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  }, [currentStep]);
+
+  const progress = getProgress(currentStep, steps.length);
+  const CurrentStepComponent = steps[currentStep].component;
   return (
     <>
       <div dir="rtl" className="min-h-screen py-8 md:px-6">
@@ -161,49 +208,38 @@ const AddNoteForm = () => {
               />
             </div>
 
-            {/* Form Steps */}
+            {/* Step Content */}
             <CardContent className="p-0" dir="rtl">
-              <Tabs
-                value={tab}
-                onValueChange={(v) => setTab(v as TabKey)}
-                className="w-full"
-              >
-                {/* Step 1 */}
-                <TabsContent value="basic" className="p-6">
-                  <BasicInfo formik={formik} nextTab={() => setTab("file")} />
-                </TabsContent>
-
-                {/* Step 2 */}
-                <TabsContent value="file" className="p-6">
-                  <UploadFileNote
-                    formik={formik}
-                    prevTab={() => setTab("basic")}
-                    nextTab={() => setTab("cover")}
-                  />
-                </TabsContent>
-
-                {/* Step 3 */}
-                <TabsContent value="cover" className="p-6">
-                  <UploadCoverNote
-                    formik={formik}
-                    prevTab={() => setTab("file")}
-                    nextTab={() => setTab("review")}
-                  />
-                </TabsContent>
-
-                {/* Step 4 */}
-                <TabsContent value="review" className="p-6">
-                  <ReviewNote
-                    loading={createNoteLoading}
-                    formik={formik}
-                    prevTab={() => setTab("cover")}
-                  />
-                </TabsContent>
-              </Tabs>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={steps[currentStep].key}
+                  variants={motionVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  <Tabs
+                    value={steps[currentStep].key}
+                    onValueChange={() => {}}
+                    className="w-full"
+                  >
+                    <TabsContent value={steps[currentStep].key} className="p-6">
+                      <CurrentStepComponent
+                        formik={formik}
+                        prevTab={prevStep}
+                        nextTab={nextStep}
+                        loading={createNoteLoading}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </motion.div>
+              </AnimatePresence>
             </CardContent>
           </Card>
         </form>
       </div>
+
       <SuccessUploadNoteDialog
         open={openSuccessDialog}
         onOpenChange={setOpenSuccessDialog}

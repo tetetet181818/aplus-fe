@@ -10,10 +10,11 @@ import LoadingSpinner from "@/components/atoms/LoadingSpinner";
 const AddNotePage = () => {
   const router = useRouter();
   const { user, loading } = useAuth();
-  console.log(user);
+
   if (loading) {
     return <LoadingSpinner />;
   }
+
   if (!user) {
     return <AddNoteLoginPrompt onNavigate={router.push} />;
   }

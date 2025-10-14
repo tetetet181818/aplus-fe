@@ -39,7 +39,7 @@ const InstructionItem = ({ icon, title, children }: InstructionItemProps) => (
 
 const AddNoteInstructions = () => {
   return (
-    <Card className="bg-gray-50 dark:bg-gray-800">
+    <Card className="bg-gray-50 dark:bg-gray-800 mt-6">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Lightbulb className="h-6 w-6 text-primary" />

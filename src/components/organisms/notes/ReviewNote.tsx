@@ -11,7 +11,8 @@ import {
   ImageIcon,
   Loader2,
 } from "lucide-react";
-import { FormikProps, FormikValues } from "formik";
+import { FormikProps } from "formik";
+import { AddNoteValues } from "./AddNoteForm";
 
 /** Final review step in Add Note form with loading indicator during creation */
 export default function ReviewNote({
@@ -19,25 +20,11 @@ export default function ReviewNote({
   prevTab,
   loading,
 }: {
-  formik: FormikProps<FormikValues>;
+  formik: FormikProps<AddNoteValues>;
   prevTab: () => void;
   loading: boolean;
 }) {
-  const { basic, files, review } = formik.values as {
-    basic: {
-      title: string;
-      price: number;
-      description: string;
-      university: string;
-      college: string;
-      subject: string;
-      pagesNumber: number;
-      year: number;
-      contactMethod: string;
-    };
-    files: { file: File | null; cover: File | null };
-    review: { termsAccepted: boolean };
-  };
+  const { basic, file, cover, review } = formik.values;
 
   const summaryItems = [
     { label: "العنوان", value: basic.title },
@@ -54,14 +41,14 @@ export default function ReviewNote({
   const fileItems = [
     {
       label: "ملف الملخص",
-      value: files.file ? "تم رفع الملف" : "لم يتم رفع الملف",
-      ok: !!files.file,
+      value: file.file ? "تم رفع الملف" : "لم يتم رفع الملف",
+      ok: !!file.file,
       icon: FileText,
     },
     {
       label: "صورة الغلاف",
-      value: files.cover ? "تم رفع الصورة" : "لم يتم رفع الصورة",
-      ok: !!files.cover,
+      value: cover.cover ? "تم رفع الصورة" : "لم يتم رفع الصورة",
+      ok: !!cover.cover,
       icon: ImageIcon,
     },
   ];
@@ -172,7 +159,7 @@ export default function ReviewNote({
                 id="terms"
                 checked={review.termsAccepted}
                 onCheckedChange={(v) =>
-                  formik.setFieldValue("review.termsAccepted", v)
+                  formik.setFieldValue("review.termsAccepted", v === true)
                 }
                 className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
               />
