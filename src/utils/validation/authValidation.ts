@@ -13,13 +13,17 @@ export const loginSchema = Yup.object().shape({
 
 export const registerSchema = Yup.object({
   fullName: Yup.string()
-    .required("اسم المستخدم مطلوب")
     .trim()
+    .required("اسم المستخدم مطلوب")
+    .matches(
+      /^[a-z ]+$/,
+      "يجب أن يحتوي الاسم على حروف صغيرة فقط بدون أرقام أو رموز"
+    )
     .min(4, "يجب أن يكون اسم المستخدم 4 أحرف على الأقل")
     .max(15, "يجب أن لا يتجاوز اسم المستخدم 15 حرف"),
   email: Yup.string()
-    .email("البريد الإلكتروني غير صالح")
     .trim()
+    .email("البريد الإلكتروني غير صالح")
     .required("البريد الإلكتروني مطلوب"),
   password: Yup.string()
     .trim()

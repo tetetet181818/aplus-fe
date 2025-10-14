@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { FormikProps } from "formik";
 import { AddNoteValues } from "./AddNoteForm";
+import Link from "next/link";
 
 /** Final review step in Add Note form with loading indicator during creation */
 export default function ReviewNote({
@@ -154,20 +155,27 @@ export default function ReviewNote({
             <h4 className="font-semibold text-lg mb-4 text-gray-900 dark:text-white">
               الشروط والأحكام
             </h4>
-            <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
               <Checkbox
                 id="terms"
                 checked={review.termsAccepted}
                 onCheckedChange={(v) =>
                   formik.setFieldValue("review.termsAccepted", v === true)
                 }
-                className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white flex-shrink-0"
               />
               <Label
                 htmlFor="terms"
-                className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 cursor-pointer"
+                className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 cursor-pointer flex-1"
               >
-                أوافق على الشروط والأحكام الخاصة برفع الملخص ونشره
+                أوافق على{" "}
+                <Link
+                  className="hover:underline text-blue-600 dark:text-blue-400 font-medium underline-offset-2"
+                  href="/terms-of-service"
+                >
+                  الشروط والأحكام الخاصة
+                </Link>{" "}
+                برفع الملخص ونشره
               </Label>
             </div>
           </div>
