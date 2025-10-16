@@ -165,6 +165,7 @@ export default function useAuth() {
   const handleLogout = async () => {
     const res = await logout(undefined).unwrap();
     toast.success(res?.message);
+    window.location.reload();
   };
 
   const loading =

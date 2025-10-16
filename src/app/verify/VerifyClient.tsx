@@ -5,7 +5,7 @@ import { notFound, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import { useVerifyMutation, useLazyCheckAuthQuery } from "@/store/api/auth.api";
+import { useVerifyMutation } from "@/store/api/auth.api";
 import { toast } from "sonner";
 
 /**
@@ -20,8 +20,6 @@ export default function VerifyClient() {
 
   const [verify, { isLoading, isSuccess, isError, error }] =
     useVerifyMutation();
-  const [triggerCheckAuth, { data: authData, isLoading: authLoading }] =
-    useLazyCheckAuthQuery();
 
   if (!token) notFound();
 
@@ -36,20 +34,16 @@ export default function VerifyClient() {
     const runVerification = async () => {
       try {
         const res = await verify({ token: token }).unwrap();
-        await triggerCheckAuth(undefined).unwrap();
-        toast.success(res?.message || "Verification successful");
-        setTimeout(() => router.push("/"), 1500);
+        toast.success(res?.message);
+        setTimeout(() => router.push("/"), 1000);
       } catch (err) {
-        console.error("Verification failed:", err);
-        toast.error(
-          (err as { data?: { message?: string } })?.data?.message ||
-            "Account verification failed"
-        );
+        console.log("Verification failed:", err);
+        toast.error((err as { data?: { message?: string } })?.data?.message);
       }
     };
 
     runVerification();
-  }, [token, verify, triggerCheckAuth, router]);
+  }, [token, verify, router]);
 
   /** Defines gradient color based on verification state */
   const bgClass = isLoading
@@ -87,7 +81,7 @@ export default function VerifyClient() {
         </div>
 
         {/* Loading state */}
-        {(isLoading || authLoading) && (
+        {isLoading && (
           <>
             <h1 className="text-2xl font-bold text-gray-700 mb-2">
               Verifying...
@@ -99,7 +93,7 @@ export default function VerifyClient() {
         )}
 
         {/* Success state */}
-        {isSuccess && !authLoading && (
+        {isLoading && (
           <>
             <h1 className="text-2xl font-bold text-green-600 mb-2">
               Verification Successful
@@ -108,12 +102,6 @@ export default function VerifyClient() {
               Your account has been activated. You can now use the platform
               normally.
             </p>
-            {authData?.data && (
-              <div className="bg-green-50 text-green-700 p-3 rounded-md mb-4 text-sm">
-                <p>Hello, {authData.data.name || "User"} 🎉</p>
-                <p>Email: {authData.data.email}</p>
-              </div>
-            )}
           </>
         )}
 
