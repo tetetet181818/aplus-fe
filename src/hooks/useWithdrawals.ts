@@ -9,25 +9,29 @@ import { withdrawalData } from "@/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+/**
+ * Custom hook for managing withdrawals:
+ * - Fetch user and admin withdrawals
+ * - Create new withdrawal requests
+ */
 export default function useWithdrawals() {
   const router = useRouter();
-  let token = "";
 
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token") || "";
-  }
+  /** Fetch withdrawals for the current user */
   const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
-    useGetMeWithdrawalsQuery({ token: token! });
+    useGetMeWithdrawalsQuery({});
 
+  /** Fetch all withdrawals (admin use) */
   const { data: withdrawals, isLoading: withdrawalsLoading } =
-    useGetAllWithdrawalsQuery({ token: token! });
+    useGetAllWithdrawalsQuery({});
 
   const [createWithdrawal, { isLoading: createWithdrawalLoading }] =
     useCreateWithdrawalMutation();
 
+  /** Create a new withdrawal request */
   const handleCreateWithdrawal = async (withdrawalData: withdrawalData) => {
     try {
-      const res = await createWithdrawal({ token: token!, withdrawalData });
+      const res = await createWithdrawal({ withdrawalData });
       if (res?.data?.message) {
         toast.success("تم إضافة السحب بنجاح");
         router.push("/");

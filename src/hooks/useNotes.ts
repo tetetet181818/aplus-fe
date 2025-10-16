@@ -15,13 +15,11 @@ import {
 import { CreateNoteData, ReviewData } from "@/types";
 import { toast } from "sonner";
 
+/**
+ * Custom hook for handling all note-related operations (CRUD, filters, reviews, purchases, pagination).
+ */
 export default function useNotes() {
-  let token = "";
-
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token") || "";
-  }
-  // Pagination states
+  // Pagination & filters
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [filterUniversity, setFilterUniversity] = useState("");
@@ -33,13 +31,12 @@ export default function useNotes() {
   const [minPrice, setMinPrice] = useState(false);
   const [filterTitle, setFilterTitle] = useState("");
 
-  // Fetch notes with pagination
+  /** Fetch all notes with filters and pagination */
   const {
     data,
     isLoading: notesLoading,
     isFetching,
   } = useGetAllNotesQuery({
-    token,
     page,
     limit,
     university: filterUniversity,
@@ -52,13 +49,15 @@ export default function useNotes() {
     title: filterTitle,
   });
 
-  /** get users notes by token */
+  /** Fetch user’s notes */
   const { data: userNotes, isLoading: userNotesLoading } = useGetUserNotesQuery(
-    { token: token || "" }
+    {}
   );
+
   const [addReviewToNote, { isLoading: addReviewLoading }] =
     useAddReviewToNoteMutation();
 
+  /** Add review to a note */
   const handelAddReviewToNote = async ({
     noteId,
     reviewData,
@@ -66,20 +65,14 @@ export default function useNotes() {
     noteId: string;
     reviewData: ReviewData;
   }) => {
-    const res = await addReviewToNote({
-      token: token || "",
-      noteId,
-      reviewData,
-    });
-
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await addReviewToNote({ noteId, reviewData });
+    if (res) toast.success(res?.data?.message);
   };
 
   const [removeReviewFromNote, { isLoading: removeReviewLoading }] =
     useRemoveReviewFromNoteMutation();
 
+  /** Remove review from a note */
   const handelRemoveReviewFromNote = async ({
     noteId,
     reviewId,
@@ -87,20 +80,14 @@ export default function useNotes() {
     noteId: string;
     reviewId: string;
   }) => {
-    const res = await removeReviewFromNote({
-      noteId,
-      reviewId,
-      token: token || "",
-    });
-
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await removeReviewFromNote({ noteId, reviewId });
+    if (res) toast.success(res?.data?.message);
   };
 
   const [updateReviewFromNote, { isLoading: updateReviewLoading }] =
     useUpdateReviewFromNoteMutation();
 
+  /** Update review on a note */
   const handleUpdateReview = async ({
     noteId,
     reviewId,
@@ -110,30 +97,23 @@ export default function useNotes() {
     reviewId: string;
     reviewData: ReviewData;
   }) => {
-    const res = await updateReviewFromNote({
-      noteId,
-      reviewId,
-      reviewData,
-      token: token || "",
-    });
-    if (res) {
-      toast.success(res?.data?.message);
-    }
-
+    const res = await updateReviewFromNote({ noteId, reviewId, reviewData });
+    if (res) toast.success(res?.data?.message);
     return res?.data;
   };
+
+  /** Fetch purchased notes */
   const { data: purchasedNotes, isLoading: purchasedNotesLoading } =
-    useGetPurchasedNotesQuery({ token: token || "" });
+    useGetPurchasedNotesQuery({});
 
   const [createNote, { isLoading: createNoteLoading }] =
     useCreateNoteMutation();
 
+  /** Create new note */
   const handleCreateNote = async (noteData: CreateNoteData) => {
     try {
-      const res = await createNote({ noteData, token: token! });
-      if (res?.data?.message) {
-        toast.success("تم إضافة الملخص بنجاح");
-      }
+      const res = await createNote({ noteData });
+      if (res?.data?.message) toast.success("تم إضافة الملخص بنجاح");
       return res?.data;
     } catch (error) {
       console.log(error);
@@ -141,8 +121,9 @@ export default function useNotes() {
     }
   };
 
+  /** Fetch liked notes */
   const { data: likedNotes, isLoading: likedNotesLoading } =
-    useGetLikedNotesQuery({ token: token || "" });
+    useGetLikedNotesQuery({});
 
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
     useMakeUnlikeNoteMutation();
@@ -150,14 +131,13 @@ export default function useNotes() {
   const [purchaseNote, { isLoading: purchaseLoading }] =
     usePurchaseNoteMutation();
 
+  /** Remove note from liked list */
   const removeNoteFromLikeList = async ({ noteId }: { noteId: string }) => {
-    const res = await makeUnlikeNote({ noteId, token: token || "" });
-
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await makeUnlikeNote({ noteId });
+    if (res) toast.success(res?.data?.message);
   };
 
+  /** Handle purchase of a note */
   const handlePurchaseNote = async ({
     noteId,
     invoice_id,
@@ -169,24 +149,12 @@ export default function useNotes() {
     status: string;
     message: string;
   }) => {
-    const res = await purchaseNote({
-      noteId,
-      invoice_id,
-      status,
-      message,
-      token: token || "",
-    });
-
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await purchaseNote({ noteId, invoice_id, status, message });
+    if (res) toast.success(res?.data?.message);
     return res;
   };
 
-  /**  ====================================== 
-                    Helpers
-  ====================================== */
-
+  /** Reset all applied filters */
   const resetFilters = () => {
     setFilterCollage("");
     setFilterUniversity("");
@@ -197,24 +165,26 @@ export default function useNotes() {
     setMinPrice(false);
   };
 
-  // ---- Pagination Logic ----
+  // Pagination calculations
   const total = data?.pagination?.total || 0;
   const totalPages = data?.pagination?.totalPages || 1;
 
+  /** Go to next page */
   const nextPage = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
 
+  /** Go to previous page */
   const prevPage = () => {
     if (page > 1) setPage((prev) => prev - 1);
   };
 
+  /** Jump to a specific page */
   const goToPage = (pageNumber: number) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setPage(pageNumber);
-    }
+    if (pageNumber >= 1 && pageNumber <= totalPages) setPage(pageNumber);
   };
 
+  /** Change number of notes per page */
   const changeLimit = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);

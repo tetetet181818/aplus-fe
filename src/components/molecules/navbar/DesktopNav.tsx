@@ -23,7 +23,6 @@ interface DesktopNavProps {
   handleMakeNotificationRead: (id: string) => void;
   notifications: notificationType[];
   loading: boolean;
-  isTokenReady?: boolean;
 }
 
 const DesktopNav = ({
@@ -38,10 +37,9 @@ const DesktopNav = ({
   handelClearAllNotification,
   handleMakeNotificationRead,
   loading,
-  isTokenReady = true,
 }: DesktopNavProps) => {
   // Show skeletons while global data or token is being fetched
-  if (loading || !isTokenReady) {
+  if (loading) {
     return (
       <nav className="hidden md:flex items-center gap-3">
         <Skeleton className="h-10 w-32 rounded-md" />

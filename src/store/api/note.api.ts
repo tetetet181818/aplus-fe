@@ -6,15 +6,22 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
+/**
+ * RTK Query API for all Note-related endpoints.
+ * Handles fetching, creating, updating, liking, purchasing, and reviewing notes.
+ */
 export const noteApi = createApi({
   reducerPath: "noteApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/notes` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/notes`,
+    credentials: "include",
+  }),
   tagTypes: ["Note"],
 
   endpoints: (builder) => ({
+    /** Get all notes with filters and pagination */
     getAllNotes: builder.query({
       query: ({
-        token,
         page,
         limit,
         title,
@@ -28,179 +35,127 @@ export const noteApi = createApi({
       }) => ({
         url: `/?page=${page}&sortOrder=${sortOrder}&limit=${limit}&title=${title}&university=${university}&collage=${collage}&year=${year}&maxDownloads=${maxDownloads}&maxPrice=${maxPrice}&minPrice=${minPrice}`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Note"],
     }),
 
+    /** Create a new note */
     createNote: builder.mutation({
-      query: ({
-        noteData,
-        token,
-      }: {
-        noteData: CreateNoteData;
-        token: string;
-      }) => ({
+      query: ({ noteData }: { noteData: CreateNoteData }) => ({
         url: `/create`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
         body: noteData,
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Purchase a note */
     purchaseNote: builder.mutation({
       query: ({
         noteId,
-        token,
         invoice_id,
         status,
         message,
       }: {
         noteId: string;
-        token: string;
         invoice_id: string;
         status: string;
         message: string;
       }) => ({
         url: `/${noteId}/purchase`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
-        body: {
-          invoice_id,
-          status,
-          message,
-        },
+        body: { invoice_id, status, message },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Get a single note by ID */
     getSingleNote: builder.query({
       query: (noteId: string) => `/${noteId}`,
       providesTags: ["Note"],
     }),
 
+    /** Like a note */
     makeLikeNote: builder.mutation({
-      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+      query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/like`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Toggle note like state */
     toggleLike: builder.query({
-      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+      query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/toggle-like`,
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Note"],
     }),
 
+    /** Unlike a note */
     makeUnlikeNote: builder.mutation({
-      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+      query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/unlike`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Delete a note */
     deleteNote: builder.mutation({
-      query: ({ noteId, token }: { noteId: string; token: string }) => ({
+      query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}`,
         method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Get notes created by the current user */
     getUserNotes: builder.query({
-      query: ({ token }: { token: string }) => ({
-        url: `/my-notes`,
-        headers: {
-          Authorization: `${token}`,
-        },
-      }),
+      query: () => ({ url: `/my-notes` }),
       providesTags: ["Note"],
     }),
 
+    /** Get notes purchased by the current user */
     getPurchasedNotes: builder.query({
-      query: ({ token }: { token: string }) => ({
-        url: `/purchased`,
-        headers: {
-          Authorization: `${token}`,
-        },
-      }),
+      query: () => ({ url: `/purchased` }),
       providesTags: ["Note"],
     }),
 
+    /** Get notes liked by the current user */
     getLikedNotes: builder.query({
-      query: ({ token }: { token: string }) => ({
-        url: `/likes-notes`,
-        headers: {
-          Authorization: `${token}`,
-        },
-      }),
+      query: () => ({ url: `/likes-notes` }),
       providesTags: ["Note"],
     }),
 
+    /** Add a review to a note */
     addReviewToNote: builder.mutation({
       query: ({
-        token,
         noteId,
         reviewData,
       }: {
         noteId: string;
         reviewData: ReviewData;
-        token: string;
       }) => ({
         url: `/${noteId}/add-review`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
         body: reviewData,
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Remove a review from a note */
     removeReviewFromNote: builder.mutation({
-      query: ({
-        token,
-        noteId,
-        reviewId,
-      }: {
-        noteId: string;
-        reviewId: string;
-        token: string;
-      }) => ({
+      query: ({ noteId, reviewId }: { noteId: string; reviewId: string }) => ({
         url: `/${noteId}/reviews/${reviewId}`,
         method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Update a review on a note */
     updateReviewFromNote: builder.mutation({
       query: ({
-        token,
         noteId,
         reviewId,
         reviewData,
@@ -208,54 +163,42 @@ export const noteApi = createApi({
         noteId: string;
         reviewId: string;
         reviewData: ReviewData;
-        token: string;
       }) => ({
         url: `/${noteId}/reviews/${reviewId}`,
         method: "PUT",
-        headers: {
-          Authorization: `${token}`,
-        },
         body: reviewData,
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Create a payment link for a note purchase */
     createPaymentLink: builder.mutation({
       query: ({
         noteId,
         userId,
         amount,
-        token,
       }: {
         noteId: string;
         userId: string;
         amount: string;
-        token: string;
       }) => ({
         url: `/create-payment-link?userId=${userId}&noteId=${noteId}&amount=${amount}`,
         method: "POST",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Note"],
     }),
 
+    /** Update an existing note */
     updateNote: builder.mutation({
       query: ({
         noteId,
-        token,
         noteData,
       }: {
         noteId: string;
-        token: string;
         noteData: CreateNoteData;
       }) => ({
         url: `update/${noteId}`,
         method: "PUT",
-        headers: {
-          Authorization: `${token}`,
-        },
         body: noteData,
       }),
       invalidatesTags: ["Note"],

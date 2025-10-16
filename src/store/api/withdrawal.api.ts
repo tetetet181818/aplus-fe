@@ -6,99 +6,70 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
+/**
+ * RTK Query API for managing withdrawals:
+ * - Fetch, create, update, and delete withdrawal requests
+ */
 export const withdrawalApi = createApi({
   reducerPath: "withdrawalApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/withdrawals` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/withdrawals`,
+    credentials: "include",
+  }),
   tagTypes: ["Withdrawal"],
 
   endpoints: (builder) => ({
+    /** Fetch withdrawals of the current user */
     getMeWithdrawals: builder.query({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: "/me",
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Withdrawal"],
     }),
 
+    /** Create a new withdrawal request */
     createWithdrawal: builder.mutation({
-      query: ({
-        token,
-        withdrawalData,
-      }: {
-        token: string;
-        withdrawalData: withdrawalData;
-      }) => ({
+      query: ({ withdrawalData }: { withdrawalData: withdrawalData }) => ({
         url: "/create",
         method: "POST",
         body: withdrawalData,
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Withdrawal"],
     }),
 
+    /** Fetch all withdrawals (admin use) */
     getAllWithdrawals: builder.query({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: "/",
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Withdrawal"],
     }),
 
+    /** Fetch a single withdrawal by ID */
     getSingleWithdrawal: builder.query({
-      query: ({
-        withdrawalId,
-        token,
-      }: {
-        withdrawalId: string;
-        token: string;
-      }) => ({
+      query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Withdrawal"],
     }),
 
+    /** Update a withdrawal by ID */
     updateWithdrawal: builder.mutation({
-      query: ({
-        withdrawalId,
-        token,
-      }: {
-        withdrawalId: string;
-        token: string;
-      }) => ({
+      query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
         method: "PUT",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Withdrawal"],
     }),
 
+    /** Delete a withdrawal by ID */
     deleteWithdrawal: builder.mutation({
-      query: ({
-        withdrawalId,
-        token,
-      }: {
-        withdrawalId: string;
-        token: string;
-      }) => ({
+      query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
         method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Withdrawal"],
     }),

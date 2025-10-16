@@ -16,24 +16,30 @@ import { useState } from "react";
 import useAuth from "./useAuth";
 import { UpdateNoteData } from "@/types";
 
+/**
+ * Custom hook for managing note details, updates, likes, and payments.
+ * @param {string} id - The ID of the note.
+ */
 export default function useNoteDetail(id: string) {
   const { isAuthenticated, user } = useAuth();
   const [isPurchaseConfirmOpen, setIsPurchaseConfirmOpen] = useState(false);
   const router = useRouter();
-  let token = "";
 
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token") || "";
-  }
   const { data: note, isLoading: getSingleLoading } = useGetSingleNoteQuery(id);
-
   const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation();
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
     useMakeUnlikeNoteMutation();
-
   const [updateNote, { isLoading: updateNoteLoading }] =
     useUpdateNoteMutation();
+  const [createPaymentLink, { isLoading: createPaymentLinkLoading }] =
+    useCreatePaymentLinkMutation();
+  const { data: toggleLike } = useToggleLikeQuery({ noteId: id });
+  const [deleteNote, { isLoading: deleteNoteLoading }] =
+    useDeleteNoteMutation();
 
+  /**
+   * Update note data.
+   */
   const handleUpdateNote = async ({
     noteId,
     noteData,
@@ -41,24 +47,17 @@ export default function useNoteDetail(id: string) {
     noteId: string;
     noteData: UpdateNoteData;
   }) => {
-    const res = await updateNote({ noteId, noteData, token: token || "" });
+    const res = await updateNote({ noteId, noteData });
     if (res?.data) {
-      toast.success(res?.data?.message);
+      toast.success(res.data.message);
       router.push("/profile?tab=my-notes");
     }
-
     return res?.data;
   };
 
-  const [createPaymentLink, { isLoading: createPaymentLinkLoading }] =
-    useCreatePaymentLinkMutation();
-  const { data: toggleLike } = useToggleLikeQuery({
-    noteId: id,
-    token: token || "",
-  });
-  const [deleteNote, { isLoading: deleteNoteLoading }] =
-    useDeleteNoteMutation();
-
+  /**
+   * Open purchase confirmation modal.
+   */
   const handlePurchase = () => {
     if (!isAuthenticated) {
       toast.error("يجب تسجيل الدخول أولاً لإتمام عملية الشراء");
@@ -67,12 +66,18 @@ export default function useNoteDetail(id: string) {
     setIsPurchaseConfirmOpen(true);
   };
 
+  /**
+   * Confirm purchase and redirect to checkout.
+   */
   const confirmPurchase = () => {
     router.push(
       `/checkout?userId=${user?._id}&noteId=${note?.data?._id}&amount=${note?.data?.price}`
     );
   };
 
+  /**
+   * Create a payment link for the note.
+   */
   const handleCreatePaymentLink = async ({
     userId,
     noteId,
@@ -81,23 +86,17 @@ export default function useNoteDetail(id: string) {
     userId: string;
     noteId: string;
     amount: string;
-    invoice_id: string;
-    status: string;
-    message: string;
   }) => {
-    const res = await createPaymentLink({
-      userId,
-      noteId,
-      amount,
-      token: token || "",
-    });
-
+    const res = await createPaymentLink({ userId, noteId, amount });
     if (res?.data) {
-      toast.success(res?.data?.message);
-      router.push(res?.data?.data?.url);
+      toast.success(res.data.message);
+      router.push(res.data.data.url);
     }
   };
 
+  /**
+   * Download note file.
+   */
   const handleDownloadFile = ({
     noteUrl,
     noteName,
@@ -106,44 +105,51 @@ export default function useNoteDetail(id: string) {
     noteName?: string;
   }) => downloadFile({ noteUrl, noteName });
 
+  /**
+   * Delete note.
+   */
   const handleDeleteNote = async ({ noteId }: { noteId: string }) => {
-    const res = await deleteNote({ noteId, token: token || "" });
+    const res = await deleteNote({ noteId });
     if (res) {
       toast.success(res?.data?.message);
       router.push("/profile?tab=my-notes");
     }
   };
+
+  /**
+   * Add note to liked list.
+   */
   const addNoteToLikeList = async ({ noteId }: { noteId: string }) => {
-    const res = await makeLikeNote({ noteId, token: token || "" });
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await makeLikeNote({ noteId });
+    if (res) toast.success(res?.data?.message);
   };
+
+  /**
+   * Remove note from liked list.
+   */
   const removeNoteFromLikeList = async ({ noteId }: { noteId: string }) => {
-    const res = await makeUnlikeNote({ noteId, token: token || "" });
-    if (res) {
-      toast.success(res?.data?.message);
-    }
+    const res = await makeUnlikeNote({ noteId });
+    if (res) toast.success(res?.data?.message);
   };
 
   return {
     note: note?.data,
     loading: getSingleLoading,
     handlePurchase,
-    addNoteToLikeList,
-    handleDownloadFile,
-    removeNoteFromLikeList,
-    likeLoading,
-    unlikeLoading,
-    toggleLike: toggleLike?.data,
-    handleDeleteNote,
-    deleteNoteLoading,
     confirmPurchase,
     isPurchaseConfirmOpen,
     setIsPurchaseConfirmOpen,
     handleCreatePaymentLink,
+    handleUpdateNote,
+    handleDownloadFile,
+    handleDeleteNote,
+    addNoteToLikeList,
+    removeNoteFromLikeList,
+    likeLoading,
+    unlikeLoading,
+    deleteNoteLoading,
     createPaymentLinkLoading,
     updateNoteLoading,
-    handleUpdateNote,
+    toggleLike: toggleLike?.data,
   };
 }

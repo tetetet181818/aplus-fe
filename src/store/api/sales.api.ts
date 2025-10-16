@@ -7,16 +7,16 @@ const baseUrl =
 
 export const salesApi = createApi({
   reducerPath: "salesApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/sales` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/sales`,
+    credentials: "include",
+  }),
   tagTypes: ["Sales"],
   endpoints: (builder) => ({
     getSingleSale: builder.query({
-      query: ({ token, saleId }: { token: string; saleId: string }) => ({
+      query: ({ saleId }: { saleId: string }) => ({
         url: `/${saleId}`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Sales"],
     }),

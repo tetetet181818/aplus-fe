@@ -4,22 +4,23 @@ import {
   useClearAllNotificationMutation,
   useMakeNotificationReadMutation,
   useReadAllNotificationMutation,
+  useGetUserNotificationsQuery,
 } from "@/store/api/notification.api";
-import { useGetUserNotificationsQuery } from "@/store/api/notification.api";
-import useAuth from "./useAuth";
 
 /**
- * Custom hook to:
- * - Fetch all notifications for a user
+ * Custom hook for handling user notifications:
+ * - Fetch all notifications
+ * - Mark as read
+ * - Clear all
+ * - Read all
  */
 export default function useNotifications() {
-  const { token } = useAuth();
-
+  /** Fetch user notifications */
   const {
     data: notifications,
     isLoading: notificationLoading,
     refetch,
-  } = useGetUserNotificationsQuery({ token: token || "" });
+  } = useGetUserNotificationsQuery(undefined);
 
   const [readAllNotification, { isLoading: readAllLoading }] =
     useReadAllNotificationMutation();
@@ -27,27 +28,24 @@ export default function useNotifications() {
   const [clearAllNotification, { isLoading: clearAllLoading }] =
     useClearAllNotificationMutation();
 
+  /** Clear all notifications */
   const handelClearAllNotification = async () => {
-    const res = await clearAllNotification({ token: token || "" });
-    if (res) {
-      refetch();
-    }
+    const res = await clearAllNotification(undefined);
+    if (res) refetch();
   };
 
+  /** Mark all notifications as read */
   const handleReadAllNotification = async () => {
-    const res = await readAllNotification({ token: token || "" });
-    if (res) {
-      refetch();
-    }
+    const res = await readAllNotification(undefined);
+    if (res) refetch();
   };
 
   const [makeNotificationRead] = useMakeNotificationReadMutation();
 
+  /** Mark single notification as read */
   const handleMakeNotificationRead = async (id: string) => {
-    const res = await makeNotificationRead({ token: token || "", id });
-    if (res) {
-      refetch();
-    }
+    const res = await makeNotificationRead({ id });
+    if (res) refetch();
   };
 
   return {

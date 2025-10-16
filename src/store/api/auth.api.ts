@@ -8,23 +8,23 @@ const baseUrl =
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/auth` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/auth`,
+    credentials: "include",
+  }),
   tagTypes: ["Auth", "User"],
   endpoints: (builder) => ({
     checkAuth: builder.query({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: `/check-auth`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Auth", "User"],
     }),
 
     verify: builder.mutation({
-      query: (token) => `/verify?token=${token}`,
-      invalidatesTags: ["Auth"],
+      query: ({ token }: { token: string }) => `/verify?token=${token}`,
+      invalidatesTags: ["Auth", "User"],
     }),
 
     register: builder.mutation({
@@ -50,6 +50,14 @@ export const authApi = createApi({
       providesTags: ["Auth", "User"],
     }),
 
+    deleteAccount: builder.mutation({
+      query: () => ({
+        url: "/delete-account",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Auth", "User"],
+    }),
+
     logout: builder.mutation({
       query: () => ({
         url: "/logout",
@@ -58,24 +66,10 @@ export const authApi = createApi({
       invalidatesTags: ["Auth", "User"],
     }),
 
-    deleteAccount: builder.mutation({
-      query: ({ token }: { token: string }) => ({
-        url: "/delete-account",
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      }),
-      invalidatesTags: ["Auth", "User"],
-    }),
-
     updateUserInfo: builder.mutation({
-      query: ({ token, data }: { token: string; data: UpdateUserInfo }) => ({
+      query: (data: UpdateUserInfo) => ({
         url: `/update-user`,
         method: "PUT",
-        headers: {
-          Authorization: `${token}`,
-        },
         body: data,
       }),
       invalidatesTags: ["Auth", "User"],
@@ -107,39 +101,27 @@ export const authApi = createApi({
     }),
 
     getUserById: builder.query({
-      query: ({ id, token }: { id: string; token: string }) => ({
+      query: ({ id }: { id: string }) => ({
         url: `/${id}`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Auth", "User"],
     }),
 
     getAllUsers: builder.query({
       query: ({
-        token,
         page,
         limit,
         fullName,
       }: {
-        token: string;
         page: number;
         limit: number;
         fullName: string;
       }) => ({
         url: `/all-users?page=${page}&limit=${limit}&fullName=${fullName}`,
         method: "GET",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       providesTags: ["Auth", "User"],
-    }),
-    signWithGoogle: builder.mutation({
-      query: () => "/google/login",
-      invalidatesTags: ["Auth", "User"],
     }),
   }),
 });
@@ -158,5 +140,4 @@ export const {
   useResetPasswordMutation,
   useGetUserByIdQuery,
   useGetAllUsersQuery,
-  useSignWithGoogleMutation,
 } = authApi;

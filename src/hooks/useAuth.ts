@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   useCheckAuthQuery,
@@ -8,12 +8,13 @@ import {
   useForgetPasswordMutation,
   useGetAllUsersQuery,
   useLoginMutation,
+  useLogoutMutation,
   useRegisterMutation,
   useResetPasswordMutation,
   useUpdateUserInfoMutation,
 } from "@/store/api/auth.api";
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
-import { deleteCookie, getCookie, setCookie } from "@/utils/cookies";
+import { deleteCookie, setCookie } from "@/utils/cookies";
 import { useRouter } from "next/navigation";
 
 /**
@@ -22,45 +23,12 @@ import { useRouter } from "next/navigation";
  */
 export default function useAuth() {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
-  const [isTokenReady, setIsTokenReady] = useState(false);
-  const [userState, setUserState] = useState({});
 
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
   const [filterFullName, setFilterFullName] = useState("");
-
-  /** Get token on mount and watch for cross-tab updates */
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const getStoredToken = () =>
-      localStorage.getItem("access_token") || getCookie("access_token");
-
-    setToken(getStoredToken() || null);
-    setIsTokenReady(true);
-
-    // Listen for token changes in other tabs
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "access_token") {
-        setToken(e.newValue);
-      }
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  /** Auth query automatically updates when token changes */
-  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery(
-    { token: token || "" },
-    {
-      skip: !isTokenReady || !token,
-      pollingInterval: 60_000, // refresh user data every 1 minute
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
-    }
-  );
-
+  const { data: authData, isLoading: isCheckAuthLoading } =
+    useCheckAuthQuery(undefined);
   /** Mutations */
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -78,15 +46,11 @@ export default function useAuth() {
     data: allUsers,
     isLoading: usersLoading,
     refetch: refetchUsers,
-  } = useGetAllUsersQuery(
-    {
-      token: token || "",
-      page: currentPageUser,
-      limit: currentUsersLimit,
-      fullName: filterFullName,
-    },
-    { skip: !token }
-  );
+  } = useGetAllUsersQuery({
+    page: currentPageUser,
+    limit: currentUsersLimit,
+    fullName: filterFullName,
+  });
 
   const totalUsers = allUsers?.total || 0;
   const totalPages = Math.ceil(totalUsers / currentUsersLimit) || 1;
@@ -132,7 +96,6 @@ export default function useAuth() {
       localStorage.setItem("isAuthenticated", "true");
       setCookie("access_token", bearerToken);
       setCookie("isAuthenticated", "true");
-      setToken(bearerToken);
       toast.success(response?.message);
       return response;
     } catch (error) {
@@ -146,22 +109,20 @@ export default function useAuth() {
     deleteCookie("isAuthenticated");
     localStorage.removeItem("access_token");
     localStorage.removeItem("isAuthenticated");
-    setToken(null);
     toast.success("تم تسجيل الخروج");
     window.location.reload();
   }, []);
 
   const handleDeleteAccount = useCallback(async () => {
-    if (!token) return;
     try {
-      const response = await deleteAccount({ token }).unwrap();
+      const response = await deleteAccount(undefined).unwrap();
       toast.success(response?.message);
       logoutUser();
       return response;
     } catch (error) {
       console.error("Delete Account Error:", error);
     }
-  }, [token, deleteAccount, logoutUser]);
+  }, [deleteAccount, logoutUser]);
 
   const handleForgetPassword = useCallback(
     async ({ email }: { email: string }) => {
@@ -178,16 +139,15 @@ export default function useAuth() {
 
   const handleUpdateUserInfo = useCallback(
     async (data: UpdateUserInfo) => {
-      if (!token) return;
       try {
-        const response = await updateUserInfo({ token, data }).unwrap();
+        const response = await updateUserInfo(data).unwrap();
         toast.success(response?.message);
         return response;
       } catch (error) {
         console.error("Update Info Error:", error);
       }
     },
-    [token, updateUserInfo]
+    [updateUserInfo]
   );
 
   const handleResetPassword = useCallback(
@@ -217,26 +177,28 @@ export default function useAuth() {
     },
     [resetPassword, router]
   );
-  useEffect(() => {
-    setUserState(authData?.data);
-  }, [authData?.data]);
+  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+  const handleLogout = async () => {
+    const res = await logout(undefined).unwrap();
+    toast.success(res?.message);
+    logoutUser();
+  };
+
   const loading =
     isCheckAuthLoading ||
     isLoginLoading ||
     isRegisterLoading ||
     deleteAccountLoading ||
-    updateUserInfoLoading;
+    updateUserInfoLoading ||
+    isLogoutLoading;
 
   return {
     /** Auth state */
-    token,
-    setToken,
-    user: userState,
-    isAuthenticated: !!token && !!userState,
+    user: authData?.data,
+    isAuthenticated: !!authData?.data,
     isCheckAuthLoading,
     loading,
-    isTokenReady,
-    setUserState,
+
     /** User management */
     allUsers: allUsers?.data?.data,
     usersLoading,
@@ -262,5 +224,6 @@ export default function useAuth() {
     handleResetPassword,
     forgetPasswordLoading,
     resetPasswordLoading,
+    handleLogout,
   };
 }

@@ -1,14 +1,18 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { setCookie } from "@/utils/cookies";
-import useAuth from "@/hooks/useAuth";
+import { useVerifyMutation } from "@/store/api/auth.api";
 
 export default function GoogleCallbackProvider() {
   const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const router = useRouter();
-  const { setToken } = useAuth();
+  const [verify] = useVerifyMutation();
+
+  if (!token) return notFound();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -16,20 +20,17 @@ export default function GoogleCallbackProvider() {
       document.body.style.overflow = original;
     };
   }, []);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    const token = searchParams.get("token");
-    if (token) {
-      setCookie("access_token", `Bearer ${token}`);
-      setCookie("isAuthenticated", "true");
-      setToken(`Bearer ${token}`);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("access_token", `Bearer ${token}`);
+    const handelVerify = async () => {
+      const res = await verify({ token }).unwrap();
+      if (res) {
+        router.push("/");
       }
-    }
-    if (typeof window !== "undefined" && localStorage.getItem("access_token")) {
-      router.push("/");
-    }
-  }, [searchParams, router, setToken]);
+    };
+    handelVerify();
+  }, [verify, router, token]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/70 z-50">

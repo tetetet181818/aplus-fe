@@ -5,49 +5,54 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
+/**
+ * RTK Query API for managing user notifications:
+ * - Fetch notifications
+ * - Mark as read
+ * - Read all
+ * - Clear all
+ */
 export const notificationsApi = createApi({
   reducerPath: "notificationsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/notifications` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/notifications`,
+    credentials: "include",
+  }),
   tagTypes: ["Notification"],
+
   endpoints: (builder) => ({
+    /** Fetch all user notifications */
     getUserNotifications: builder.query({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: `/`,
-        headers: {
-          Authorization: `${token}`,
-        },
+        method: "GET",
       }),
       providesTags: ["Notification"],
     }),
+
+    /** Mark all notifications as read */
     readAllNotification: builder.mutation({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: `/read-all`,
         method: "PATCH",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Notification"],
     }),
 
+    /** Clear all notifications */
     clearAllNotification: builder.mutation({
-      query: ({ token }: { token: string }) => ({
+      query: () => ({
         url: `/clear-all`,
         method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Notification"],
     }),
 
+    /** Mark a single notification as read */
     makeNotificationRead: builder.mutation({
-      query: ({ token, id }: { token: string; id: string }) => ({
+      query: ({ id }: { id: string }) => ({
         url: `${id}/read`,
         method: "PATCH",
-        headers: {
-          Authorization: `${token}`,
-        },
       }),
       invalidatesTags: ["Notification"],
     }),

@@ -1,6 +1,5 @@
 "use client";
 import { useState, useCallback } from "react";
-
 import {
   useAcceptedWithdrawalMutation,
   useCompletedWithdrawalMutation,
@@ -23,52 +22,40 @@ import { toast } from "sonner";
 import { AcceptedWithdrawal } from "@/types";
 
 /**
- * Custom hook to fetch dashboard data (overview + users + notes + sales)
+ * Hook for fetching and managing dashboard data
+ * (overview, users, notes, sales, withdrawals).
  */
 export default function useDashboard() {
-  let token = "";
-
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("access_token") || "";
-  }
-  /** ----------------- Pagination State ----------------- */
+  /** Local pagination & filter states */
   const [userPage, setUserPage] = useState(1);
   const [userLimit, setUserLimit] = useState(10);
-
   const [notePage, setNotePage] = useState(1);
   const [noteLimit, setNoteLimit] = useState(10);
-
   const [salePage, setSalePage] = useState(1);
   const [saleLimit, setSaleLimit] = useState(10);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [universityFilter, setUniversityFilter] = useState<string | null>(null);
-
   const [emailFilter, setEmailFilter] = useState<string | null>(null);
 
-  /** ----------------- Overview ----------------- */
-  const { data, isLoading: overviewLoading } = useGetOverviewQuery({
-    token: token || "",
-  });
+  /** ---------------- Overview ---------------- */
+  const { data, isLoading: overviewLoading } = useGetOverviewQuery(undefined);
 
-  /** ----------------- Users ----------------- */
+  /** ---------------- Users ---------------- */
   const [deleteUser] = useDeleteUserMutation();
-
   const {
     data: usersResponse,
     isLoading: usersLoading,
     refetch: refetchUsers,
   } = useGetAllUsersQuery({
-    token: token || "",
     page: userPage,
     limit: userLimit,
     fullName: searchQuery || "",
     university: universityFilter || "",
     emailFilter: emailFilter || "",
   });
+  const { data: usersStats } = useGetUsersStatsQuery(undefined);
 
-  const { data: usersStats } = useGetUsersStatsQuery({ token: token || "" });
-
+  /** Delete user handler */
   const handleDeleteUser = async ({
     userId,
     userName,
@@ -77,7 +64,7 @@ export default function useDashboard() {
     userName: string;
   }) => {
     try {
-      await deleteUser({ token: token || "", id: userId }).unwrap();
+      await deleteUser({ id: userId }).unwrap();
       toast.success(`تم حذف الحساب بنجاح ${userName}`);
       refetchUsers();
     } catch {
@@ -85,8 +72,7 @@ export default function useDashboard() {
     }
   };
 
-  /** ----------------- Notes ----------------- */
-
+  /** ---------------- Notes ---------------- */
   const [searchTitleNote, setSearchTitleNote] = useState("");
   const [universityFilterNote, setUniversityFilterNote] = useState<
     string | null
@@ -103,7 +89,6 @@ export default function useDashboard() {
     isLoading: notesLoading,
     refetch: refetchNotes,
   } = useGetAllNotesQuery({
-    token: token || "",
     page: notePage,
     limit: noteLimit,
     title: searchTitleNote || "",
@@ -113,18 +98,17 @@ export default function useDashboard() {
     sortBy: sortByNote,
     sortOrder: sortOrderNote,
   });
-
-  const { data: notesStats } = useGetNotesStatsQuery({ token: token || "" });
-
+  const { data: notesStats } = useGetNotesStatsQuery(undefined);
   const [makeNotePublish, { isLoading: publishLoading }] =
     useMakeNotePublishMutation();
   const [makeNoteUnpublish, { isLoading: unpublishLoading }] =
     useMakeNoteUnpublishMutation();
 
+  /** Publish / Unpublish handlers */
   const handelPublishNote = async (noteId: string) => {
     try {
-      await makeNotePublish({ token: token || "", id: noteId }).unwrap();
-      toast.success(`تم نشر الملاحظة بنجاح`);
+      await makeNotePublish({ id: noteId }).unwrap();
+      toast.success("تم نشر الملاحظة بنجاح");
       refetchNotes();
     } catch {
       toast.error("فشل نشر الملاحظة");
@@ -133,29 +117,23 @@ export default function useDashboard() {
 
   const handelUnpublishNote = async (noteId: string) => {
     try {
-      await makeNoteUnpublish({ token: token || "", id: noteId }).unwrap();
-      toast.success(`تم إلغاء نشر الملاحظة بنجاح`);
+      await makeNoteUnpublish({ id: noteId }).unwrap();
+      toast.success("تم إلغاء نشر الملاحظة بنجاح");
       refetchNotes();
     } catch {
       toast.error("فشل إلغاء نشر الملاحظة");
     }
   };
 
-  /** ----------------- Sales ----------------- */
+  /** ---------------- Sales ---------------- */
   const {
     data: salesResponse,
     isLoading: salesLoading,
     refetch: refetchSales,
-  } = useGetAllSalesQuery({
-    token: token || "",
-    page: salePage,
-    limit: saleLimit,
-  });
+  } = useGetAllSalesQuery({ page: salePage, limit: saleLimit });
+  const { data: salesStats } = useGetSalesStatsQuery(undefined);
 
-  const { data: salesStats } = useGetSalesStatsQuery({ token: token || "" });
-
-  /** ----------------- Withdrawals ----------------- */
-
+  /** ---------------- Withdrawals ---------------- */
   const [withdrawalPage, setWithdrawalPage] = useState(1);
   const [withdrawalLimit, setWithdrawalLimit] = useState(10);
   const [withdrawalStatus, setWithdrawalStatus] = useState<string>("all");
@@ -170,7 +148,6 @@ export default function useDashboard() {
     isLoading: withdrawalsLoading,
     refetch: refetchWithdrawals,
   } = useGetAllWithdrawalsQuery({
-    token: token || "",
     page: withdrawalPage,
     limit: withdrawalLimit,
     status: withdrawalStatus,
@@ -180,28 +157,9 @@ export default function useDashboard() {
     sortBy,
     sortOrder,
   });
-
-  const { data: withdrawalsStats } = useGetWithdrawalStatsQuery({
-    token: token || "",
-  });
-
-  const nextWithdrawalPage = useCallback(() => {
-    if (
-      withdrawalPage < (withdrawalsResponse?.data?.pagination?.totalPages || 1)
-    ) {
-      setWithdrawalPage((prev) => prev + 1);
-      refetchWithdrawals();
-    }
-  }, [
-    withdrawalPage,
-    withdrawalsResponse?.data?.pagination?.totalPages,
-    refetchWithdrawals,
-  ]);
-
+  const { data: withdrawalsStats } = useGetWithdrawalStatsQuery(undefined);
   const { data: withdrawalStatuses, isLoading: withdrawalStatusesLoading } =
-    useGetWithdrawalStatusesQuery({
-      token: token || "",
-    });
+    useGetWithdrawalStatusesQuery(undefined);
 
   const [acceptedWithdrawal, { isLoading: acceptedWithdrawalLoading }] =
     useAcceptedWithdrawalMutation();
@@ -210,15 +168,12 @@ export default function useDashboard() {
   const [completedWithdrawal, { isLoading: completedWithdrawalLoading }] =
     useCompletedWithdrawalMutation();
 
+  /** Withdrawal action handlers */
   const handleAcceptWithdrawal = async (withdrawalId: string) => {
     try {
-      const res = await acceptedWithdrawal({
-        token: token || "",
-        id: withdrawalId,
-      }).unwrap();
+      const res = await acceptedWithdrawal({ id: withdrawalId }).unwrap();
       toast.success(res.data.message);
       refetchWithdrawals();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.data.message);
     }
@@ -226,13 +181,9 @@ export default function useDashboard() {
 
   const handleRejectWithdrawal = async (withdrawalId: string) => {
     try {
-      const res = await rejectedWithdrawal({
-        token: token || "",
-        id: withdrawalId,
-      }).unwrap();
+      const res = await rejectedWithdrawal({ id: withdrawalId }).unwrap();
       toast.success(res.data.message);
       refetchWithdrawals();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.data.message);
     }
@@ -244,36 +195,17 @@ export default function useDashboard() {
   ) => {
     try {
       const res = await completedWithdrawal({
-        token: token || "",
         id: withdrawalId,
         data,
       }).unwrap();
       toast.success(res.data.message);
       refetchWithdrawals();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.data.message);
     }
   };
 
-  const prevWithdrawalPage = useCallback(() => {
-    if (withdrawalPage > 1) {
-      setWithdrawalPage((prev) => prev - 1);
-      refetchWithdrawals();
-    }
-  }, [withdrawalPage, refetchWithdrawals]);
-
-  const changeWithdrawalLimit = useCallback(
-    (newLimit: number) => {
-      setWithdrawalLimit(newLimit);
-      setWithdrawalPage(1);
-      refetchWithdrawals();
-    },
-    [refetchWithdrawals]
-  );
-
-  /** ----------------- Pagination Helpers ----------------- */
-  // Users
+  /** Pagination helpers (users, notes, sales, withdrawals) */
   const nextUserPage = useCallback(() => {
     if (userPage < (usersResponse?.data?.pagination?.totalPages || 1)) {
       setUserPage((prev) => prev + 1);
@@ -297,7 +229,6 @@ export default function useDashboard() {
     [refetchUsers]
   );
 
-  // Notes
   const nextNotePage = useCallback(() => {
     if (notePage < (notesResponse?.data?.pagination?.totalPages || 1)) {
       setNotePage((prev) => prev + 1);
@@ -321,7 +252,6 @@ export default function useDashboard() {
     [refetchNotes]
   );
 
-  // Sales
   const nextSalePage = useCallback(() => {
     if (salePage < (salesResponse?.data?.pagination?.totalPages || 1)) {
       setSalePage((prev) => prev + 1);
@@ -345,13 +275,39 @@ export default function useDashboard() {
     [refetchSales]
   );
 
-  /** ----------------- Return ----------------- */
+  const nextWithdrawalPage = useCallback(() => {
+    if (
+      withdrawalPage < (withdrawalsResponse?.data?.pagination?.totalPages || 1)
+    ) {
+      setWithdrawalPage((prev) => prev + 1);
+      refetchWithdrawals();
+    }
+  }, [
+    withdrawalPage,
+    withdrawalsResponse?.data?.pagination?.totalPages,
+    refetchWithdrawals,
+  ]);
+
+  const prevWithdrawalPage = useCallback(() => {
+    if (withdrawalPage > 1) {
+      setWithdrawalPage((prev) => prev - 1);
+      refetchWithdrawals();
+    }
+  }, [withdrawalPage, refetchWithdrawals]);
+
+  const changeWithdrawalLimit = useCallback(
+    (newLimit: number) => {
+      setWithdrawalLimit(newLimit);
+      setWithdrawalPage(1);
+      refetchWithdrawals();
+    },
+    [refetchWithdrawals]
+  );
+
+  /** Final return */
   return {
-    token,
     overviews: data?.data,
     overviewLoading,
-
-    /** users */
     users: usersResponse?.data?.users || [],
     usersPagination: usersResponse?.data?.pagination,
     usersLoading,
@@ -368,8 +324,6 @@ export default function useDashboard() {
     changeUserLimit,
     handleDeleteUser,
     usersStats: usersStats?.data,
-
-    /** notes */
     notes: notesResponse?.data?.notes || [],
     notesPagination: notesResponse?.data?.pagination,
     notesLoading,
@@ -396,8 +350,6 @@ export default function useDashboard() {
     setSortByNote,
     sortOrderNote,
     setSortOrderNote,
-
-    /** sales */
     sales: salesResponse?.data?.sales || [],
     salesPagination: salesResponse?.data?.pagination,
     salesLoading,
@@ -408,8 +360,6 @@ export default function useDashboard() {
     nextSalePage,
     prevSalePage,
     changeSaleLimit,
-
-    /** withdrawals */
     withdrawals: withdrawalsResponse?.data?.withdrawals || [],
     withdrawalsPagination: withdrawalsResponse?.data?.pagination,
     withdrawalsLoading,

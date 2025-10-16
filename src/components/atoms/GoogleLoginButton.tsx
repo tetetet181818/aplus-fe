@@ -1,10 +1,8 @@
 "use client";
-// import { useSignWithGoogleMutation } from "@/store/api/auth.api";
 
 function GoogleLoginButton() {
   const loginWithGoogle = () => {
-    window.location.href =
-      "https://aplus-be.onrender.com/api/v1/auth/google/login";
+    window.location.href = `${process.env.NEXT_PUBLIC_GOOGLE_LOGIN}`;
   };
   return (
     <button
