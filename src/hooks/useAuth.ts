@@ -24,6 +24,7 @@ export default function useAuth() {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [isTokenReady, setIsTokenReady] = useState(false);
+  const [userState, setUserState] = useState({});
 
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
@@ -216,7 +217,9 @@ export default function useAuth() {
     },
     [resetPassword, router]
   );
-
+  useEffect(() => {
+    setUserState(authData?.data);
+  }, [authData?.data]);
   const loading =
     isCheckAuthLoading ||
     isLoginLoading ||
@@ -228,12 +231,12 @@ export default function useAuth() {
     /** Auth state */
     token,
     setToken,
-    user: authData?.data?.[0],
-    isAuthenticated: !!token && !!authData?.data?.[0],
+    user: userState,
+    isAuthenticated: !!token && !!userState,
     isCheckAuthLoading,
     loading,
     isTokenReady,
-
+    setUserState,
     /** User management */
     allUsers: allUsers?.data?.data,
     usersLoading,

@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { setCookie } from "@/utils/cookies";
 import { useVerifyMutation, useLazyCheckAuthQuery } from "@/store/api/auth.api";
 import useAuth from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function VerifyClient() {
   const router = useRouter();
-  const { setToken } = useAuth();
+  const { setToken, setUserState } = useAuth();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [verify, { isLoading, isSuccess, isError, error }] =
@@ -19,9 +20,11 @@ export default function VerifyClient() {
   const [triggerCheckAuth, { data: authData, isLoading: authLoading }] =
     useLazyCheckAuthQuery();
 
-  useEffect(() => {
-    if (!token) return;
+  if (!token) {
+    notFound();
+  }
 
+  useEffect(() => {
     const storeToken = (value: string) => {
       setCookie("access_token", `Bearer ${value}`);
       setCookie("isAuthenticated", "true");
@@ -33,20 +36,21 @@ export default function VerifyClient() {
 
     const runVerification = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const res = await verify(token)
-          .unwrap()
-          .then((res) => {
-            storeToken(res.data.token);
-            triggerCheckAuth({ token }).unwrap();
-          });
+        const res = await verify(token).unwrap();
+        storeToken(res?.token);
+        setUserState(res?.data);
+        triggerCheckAuth({ token: res?.token }).unwrap();
+        if (res) {
+          router.push("/");
+        }
       } catch (err) {
         console.error("Verification failed:", err);
+        toast.error((err as { data: { message?: string } })?.data?.message);
       }
     };
 
     runVerification();
-  }, [token, verify, triggerCheckAuth, setToken, router]);
+  }, [token, verify, triggerCheckAuth, setToken, setUserState, router]);
 
   const bgClass = isLoading
     ? "from-gray-50 to-gray-100"
