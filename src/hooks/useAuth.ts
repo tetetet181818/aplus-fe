@@ -14,7 +14,6 @@ import {
   useUpdateUserInfoMutation,
 } from "@/store/api/auth.api";
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from "@/types";
-import { deleteCookie, setCookie } from "@/utils/cookies";
 import { useRouter } from "next/navigation";
 
 /**
@@ -78,7 +77,7 @@ export default function useAuth() {
         toast.success(response?.message);
         return response;
       } catch (error) {
-        console.error("Register Error:", error);
+        console.log("Register Error:", error);
         toast.error(
           (error as { data?: { message?: string } })?.data?.message ||
             "حدث خطأ أثناء التسجيل"
@@ -91,38 +90,23 @@ export default function useAuth() {
   const loginUser = async (credentials: LoginCredentials) => {
     try {
       const response = await login(credentials).unwrap();
-      const bearerToken = `Bearer ${response.token}`;
-      localStorage.setItem("access_token", bearerToken);
-      localStorage.setItem("isAuthenticated", "true");
-      setCookie("access_token", bearerToken);
-      setCookie("isAuthenticated", "true");
       toast.success(response?.message);
       return response;
     } catch (error) {
-      console.error("Login Error:", error);
+      console.log("Login Error:", error);
       toast.error((error as { data: { message?: string } })?.data?.message);
     }
   };
-
-  const logoutUser = useCallback(() => {
-    deleteCookie("access_token");
-    deleteCookie("isAuthenticated");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("isAuthenticated");
-    toast.success("تم تسجيل الخروج");
-    window.location.reload();
-  }, []);
 
   const handleDeleteAccount = useCallback(async () => {
     try {
       const response = await deleteAccount(undefined).unwrap();
       toast.success(response?.message);
-      logoutUser();
       return response;
     } catch (error) {
-      console.error("Delete Account Error:", error);
+      console.log("Delete Account Error:", error);
     }
-  }, [deleteAccount, logoutUser]);
+  }, [deleteAccount]);
 
   const handleForgetPassword = useCallback(
     async ({ email }: { email: string }) => {
@@ -131,7 +115,7 @@ export default function useAuth() {
         toast.success(response?.message);
         return response;
       } catch (error) {
-        console.error("Forget Password Error:", error);
+        console.log("Forget Password Error:", error);
       }
     },
     [forgetPassword]
@@ -144,7 +128,7 @@ export default function useAuth() {
         toast.success(response?.message);
         return response;
       } catch (error) {
-        console.error("Update Info Error:", error);
+        console.log("Update Info Error:", error);
       }
     },
     [updateUserInfo]
@@ -172,7 +156,7 @@ export default function useAuth() {
           return response?.data;
         }
       } catch (error) {
-        console.error("Reset Password Error:", error);
+        console.log("Reset Password Error:", error);
       }
     },
     [resetPassword, router]
@@ -181,7 +165,6 @@ export default function useAuth() {
   const handleLogout = async () => {
     const res = await logout(undefined).unwrap();
     toast.success(res?.message);
-    logoutUser();
   };
 
   const loading =
@@ -217,7 +200,6 @@ export default function useAuth() {
     /** Actions */
     registerUser,
     loginUser,
-    logoutUser,
     handleDeleteAccount,
     handleForgetPassword,
     handleUpdateUserInfo,

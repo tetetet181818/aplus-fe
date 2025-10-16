@@ -23,7 +23,6 @@ export default function VerifyClient() {
   const [triggerCheckAuth, { data: authData, isLoading: authLoading }] =
     useLazyCheckAuthQuery();
 
-  // Redirect to 404 if token is missing
   if (!token) notFound();
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function VerifyClient() {
      */
     const runVerification = async () => {
       try {
-        const res = await verify({ token }).unwrap();
+        const res = await verify({ token: token }).unwrap();
         await triggerCheckAuth(undefined).unwrap();
         toast.success(res?.message || "Verification successful");
         setTimeout(() => router.push("/"), 1500);
