@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
 import BasicInfo from "./BasicInfo";
 import UploadFileNote from "./UploadFileNote";
 import UploadCoverNote from "./UploadCoverNote";
@@ -164,7 +163,6 @@ const AddNoteForm = (): JSX.Element => {
       const formData = buildFormData(values);
       const success = await handleCreateNote(formData);
       if (success) {
-        toast.success("تم رفع المذكرة بنجاح!");
         resetForm();
         setCurrentStep(0);
         setOpenSuccessDialog(true);
