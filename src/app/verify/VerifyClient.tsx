@@ -8,11 +8,6 @@ import { Loader } from "lucide-react";
 import { useVerifyMutation } from "@/store/api/auth.api";
 import { toast } from "sonner";
 
-/**
- * Email verification page.
- * Verifies the user account via token passed in the URL,
- * then triggers authentication check and redirects to home.
- */
 export default function VerifyClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,13 +19,6 @@ export default function VerifyClient() {
   if (!token) notFound();
 
   useEffect(() => {
-    /**
-     * Executes the verification process when the component mounts.
-     * - Calls verify API with token.
-     * - Updates authentication data.
-     * - Shows success or error toasts.
-     * - Redirects to home page after success.
-     */
     const runVerification = async () => {
       try {
         const res = await verify({ token: token }).unwrap();
@@ -45,7 +33,6 @@ export default function VerifyClient() {
     runVerification();
   }, [token, verify, router]);
 
-  /** Defines gradient color based on verification state */
   const bgClass = isLoading
     ? "from-gray-50 to-gray-100"
     : isSuccess
@@ -57,9 +44,9 @@ export default function VerifyClient() {
   return (
     <div
       className={`flex items-center justify-center min-h-screen bg-gradient-to-br ${bgClass} p-4`}
+      dir="rtl"
     >
       <div className="bg-white shadow-xl rounded-2xl p-8 text-center max-w-md w-full">
-        {/* Status icon */}
         <div className="flex justify-center mb-4">
           <div
             className={`w-20 h-20 rounded-full flex items-center justify-center ${
@@ -80,45 +67,38 @@ export default function VerifyClient() {
           </div>
         </div>
 
-        {/* Loading state */}
         {isLoading && (
           <>
             <h1 className="text-2xl font-bold text-gray-700 mb-2">
-              Verifying...
+              جاري التحقق...
             </h1>
             <p className="text-gray-600 mb-6">
-              Please wait while we verify your account.
+              يرجى الانتظار أثناء تحققنا من حسابك
             </p>
           </>
         )}
 
-        {/* Success state */}
-        {isLoading && (
+        {isSuccess && (
           <>
             <h1 className="text-2xl font-bold text-green-600 mb-2">
-              Verification Successful
+              تم التحقق بنجاح
             </h1>
             <p className="text-gray-600 mb-6">
-              Your account has been activated. You can now use the platform
-              normally.
+              تم تفعيل حسابك بنجاح. يمكنك الآن استخدام المنصة بشكل طبيعي
             </p>
           </>
         )}
 
-        {/* Error state */}
         {isError && (
           <>
-            <h1 className="text-2xl font-bold text-red-600 mb-2">
-              Verification Failed
-            </h1>
+            <h1 className="text-2xl font-bold text-red-600 mb-2">فشل التحقق</h1>
             <p className="text-gray-600 mb-6">
               {(error as { data?: { message?: string } })?.data?.message ||
-                "An error occurred while verifying your account."}
+                "حدث خطأ أثناء التحقق من حسابك."}
             </p>
           </>
         )}
 
-        {/* Return button */}
         <Link href="/" passHref>
           <Button
             className={`${
@@ -129,7 +109,7 @@ export default function VerifyClient() {
                 : "bg-gray-500 hover:bg-gray-600"
             } text-white px-6 py-2 rounded-lg font-semibold transition`}
           >
-            Back to Home
+            العودة للرئيسية
           </Button>
         </Link>
       </div>
