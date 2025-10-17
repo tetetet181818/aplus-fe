@@ -27,8 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { ar } from "date-fns/locale";
+
 import SectionHeader from "@/components/atoms/SectionHeader";
 import GetSingleStudentDialog from "@/components/molecules/dialogs/GetSingleStudentDialog";
 import {
@@ -267,7 +266,7 @@ export default function StudentsDashboard() {
               ) : users.length === 0 ? (
                 <p className="text-center text-gray-500 py-6">لا توجد بيانات</p>
               ) : (
-                users.map((s) => (
+                users.map((s: Student) => (
                   <Card
                     key={s._id}
                     className="p-4 border border-muted shadow-sm rounded-xl"
@@ -320,7 +319,7 @@ export default function StudentsDashboard() {
             </div>
 
             {/* Pagination */}
-            {usersPagination && !loadingState && (
+            {usersPagination?.totalItems > 10 && !loadingState && (
               <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
                 <span className="text-sm text-muted-foreground text-center md:text-start">
                   عرض {(usersPagination.currentPage - 1) * userLimit + 1}-

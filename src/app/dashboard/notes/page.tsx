@@ -152,15 +152,6 @@ export default function NotesDashboard() {
 
         <Card>
           <CardHeader className="space-y-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <CardTitle>الملاحظات</CardTitle>
-                <CardDescription>
-                  {hasActiveFilters ? "نتائج البحث" : "جميع الملاحظات المتاحة"}
-                </CardDescription>
-              </div>
-            </div>
-
             <ChartLineNotes
               total={notesPagination?.totalItems}
               data={notesStats}
@@ -243,70 +234,88 @@ export default function NotesDashboard() {
           <CardContent>
             {/* Mobile View (Cards) */}
             <div className="block md:hidden space-y-4">
-              {notes?.map((note: Note) => (
-                <Card key={note._id} className="border p-4 shadow-sm">
-                  <CardHeader className="p-0 mb-2">
-                    <CardTitle className="text-base">
-                      {truncateText(note.title, 40)}
-                    </CardTitle>
-                    <CardDescription className="text-sm">
-                      {truncateText(note.description, 60)}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-0 space-y-1 text-sm">
-                    <p>الجامعة: {note.university}</p>
-                    <p>الكلية: {note.college}</p>
-                    <p>السنة: {note.year}</p>
-                    <p>السعر: {note.price} ر.س</p>
-                    <div className="flex gap-2 pt-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setIsDialogOpen(true);
-                          setSelectedFile(note);
-                        }}
-                      >
-                        <Eye className="size-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          downloadFile({
-                            noteUrl: String(note.file_path),
-                            noteName: String(note.title),
-                          })
-                        }
-                      >
-                        <Download className="size-4" />
-                      </Button>
-                      {note.isPublish ? (
+              {notes?.length === 0 ? (
+                <p className="text-center text-muted-foreground font-semibold text-lg my-10">
+                  لا يوجد نتائج
+                </p>
+              ) : (
+                notes?.map((note: Note) => (
+                  <Card key={note._id} className="border p-4 shadow-sm">
+                    <CardHeader className="p-0 mb-2">
+                      <CardTitle className="text-base">
+                        {truncateText(note.title, 40)}
+                      </CardTitle>
+                      <CardDescription className="text-sm">
+                        {truncateText(note.description, 60)}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0 space-y-1 text-sm">
+                      <p>
+                        <span className="font-semibold">الجامعة: </span>{" "}
+                        {note.university}
+                      </p>
+                      <p>
+                        <span className="font-semibold"> الكلية: </span>{" "}
+                        {note.college}
+                      </p>
+                      <p>
+                        <span className="font-semibold"> السنة: </span>{" "}
+                        {note.year}
+                      </p>
+                      <p>
+                        <span className="font-semibold">السعر: </span>{" "}
+                        {note.price} ر.س
+                      </p>
+                      <div className="flex gap-2 pt-2">
                         <Button
-                          variant="destructive"
+                          variant="outline"
                           size="sm"
                           onClick={() => {
+                            setIsDialogOpen(true);
                             setSelectedFile(note);
-                            setUnpublishedNote(true);
                           }}
                         >
-                          إلغاء النشر
+                          <Eye className="size-4" />
                         </Button>
-                      ) : (
                         <Button
+                          variant="outline"
                           size="sm"
-                          onClick={() => {
-                            setSelectedFile(note);
-                            setPublishedNote(true);
-                          }}
+                          onClick={() =>
+                            downloadFile({
+                              noteUrl: String(note.file_path),
+                              noteName: String(note.title),
+                            })
+                          }
                         >
-                          نشر
+                          <Download className="size-4" />
                         </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                        {note.isPublish ? (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedFile(note);
+                              setUnpublishedNote(true);
+                            }}
+                          >
+                            إلغاء النشر
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setSelectedFile(note);
+                              setPublishedNote(true);
+                            }}
+                          >
+                            نشر
+                          </Button>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
 
             {/* Desktop View (Table) */}
@@ -324,73 +333,84 @@ export default function NotesDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {notes?.map((note: Note) => (
-                    <TableRow key={note._id}>
-                      {columns.map((col, i) => (
-                        <TableCell key={i}>
-                          {col.render
-                            ? col.render(
-                                note[col.accessor as keyof Note] as never
-                              )
-                            : (note[col.accessor as keyof Note] as never) ||
-                              "N/A"}
-                        </TableCell>
-                      ))}
-                      <TableCell>
-                        <div className="flex gap-2 justify-end">
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              setIsDialogOpen(true);
-                              setSelectedFile(note);
-                            }}
-                          >
-                            <Eye className="size-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() =>
-                              downloadFile({
-                                noteUrl: String(note.file_path),
-                                noteName: String(note.title),
-                              })
-                            }
-                          >
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {note.isPublish ? (
-                          <Button
-                            variant="destructive"
-                            onClick={() => {
-                              setSelectedFile(note);
-                              setUnpublishedNote(true);
-                            }}
-                          >
-                            إلغاء النشر
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => {
-                              setSelectedFile(note);
-                              setPublishedNote(true);
-                            }}
-                          >
-                            نشر
-                          </Button>
-                        )}
+                  {notes?.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length + 2}
+                        className="h-24 text-center font-semibold my-5 text-2xl"
+                      >
+                        لا يوجد نتائج
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    notes?.map((note: Note) => (
+                      <TableRow key={note._id}>
+                        {columns.map((col, i) => (
+                          <TableCell key={i}>
+                            {col.render
+                              ? col.render(
+                                  note[col.accessor as keyof Note] as never
+                                )
+                              : (note[col.accessor as keyof Note] as never) ||
+                                "N/A"}
+                          </TableCell>
+                        ))}
+                        <TableCell>
+                          <div className="flex gap-2 justify-end">
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                setIsDialogOpen(true);
+                                setSelectedFile(note);
+                              }}
+                            >
+                              <Eye className="size-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                downloadFile({
+                                  noteUrl: String(note.file_path),
+                                  noteName: String(note.title),
+                                })
+                              }
+                            >
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {note.isPublish ? (
+                            <Button
+                              variant="destructive"
+                              onClick={() => {
+                                setSelectedFile(note);
+                                setUnpublishedNote(true);
+                              }}
+                            >
+                              إلغاء النشر
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => {
+                                setSelectedFile(note);
+                                setPublishedNote(true);
+                              }}
+                            >
+                              نشر
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>
 
             {/* Pagination */}
-            {notesPagination && (
+            {notesPagination?.totalItems > 10 && (
               <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
                 <span className="text-sm text-muted-foreground">
                   عرض {(notePage - 1) * noteLimit + 1}-

@@ -116,11 +116,7 @@ export default function WithdrawalHistoryTable({
         await handleRejectWithdrawal(withdrawalId);
       }
       if (actionType === "complete") {
-        if (!transferNumber || !transferDate) return;
-        await handleCompleteWithdrawal(withdrawalId, {
-          routingNumber: transferNumber,
-          routingDate: transferDate.toISOString(),
-        });
+        await handleCompleteWithdrawal(withdrawalId);
       }
     } finally {
       handleDialogClose();
@@ -418,6 +414,7 @@ export default function WithdrawalHistoryTable({
           )}
 
           {/* Pagination */}
+          {/* {withdrawalsPagination?.totalItems > 10 && ( */}
           <div className="mt-4 flex justify-end">
             <WithdrawalsPagination
               pagination={withdrawalsPagination}
@@ -426,6 +423,7 @@ export default function WithdrawalHistoryTable({
               loading={withdrawalsLoading}
             />
           </div>
+          {/* )} */}
         </CardContent>
       </Card>
 
