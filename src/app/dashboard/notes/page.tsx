@@ -51,6 +51,7 @@ import ChartLineNotes from "@/components/organisms/dashboard/ChartLineNotes";
 import useDashboard from "@/hooks/useDashboard";
 import { Note } from "@/types";
 import { universityData } from "@/constants/index";
+import { downloadFile } from "@/utils/downloadFile";
 
 /** Helper: truncate long text */
 const truncateText = (text: string, maxLength = 20) =>
@@ -271,7 +272,12 @@ export default function NotesDashboard() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => alert(`تحميل ${note.file_path}`)}
+                        onClick={() =>
+                          downloadFile({
+                            noteUrl: String(note.file_path),
+                            noteName: String(note.title),
+                          })
+                        }
                       >
                         <Download className="size-4" />
                       </Button>
@@ -344,7 +350,12 @@ export default function NotesDashboard() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => alert(`تحميل ${note.file_path}`)}
+                            onClick={() =>
+                              downloadFile({
+                                noteUrl: String(note.file_path),
+                                noteName: String(note.title),
+                              })
+                            }
                           >
                             <Download className="h-4 w-4" />
                           </Button>

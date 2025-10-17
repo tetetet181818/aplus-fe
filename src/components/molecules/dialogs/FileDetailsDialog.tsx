@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import { Note } from "@/types";
 import { FileDown } from "lucide-react";
+import { downloadFile } from "@/utils/downloadFile";
 
 interface FileDetailsDialogProps {
   open: boolean;
@@ -104,16 +105,19 @@ const FileDetailsDialog = memo(
                 <h3 className="font-semibold text-lg mb-2 text-gray-800">
                   الملف:
                 </h3>
-                <a
-                  href={item.file_path}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Button
+                  onClick={() =>
+                    downloadFile({
+                      noteName: String(item.title),
+                      noteUrl: String(item.file_path),
+                    })
+                  }
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
                   aria-label="عرض ملف PDF"
                 >
                   <span>عرض PDF</span>
                   <FileDown className="size-4" />
-                </a>
+                </Button>
               </div>
             )}
           </div>
