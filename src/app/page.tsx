@@ -2,7 +2,7 @@ import HomePage from "@/components/pages/landing/HomePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "منصة أ+ | مكتبة الملخصات الجامعية والملفات التعليمية الرقمية",
+  title: "منصة أ+ | منصه الملخصات الجامعية والملفات التعليمية الرقمية",
   description:
     "منصة أ+ هي منصتك الذكية للحصول على ملخصات وملفات جامعية عالية الجودة، منظمة من طلاب جامعات مصر والسعودية. اكتشف أفضل المحتوى الأكاديمي وساهم في تطوير تجربة التعلم الجامعي.",
   keywords: [

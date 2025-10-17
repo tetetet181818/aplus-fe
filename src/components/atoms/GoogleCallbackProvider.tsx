@@ -1,7 +1,18 @@
 "use client";
+import { notFound, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useVerifyMutation } from "@/store/api/auth.api";
 
 export default function GoogleCallbackProvider() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const router = useRouter();
+  const [verify] = useVerifyMutation();
+
+  if (!token) return notFound();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -9,6 +20,17 @@ export default function GoogleCallbackProvider() {
       document.body.style.overflow = original;
     };
   }, []);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const handelVerify = async () => {
+      const res = await verify({ token }).unwrap();
+      if (res) {
+        router.push("/");
+      }
+    };
+    handelVerify();
+  }, [verify, router, token]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/70 z-50">
