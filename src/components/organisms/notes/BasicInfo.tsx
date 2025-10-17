@@ -55,10 +55,11 @@ export default function BasicInfo({
   const handleToggleEmail = () => {
     const next = !isUsingRegisteredEmail;
     setIsUsingRegisteredEmail(next);
+
     const newEmail = next ? user?.email || "" : "";
     setEmail(newEmail);
+
     formik.setFieldValue("basic.contactMethod", newEmail);
-    formik.setFieldTouched("basic.contactMethod", true, true);
   };
 
   const selectedUniversity = formik.values.basic.university;
@@ -295,6 +296,7 @@ export default function BasicInfo({
               checked={isUsingRegisteredEmail}
               onCheckedChange={handleToggleEmail}
               aria-label="استخدم بريدك المسجل"
+              type="button"
             />
           </div>
           <Input

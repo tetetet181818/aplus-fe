@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import {
   ArrowRight,
   CheckCircle2,
@@ -155,28 +154,22 @@ export default function ReviewNote({
             <h4 className="font-semibold text-lg mb-4 text-gray-900 dark:text-white">
               الشروط والأحكام
             </h4>
-            <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+            <div className="flex items-center gap-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="flex-1 text-end">
+                أوافق على{" "}
+                <Link href="/terms" className="hover:underline text-blue-600 ">
+                  الشروط والأحكام الخاصة
+                </Link>{" "}
+                برفع الملخص ونشره
+              </p>
               <Checkbox
                 id="terms"
                 checked={review.termsAccepted}
                 onCheckedChange={(v) =>
                   formik.setFieldValue("review.termsAccepted", v === true)
                 }
-                className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white flex-shrink-0"
+                className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white flex-shrink-0 w-8 h-8 bg-white"
               />
-              <Label
-                htmlFor="terms"
-                className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 cursor-pointer flex-1"
-              >
-                أوافق على{" "}
-                <Link
-                  className="hover:underline text-blue-600 dark:text-blue-400 font-medium underline-offset-2"
-                  href="/terms-of-service"
-                >
-                  الشروط والأحكام الخاصة
-                </Link>{" "}
-                برفع الملخص ونشره
-              </Label>
             </div>
           </div>
 
