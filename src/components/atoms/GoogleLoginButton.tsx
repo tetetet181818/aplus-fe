@@ -2,7 +2,7 @@
 
 function GoogleLoginButton() {
   const loginWithGoogle = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_GOOGLE_LOGIN}`;
+    window.open(process.env.NEXT_PUBLIC_GOOGLE_LOGIN, "_self");
   };
   return (
     <button
