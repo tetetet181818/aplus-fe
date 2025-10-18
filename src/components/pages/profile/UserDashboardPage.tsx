@@ -24,7 +24,6 @@ import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 import useNoteDetail from "@/hooks/useNoteDetail";
 import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
 import { downloadFile } from "@/utils/downloadFile";
-import FinancialDashboardSkeleton from "@/components/skeletons/FinancialDashboardSkeleton";
 
 /**
  * UserDashboardPage
@@ -71,10 +70,6 @@ const UserDashboardPage = () => {
     params.set("tab", value);
     router.replace(`/profile?${params.toString()}`);
   };
-
-  if (loading) {
-    return <FinancialDashboardSkeleton />;
-  }
 
   if (!user) {
     return <ShouldLoginPrompt onNavigate={router.push} />;
