@@ -32,6 +32,8 @@ export default function WithdrawalsDashboard() {
     handleRejectWithdrawal,
     handleCompleteWithdrawal,
     loading,
+    handleAddAdminNote,
+    addAdminNoteLoading,
   } = useDashboard();
   return (
     <div className="space-y-8 animate-fade-in">
@@ -68,6 +70,8 @@ export default function WithdrawalsDashboard() {
         handleRejectWithdrawal={handleRejectWithdrawal}
         handleCompleteWithdrawal={handleCompleteWithdrawal}
         loading={loading}
+        handleAddAdminNote={handleAddAdminNote}
+        addAdminNoteLoading={addAdminNoteLoading}
       />
     </div>
   );

@@ -58,9 +58,16 @@ export const withdrawalApi = createApi({
 
     /** Update a withdrawal by ID */
     updateWithdrawal: builder.mutation({
-      query: ({ withdrawalId }: { withdrawalId: string }) => ({
-        url: `/${withdrawalId}`,
+      query: ({
+        withdrawalId,
+        updateData,
+      }: {
+        withdrawalId: string;
+        updateData: withdrawalData;
+      }) => ({
+        url: `/update/${withdrawalId}`,
         method: "PUT",
+        body: updateData,
       }),
       invalidatesTags: ["Withdrawal"],
     }),
@@ -70,6 +77,21 @@ export const withdrawalApi = createApi({
       query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["Withdrawal"],
+    }),
+
+    addAdminNote: builder.mutation({
+      query: ({
+        withdrawalId,
+        updateData,
+      }: {
+        withdrawalId: string;
+        updateData: { adminNotes: string };
+      }) => ({
+        url: `/add-admin-note/${withdrawalId}`,
+        method: "PUT",
+        body: updateData,
       }),
       invalidatesTags: ["Withdrawal"],
     }),
@@ -83,4 +105,5 @@ export const {
   useUpdateWithdrawalMutation,
   useDeleteWithdrawalMutation,
   useGetMeWithdrawalsQuery,
+  useAddAdminNoteMutation,
 } = withdrawalApi;

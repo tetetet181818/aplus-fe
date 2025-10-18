@@ -11,7 +11,7 @@ import {
 
 interface WithdrawalsPaginationProps {
   pagination?: {
-    currentPage: number;
+    page: number;
     totalPages: number;
   };
   loading?: boolean;
@@ -27,7 +27,7 @@ interface WithdrawalsPaginationProps {
  */
 export default function WithdrawalsPagination({
   pagination,
-  loading = false,
+  loading,
   onNext,
   onPrev,
   onFirst,
@@ -35,14 +35,14 @@ export default function WithdrawalsPagination({
 }: WithdrawalsPaginationProps) {
   if (!pagination || pagination.totalPages <= 1) return null;
 
-  const { currentPage, totalPages } = pagination;
+  const { page, totalPages } = pagination;
 
   /** Render numbered page buttons dynamically */
   const renderPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
@@ -53,13 +53,13 @@ export default function WithdrawalsPagination({
       pages.push(
         <Button
           key={i}
-          variant={i === currentPage ? "default" : "outline"}
+          variant={i === page ? "default" : "outline"}
           size="sm"
           className="min-w-9 h-9 p-0"
-          disabled={loading || i === currentPage}
+          disabled={loading || i === page}
           onClick={() => {
-            if (i < currentPage) onPrev?.();
-            else if (i > currentPage) onNext?.();
+            if (i < page) onPrev?.();
+            else if (i > page) onNext?.();
           }}
         >
           {i}
@@ -73,7 +73,7 @@ export default function WithdrawalsPagination({
   return (
     <div className="flex items-center justify-between px-2 py-4">
       <div className="text-sm text-muted-foreground">
-        الصفحة {currentPage} من {totalPages}
+        الصفحة {page} من {totalPages}
       </div>
 
       <div className="flex items-center space-x-2 rtl:space-x-reverse">
@@ -81,7 +81,7 @@ export default function WithdrawalsPagination({
           variant="outline"
           size="sm"
           onClick={onFirst}
-          disabled={loading || currentPage === 1}
+          disabled={loading || page === 1}
           className="h-9 px-2"
         >
           <ChevronsRight className="size-4" />
@@ -91,7 +91,7 @@ export default function WithdrawalsPagination({
           variant="outline"
           size="sm"
           onClick={onPrev}
-          disabled={loading || currentPage === 1}
+          disabled={loading || page === 1}
           className="h-9 px-2"
         >
           <ChevronRight className="size-4" />
@@ -103,7 +103,7 @@ export default function WithdrawalsPagination({
           variant="outline"
           size="sm"
           onClick={onNext}
-          disabled={loading || currentPage === totalPages}
+          disabled={loading || page === totalPages}
           className="h-9 px-2"
         >
           <ChevronLeft className="size-4" />
@@ -113,7 +113,7 @@ export default function WithdrawalsPagination({
           variant="outline"
           size="sm"
           onClick={onLast}
-          disabled={loading || currentPage === totalPages}
+          disabled={loading || page === totalPages}
           className="h-9 px-2"
         >
           <ChevronsLeft className="size-4" />

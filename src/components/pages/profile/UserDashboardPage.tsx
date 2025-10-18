@@ -20,11 +20,11 @@ import NotesLikedTab from "@/components/pages/profile/NotesLikedTab";
 
 import useAuth from "@/hooks/useAuth";
 import useNotes from "@/hooks/useNotes";
-import { Skeleton } from "@/components/ui/skeleton";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 import useNoteDetail from "@/hooks/useNoteDetail";
 import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
 import { downloadFile } from "@/utils/downloadFile";
+import FinancialDashboardSkeleton from "@/components/skeletons/FinancialDashboardSkeleton";
 
 /**
  * UserDashboardPage
@@ -72,23 +72,8 @@ const UserDashboardPage = () => {
     router.replace(`/profile?${params.toString()}`);
   };
 
-  // ----------------- Skeleton Loading -----------------
   if (loading) {
-    return (
-      <div className="py-8 px-4 md:px-6 space-y-6">
-        <div className="flex flex-col gap-4">
-          <Skeleton className="h-10 w-1/3" />
-          <Skeleton className="h-6 w-2/3" />
-          <Skeleton className="h-40 w-full rounded-md" />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <Skeleton className="h-24 w-full rounded-md" />
-          <Skeleton className="h-24 w-full rounded-md" />
-          <Skeleton className="h-24 w-full rounded-md" />
-          <Skeleton className="h-24 w-full rounded-md" />
-        </div>
-      </div>
-    );
+    return <FinancialDashboardSkeleton />;
   }
 
   if (!user) {

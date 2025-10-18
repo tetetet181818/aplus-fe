@@ -12,6 +12,7 @@ import {
   Eye,
   Copy,
   Calendar as CalendarIcon,
+  CirclePlus,
 } from "lucide-react";
 import {
   Card,
@@ -52,11 +53,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WithdrawalDetailsDialog from "@/components/molecules/dialogs/WithdrawalDetailsDialog";
-import { statusLabelMap, statusVariantMap } from "@/constants/index";
+import { safeValue, statusLabelMap, statusVariantMap } from "@/constants/index";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import WithdrawalsPagination from "@/app/dashboard/withdrawals/WithdrawalsPagination";
-import { Withdrawal } from "@/types";
+import { AcceptedWithdrawal, Withdrawal } from "@/types";
+import AddAdminNotesDialog from "@/components/molecules/dialogs/AddAdminNotesDialog";
 
 /**
  * @component WithdrawalHistoryTable
@@ -72,16 +74,24 @@ export default function WithdrawalHistoryTable({
   handleRejectWithdrawal,
   handleCompleteWithdrawal,
   loading,
+  handleAddAdminNote,
+  addAdminNoteLoading,
 }: {
   withdrawals: Withdrawal[];
   withdrawalsLoading: boolean;
-  withdrawalsPagination: () => void;
+  withdrawalsPagination: {
+    page: number;
+    totalPages: number;
+    totalItems: number;
+  };
   nextWithdrawalPage: () => void;
   prevWithdrawalPage: () => void;
   handleAcceptWithdrawal: (id: string) => void;
   handleRejectWithdrawal: (id: string) => void;
-  handleCompleteWithdrawal: (id: string) => void;
+  handleCompleteWithdrawal: (id: string, data: AcceptedWithdrawal) => void;
   loading: boolean;
+  handleAddAdminNote: (id: string, note: string) => void;
+  addAdminNoteLoading: boolean;
 }) {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedWithdrawal, setSelectedWithdrawal] =
@@ -93,6 +103,7 @@ export default function WithdrawalHistoryTable({
   const [transferNumber, setTransferNumber] = useState("");
   const [transferDate, setTransferDate] = useState<Date | null>(null);
   const [copiedIban, setCopiedIban] = useState<string | null>(null);
+  const [openAddAdminNotes, setOpenAddAdminNotes] = useState(false);
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -116,7 +127,10 @@ export default function WithdrawalHistoryTable({
         await handleRejectWithdrawal(withdrawalId);
       }
       if (actionType === "complete") {
-        await handleCompleteWithdrawal(withdrawalId);
+        await handleCompleteWithdrawal(withdrawalId, {
+          routingNumber: transferNumber,
+          routingDate: transferDate?.toISOString() || "",
+        });
       }
     } finally {
       handleDialogClose();
@@ -125,11 +139,6 @@ export default function WithdrawalHistoryTable({
 
   const handleInstantAccept = async (withdrawal: Withdrawal) => {
     await handleAcceptWithdrawal(withdrawal._id);
-  };
-
-  const safeValue = (val: string): string => {
-    if (val === null || val === undefined || val === "") return "A/N";
-    return String(val);
   };
 
   const columns = [
@@ -182,6 +191,11 @@ export default function WithdrawalHistoryTable({
         date ? new Date(date).toLocaleDateString("ar-EG") : "A/N",
     },
     {
+      header: "ملاحظة الادمن",
+      accessor: "adminNotes",
+      customRender: (notes: string) => safeValue(notes),
+    },
+    {
       header: "الحالة",
       accessor: "status",
       customRender: (status: string) => (
@@ -203,7 +217,6 @@ export default function WithdrawalHistoryTable({
       <Head>
         <title>طلبات السحب | لوحة التحكم</title>
       </Head>
-
       <Card>
         <CardHeader>
           <CardTitle>سجل طلبات السحب</CardTitle>
@@ -246,11 +259,10 @@ export default function WithdrawalHistoryTable({
                         {columns.map((c) => (
                           <TableCell key={c.header}>
                             {c.customRender
-                              ? c.customRender(
-                                  w[c.accessor as keyof typeof w],
-                                  w
-                                )
-                              : safeValue(w[c.accessor as keyof typeof w])}
+                              ? c.customRender(w[c.accessor as keyof typeof w])
+                              : safeValue(
+                                  w[c.accessor as keyof typeof w] || ""
+                                )}
                           </TableCell>
                         ))}
 
@@ -267,39 +279,53 @@ export default function WithdrawalHistoryTable({
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem
+                                className="flex items-center justify-center gap-2"
                                 onClick={() => {
                                   setSelectedWithdrawal(w);
                                   setOpenDetails(true);
                                 }}
                               >
-                                <Eye className="size-4 mr-2" />
                                 عرض التفاصيل
+                                <Eye className="size-4 mr-2" />
                               </DropdownMenuItem>
                               <DropdownMenuItem
+                                className="flex items-center justify-center gap-2"
                                 onClick={() => handleInstantAccept(w)}
                               >
-                                <Check className="size-4 mr-2 text-green-600" />
                                 قبول
+                                <Check className="size-4 mr-2 text-green-600" />
                               </DropdownMenuItem>
                               <DropdownMenuItem
+                                className="flex items-center justify-center gap-2"
                                 onClick={() => {
                                   setSelectedWithdrawal(w);
                                   setActionType("reject");
                                   setIsDialogOpen(true);
                                 }}
                               >
-                                <X className="size-4 mr-2 text-red-600" />
                                 رفض
+                                <X className="size-4 mr-2 text-red-600" />
                               </DropdownMenuItem>
                               <DropdownMenuItem
+                                className="flex items-center justify-center gap-2"
                                 onClick={() => {
                                   setSelectedWithdrawal(w);
                                   setActionType("complete");
                                   setIsDialogOpen(true);
                                 }}
                               >
-                                <CheckCircle className="size-4 mr-2 text-green-800" />
                                 إكمال العملية
+                                <CheckCircle className="size-4 mr-2 text-green-800" />
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="flex items-center justify-center gap-2"
+                                onClick={() => {
+                                  setSelectedWithdrawal(w);
+                                  setOpenAddAdminNotes(true);
+                                }}
+                              >
+                                إضافة ملاحظة
+                                <CirclePlus className="size-4 mr-2 text-green-800" />
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -323,18 +349,16 @@ export default function WithdrawalHistoryTable({
                       </span>
                       <Badge
                         variant={
-                          String(
-                            statusVariantMap[
-                              w.status as keyof typeof statusVariantMap
-                            ]
-                          ) || "default"
+                          statusVariantMap[
+                            w.status as keyof typeof statusVariantMap
+                          ] || "default"
                         }
                       >
-                        {String(
+                        {
                           statusLabelMap[
                             w.status as keyof typeof statusLabelMap
                           ]
-                        )}
+                        }
                       </Badge>
                     </div>
 
@@ -343,6 +367,9 @@ export default function WithdrawalHistoryTable({
                     </p>
                     <p className="text-sm text-muted-foreground">
                       IBAN: {w.iban || "A/N"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      ملاحظة الادمن: {w.adminNotes || "A/N"}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       المبلغ: {w.amount?.toLocaleString() || 0} ر.س
@@ -405,6 +432,16 @@ export default function WithdrawalHistoryTable({
                           <CheckCircle className="size-4 mr-2 text-green-800" />
                           إكمال العملية
                         </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedWithdrawal(w);
+                            setOpenAddAdminNotes(true);
+                          }}
+                        >
+                          <CirclePlus className="size-4 mr-2 text-green-800" />
+                          إضافة ملاحظة
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -426,14 +463,12 @@ export default function WithdrawalHistoryTable({
           {/* )} */}
         </CardContent>
       </Card>
-
       {/* Dialogs */}
       <WithdrawalDetailsDialog
         open={openDetails}
         onClose={() => setOpenDetails(false)}
         selectedWithdrawal={selectedWithdrawal?._id || ""}
       />
-
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -472,8 +507,9 @@ export default function WithdrawalHistoryTable({
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={transferDate}
+                    selected={transferDate || new Date()}
                     onSelect={setTransferDate}
+                    required
                   />
                 </PopoverContent>
               </Popover>
@@ -498,6 +534,14 @@ export default function WithdrawalHistoryTable({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AddAdminNotesDialog
+        onOpenChange={() => setOpenAddAdminNotes(false)}
+        open={openAddAdminNotes}
+        withdrawalId={selectedWithdrawal?._id || ""}
+        handleAddAdminNote={handleAddAdminNote}
+        addAdminNoteLoading={addAdminNoteLoading}
+      />
     </>
   );
 }

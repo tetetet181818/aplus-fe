@@ -24,6 +24,8 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
     createWithdrawalLoading,
     meWithdrawals,
     meWithdrawalsLoading,
+    handelDeleteWithdrawal,
+    deleteWithdrawalLoading,
   } = useWithdrawals();
 
   const availableBalance = currentUser?.balance || 0;
@@ -60,6 +62,8 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
         availableBalance={availableBalance}
         meWithdrawals={meWithdrawals}
         loading={meWithdrawalsLoading}
+        handelDeleteWithdrawal={handelDeleteWithdrawal}
+        deleteWithdrawalLoading={deleteWithdrawalLoading}
       />
 
       <div>

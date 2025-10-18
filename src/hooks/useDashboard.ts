@@ -20,6 +20,7 @@ import {
 } from "../store/api/dashboard.api";
 import { toast } from "sonner";
 import { AcceptedWithdrawal } from "@/types";
+import { useAddAdminNoteMutation } from "@/store/api/withdrawal.api";
 
 /**
  * Hook for fetching and managing dashboard data
@@ -167,25 +168,26 @@ export default function useDashboard() {
     useRejectedWithdrawalMutation();
   const [completedWithdrawal, { isLoading: completedWithdrawalLoading }] =
     useCompletedWithdrawalMutation();
-
+  const [addAdminNote, { isLoading: addAdminNoteLoading }] =
+    useAddAdminNoteMutation();
   /** Withdrawal action handlers */
   const handleAcceptWithdrawal = async (withdrawalId: string) => {
     try {
       const res = await acceptedWithdrawal({ id: withdrawalId }).unwrap();
-      toast.success(res.data.message);
+      toast.success(res.message);
       refetchWithdrawals();
-    } catch (error: any) {
-      toast.error(error.data.message);
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
     }
   };
 
   const handleRejectWithdrawal = async (withdrawalId: string) => {
     try {
       const res = await rejectedWithdrawal({ id: withdrawalId }).unwrap();
-      toast.success(res.data.message);
+      toast.success(res.message);
       refetchWithdrawals();
-    } catch (error: any) {
-      toast.error(error.data.message);
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
     }
   };
 
@@ -198,10 +200,23 @@ export default function useDashboard() {
         id: withdrawalId,
         data,
       }).unwrap();
-      toast.success(res.data.message);
+      toast.success(res.message);
       refetchWithdrawals();
-    } catch (error: any) {
-      toast.error(error.data.message);
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const handleAddAdminNote = async (withdrawalId: string, data: string) => {
+    try {
+      console.log(withdrawalId, data);
+      const res = await addAdminNote({
+        withdrawalId,
+        updateData: { adminNotes: data },
+      }).unwrap();
+      toast.success(res.message);
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
     }
   };
 
@@ -391,6 +406,8 @@ export default function useDashboard() {
     setSortOrder,
     refetchWithdrawals,
     withdrawalStatus,
+    handleAddAdminNote,
+    addAdminNoteLoading,
     loading:
       acceptedWithdrawalLoading ||
       rejectedWithdrawalLoading ||

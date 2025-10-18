@@ -221,7 +221,7 @@ export const statusVariantMap = {
   accepted: "success",
   rejected: "destructive",
   completed: "completed",
-};
+} as const;
 export const staticWithdrawalStatuses = [
   "pending",
   "accepted",
@@ -300,3 +300,8 @@ export const universityData = [
 ];
 
 export const universities = universityData.map((uni) => uni.name);
+
+export const safeValue = (val: unknown): string => {
+  if (val === null || val === undefined || val === "") return "A/N";
+  return String(val);
+};

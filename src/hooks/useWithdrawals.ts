@@ -2,11 +2,12 @@
 
 import {
   useCreateWithdrawalMutation,
+  useDeleteWithdrawalMutation,
   useGetAllWithdrawalsQuery,
   useGetMeWithdrawalsQuery,
+  useUpdateWithdrawalMutation,
 } from "@/store/api/withdrawal.api";
 import { withdrawalData } from "@/types";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 /**
@@ -15,8 +16,6 @@ import { toast } from "sonner";
  * - Create new withdrawal requests
  */
 export default function useWithdrawals() {
-  const router = useRouter();
-
   /** Fetch withdrawals for the current user */
   const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
     useGetMeWithdrawalsQuery({});
@@ -34,12 +33,49 @@ export default function useWithdrawals() {
       const res = await createWithdrawal({ withdrawalData });
       if (res?.data?.message) {
         toast.success("تم إضافة السحب بنجاح");
-        router.push("/");
       }
       return res?.data;
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ ");
+    }
+  };
+
+  const [deleteWithdrawal, { isLoading: deleteWithdrawalLoading }] =
+    useDeleteWithdrawalMutation();
+
+  const handelDeleteWithdrawal = async (withdrawalId: string) => {
+    try {
+      const res = await deleteWithdrawal({ withdrawalId });
+      if (res?.data?.message) {
+        toast.success("تم حذف السحب بنجاح");
+      }
+      return res?.data;
+    } catch (error) {
+      console.log((error as { message: string })?.message);
+      toast.error((error as { message: string })?.message);
+    }
+  };
+
+  const [updateWithdrawal, { isLoading: updateWithdrawalLoading }] =
+    useUpdateWithdrawalMutation();
+
+  const handleUpdateWithdrawal = async ({
+    withdrawalId,
+    updateData,
+  }: {
+    withdrawalId: string;
+    updateData: withdrawalData;
+  }) => {
+    try {
+      const res = await updateWithdrawal({ withdrawalId, updateData }).unwrap();
+      if (res?.message) {
+        toast.success("تم تحديث السحب بنجاح");
+      }
+      return res;
+    } catch (error) {
+      console.log((error as { message: string })?.message);
+      toast.error((error as { message: string })?.message);
     }
   };
 
@@ -50,5 +86,9 @@ export default function useWithdrawals() {
     meWithdrawalsLoading,
     createWithdrawalLoading,
     handleCreateWithdrawal,
+    handelDeleteWithdrawal,
+    deleteWithdrawalLoading,
+    updateWithdrawalLoading,
+    handleUpdateWithdrawal,
   };
 }
