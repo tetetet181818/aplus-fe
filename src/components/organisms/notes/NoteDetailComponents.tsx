@@ -170,30 +170,40 @@ interface NoteDescriptionProps {
 export const NoteDescription = ({ description }: NoteDescriptionProps) => {
   if (!description) {
     return (
-      <Card className="shadow-lg border-gray-200 dark:border-gray-700">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-            <FileText className="h-6 w-6 text-primary" /> وصف الملخص
+      <Card className="w-full shadow-lg border-gray-200 dark:border-gray-700 mx-auto max-w-full">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+            <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            وصف الملخص
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-gray-500 italic">لا يوجد وصف متوفر لهذا الملخص</p>
+        <CardContent className="px-4 sm:px-6">
+          <p className="text-gray-500 italic text-sm sm:text-base">
+            لا يوجد وصف متوفر لهذا الملخص
+          </p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <FileText className="h-6 w-6 text-primary" /> وصف الملخص
+    <Card className="w-full shadow-lg border-gray-200 dark:border-gray-700 mx-auto max-w-full overflow-hidden">
+      <CardHeader className="px-4 sm:px-6 pb-3">
+        <CardTitle className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+          <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          وصف الملخص
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-          {description}
-        </p>
+      <CardContent className="px-4 sm:px-6 pt-0">
+        <div className="overflow-hidden">
+          <p
+            className="text-gray-700 dark:text-gray-300 leading-relaxed sm:leading-loose 
+                        whitespace-pre-wrap break-words overflow-wrap-anywhere
+                        text-sm sm:text-base max-w-full"
+          >
+            {description}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
