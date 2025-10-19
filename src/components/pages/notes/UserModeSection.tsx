@@ -48,9 +48,6 @@ export default function UserModeSection({
                   <h3 className="text-base font-semibold text-gray-800 text-center">
                     {user.fullName}
                   </h3>
-                  <p className="text-sm text-gray-500 text-center">
-                    {user.email}
-                  </p>
 
                   <Link
                     href={`/seller/${user._id}`}
@@ -67,7 +64,6 @@ export default function UserModeSection({
             )}
           </div>
 
-          {/* Pagination Controls for Users */}
           {totalUsers > 10 && (
             <div className="flex justify-center items-center gap-4">
               <button

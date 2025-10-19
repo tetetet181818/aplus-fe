@@ -129,7 +129,6 @@ const NotesListPage = () => {
         )}
       </div>
 
-      {/* Filters */}
       {showFilters && searchType === "file" && (
         <NotesFilterSection
           years={[2026, 2025, 2023, 2022, 2021]}
@@ -143,7 +142,6 @@ const NotesListPage = () => {
         />
       )}
 
-      {/* Notes Mode */}
       {searchType === "file" ? (
         notesLoading ? (
           <NoteCardSkeleton />
@@ -154,7 +152,6 @@ const NotesListPage = () => {
           </>
         )
       ) : (
-        /* Users Mode */
         <UserModeSection
           allUsers={allUsers}
           usersLoading={usersLoading}

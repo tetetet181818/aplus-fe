@@ -42,14 +42,8 @@ const UserDashboardPage = () => {
   const searchParams = useSearchParams();
   const { user, loading } = useAuth();
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-  const {
-    userNotes,
-    userNotesLoading,
-    purchasedNotes,
-    purchasedNotesLoading,
-    likedNotes,
-    likedNotesLoading,
-  } = useNotes();
+  const { userNotes, userNotesLoading, likedNotes, likedNotesLoading } =
+    useNotes();
   const { handleDeleteNote, deleteNoteLoading } = useNoteDetail(
     itemToDelete || ""
   );
@@ -75,6 +69,8 @@ const UserDashboardPage = () => {
     return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 
+  console.log(user);
+
   // ----------------- UI -----------------
   return (
     <div className="py-8 px-4 md:px-6">
@@ -97,12 +93,10 @@ const UserDashboardPage = () => {
             </TabsTrigger>
           ))}
         </TabsList>
-        {/* Profile Tab */}
         <TabsContent value="profile" className="mt-6">
           <ProfileInfoTab user={user} loading={loading} />
         </TabsContent>
 
-        {/* User Notes Tab */}
         <TabsContent value="my-notes" className="mt-6">
           {userNotesLoading ? (
             <NoteCardSkeleton />
@@ -125,13 +119,12 @@ const UserDashboardPage = () => {
           )}
         </TabsContent>
 
-        {/* Purchased Notes Tab */}
         <TabsContent value="purchased" className="mt-6">
-          {purchasedNotesLoading ? (
+          {loading ? (
             <NoteCardSkeleton />
           ) : (
             <PurchasedNotesTab
-              notes={purchasedNotes}
+              notes={user?.purchased_notes || []}
               router={router}
               onDownload={(note) =>
                 downloadFile({
@@ -139,17 +132,15 @@ const UserDashboardPage = () => {
                   noteName: note.title as string,
                 })
               }
-              loading={purchasedNotesLoading}
+              loading={loading}
             />
           )}
         </TabsContent>
 
-        {/* Earnings Tab */}
         <TabsContent value="earnings" className="mt-6">
           <EarningsTab currentUser={user} />
         </TabsContent>
 
-        {/* Liked Notes Tab */}
         <TabsContent value="notesLiked" className="mt-6">
           {likedNotesLoading ? (
             <NoteCardSkeleton />

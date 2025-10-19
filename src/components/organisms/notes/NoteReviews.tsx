@@ -97,84 +97,87 @@ const ReviewItem = ({
   removeReviewLoading: boolean;
   noteId: string;
   setUpdateReview: (updateReview: boolean) => void;
-}) => (
-  <motion.div
-    className="flex gap-4 py-4"
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-  >
-    <Avatar className="h-10 w-10 flex-shrink-0">
-      <AvatarFallback className="bg-blue-100 text-blue-600">
-        {review.userName?.charAt(0) ?? "U"}
-      </AvatarFallback>
-    </Avatar>
+}) => {
+  console.log(review);
+  return (
+    <motion.div
+      className="flex gap-4 py-4"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Avatar className="h-10 w-10 flex-shrink-0">
+        <AvatarFallback className="bg-blue-100 text-blue-600">
+          {review.userName?.charAt(0) ?? "U"}
+        </AvatarFallback>
+      </Avatar>
 
-    <div className="flex-1 min-w-0">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
-        <h4 className="font-semibold text-gray-800 dark:text-white truncate">
-          {review.userName || "مستخدم مجهول"}
-        </h4>
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+          <h4 className="font-semibold text-gray-800 dark:text-white truncate">
+            {review.userName || "مستخدم مجهول"}
+          </h4>
 
-        <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
-          {Array.from({ length: 5 }, (_, i) => (
-            <Star
-              key={i}
-              className={cn(
-                "h-3 w-3",
-                i < (review?.rating || 0)
-                  ? "text-yellow-400 fill-yellow-400"
-                  : "text-gray-300 dark:text-gray-600"
+          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star
+                key={i}
+                className={cn(
+                  "h-3 w-3",
+                  i < (review?.rating || 0)
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300 dark:text-gray-600"
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words">
+          {review?.comment || "لا يوجد تعليق"}
+        </p>
+
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          {review?.createdAt
+            ? formatArabicDate(review?.createdAt)
+            : "تاريخ غير معروف"}
+        </p>
+
+        {review?.userId === user?._id && (
+          <div className="flex gap-2 mt-4">
+            <Button
+              variant="default"
+              className="mt-1"
+              onClick={() => setUpdateReview(true)}
+            >
+              تعديل
+            </Button>
+            <Button
+              variant="destructive"
+              className="mt-1 flex items-center gap-2"
+              onClick={() =>
+                removeReviewFromNote({
+                  noteId,
+                  reviewId: review?._id,
+                })
+              }
+              disabled={removeReviewLoading}
+            >
+              {removeReviewLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  جاري الحذف...
+                </>
+              ) : (
+                "حذف"
               )}
-            />
-          ))}
-        </div>
+            </Button>
+          </div>
+        )}
       </div>
-
-      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words">
-        {review?.comment || "لا يوجد تعليق"}
-      </p>
-
-      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-        {review?.createdAt
-          ? formatArabicDate(review?.createdAt)
-          : "تاريخ غير معروف"}
-      </p>
-
-      {review?.userId === user?._id && (
-        <div className="flex gap-2 mt-4">
-          <Button
-            variant="default"
-            className="mt-1"
-            onClick={() => setUpdateReview(true)}
-          >
-            تعديل
-          </Button>
-          <Button
-            variant="destructive"
-            className="mt-1 flex items-center gap-2"
-            onClick={() =>
-              removeReviewFromNote({
-                noteId,
-                reviewId: review?._id,
-              })
-            }
-            disabled={removeReviewLoading}
-          >
-            {removeReviewLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                جاري الحذف...
-              </>
-            ) : (
-              "حذف"
-            )}
-          </Button>
-        </div>
-      )}
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 /** ===================== Sort Selector ===================== */
 

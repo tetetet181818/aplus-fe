@@ -5,7 +5,6 @@ import {
   useCreateNoteMutation,
   useGetAllNotesQuery,
   useGetLikedNotesQuery,
-  useGetPurchasedNotesQuery,
   useGetUserNotesQuery,
   useMakeUnlikeNoteMutation,
   usePurchaseNoteMutation,
@@ -102,10 +101,6 @@ export default function useNotes() {
     return res?.data;
   };
 
-  /** Fetch purchased notes */
-  const { data: purchasedNotes, isLoading: purchasedNotesLoading } =
-    useGetPurchasedNotesQuery({});
-
   const [createNote, { isLoading: createNoteLoading }] =
     useCreateNoteMutation();
 
@@ -198,8 +193,6 @@ export default function useNotes() {
     createNoteLoading,
     userNotesLoading,
     userNotes: userNotes?.data,
-    purchasedNotesLoading,
-    purchasedNotes: purchasedNotes?.data,
     likedNotesLoading,
     likedNotes: likedNotes?.data,
     removeNoteFromLikeList,

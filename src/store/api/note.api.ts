@@ -116,12 +116,6 @@ export const noteApi = createApi({
       providesTags: ["Note"],
     }),
 
-    /** Get notes purchased by the current user */
-    getPurchasedNotes: builder.query({
-      query: () => ({ url: `/purchased` }),
-      providesTags: ["Note"],
-    }),
-
     /** Get notes liked by the current user */
     getLikedNotes: builder.query({
       query: () => ({ url: `/likes-notes` }),
@@ -215,7 +209,6 @@ export const {
   useToggleLikeQuery,
   useDeleteNoteMutation,
   useGetUserNotesQuery,
-  useGetPurchasedNotesQuery,
   useGetLikedNotesQuery,
   usePurchaseNoteMutation,
   useAddReviewToNoteMutation,
