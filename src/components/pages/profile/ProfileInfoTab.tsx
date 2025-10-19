@@ -10,11 +10,19 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { User as UserIcon, Mail, School, Edit3, Trash2 } from "lucide-react";
+import {
+  User as UserIcon,
+  Mail,
+  School,
+  Edit3,
+  Trash2,
+  Link2,
+} from "lucide-react";
 import UpdateInfoDialog from "../../molecules/dialogs/UpdateInfoDialog";
 import useAuth from "@/hooks/useAuth";
 import { User } from "@/types";
 import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
+import { toast } from "sonner";
 
 /**
  * Renders the user's profile information and actions (edit, delete, reset password).
@@ -33,6 +41,11 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
   const { handleDeleteAccount, handleUpdateUserInfo } = useAuth();
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
+
+  const copyToClipboard = (text: string) => {
+    toast.success("تم نسخ رابط حسابك");
+    navigator.clipboard.writeText(text);
+  };
 
   if (!user) return null;
 
@@ -82,6 +95,17 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
 
             {/* Actions */}
             <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                onClick={() =>
+                  copyToClipboard(
+                    `https://aplusplatformsa.com/seller/${user._id}`
+                  )
+                }
+              >
+                <Link2 className="size-4" />
+                مشاركة الحساب
+              </Button>
+
               <Button>
                 <Link
                   href="/forget-password"
