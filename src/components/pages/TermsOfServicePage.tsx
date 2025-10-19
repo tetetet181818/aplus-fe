@@ -294,6 +294,18 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
+
+        <ListItem
+          icon={<Book className="size-4" />}
+          title="١٢. استرداد المبالغ"
+        >
+          <ul className="list-disc list-inside space-y-1 pl-4">
+            <li>
+              لا تُسترد المبالغ بعد الشراء، إلا إذا لم يطابق المحتوى الوصف، ويجب
+              تقديم المطالبة خلال 7 أيام من الاستلام.
+            </li>
+          </ul>
+        </ListItem>
       </div>
     </div>
   );
