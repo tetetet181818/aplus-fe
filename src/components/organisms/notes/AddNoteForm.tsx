@@ -43,7 +43,7 @@ export type AddNoteValues = {
 const initialValues: AddNoteValues = {
   basic: {
     title: "",
-    price: 0,
+    price: 10,
     description: "",
     university: "",
     college: "",

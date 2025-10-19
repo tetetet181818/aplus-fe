@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import visaImage from "../../../public/visa.png";
 import mada_image from "../../../public/mada.svg";
 import mastercard_image from "../../../public/MasterCard-logo.webp";
+import applepay_image from "../../../public/apple_pay_logo.png";
 import Image from "next/image";
 
 const PaymentMethodsSection = () => {
@@ -12,7 +13,7 @@ const PaymentMethodsSection = () => {
         <Image
           loading="lazy"
           alt="Visa logo"
-          className="h-6 w-auto"
+          className="h-10 w-auto"
           src={visaImage}
         />
       ),
@@ -36,6 +37,17 @@ const PaymentMethodsSection = () => {
           alt="master card logo"
           className="h-6 w-auto"
           src={mastercard_image}
+        />
+      ),
+    },
+    {
+      name: "Apple Pay",
+      icon: (
+        <Image
+          loading="lazy"
+          alt="apple pay logo"
+          className="h-6 w-auto"
+          src={applepay_image}
         />
       ),
     },
@@ -63,7 +75,7 @@ const PaymentMethodsSection = () => {
         طرق الدفع
       </h3>
       <motion.div
-        className="flex gap-2"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
         variants={sectionVariants}
         initial="hidden"
         animate="visible"
