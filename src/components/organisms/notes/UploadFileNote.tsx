@@ -72,9 +72,12 @@ export default function UploadFileNote({
           >
             <FileUp className="size-10 text-blue-400" />
           </div>
-
-          <p className="font-medium mt-2">اختر ملف الملخص</p>
-          <p className="text-sm text-gray-500">PDF فقط</p>
+          {!formik.values.file?.file !== null && (
+            <>
+              <p className="font-medium mt-2">اختر ملف الملخص</p>
+              <p className="text-sm text-gray-500">PDF فقط</p>
+            </>
+          )}
 
           {/* Error message from Formik */}
           {formik.errors.file?.file && (
@@ -95,6 +98,10 @@ export default function UploadFileNote({
           )}
         </div>
 
+        {formik.values.file?.file !== null && (
+          <p className="text-green-600"> تم رفع الملف بنجاح ✅</p>
+        )}
+
         <input
           ref={fileInputRef}
           type="file"
@@ -104,7 +111,7 @@ export default function UploadFileNote({
         />
 
         <Button
-          variant="outline"
+          variant="default"
           onClick={() => fileInputRef.current?.click()}
           className="mt-5"
           type="button"
@@ -113,7 +120,6 @@ export default function UploadFileNote({
         </Button>
       </div>
 
-      {/* Navigation Buttons */}
       <div dir="rtl" className="flex justify-between pt-6">
         <Button
           type="button"
