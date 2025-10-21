@@ -18,6 +18,7 @@ import {
   Phone,
   Loader2,
   Loader,
+  Link2,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -33,6 +34,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { User } from "@/types";
+import { toast } from "sonner";
 
 interface NoteHeaderProps {
   title: string;
@@ -77,34 +79,36 @@ export const NoteHeader = ({
             <CardTitle className="text-3xl font-extrabold text-gray-800 dark:text-white">
               {title || "عنوان غير متوفر"}
             </CardTitle>
-            {user ? (
-              toggleLike ? (
-                <Button
-                  className="mt-2"
-                  onClick={() => removeNoteFromLikeList({ noteId })}
-                  variant="destructive"
-                  disabled={likeLoading}
-                >
-                  {likeLoading ? (
-                    <Loader2 className="size-5 animate-spin" />
-                  ) : (
-                    "إلغاء الإعجاب بالملخص"
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  className="mt-2"
-                  onClick={() => addNoteToLikeList({ noteId })}
-                  disabled={likeLoading}
-                >
-                  {likeLoading ? (
-                    <Loader2 className="size-5 animate-spin" />
-                  ) : (
-                    "الإعجاب بالملخص"
-                  )}
-                </Button>
-              )
-            ) : null}
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              {user ? (
+                toggleLike ? (
+                  <Button
+                    className="mt-2"
+                    onClick={() => removeNoteFromLikeList({ noteId })}
+                    variant="destructive"
+                    disabled={likeLoading}
+                  >
+                    {likeLoading ? (
+                      <Loader2 className="size-5 animate-spin" />
+                    ) : (
+                      "إلغاء الإعجاب بالملخص"
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    className="mt-2"
+                    onClick={() => addNoteToLikeList({ noteId })}
+                    disabled={likeLoading}
+                  >
+                    {likeLoading ? (
+                      <Loader2 className="size-5 animate-spin" />
+                    ) : (
+                      "الإعجاب بالملخص"
+                    )}
+                  </Button>
+                )
+              ) : null}
+            </div>
           </div>
 
           <div className="flex flex-col items-end gap-2">
@@ -360,6 +364,7 @@ export const NoteActions = ({
   contactMethod,
   downloadLoading,
   isOwner,
+  noteId,
 }: {
   isOwner: boolean;
   hasPurchased: boolean;
@@ -375,7 +380,12 @@ export const NoteActions = ({
   loading: boolean;
   downloadLoading: boolean;
   deleteLoading: boolean;
+  noteId: string;
 }) => {
+  const copyToClipboard = (text: string) => {
+    toast.success("تم نسخ رابط الملخص بنجاح");
+    navigator.clipboard.writeText(text);
+  };
   const handleAction = (action: () => void) => {
     try {
       if (typeof action === "function") {
@@ -396,6 +406,16 @@ export const NoteActions = ({
       <CardContent className="space-y-3">
         {isOwner ? (
           <>
+            <Button
+              onClick={() =>
+                copyToClipboard(
+                  `https://www.aplusplatformsa.com/notes/${noteId}`
+                )
+              }
+              className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+            >
+              <Link2 className="h-4 w-4" /> مشاركة الملخص
+            </Button>
             <Button
               onClick={() => handleAction(onEdit)}
               className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
@@ -444,6 +464,16 @@ export const NoteActions = ({
                   لقد قمت بشراء هذا الملخص.
                 </p>
                 <Button
+                  onClick={() =>
+                    copyToClipboard(
+                      `https://www.aplusplatformsa.com/notes/${noteId}`
+                    )
+                  }
+                  className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <Link2 className="h-4 w-4" /> مشاركة الملخص
+                </Button>
+                <Button
                   onClick={() => handleAction(onDownload)}
                   className="w-full bg-green-600 hover:bg-green-700 flex items-center gap-2"
                   disabled={downloadLoading}
@@ -474,6 +504,16 @@ export const NoteActions = ({
               </>
             ) : (
               <>
+                <Button
+                  onClick={() =>
+                    copyToClipboard(
+                      `https://www.aplusplatformsa.com/notes/${noteId}`
+                    )
+                  }
+                  className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <Link2 className="h-4 w-4" /> مشاركة الملخص
+                </Button>
                 <Button
                   onClick={() => handleAction(onPurchase)}
                   className="w-full bg-primary hover:bg-primary/90 flex items-center gap-2"

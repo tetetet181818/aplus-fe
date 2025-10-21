@@ -188,6 +188,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               )}
               isAuthenticated={isAuthenticated}
               contactMethod={note.contactMethod}
+              noteId={note._id}
             />
           </div>
         </div>
