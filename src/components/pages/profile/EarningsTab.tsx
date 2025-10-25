@@ -1,16 +1,18 @@
 "use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import WithdrawalForm from "./WithdrawalForm";
 import FinanceDashboard from "./FinanceDashboard";
 import { User } from "@/types";
 import { useFormik, FormikHelpers } from "formik";
 import useWithdrawals from "@/hooks/useWithdrawals";
+import { withdrawalValidationSchema } from "@/utils/validation/withdrawalSchema";
 
+/** Props for EarningsTab */
 interface EarningsTabProps {
   currentUser: User;
 }
 
+/** Values for withdrawal form */
 interface WithdrawalFormValues {
   accountHolderName: string;
   bankName: string;
@@ -18,6 +20,7 @@ interface WithdrawalFormValues {
   withdrawalAmount: number;
 }
 
+/** Earnings tab showing balance, withdrawals and withdrawal form */
 const EarningsTab = ({ currentUser }: EarningsTabProps) => {
   const {
     handleCreateWithdrawal,
@@ -29,7 +32,6 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
   } = useWithdrawals();
 
   const availableBalance = currentUser?.balance || 0;
-
   const currentNetEarnings = availableBalance * 0.9;
 
   const formik = useFormik<WithdrawalFormValues>({
@@ -39,20 +41,19 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
       iban: "",
       withdrawalAmount: 0,
     },
+    validationSchema: withdrawalValidationSchema(availableBalance),
     onSubmit: async (
       values: WithdrawalFormValues,
       { resetForm }: FormikHelpers<WithdrawalFormValues>
     ) => {
+      if (!formik.isValid) return; // prevent submit if errors
       const res = await handleCreateWithdrawal({
         amount: values.withdrawalAmount,
         accountName: values.accountHolderName,
         bankName: values.bankName,
         iban: values.iban,
       });
-
-      if (res) {
-        resetForm();
-      }
+      if (res) resetForm();
     },
   });
 
