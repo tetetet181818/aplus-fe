@@ -189,7 +189,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               contactMethod={note.contactMethod}
               noteId={note._id}
               noteTitle={note.title}
-              noteDescription={note.description}
+              noteDescription={note.description.substring(0, 160) + "....."}
             />
           </div>
         </div>
