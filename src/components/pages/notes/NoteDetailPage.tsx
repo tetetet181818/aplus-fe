@@ -170,7 +170,6 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               isOwner={isOwner}
               hasPurchased={note.purchased_by?.includes(user?._id)}
               price={note.price}
-              loading={loading}
               onPurchase={handlePurchase}
               onEdit={() => router.push(`/add-note/${note._id}`)}
               onDelete={() => handleDeleteNote({ noteId: note._id })}
@@ -189,6 +188,8 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               isAuthenticated={isAuthenticated}
               contactMethod={note.contactMethod}
               noteId={note._id}
+              noteTitle={note.title}
+              noteDescription={note.description}
             />
           </div>
         </div>

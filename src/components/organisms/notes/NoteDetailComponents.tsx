@@ -350,21 +350,26 @@ export const NoteAuthorInfo = ({
   );
 };
 
+/**
+ * Actions for a single note (purchase, edit, share, etc.)
+ */
 export const NoteActions = ({
+  isOwner,
   hasPurchased,
   price,
   onPurchase,
   onEdit,
   onDelete,
-  deleteLoading,
   onDownload,
   onReview,
   alreadyReviewed,
   isAuthenticated,
   contactMethod,
   downloadLoading,
-  isOwner,
+  deleteLoading,
   noteId,
+  noteTitle,
+  noteDescription,
 }: {
   isOwner: boolean;
   hasPurchased: boolean;
@@ -377,20 +382,40 @@ export const NoteActions = ({
   alreadyReviewed: boolean;
   isAuthenticated: boolean;
   contactMethod: string;
-  loading: boolean;
   downloadLoading: boolean;
   deleteLoading: boolean;
   noteId: string;
+  noteTitle: string;
+  noteDescription?: string;
 }) => {
-  const copyToClipboard = (text: string) => {
-    toast.success("تم نسخ رابط الملخص بنجاح");
-    navigator.clipboard.writeText(text);
+  /**
+   * Copy or share note info
+   */
+  const handleShare = async () => {
+    const shareText = `${noteTitle}\n\n${
+      noteDescription || ""
+    }\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: noteTitle,
+          text: `${noteDescription || ""}`,
+          url: `https://www.aplusplatformsa.com/notes/${noteId}`,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareText);
+        toast.success("تم نسخ معلومات الملخص بنجاح");
+      }
+    } catch (err) {
+      console.error("Error sharing note:", err);
+      toast.error("حدث خطأ أثناء المشاركة");
+    }
   };
+
   const handleAction = (action: () => void) => {
     try {
-      if (typeof action === "function") {
-        action();
-      }
+      action?.();
     } catch (error) {
       console.error("Error executing action:", error);
     }
@@ -403,25 +428,24 @@ export const NoteActions = ({
           <ShoppingCart className="h-6 w-6 text-primary" /> الإجراءات
         </CardTitle>
       </CardHeader>
+
       <CardContent className="space-y-3">
         {isOwner ? (
           <>
             <Button
-              onClick={() =>
-                copyToClipboard(
-                  `https://www.aplusplatformsa.com/notes/${noteId}`
-                )
-              }
+              onClick={handleShare}
               className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
               <Link2 className="h-4 w-4" /> مشاركة الملخص
             </Button>
+
             <Button
               onClick={() => handleAction(onEdit)}
               className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
               <Edit className="h-4 w-4" /> تعديل الملخص
             </Button>
+
             <Button
               onClick={() => handleAction(onDelete)}
               variant="destructive"
@@ -439,6 +463,7 @@ export const NoteActions = ({
                 </>
               )}
             </Button>
+
             <Button
               onClick={() => handleAction(onDownload)}
               variant="outline"
@@ -463,16 +488,14 @@ export const NoteActions = ({
                 <p className="text-green-600 dark:text-green-400 font-semibold text-center">
                   لقد قمت بشراء هذا الملخص.
                 </p>
+
                 <Button
-                  onClick={() =>
-                    copyToClipboard(
-                      `https://www.aplusplatformsa.com/notes/${noteId}`
-                    )
-                  }
+                  onClick={handleShare}
                   className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
+
                 <Button
                   onClick={() => handleAction(onDownload)}
                   className="w-full bg-green-600 hover:bg-green-700 flex items-center gap-2"
@@ -489,6 +512,7 @@ export const NoteActions = ({
                     </>
                   )}
                 </Button>
+
                 <Button
                   onClick={() => handleAction(onReview)}
                   disabled={alreadyReviewed}
@@ -505,15 +529,12 @@ export const NoteActions = ({
             ) : (
               <>
                 <Button
-                  onClick={() =>
-                    copyToClipboard(
-                      `https://www.aplusplatformsa.com/notes/${noteId}`
-                    )
-                  }
+                  onClick={handleShare}
                   className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
+
                 <Button
                   onClick={() => handleAction(onPurchase)}
                   className="w-full bg-primary hover:bg-primary/90 flex items-center gap-2"
@@ -522,6 +543,7 @@ export const NoteActions = ({
                   <ShoppingCart className="h-4 w-4" />{" "}
                   {price > 0 ? `شراء الآن (${price} ريال)` : "الحصول مجاناً"}
                 </Button>
+
                 {!isAuthenticated && price > 0 && (
                   <p className="text-xs text-red-500 text-center mt-2">
                     يجب تسجيل الدخول أولاً للشراء.
@@ -536,6 +558,7 @@ export const NoteActions = ({
     </Card>
   );
 };
+
 interface ContactMethodProps {
   method?: string;
 }
