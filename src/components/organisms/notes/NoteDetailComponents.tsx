@@ -392,15 +392,12 @@ export const NoteActions = ({
    * Copy or share note info
    */
   const handleShare = async () => {
-    const shareText = `${noteTitle}\n\n${
-      noteDescription || ""
-    }\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`;
+    const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`;
 
     try {
       if (navigator.share) {
         await navigator.share({
-          title: noteTitle,
-          text: `${noteDescription || ""}`,
+          text: shareText,
           url: `https://www.aplusplatformsa.com/notes/${noteId}`,
         });
       } else {
