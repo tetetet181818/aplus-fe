@@ -69,7 +69,7 @@ const UserDashboardPage = () => {
     return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 
-  console.log(user);
+  console.log(user?.purchased_notes);
 
   // ----------------- UI -----------------
   return (
