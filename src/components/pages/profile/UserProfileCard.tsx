@@ -16,17 +16,17 @@ import { User } from "@/types";
 interface UserProfileCardProps {
   currentUser: User;
   onEditProfile: () => void;
-  userNotesCount: number;
-  purchasedNotesCount: number;
-  totalEarnings: number;
+  userNotesCount?: number;
+  purchasedNotesCount?: number;
+  totalEarnings?: number;
 }
 
 const UserProfileCard = ({
   currentUser,
   onEditProfile = () => console.log("Edit profile clicked"),
-  userNotesCount = 5,
-  purchasedNotesCount = 3,
-  totalEarnings = 1200,
+  userNotesCount,
+  purchasedNotesCount,
+  totalEarnings,
 }: Partial<UserProfileCardProps>) => {
   if (!currentUser) return null;
 
