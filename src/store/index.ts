@@ -5,6 +5,7 @@ import { withdrawalApi } from "./api/withdrawal.api";
 import { dashboardApi } from "./api/dashboard.api";
 import { notificationsApi } from "./api/notification.api";
 import { salesApi } from "./api/sales.api";
+import { customerRatingApi } from "./api/customer-rating.api";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [salesApi.reducerPath]: salesApi.reducer,
+    [customerRatingApi.reducerPath]: customerRatingApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -22,7 +24,8 @@ export const store = configureStore({
       withdrawalApi.middleware,
       dashboardApi.middleware,
       notificationsApi.middleware,
-      salesApi.middleware
+      salesApi.middleware,
+      customerRatingApi.middleware
     ),
 });
 
