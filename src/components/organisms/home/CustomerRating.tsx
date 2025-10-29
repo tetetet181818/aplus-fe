@@ -136,7 +136,7 @@ export default function CustomerRating() {
                   <div className="flex flex-col items-center text-center space-y-4">
                     <Quote className="size-8 text-primary/40" />
                     <div className="flex gap-1">{renderStars(item.rating)}</div>
-                    <p className="text-gray-700 text-base leading-relaxed line-clamp-5">
+                    <p className="text-gray-700 text-base leading-relaxed line-clamp-3">
                       {item.comment}
                     </p>
                   </div>
@@ -174,7 +174,6 @@ export default function CustomerRating() {
           </div>
         </div>
 
-        {/* Add rating button */}
         {!userRatedBefore && !userRatedBeforeLoading && (
           <div className="w-full flex justify-center items-center mt-16">
             <Button
