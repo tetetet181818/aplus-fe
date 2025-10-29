@@ -3,6 +3,7 @@ import FeaturesSection from "@/components/organisms/home/FeaturesSection";
 import BuyerSellerSection from "@/components/organisms/home/BuyerSellerSection";
 import CallToActionSection from "@/components/organisms/home/CallToActionSection";
 import HowItWorksSection from "@/components/organisms/home/HowItWorksSection";
+import CustomerRating from "@/components/organisms/home/CustomerRating";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
         <FeaturesSection />
         <BuyerSellerSection />
         <HowItWorksSection />
+        <CustomerRating />
         <CallToActionSection />
       </div>
     </>

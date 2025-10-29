@@ -197,3 +197,13 @@ export interface notificationType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CustomerRatingTypes {
+  _id: string;
+  customerId: string;
+  rating: number;
+  comment: string;
+  fullName: string;
+  createdAt: string;
+  updatedAt: string;
+}
