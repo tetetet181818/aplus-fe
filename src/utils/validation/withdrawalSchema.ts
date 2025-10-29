@@ -16,6 +16,6 @@ export const withdrawalValidationSchema = (availableBalance: number) =>
       .matches(/^SA\d{22}$/, "الآيبان يجب أن يبدأ بـ SA ويتبعه 22 رقمًا"),
     withdrawalAmount: Yup.number()
       .required("قيمة السحب مطلوبة")
-      .min(50, "الحد الأدنى للسحب هو 50 ريال")
+      .min(100, "الحد الأدنى للسحب هو 100 ريال")
       .max(availableBalance, `الحد الأقصى للسحب هو ${availableBalance} ريال`),
   });

@@ -174,8 +174,8 @@ export default function EditWithdrawalDialog({
               id="amount"
               name="amount"
               type="number"
-              placeholder="50 ريال على الأقل"
-              min={50}
+              placeholder="100 ريال على الأقل"
+              min={100}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.amount}
