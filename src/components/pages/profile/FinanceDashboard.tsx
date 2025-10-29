@@ -144,7 +144,7 @@ export default function FinanceDashboard({
                       <span>
                         الحد الأدنى للسحب{" "}
                         <strong className="text-gray-900 dark:text-gray-100">
-                          50 ريال سعودي
+                          100 ريال سعودي
                         </strong>
                       </span>
                     </li>

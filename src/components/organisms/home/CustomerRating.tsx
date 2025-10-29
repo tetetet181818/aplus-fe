@@ -13,11 +13,12 @@ import formatArabicDate from "@/utils/formateTime";
 import { CustomerRatingTypes } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUserRatedBeforeQuery } from "@/store/api/customer-rating.api";
+import useAuth from "@/hooks/useAuth";
 
 export default function CustomerRating() {
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const { user } = useAuth();
   const { customerRating, isLoading } = useCustomerRating();
   const { data: userRatedBefore, isLoading: userRatedBeforeLoading } =
     useUserRatedBeforeQuery(undefined);
@@ -167,14 +168,14 @@ export default function CustomerRating() {
                 </div>
               ))
             ) : (
-              <div className="text-center text-gray-500 py-20 min-w-full">
-                لا توجد تقييمات حتى الآن.
+              <div className="w-full flex justify-center items-center text-center text-gray-500 py-20">
+                <p> لا توجد تقييمات حتى الآن.</p>
               </div>
             )}
           </div>
         </div>
 
-        {!userRatedBefore && !userRatedBeforeLoading && (
+        {user && !userRatedBefore && !userRatedBeforeLoading && (
           <div className="w-full flex justify-center items-center mt-16">
             <Button
               className="flex items-center gap-3 px-8 py-6 rounded-2xl text-white bg-gradient-to-br from-primary to-blue-400"

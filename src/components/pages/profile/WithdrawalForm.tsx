@@ -79,7 +79,7 @@ export default function WithdrawalForm({
             type="number"
             formik={formik}
             disabled={disabled}
-            placeholder="الحد الأدنى 50 ريال"
+            placeholder="الحد الأدنى 100 ريال"
           />
 
           <WithdrawalInfo
@@ -263,13 +263,13 @@ const FormMessages = ({
   remainingWithdrawals: number;
 }) => (
   <>
-    {netEarnings < 50 && (
+    {netEarnings < 100 && (
       <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center mt-2 flex items-center justify-center gap-1">
         <AlertTriangle className="h-4 w-4" />
-        يجب أن يصل رصيدك إلى 50 ريال على الأقل لتتمكن من السحب.
+        يجب أن يصل رصيدك إلى 100 ريال على الأقل لتتمكن من السحب.
       </p>
     )}
-    {remainingWithdrawals <= 0 && netEarnings >= 50 && (
+    {remainingWithdrawals <= 0 && netEarnings >= 100 && (
       <p className="text-xs text-orange-600 dark:text-orange-400 text-center mt-2 flex items-center justify-center gap-1">
         <Info className="h-4 w-4" />
         لقد استنفدت عمليات السحب المتاحة لهذا الشهر.
