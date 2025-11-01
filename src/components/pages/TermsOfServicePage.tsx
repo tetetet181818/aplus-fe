@@ -78,7 +78,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<CheckSquare className="size-4" />}
           title="٢. شروط التسجيل والاستخدام"
@@ -105,7 +104,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<UploadCloud className="size-4" />}
           title="٣. رفع وبيع المحتوى"
@@ -130,7 +128,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<ShieldCheck className="size-4" />}
           title="٤. حقوق المنصة"
@@ -154,29 +151,21 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<CreditCard className="size-4" />}
           title="٥. عمليات الشراء والدفع وسحب الأرباح"
         >
           <ul className="list-disc list-inside space-y-1 pl-4">
-            <li>
-              تتم جميع عمليات الدفع عبر بوابات إلكترونية آمنة (مثل بوابة
-              &quot;ميسر&quot;).
-            </li>
+            <li>تتم جميع عمليات الدفع عبر بوابات إلكترونية آمنة</li>
             <li>
               لا تُسترد المبالغ المدفوعة بعد إتمام عملية الشراء، إلا في حالة
               وجود خطأ واضح مثل عدم تطابق المحتوى مع الوصف.
             </li>
             <li>تخصم المنصة عمولة ثابتة بنسبة 15% من قيمة كل عملية بيع.</li>
             <li>
-              بالإضافة إلى عمولة المنصة، يتم خصم رسوم إضافية من قبل بوابة الدفع
-              &quot;ميسر&quot;، وتشمل الآتي:
+              بالإضافة إلى عمولة المنصة، يتم خصم رسوم إضافية، وتشمل الآتي:
               <ul className="list-disc list-inside pl-6 mt-1">
-                <li>
-                  2.75% من قيمة العملية عند الدفع باستخدام بطاقات فيزا أو
-                  ماستركارد.
-                </li>
+                <li>2.75% من قيمة العملية.</li>
                 <li>
                   {2}
                   <span> ريال رسوم اضافية</span>
@@ -205,7 +194,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<Book className="size-4" />}
           title="٦. المحتوى والملكية الفكرية"
@@ -218,7 +206,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem icon={<UserX className="size-4" />} title="٧. الإيقاف والحذف">
           <ul className="list-disc list-inside space-y-1 pl-4">
             <li>
@@ -231,7 +218,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<MessageSquare className="size-4" />}
           title="٨. التواصل والدعم"
@@ -247,7 +233,6 @@ const TermsOfServicePage = () => {
             </a>
           </p>
         </ListItem>
-
         <ListItem
           icon={<AlertTriangle className="size-4" />}
           title="٩. إخلاء المسؤولية"
@@ -268,7 +253,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<CheckSquare className="size-4" />}
           title="١٠. القبول والالتزام"
@@ -278,7 +262,6 @@ const TermsOfServicePage = () => {
             وفهمتها، وتوافق على الالتزام الكامل بها.
           </p>
         </ListItem>
-
         <ListItem
           icon={<Book className="size-4" />}
           title="١١. الملكية الفكرية"
@@ -294,7 +277,6 @@ const TermsOfServicePage = () => {
             </li>
           </ul>
         </ListItem>
-
         <ListItem
           icon={<Book className="size-4" />}
           title="١٢. استرداد المبالغ"
@@ -303,6 +285,61 @@ const TermsOfServicePage = () => {
             <li>
               لا تُسترد المبالغ بعد الشراء، إلا إذا لم يطابق المحتوى الوصف، ويجب
               تقديم المطالبة خلال 7 أيام من الاستلام.
+            </li>
+          </ul>
+        </ListItem>
+        <ListItem
+          icon={<Book className="size-4" />}
+          title="١٣. المسؤولية والاعتراضات"
+        >
+          <ul className="list-decimal list-inside space-y-2 pl-4 text-right">
+            <li>
+              بما أن البائع هو الذي يقوم بإعداد وتحميل المحتوى، فإنه يُقرّ
+              ويوافق على الآتي:
+              <ul className="list-decimal list-inside space-y-2 pr-4">
+                <li>
+                  يجب أن يكون المحتوى مطابقًا للوصف المعروض داخل المنصّة، وغير
+                  مضلِّل، ولا يحتوي على معلومات غير دقيقة تؤثر على قرار أو تجربة
+                  المشتري.
+                </li>
+                <li>
+                  في حال تبيّن أن المحتوى لا يتوافق مع الوصف أو يُعدّ مضلِّلًا،
+                  فإن للمنصّة الحق في اتخاذ واحد أو أكثر من الإجراءات التالية
+                  دون إشعار مسبق:
+                  <ul className="list-disc list-inside space-y-1 pr-6">
+                    <li>إزالة المحتوى فورًا.</li>
+                    <li>
+                      خصم قيمة الملخص من رصيد البائع وإعادة المبلغ كاملًا
+                      للمشتري.
+                    </li>
+                    <li>حجب أو رفض أرباح البائع المتعلقة بالملخص المخالف.</li>
+                    <li>
+                      إيقاف أو إنهاء حساب البائع في المنصّة عند التكرار أو عند
+                      تقدير المنصّة ضرورة ذلك.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  يتحمّل البائع كافة التبعات المالية الناتجة عن الإخلال، بما في
+                  ذلك على سبيل المثال لا الحصر:
+                  <ul className="list-disc list-inside space-y-1 pr-6">
+                    <li>إعادة قيمة الملخص للمشتري وخصمها من رصيد البائع.</li>
+                    <li>تكاليف الاسترجاع.</li>
+                    <li>
+                      رسوم معالجة الدفع ورسوم تنفيذ الإرجاع (1 ريال لكل عملية).
+                    </li>
+                  </ul>
+                  <p className="mt-1">
+                    ويُعدّ ذلك جزءًا من التزام البائع ضمن العقد بينه وبين
+                    المنصّة.
+                  </p>
+                </li>
+                <li>
+                  تخلي المنصّة مسؤوليتها عن أي خسائر أو مطالبات تنشأ نتيجة محتوى
+                  غير مطابق أو مضلِّل قدّمه البائع، باستثناء ما يوجبه القانون
+                  خلاف ذلك.
+                </li>
+              </ul>
             </li>
           </ul>
         </ListItem>
