@@ -1,4 +1,6 @@
 import { Mail, Clock, Info, AlertTriangle, Send } from "lucide-react";
+import Image from "next/image";
+import { Button } from "../ui/button";
 
 const ContactUsPage = () => {
   return (
@@ -39,6 +41,30 @@ const ContactUsPage = () => {
               <Send className="h-5 w-5 ml-2" />
               إرسال بريد إلكتروني
             </a>
+            <div className="flex items-start gap-4 mb-4 my-10">
+              <Image
+                src="/logos_whatsapp-icon.svg"
+                alt="whatsapp-icon"
+                width={30}
+                height={30}
+                className="mt-1"
+              />
+              <div className="">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                  واتساب
+                </h2>
+              </div>
+            </div>
+            <Button asChild className="text-sm font-medium w-full">
+              <a
+                href="https://wa.me/966511021507"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all"
+              >
+                تواصل معنا على واتساب
+              </a>
+            </Button>
           </section>
 
           <section className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
