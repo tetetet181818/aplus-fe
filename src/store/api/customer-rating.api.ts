@@ -46,6 +46,7 @@ export const customerRatingApi = createApi({
       }),
       invalidatesTags: ["CustomerRating"],
     }),
+
     userRatedBefore: builder.query({
       query: () => ({
         url: `/user-rated-before`,

@@ -57,7 +57,7 @@ export default function AppSidebar({
                     <Link href={item.href}>
                       <SidebarMenuButton
                         aria-label={item.title}
-                        className={`w-full justify-start px-4 py-6 rounded-xl transition-all duration-200 flex items-center gap-3
+                        className={`cursor-pointer w-full justify-start px-4 py-6 rounded-xl transition-all duration-200 flex items-center gap-3
                           ${
                             isActive
                               ? "bg-blue-600 text-white shadow-md"

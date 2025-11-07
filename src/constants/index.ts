@@ -10,6 +10,7 @@ import {
   DollarSign,
   Download,
   BarChart3,
+  Stars,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -96,6 +97,12 @@ export const navigationItems: NavigationItem[] = [
     icon: Download,
     id: "withdrawals",
     href: "/dashboard/withdrawals",
+  },
+  {
+    title: "التقييمات",
+    icon: Stars,
+    id: "customers-rating",
+    href: "/dashboard/customers-rating",
   },
 ];
 

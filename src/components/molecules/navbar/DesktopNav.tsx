@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import UserMenu from "./UserMenu";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
-import { Skeleton } from "@/components/ui/skeleton";
 import { notificationType, User } from "@/types";
 
 /**
@@ -38,18 +37,6 @@ const DesktopNav = ({
   handleMakeNotificationRead,
   loading,
 }: DesktopNavProps) => {
-  // Show skeletons while global data or token is being fetched
-  if (loading) {
-    return (
-      <nav className="hidden md:flex items-center gap-3">
-        <Skeleton className="h-10 w-32 rounded-md" />
-        <Skeleton className="h-10 w-32 rounded-md" />
-        <Skeleton className="h-10 w-10 rounded-full" />
-        <Skeleton className="h-10 w-10 rounded-full" />
-      </nav>
-    );
-  }
-
   return (
     <nav className="hidden md:flex items-center gap-3">
       <Link href="/notes">

@@ -20,6 +20,7 @@ export const authApi = createApi({
         method: "GET",
       }),
       providesTags: ["Auth", "User"],
+      keepUnusedDataFor: 300,
     }),
 
     verify: builder.mutation({
