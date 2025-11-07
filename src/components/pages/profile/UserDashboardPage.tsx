@@ -65,7 +65,7 @@ const UserDashboardPage = () => {
     router.replace(`/profile?${params.toString()}`);
   };
 
-  if (!user) {
+  if (!loading && !user) {
     return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 

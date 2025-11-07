@@ -26,8 +26,14 @@ export default function useAuth() {
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
   const [filterFullName, setFilterFullName] = useState("");
-  const { data: authData, isLoading: isCheckAuthLoading } =
-    useCheckAuthQuery(undefined);
+  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery(
+    undefined,
+    {
+      refetchOnMountOrArgChange: false,
+      refetchOnFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
   /** Mutations */
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();

@@ -8,6 +8,7 @@ export default function useCustomerRating() {
   const { data, isLoading } = useGetAllCustomerRatingQuery(undefined);
   const [createCustomerRating, { isLoading: isCreating }] =
     useCreateCustomerRatingMutation();
+
   const handelCreateCustomerRating = async (values: any) => {
     const res = await createCustomerRating(values);
     if (res?.data) {

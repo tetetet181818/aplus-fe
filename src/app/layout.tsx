@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 import { Providers } from "@/utils/Providers";
 import Layout from "@/components/templates/Layout";
-
+import { Tajawal } from "next/font/google";
 export const metadata: Metadata = {
   title: "سوق الملخصات الجامعية",
   description:
@@ -45,6 +45,12 @@ export const metadata: Metadata = {
   },
 };
 
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  variable: "--font-tajawal",
+  weight: ["400", "500", "700", "800"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -52,19 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Tajawal:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
         dir="rtl"
-        style={{
-          fontFamily: "Tajawal, sans-serif",
-          width: "100%",
-          overflowX: "hidden",
-        }}
+        className={`${tajawal.className} overflow-x-hidden w-screen`}
       >
         <Providers>
           <Layout>{children}</Layout>

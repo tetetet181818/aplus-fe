@@ -1,9 +1,11 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "@/store";
+import store from "@/store";
 import { ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor } from "@/store";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -36,7 +38,11 @@ function ErrorFallback({ error }: { error: Error }) {
 export function Providers({ children }: ProvidersProps) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Provider store={store}>{children}</Provider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {children}
+        </PersistGate>
+      </Provider>
     </ErrorBoundary>
   );
 }
