@@ -115,6 +115,7 @@ const UserDashboardPage = () => {
                 })
               }
               loading={userNotesLoading}
+              authLoading={loading}
             />
           )}
         </TabsContent>
@@ -138,14 +139,14 @@ const UserDashboardPage = () => {
         </TabsContent>
 
         <TabsContent value="earnings" className="mt-6">
-          <EarningsTab currentUser={user} />
+          <EarningsTab currentUser={user} authLoading={loading} />
         </TabsContent>
 
         <TabsContent value="notesLiked" className="mt-6">
           {likedNotesLoading ? (
             <NoteCardSkeleton />
           ) : (
-            <NotesLikedTab notes={likedNotes} />
+            <NotesLikedTab notes={likedNotes} authLoading={loading} />
           )}
         </TabsContent>
       </Tabs>
