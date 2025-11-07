@@ -52,9 +52,8 @@ const AddCoustomerRateDialog = ({
           resetForm();
           onOpenChange(false);
         }
-      } catch (error) {
-        console.log(error);
-      }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
     },
   });
 

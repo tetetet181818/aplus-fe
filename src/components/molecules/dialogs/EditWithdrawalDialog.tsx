@@ -62,7 +62,6 @@ export default function EditWithdrawalDialog({
     },
     validationSchema: editWithdrawalValidationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       await handleUpdateWithdrawal({
         withdrawalId: selectWithdrawal._id,
         updateData: values,

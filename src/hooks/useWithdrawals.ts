@@ -74,7 +74,6 @@ export default function useWithdrawals() {
       }
       return res;
     } catch (error) {
-      console.log((error as { message: string })?.message);
       toast.error((error as { message: string })?.message);
     }
   };

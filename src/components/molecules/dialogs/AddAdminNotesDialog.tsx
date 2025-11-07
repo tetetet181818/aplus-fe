@@ -46,7 +46,6 @@ export default function AddAdminNotesDialog({
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       await handleAddAdminNote(withdrawalId, values.note);
-      console.log(values.note);
       resetForm();
       onOpenChange(false);
     },

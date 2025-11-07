@@ -68,9 +68,8 @@ export default function UpdateReviewsDialog({
         });
         if (res) resetForm();
         onOpenChange(false);
-      } catch (error) {
-        console.error("Error updating review:", error);
-      }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
     },
   });
 

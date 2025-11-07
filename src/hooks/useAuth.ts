@@ -99,7 +99,6 @@ export default function useAuth() {
       toast.success(response?.message);
       return response;
     } catch (error) {
-      console.log("Login Error:", error);
       toast.error((error as { data: { message?: string } })?.data?.message);
     }
   };

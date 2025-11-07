@@ -25,7 +25,6 @@ export default function VerifyClient() {
         toast.success(res?.message);
         setTimeout(() => router.push("/"), 1000);
       } catch (err) {
-        console.log("Verification failed:", err);
         toast.error((err as { data?: { message?: string } })?.data?.message);
       }
     };

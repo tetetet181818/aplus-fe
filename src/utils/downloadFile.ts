@@ -27,8 +27,8 @@ export async function downloadFile({
 
     document.body.removeChild(link);
     window.URL.revokeObjectURL(blobUrl);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Download failed:", error);
     const fileNameFromUrl = noteUrl.split("/").pop()?.split("?")[0] || "note";
     const finalFileName = `${noteName || fileNameFromUrl}.pdf`;
 
