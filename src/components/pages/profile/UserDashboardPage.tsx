@@ -69,8 +69,6 @@ const UserDashboardPage = () => {
     return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 
-  console.log(user?.purchased_notes);
-
   // ----------------- UI -----------------
   return (
     <div className="py-8 px-4 md:px-6">

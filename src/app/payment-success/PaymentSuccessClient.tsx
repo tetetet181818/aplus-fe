@@ -45,8 +45,8 @@ const PaymentSuccessClient = () => {
         if (res?.data) {
           router.push(`/notes/${noteId}`);
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Payment confirmation error:", error);
         toast.error("حدث خطأ أثناء تأكيد عملية الدفع.");
       }
     };

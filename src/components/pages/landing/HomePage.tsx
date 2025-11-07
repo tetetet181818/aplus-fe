@@ -1,4 +1,5 @@
 import HeroSection from "@/components/organisms/home/HeroSection";
+
 import FeaturesSection from "@/components/organisms/home/FeaturesSection";
 import BuyerSellerSection from "@/components/organisms/home/BuyerSellerSection";
 import CallToActionSection from "@/components/organisms/home/CallToActionSection";

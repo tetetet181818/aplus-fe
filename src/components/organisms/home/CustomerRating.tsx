@@ -86,8 +86,6 @@ export default function CustomerRating() {
       dir="rtl"
       className="relative w-full overflow-hidden bg-gradient-to-br from-white via-purple-50 to-blue-50 py-20 px-4"
     >
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] bg-center opacity-5"></div>
-
       <div className="relative max-w-7xl mx-auto">
         <div className="flex justify-center items-center">
           <div className="text-center space-y-4 mb-16">
