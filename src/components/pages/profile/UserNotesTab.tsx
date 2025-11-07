@@ -16,6 +16,7 @@ import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
 import { Note } from "@/types";
 import { useRouter } from "next/navigation";
+import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 
 interface UserNotesTabProps {
   notes: Note[];
@@ -25,6 +26,7 @@ interface UserNotesTabProps {
 
   /** Loading state for download actions */
   loading: boolean;
+  authLoading: boolean;
 }
 
 /**
@@ -44,6 +46,7 @@ const UserNotesTab = ({
   onDownloadRequest,
   router,
   loading,
+  authLoading,
 }: UserNotesTabProps) => {
   if (!notes || notes.length === 0) {
     return (
@@ -62,6 +65,10 @@ const UserNotesTab = ({
         }
       />
     );
+  }
+
+  if (authLoading) {
+    return <NoteCardSkeleton />;
   }
 
   return (

@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import useNotes from "@/hooks/useNotes";
 import NoResults from "@/components/atoms/NoResults";
+import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 
 interface Note {
   _id: string;
@@ -20,8 +21,18 @@ interface Note {
   college: string;
 }
 
-const NotesLikedTab = ({ notes }: { notes: Note[] }) => {
+const NotesLikedTab = ({
+  notes,
+  authLoading,
+}: {
+  notes: Note[];
+  authLoading: boolean;
+}) => {
   const { removeNoteFromLikeList, unlikeLoading } = useNotes();
+
+  if (authLoading) {
+    return <NoteCardSkeleton />;
+  }
 
   if (notes?.length === 0) {
     return (

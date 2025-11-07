@@ -8,6 +8,7 @@ import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
 import { Note } from "@/types";
 import { useRouter } from "next/navigation";
+import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 
 interface PurchasedNote extends Note {
   saleId: string;
@@ -37,6 +38,10 @@ const PurchasedNotesTab = ({
         }
       />
     );
+  }
+
+  if (loading) {
+    return <NoteCardSkeleton />;
   }
 
   return (

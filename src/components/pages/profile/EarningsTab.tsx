@@ -6,10 +6,12 @@ import { User } from "@/types";
 import { useFormik, FormikHelpers } from "formik";
 import useWithdrawals from "@/hooks/useWithdrawals";
 import { withdrawalValidationSchema } from "@/utils/validation/withdrawalSchema";
+import EarningsPageSkeleton from "@/components/skeletons/EarningsPageSkeleton";
 
 /** Props for EarningsTab */
 interface EarningsTabProps {
   currentUser: User;
+  authLoading: boolean;
 }
 
 /** Values for withdrawal form */
@@ -21,7 +23,7 @@ interface WithdrawalFormValues {
 }
 
 /** Earnings tab showing balance, withdrawals and withdrawal form */
-const EarningsTab = ({ currentUser }: EarningsTabProps) => {
+const EarningsTab = ({ currentUser, authLoading }: EarningsTabProps) => {
   const {
     handleCreateWithdrawal,
     createWithdrawalLoading,
@@ -56,6 +58,10 @@ const EarningsTab = ({ currentUser }: EarningsTabProps) => {
       if (res) resetForm();
     },
   });
+
+  if (authLoading) {
+    return <EarningsPageSkeleton />;
+  }
 
   return (
     <div className="space-y-6 lg:px-10 sm:px-0">

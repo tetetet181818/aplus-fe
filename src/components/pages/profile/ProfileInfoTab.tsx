@@ -23,6 +23,7 @@ import useAuth from "@/hooks/useAuth";
 import { User } from "@/types";
 import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
 import { toast } from "sonner";
+import ProfileInfoSkeleton from "@/components/skeletons/ProfileInfoSkeleton";
 
 /**
  * Renders the user's profile information and actions (edit, delete, reset password).
@@ -47,6 +48,7 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
     navigator.clipboard.writeText(text);
   };
 
+  if (loading) return <ProfileInfoSkeleton />;
   if (!user) return null;
 
   return (
