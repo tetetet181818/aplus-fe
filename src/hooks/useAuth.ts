@@ -7,6 +7,7 @@ import {
   useDeleteAccountMutation,
   useForgetPasswordMutation,
   useGetAllUsersQuery,
+  useGetBestSellerUsersQuery,
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
@@ -173,6 +174,9 @@ export default function useAuth() {
     window.location.reload();
   };
 
+  const { data: getBestSellerUsers, isLoading: getBestSellerUsersLoading } =
+    useGetBestSellerUsersQuery(undefined);
+
   const loading =
     isCheckAuthLoading ||
     isLoginLoading ||
@@ -190,6 +194,8 @@ export default function useAuth() {
 
     /** User management */
     allUsers: allUsers?.data?.data,
+    getBestSellerUsers: getBestSellerUsers?.data,
+    getBestSellerUsersLoading,
     usersLoading,
     currentPageUser,
     setCurrentPageUser,

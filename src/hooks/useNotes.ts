@@ -4,6 +4,7 @@ import {
   useAddReviewToNoteMutation,
   useCreateNoteMutation,
   useGetAllNotesQuery,
+  useGetBestSellerNotesQuery,
   useGetLikedNotesQuery,
   useGetUserNotesQuery,
   useMakeUnlikeNoteMutation,
@@ -160,6 +161,9 @@ export default function useNotes() {
     setMinPrice(false);
   };
 
+  const { data: bestSellerNotes, isLoading: bestSellerNotesLoading } =
+    useGetBestSellerNotesQuery(undefined);
+
   // Pagination calculations
   const total = data?.pagination?.total || 0;
   const totalPages = data?.pagination?.totalPages || 1;
@@ -196,6 +200,8 @@ export default function useNotes() {
     likedNotesLoading,
     likedNotes: likedNotes?.data,
     removeNoteFromLikeList,
+    bestSellerNotes: bestSellerNotes?.data,
+    bestSellerNotesLoading,
     unlikeLoading,
     purchaseLoading,
     handlePurchaseNote,

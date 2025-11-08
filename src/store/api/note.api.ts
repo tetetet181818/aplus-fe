@@ -84,6 +84,11 @@ export const noteApi = createApi({
       invalidatesTags: ["Note"],
     }),
 
+    getBestSellerNotes: builder.query({
+      query: () => "/best-sellers-notes",
+      providesTags: ["Note"],
+    }),
+
     /** Toggle note like state */
     toggleLike: builder.query({
       query: ({ noteId }: { noteId: string }) => ({
@@ -216,4 +221,5 @@ export const {
   useUpdateReviewFromNoteMutation,
   useCreatePaymentLinkMutation,
   useUpdateNoteMutation,
+  useGetBestSellerNotesQuery,
 } = noteApi;

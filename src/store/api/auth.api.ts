@@ -75,6 +75,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth", "User"],
     }),
+
     forgetPassword: builder.mutation({
       query: (email) => ({
         url: "/forget-password",
@@ -124,6 +125,14 @@ export const authApi = createApi({
       }),
       providesTags: ["Auth", "User"],
     }),
+
+    getBestSellerUsers: builder.query({
+      query: () => ({
+        url: `/best-sellers`,
+        method: "GET",
+      }),
+      providesTags: ["Auth", "User"],
+    }),
   }),
 });
 
@@ -141,4 +150,5 @@ export const {
   useResetPasswordMutation,
   useGetUserByIdQuery,
   useGetAllUsersQuery,
+  useGetBestSellerUsersQuery,
 } = authApi;
