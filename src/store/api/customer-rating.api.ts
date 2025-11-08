@@ -54,6 +54,30 @@ export const customerRatingApi = createApi({
       }),
       providesTags: ["CustomerRating"],
     }),
+
+    publishCustomerRate: builder.mutation({
+      query: (id) => ({
+        url: `publish/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["CustomerRating"],
+    }),
+
+    unPublishCustomerRate: builder.mutation({
+      query: (id) => ({
+        url: `unpublish/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["CustomerRating"],
+    }),
+
+    getRatingDashboard: builder.query({
+      query: () => ({
+        url: `/get-rating-dashboard`,
+        method: "GET",
+      }),
+      providesTags: ["CustomerRating"],
+    }),
   }),
 });
 
@@ -63,4 +87,7 @@ export const {
   useUpdateCustomerRatingMutation,
   useDeleteCustomerRatingMutation,
   useUserRatedBeforeQuery,
+  usePublishCustomerRateMutation,
+  useUnPublishCustomerRateMutation,
+  useGetRatingDashboardQuery,
 } = customerRatingApi;

@@ -205,5 +205,6 @@ export interface CustomerRatingTypes {
   comment: string;
   fullName: string;
   createdAt: string;
+  isPublish: boolean;
   updatedAt: string;
 }
