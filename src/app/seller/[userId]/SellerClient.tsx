@@ -6,14 +6,11 @@ import { BookOpen, School } from "lucide-react";
 import NoteCard from "@/components/organisms/notes/NoteCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetUserByIdQuery } from "@/store/api/auth.api";
-import useAuth from "@/hooks/useAuth";
 import { Note } from "@/types";
 
 const SellerProfilePage = ({ userId }: { userId: string }) => {
-  const { token } = useAuth();
   const { data, isLoading: loading } = useGetUserByIdQuery({
     id: userId,
-    token: token || "",
   });
 
   const sellerData = data?.data;

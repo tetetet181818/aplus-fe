@@ -14,6 +14,7 @@ export type User = {
   likesList?: Like[];
   createdAt: string;
   updatedAt: string;
+  badgeSales: boolean;
 };
 
 export interface RegisterCredentials {

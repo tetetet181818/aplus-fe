@@ -17,6 +17,7 @@ import {
   Edit3,
   Trash2,
   Link2,
+  Award,
 } from "lucide-react";
 import UpdateInfoDialog from "../../molecules/dialogs/UpdateInfoDialog";
 import useAuth from "@/hooks/useAuth";
@@ -24,6 +25,12 @@ import { User } from "@/types";
 import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
 import { toast } from "sonner";
 import ProfileInfoSkeleton from "@/components/skeletons/ProfileInfoSkeleton";
+import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 /**
  * Renders the user's profile information and actions (edit, delete, reset password).
@@ -94,6 +101,37 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
               label="الجامعة"
               value={user.university || "لم يتم التحديد"}
             />
+
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+              <div className="p-2 rounded-full bg-primary/10 dark:bg-primary/20">
+                <Award className="h-5 w-5 text-primary dark:text-primary-light" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                  الشارات
+                </p>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" className="p-0">
+                      <p className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mt-1">
+                        {user?.badgeSales === true && (
+                          <Image
+                            src={"/best-sales.png"}
+                            alt=""
+                            width={30}
+                            height={30}
+                            className="my-2"
+                          />
+                        )}
+                      </p>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p> شارة المبيعات الممتازة</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
 
             {/* Actions */}
             <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3 justify-center">
