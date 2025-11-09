@@ -10,7 +10,7 @@ import BestSellerSection from "@/components/organisms/home/BestSellerSection";
 export default function HomePage() {
   return (
     <>
-      <div className="bg-gradient-to-b from-sky-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900">
+      <div className="w-screen overflow-x-hidden">
         <HeroSection />
         <FeaturesSection />
         <BuyerSellerSection />

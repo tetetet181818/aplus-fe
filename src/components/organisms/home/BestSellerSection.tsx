@@ -14,7 +14,7 @@ export default function BestSellerSection() {
     return <LoadingSpinner message="" />;
   }
   return (
-    <section className="w-screen mx-auto py-10">
+    <section className="w-full mx-auto py-10 overflow-x-hidden">
       <div className="flex flex-col items-center my-10 text-center">
         <h1 className="text-2xl font-bold">
           الأكثر مبيعًا في منصة <span className="text-primary">أ+</span>
