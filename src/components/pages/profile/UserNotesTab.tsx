@@ -11,12 +11,14 @@ import {
   Download,
   Loader,
   BookOpen,
+  ListCollapse,
 } from "lucide-react";
 import NoResults from "@/components/atoms/NoResults";
 import Image from "next/image";
 import { Note } from "@/types";
 import { useRouter } from "next/navigation";
 import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
+import Link from "next/link";
 
 interface UserNotesTabProps {
   notes: Note[];
@@ -123,6 +125,15 @@ const UserNotesTab = ({
                   {note.rating ? note.rating.toFixed(1) : "N/A"}
                 </div>
                 <div className="flex gap-2 flex-wrap">
+                  <Button variant="outline" size="sm">
+                    <Link
+                      href={`/details-note/${note._id}`}
+                      className="flex items-center gap-2"
+                    >
+                      <ListCollapse className="h-4 w-4 ml-1" />
+                      التفاصيل
+                    </Link>
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
