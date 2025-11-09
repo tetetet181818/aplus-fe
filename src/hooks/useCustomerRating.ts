@@ -7,7 +7,6 @@ import {
   usePublishCustomerRateMutation,
   useUnPublishCustomerRateMutation,
 } from "../store/api/customer-rating.api";
-import { CustomerRatingTypes } from "@/types";
 
 export default function useCustomerRating() {
   const { data, isLoading } = useGetAllCustomerRatingQuery(undefined);
@@ -27,7 +26,10 @@ export default function useCustomerRating() {
     return false;
   };
 
-  const handelCreateCustomerRating = async (values: CustomerRatingTypes) => {
+  const handelCreateCustomerRating = async (values: {
+    rating: number;
+    comment: string;
+  }) => {
     const res = await createCustomerRating(values);
     if (res?.data) {
       toast.success("تم إضافة التقييم بنجاح");
