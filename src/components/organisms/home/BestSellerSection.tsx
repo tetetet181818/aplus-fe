@@ -5,11 +5,14 @@ import BestSellerNotes from "@/components/molecules/BestSellerNotes";
 import BestSellerUsers from "@/components/molecules/BestSellerUsers";
 import useNotes from "@/hooks/useNotes";
 import useAuth from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/atoms/LoadingSpinner";
 
 export default function BestSellerSection() {
   const { bestSellerNotes, bestSellerNotesLoading } = useNotes();
   const { getBestSellerUsers, getBestSellerUsersLoading } = useAuth();
-  console.log(getBestSellerUsers);
+  if (getBestSellerUsersLoading || bestSellerNotesLoading) {
+    return <LoadingSpinner message="" />;
+  }
   return (
     <section className="w-screen mx-auto py-10">
       <div className="flex flex-col items-center my-10 text-center">

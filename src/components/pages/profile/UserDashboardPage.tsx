@@ -9,6 +9,7 @@ import {
   ShoppingBag,
   DollarSign,
   Heart,
+  ChartLine,
 } from "lucide-react";
 
 import UserNotesTab from "@/components/pages/profile/UserNotesTab";
@@ -24,6 +25,7 @@ import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
 import useNoteDetail from "@/hooks/useNoteDetail";
 import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
 import { downloadFile } from "@/utils/downloadFile";
+import MyStatisticsTab from "./MyStatisticsTab";
 
 /**
  * UserDashboardPage
@@ -73,18 +75,19 @@ const UserDashboardPage = () => {
   return (
     <div className="py-8 px-4 md:px-6">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-20">
-        <TabsList className="w-full h-auto grid grid-cols-1 md:grid-cols-5">
+        <TabsList className="w-full h-auto grid grid-cols-1 md:grid-cols-6">
           {[
             { value: "profile", icon: UserIcon, label: "معلوماتي" },
             { value: "my-notes", icon: BookOpen, label: "ملخصاتي" },
             { value: "purchased", icon: ShoppingBag, label: "مشترياتي" },
             { value: "earnings", icon: DollarSign, label: "أرباحي" },
             { value: "notesLiked", icon: Heart, label: "إعجاباتي" },
+            { value: "myStatistics", icon: ChartLine, label: "احصائياتي " },
           ].map(({ value, icon: Icon, label }) => (
             <TabsTrigger
               key={value}
               value={value}
-              className="py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:shadow-lg"
+              className="cursor-pointer py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:shadow-lg"
             >
               <Icon className="size-4" />
               <span>{label}</span>
@@ -146,6 +149,10 @@ const UserDashboardPage = () => {
           ) : (
             <NotesLikedTab notes={likedNotes} authLoading={loading} />
           )}
+        </TabsContent>
+
+        <TabsContent value="myStatistics" className="mt-6">
+          <MyStatisticsTab />
         </TabsContent>
       </Tabs>
 

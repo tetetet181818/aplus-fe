@@ -20,7 +20,27 @@ export const salesApi = createApi({
       }),
       providesTags: ["Sales"],
     }),
+
+    getSalesUser: builder.query({
+      query: ({ page, limit }) => ({
+        url: `/get-sales-user?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: ["Sales"],
+    }),
+
+    getSalesUserStats: builder.query({
+      query: (sellerId: string) => ({
+        url: `/stats/${sellerId}`,
+        method: "GET",
+      }),
+      providesTags: ["Sales"],
+    }),
   }),
 });
 
-export const { useGetSingleSaleQuery } = salesApi;
+export const {
+  useGetSingleSaleQuery,
+  useGetSalesUserQuery,
+  useGetSalesUserStatsQuery,
+} = salesApi;
