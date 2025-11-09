@@ -15,7 +15,7 @@ export default function BestSellerUsers({
   data,
   loading,
 }: {
-  data: {
+  data?: {
     _id: number;
     fullName: string;
     numberOfSales: number;
@@ -30,6 +30,15 @@ export default function BestSellerUsers({
       </div>
     );
   }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-20 text-gray-500 font-medium">
+        لا توجد بيانات للبائعين حتى الآن
+      </div>
+    );
+  }
+
   return (
     <Carousel className="w-full max-w-6xl mx-auto">
       <CarouselContent>
@@ -39,9 +48,7 @@ export default function BestSellerUsers({
             className="md:basis-1/3 sm:basis-1/2 basis-full flex justify-center"
           >
             <Card className="group w-full h-full flex flex-col justify-center items-center border-0 rounded-3xl overflow-hidden shadow-sm transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] bg-white">
-              {/* Header with Avatar and Background */}
               <div className="relative w-full pt-8 pb-6 flex flex-col items-center bg-primary/5 group-hover:bg-primary/10">
-                {/* Decorative Elements */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
 
                 <div className="relative">
@@ -56,14 +63,12 @@ export default function BestSellerUsers({
                     </AvatarFallback>
                   </Avatar>
 
-                  {/* Online Status Indicator */}
                   <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
               </div>
 
               <CardContent className="p-6 flex flex-col justify-between text-center flex-1 w-full">
                 <div className="space-y-4">
-                  {/* Name */}
                   <div>
                     <h3 className="text-xl font-bold text-gray-800 mb-1 truncate">
                       {seller.fullName}
@@ -71,15 +76,13 @@ export default function BestSellerUsers({
                     <div className="w-12 h-1 bg-primary mx-auto rounded-full"></div>
                   </div>
 
-                  {/* University Badge */}
                   <Badge
                     variant="secondary"
                     className="px-4 py-2 rounded-full bg-primary/10 text-primary border-0 font-medium text-sm hover:bg-primary/20 transition-colors"
                   >
-                    🎓 {seller.university}
+                    {seller.university}
                   </Badge>
 
-                  {/* Sales Count */}
                   {seller.numberOfSales && (
                     <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 group-hover:border-primary/20 transition-colors">
                       <p className="text-sm font-semibold text-gray-600 mb-1">
@@ -94,7 +97,6 @@ export default function BestSellerUsers({
                   )}
                 </div>
 
-                {/* Action Button */}
                 <button className="mt-6 w-full py-3 bg-primary text-white rounded-xl font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 hover:bg-primary/90">
                   <Link href={`/seller/${seller._id}`}>عرض الملف الشخصي</Link>
                 </button>
