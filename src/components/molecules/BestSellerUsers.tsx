@@ -90,7 +90,7 @@ export default function BestSellerUsers({
                       </p>
                       <div className="flex items-center justify-center space-x-2 space-x-reverse">
                         <p className="text-2xl font-bold text-primary">
-                          {seller.numberOfSales.toLocaleString()}
+                          {seller.numberOfSales}
                         </p>
                       </div>
                     </div>
