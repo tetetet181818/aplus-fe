@@ -20,7 +20,7 @@ export default function useNotifications() {
     data: notifications,
     isLoading: notificationLoading,
     refetch,
-  } = useGetUserNotificationsQuery(undefined);
+  } = useGetUserNotificationsQuery({});
 
   const [readAllNotification, { isLoading: readAllLoading }] =
     useReadAllNotificationMutation();

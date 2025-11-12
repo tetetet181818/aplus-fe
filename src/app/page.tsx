@@ -56,6 +56,6 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
 };
 
-export default function LandingPage() {
+export default async function LandingPage() {
   return <HomePage />;
 }

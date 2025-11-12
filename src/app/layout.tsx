@@ -3,6 +3,8 @@ import "../styles/globals.css";
 import { Providers } from "@/utils/Providers";
 import Layout from "@/components/templates/Layout";
 import { Tajawal } from "next/font/google";
+import { cookies } from "next/headers";
+import axios from "axios";
 export const metadata: Metadata = {
   title: "سوق الملخصات الجامعية",
   description:
@@ -50,12 +52,35 @@ const tajawal = Tajawal({
   variable: "--font-tajawal",
   weight: ["400", "500", "700", "800"],
 });
+async function getUserFromServer() {
+  try {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
+        : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
-export default function RootLayout({
+    const cookieHeader = (await cookies()).toString();
+
+    const res = await axios.get(`${baseUrl}/auth/check-auth`, {
+      headers: {
+        Cookie: cookieHeader,
+      },
+      withCredentials: true,
+    });
+
+    return res.data?.data;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUserFromServer();
   return (
     <html lang="ar" dir="rtl">
       <body
@@ -63,7 +88,7 @@ export default function RootLayout({
         className={`${tajawal.className} overflow-x-hidden w-screen`}
       >
         <Providers>
-          <Layout>{children}</Layout>
+          <Layout user={user}>{children}</Layout>
         </Providers>
       </body>
     </html>

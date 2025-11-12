@@ -12,12 +12,13 @@ import RegisterDialog from "@/components/molecules/dialogs/RegisterDialog";
 import useAuth from "@/hooks/useAuth";
 import useNotifications from "@/hooks/useNotifications";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
+import { User } from "@/types";
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: User }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-  const { user, isAuthenticated, handleLogout, loading } = useAuth();
+  const { isAuthenticated, handleLogout } = useAuth();
   const {
     notifications,
     notificationLoading,
@@ -59,7 +60,6 @@ export default function Navbar() {
         </Link>
 
         <DesktopNav
-          isAuthenticated={isAuthenticated}
           user={user}
           onLoginOpen={() => setIsLoginDialogOpen(true)}
           onRegisterOpen={() => setIsRegisterDialogOpen(true)}
@@ -69,7 +69,6 @@ export default function Navbar() {
           handleReadAllNotification={handleReadAllNotification}
           handelClearAllNotification={handelClearAllNotification}
           handleMakeNotificationRead={handleMakeNotificationRead}
-          loading={loading}
         />
 
         {/* Mobile Hamburger */}

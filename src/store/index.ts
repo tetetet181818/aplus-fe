@@ -7,20 +7,9 @@ import { notificationsApi } from "./api/notification.api";
 import { salesApi } from "./api/sales.api";
 import { customerRatingApi } from "./api/customer-rating.api";
 
-import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
-
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: [authApi.reducerPath],
-};
-
-const persistedReducer = persistReducer(persistConfig, authApi.reducer);
-
 const store = configureStore({
   reducer: {
-    [authApi.reducerPath]: persistedReducer,
+    [authApi.reducerPath]: authApi.reducer,
     [noteApi.reducerPath]: noteApi.reducer,
     [withdrawalApi.reducerPath]: withdrawalApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
@@ -39,8 +28,6 @@ const store = configureStore({
       customerRatingApi.middleware
     ),
 });
-
-export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
