@@ -12,5 +12,12 @@
   "editor.formatOnSave": true,
   "cSpell.autoFormatConfigFile": false,
   "notebook.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["جديد"]
+  "cSpell.words": ["جديد"],
+  "notebook.markup.fontFamily": "Fira Code",
+  "scm.inputFontFamily": "Fira Code",
+  "terminal.integrated.fontFamily": "Fira Code",
+  "notebook.output.fontFamily": "Fira Code",
+  "editor.inlineSuggest.fontFamily": "Fira Code",
+  "editor.inlayHints.fontFamily": "Fira Code",
+  "editor.codeLensFontFamily": "Fira Code"
 }

@@ -98,7 +98,6 @@ const ReviewItem = ({
   noteId: string;
   setUpdateReview: (updateReview: boolean) => void;
 }) => {
-  console.log(review);
   return (
     <motion.div
       className="flex gap-4 py-4"

@@ -4,6 +4,7 @@ import { PlusCircle } from "lucide-react";
 import UserMenu from "./UserMenu";
 import { NotificationBell } from "@/components/atoms/NotificationBell";
 import { notificationType, User } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * Desktop navigation bar.
@@ -20,6 +21,7 @@ interface DesktopNavProps {
   handelClearAllNotification: () => void;
   handleMakeNotificationRead: (id: string) => void;
   notifications: notificationType[];
+  loading: boolean;
 }
 
 const DesktopNav = ({
@@ -32,7 +34,16 @@ const DesktopNav = ({
   handleReadAllNotification,
   handelClearAllNotification,
   handleMakeNotificationRead,
+  loading,
 }: DesktopNavProps) => {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-3">
+        <Skeleton className="w-32 h-10 rounded-md" />
+        <Skeleton className="w-32 h-10 rounded-md" />
+      </div>
+    );
+  }
   return (
     <nav className="hidden md:flex items-center gap-3">
       <Link href="/notes">

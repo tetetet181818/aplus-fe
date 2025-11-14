@@ -209,3 +209,10 @@ export interface CustomerRatingTypes {
   isPublish: boolean;
   updatedAt: string;
 }
+
+export interface SalesUser {
+  _id: string;
+  createdAt: string;
+  note_title: string;
+  amount: number;
+}

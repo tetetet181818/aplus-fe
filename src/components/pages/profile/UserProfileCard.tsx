@@ -23,7 +23,7 @@ interface UserProfileCardProps {
 
 const UserProfileCard = ({
   currentUser,
-  onEditProfile = () => console.log("Edit profile clicked"),
+  onEditProfile,
   userNotesCount,
   purchasedNotesCount,
   totalEarnings,

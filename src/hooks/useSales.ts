@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { useGetSalesUserQuery } from "@/store/api/sales.api";
+import {
+  useGetSalesUserQuery,
+  useGetUserStatisticsSalesQuery,
+} from "@/store/api/sales.api";
 
 export default function useSales() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const { data: userStatisticsSales, isLoading: userStatisticsSalesLoading } =
+    useGetUserStatisticsSalesQuery(undefined);
 
   const {
     data: salesUserResponse,
@@ -31,6 +36,8 @@ export default function useSales() {
   return {
     salesUser,
     salesUserLoading: salesUserLoading || isFetching,
+    userStatisticsSales,
+    userStatisticsSalesLoading,
     pagination: {
       currentPage,
       totalPages,
