@@ -19,6 +19,8 @@ export default function SalesPerformance() {
     return <SalesClientTableSkeleton />;
   }
 
+  console.log(userStatisticsSales?.sales);
+
   return (
     <Card
       className="border-none bg-transparent shadow-none gap-3 col-span-2"
@@ -74,16 +76,16 @@ export default function SalesPerformance() {
                     </TableCell>
                     <TableCell className="text-right py-4 px-6">
                       <span className="inline-flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-semibold min-w-[60px]">
-                        {sale.amount.toFixed(2)}
+                        {sale?.count}
                       </span>
                     </TableCell>
                     <TableCell className="text-right py-4 px-6">
                       <span className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1 rounded-full text-sm font-semibold min-w-[80px]">
-                        {sale.amount.toFixed(2)} ر.س
+                        {sale?.totalProfit?.toFixed(2)} ر.س
                       </span>
                     </TableCell>
                     <TableCell className="text-right py-4 px-6 text-gray-600 dark:text-gray-300 font-medium">
-                      {formatArabicDate(sale.createdAt)}
+                      {formatArabicDate(sale.date)}
                     </TableCell>
                   </TableRow>
                 )
@@ -125,7 +127,7 @@ export default function SalesPerformance() {
                       عدد المبيعات
                     </p>
                     <span className="inline-flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-2 rounded-lg text-sm font-semibold w-full">
-                      {sale.amount.toFixed(2)}
+                      {sale?.count}
                     </span>
                   </div>
 
@@ -135,7 +137,7 @@ export default function SalesPerformance() {
                       الإيرادات
                     </p>
                     <span className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-2 rounded-lg text-sm font-semibold w-full">
-                      {sale.amount.toFixed(2)} ر.س
+                      {sale?.totalProfit?.toFixed(2)} ر.س
                     </span>
                   </div>
 
@@ -145,7 +147,7 @@ export default function SalesPerformance() {
                       تاريخ المبيعات
                     </p>
                     <p className="text-right text-gray-700 dark:text-gray-300 font-medium">
-                      {formatArabicDate(sale.createdAt)}
+                      {formatArabicDate(sale.date)}
                     </p>
                   </div>
                 </div>

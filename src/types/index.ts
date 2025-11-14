@@ -212,7 +212,8 @@ export interface CustomerRatingTypes {
 
 export interface SalesUser {
   _id: string;
-  createdAt: string;
+  date: string;
   note_title: string;
-  amount: number;
+  totalProfit: number;
+  count: number;
 }
