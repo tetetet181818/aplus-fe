@@ -209,7 +209,6 @@ export default function useDashboard() {
 
   const handleAddAdminNote = async (withdrawalId: string, data: string) => {
     try {
-      console.log(withdrawalId, data);
       const res = await addAdminNote({
         withdrawalId,
         updateData: { adminNotes: data },

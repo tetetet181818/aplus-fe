@@ -44,6 +44,21 @@ export const salesApi = createApi({
       }),
       providesTags: ["Sales"],
     }),
+    getDetailsNoteSales: builder.query({
+      query: ({
+        noteId,
+        page,
+        limit,
+      }: {
+        noteId: string;
+        page: number;
+        limit: number;
+      }) => ({
+        url: `/get-sales-note/${noteId}?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: ["Sales"],
+    }),
   }),
 });
 
@@ -52,4 +67,5 @@ export const {
   useGetSalesUserQuery,
   useGetSalesUserStatsQuery,
   useGetUserStatisticsSalesQuery,
+  useGetDetailsNoteSalesQuery,
 } = salesApi;

@@ -19,8 +19,6 @@ export default function SalesPerformance() {
     return <SalesClientTableSkeleton />;
   }
 
-  console.log(userStatisticsSales?.sales);
-
   return (
     <Card
       className="border-none bg-transparent shadow-none gap-3 col-span-2"
