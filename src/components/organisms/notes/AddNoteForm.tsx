@@ -193,7 +193,7 @@ const AddNoteForm = (): JSX.Element => {
         setCurrentStep(0)
         setOpenSuccessDialog(true)
       } else {
-        toast.error(res?.errors?.[0]?.message)
+        toast.error(res?.error)
       }
     },
   })
