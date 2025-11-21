@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import UserMenu from "./UserMenu";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
-import { notificationType, User } from "@/types";
-import { Skeleton } from "@/components/ui/skeleton";
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { PlusCircle } from 'lucide-react'
+import UserMenu from './UserMenu'
+import { NotificationBell } from '@/components/atoms/NotificationBell'
+import { notificationType, User } from '@/types'
+import { Skeleton } from '@/components/ui/skeleton'
 
 /**
  * Desktop navigation bar.
@@ -12,16 +12,16 @@ import { Skeleton } from "@/components/ui/skeleton";
  * Waits for token readiness before deciding what to show.
  */
 interface DesktopNavProps {
-  user: User | null;
-  onLoginOpen: () => void;
-  onRegisterOpen: () => void;
-  handleLogout: () => void;
-  notificationLoading: boolean;
-  handleReadAllNotification: () => void;
-  handelClearAllNotification: () => void;
-  handleMakeNotificationRead: (id: string) => void;
-  notifications: notificationType[];
-  loading: boolean;
+  user: User | null
+  onLoginOpen: () => void
+  onRegisterOpen: () => void
+  handleLogout: () => void
+  notificationLoading: boolean
+  handleReadAllNotification: () => void
+  handelClearAllNotification: () => void
+  handleMakeNotificationRead: (id: string) => void
+  notifications: notificationType[]
+  loading: boolean
 }
 
 const DesktopNav = ({
@@ -38,16 +38,16 @@ const DesktopNav = ({
 }: DesktopNavProps) => {
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-3">
-        <Skeleton className="w-32 h-10 rounded-md" />
-        <Skeleton className="w-32 h-10 rounded-md" />
+      <div className="hidden items-center justify-center gap-3 sm:flex">
+        <Skeleton className="h-10 w-32 rounded-md" />
+        <Skeleton className="h-10 w-32 rounded-md" />
       </div>
-    );
+    )
   }
   return (
-    <nav className="hidden md:flex items-center gap-3">
+    <nav className="hidden items-center gap-3 md:flex">
       <Link href="/notes">
-        <Button variant="outline" className="text-base hover:bg-primary/10">
+        <Button variant="outline" className="hover:bg-primary/10 text-base">
           تصفح الملخصات
         </Button>
       </Link>
@@ -55,7 +55,7 @@ const DesktopNav = ({
       {user ? (
         <>
           <Link href="/add-note">
-            <Button className="text-base bg-primary hover:bg-primary/90">
+            <Button className="bg-primary hover:bg-primary/90 text-base">
               <PlusCircle size={18} className="ml-2" />
               إضافة ملخص
             </Button>
@@ -76,7 +76,7 @@ const DesktopNav = ({
           <Button
             variant="outline"
             onClick={onLoginOpen}
-            className="text-base border-primary text-primary hover:bg-primary/10 hover:text-primary"
+            className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-base"
             aria-label="تسجيل الدخول"
           >
             تسجيل الدخول
@@ -84,7 +84,7 @@ const DesktopNav = ({
 
           <Button
             onClick={onRegisterOpen}
-            className="text-base bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 text-base"
             aria-label="إنشاء حساب"
           >
             إنشاء حساب
@@ -92,7 +92,7 @@ const DesktopNav = ({
         </>
       )}
     </nav>
-  );
-};
+  )
+}
 
-export default DesktopNav;
+export default DesktopNav
