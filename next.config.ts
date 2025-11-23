@@ -1,21 +1,26 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["images.unsplash.com", "api.dicebear.com", "res.cloudinary.com"],
+    domains: [
+      'images.unsplash.com',
+      'api.dicebear.com',
+      'res.cloudinary.com',
+      'urlyuofgakgubzsuazhd.supabase.co',
+    ],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
       {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
       },
       {
-        protocol: "https",
-        hostname: "api.dicebear.com",
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
       },
     ],
   },
@@ -25,6 +30,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

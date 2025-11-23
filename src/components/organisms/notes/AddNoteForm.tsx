@@ -82,14 +82,14 @@ const stepValidationSchemas = [
         .min(1, 'يجب أن يكون عدد الصفحات على الأقل 1')
         .max(
           MAX_PAGES_PER_NOTE,
-          `يجب أن يكون عدد الصفحات أقل من ${MAX_PAGES_PER_NOTE}`,
+          `يجب أن يكون عدد الصفحات أقل من ${MAX_PAGES_PER_NOTE}`
         ),
       year: Yup.number()
         .required('السنة مطلوبة')
         .min(2020, 'السنة يجب أن تكون 2020 أو بعدها')
         .max(
           new Date().getFullYear() + 5,
-          'السنة يجب أن تكون في المستقبل القريب',
+          'السنة يجب أن تكون في المستقبل القريب'
         ),
       contactMethod: Yup.string()
         .required('طريقة التواصل مطلوبة')
@@ -101,7 +101,7 @@ const stepValidationSchemas = [
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
             const phoneRegex = /^05\d{8}$/
             return emailRegex.test(value) || phoneRegex.test(value)
-          },
+          }
         ),
     }),
   }),
@@ -111,7 +111,7 @@ const stepValidationSchemas = [
       file: Yup.mixed<File>()
         .required('يجب رفع الملف')
         .test('fileType', 'الملف يجب أن يكون PDF', (v) =>
-          v ? v.type === 'application/pdf' : false,
+          v ? v.type === 'application/pdf' : false
         ),
     }),
   }),
@@ -121,7 +121,7 @@ const stepValidationSchemas = [
       cover: Yup.mixed<File>()
         .required('يجب رفع الغلاف')
         .test('fileType', 'الغلاف يجب أن يكون صورة', (v) =>
-          v ? ['image/jpeg', 'image/png', 'image/jpg'].includes(v.type) : false,
+          v ? ['image/jpeg', 'image/png', 'image/jpg'].includes(v.type) : false
         ),
     }),
   }),
@@ -174,7 +174,7 @@ const AddNoteForm = (): JSX.Element => {
       { key: 'cover', component: UploadCoverNote },
       { key: 'review', component: ReviewNote },
     ],
-    [],
+    []
   )
 
   const [currentStep, setCurrentStep] = useState(0)

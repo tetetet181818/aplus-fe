@@ -1,5 +1,7 @@
 'use client'
+
 import { useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {
   useAddReviewToNoteMutation,
   useCreateNoteMutation,
@@ -12,13 +14,15 @@ import {
   useRemoveReviewFromNoteMutation,
   useUpdateReviewFromNoteMutation,
 } from '@/store/api/note.api'
-import { CreateNoteData, ReviewData } from '@/types'
+import { ReviewData } from '@/types'
 import { toast } from 'sonner'
 
 /**
- * Custom hook for handling all note-related operations (CRUD, filters, reviews, purchases, pagination).
+ * Custom hook for handling all note-related operations including file uploads to Supabase
  */
 export default function useNotes() {
+  const supabase = createClientComponentClient()
+
   // Pagination & filters
   const [page, setPage] = useState<number>(1)
   const [limit, setLimit] = useState<number>(10)
@@ -49,15 +53,157 @@ export default function useNotes() {
     title: filterTitle,
   })
 
-  /** Fetch user’s notes */
+  /** Fetch user's notes */
   const { data: userNotes, isLoading: userNotesLoading } = useGetUserNotesQuery(
-    {},
+    {}
   )
 
+  /** Fetch liked notes */
+  const { data: likedNotes, isLoading: likedNotesLoading } =
+    useGetLikedNotesQuery({})
+
+  /** Fetch best seller notes */
+  const { data: bestSellerNotes, isLoading: bestSellerNotesLoading } =
+    useGetBestSellerNotesQuery(undefined)
+
+  // Local loading state for file uploads
+  const [uploadLoading, setUploadLoading] = useState(false)
+
+  // Mutations
+  const [createNote, { isLoading: createNoteLoading }] = useCreateNoteMutation()
   const [addReviewToNote, { isLoading: addReviewLoading }] =
     useAddReviewToNoteMutation()
+  const [removeReviewFromNote, { isLoading: removeReviewLoading }] =
+    useRemoveReviewFromNoteMutation()
+  const [updateReviewFromNote, { isLoading: updateReviewLoading }] =
+    useUpdateReviewFromNoteMutation()
+  const [makeUnlikeNote, { isLoading: unlikeLoading }] =
+    useMakeUnlikeNoteMutation()
+  const [purchaseNote, { isLoading: purchaseLoading }] =
+    usePurchaseNoteMutation()
 
-  /** Add review to a note */
+  /**
+   * Upload PDF file to Supabase Storage
+   * @param file - PDF file to upload
+   * @returns Public URL of uploaded file or null on error
+   */
+  const uploadPDFToSupabase = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+      const filePath = `pdfs/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('notes')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadError) throw uploadError
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('notes').getPublicUrl(filePath)
+
+      return publicUrl
+    } catch (error) {
+      console.error('PDF upload error:', error)
+      toast.error('فشل رفع الملف')
+      return null
+    }
+  }
+
+  /**
+   * Upload cover image to Supabase Storage
+   * @param file - Image file to upload
+   * @returns Public URL of uploaded image or null on error
+   */
+  const uploadCoverToSupabase = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+      const filePath = `images/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('notes')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadError) throw uploadError
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('notes').getPublicUrl(filePath)
+
+      return publicUrl
+    } catch (error) {
+      console.error('Cover upload error:', error)
+      toast.error('فشل رفع الغلاف')
+      return null
+    }
+  }
+
+  /**
+   * Create new note with file and cover uploads
+   * @param noteData - FormData containing note information and files
+   */
+  const handleCreateNote = async (noteData) => {
+    setUploadLoading(true)
+
+    try {
+      const file = noteData.get('file') as File | null
+      const cover = noteData.get('cover') as File | null
+
+      // Validate files
+      if (!file || !cover) {
+        toast.error('الملف والغلاف مطلوبان')
+        return { success: false, error: 'الملف والغلاف مطلوبان' }
+      }
+
+      // Upload files to Supabase
+      const [filePath, coverUrl] = await Promise.all([
+        uploadPDFToSupabase(file),
+        uploadCoverToSupabase(cover),
+      ])
+
+      if (!filePath || !coverUrl) {
+        return { success: false, error: 'فشل رفع الملفات' }
+      }
+
+      // Remove file objects from FormData
+      noteData.delete('file')
+      noteData.delete('cover')
+
+      // Add Supabase URLs to FormData
+      noteData.append('file_path', filePath)
+      noteData.append('cover_url', coverUrl)
+
+      // Send to backend
+      const res = await createNote({ noteData })
+
+      if (res?.data?.message) {
+        toast.success('تم إضافة الملخص بنجاح')
+        return res?.data
+      }
+
+      return res
+    } catch (error) {
+      console.error('Create note error:', error)
+      return {
+        success: false,
+        error: 'برجاء فحص المعلومات وحاول مرة اخرى',
+      }
+    } finally {
+      setUploadLoading(false)
+    }
+  }
+
+  /**
+   * Add review to a note
+   */
   const handelAddReviewToNote = async ({
     noteId,
     reviewData,
@@ -69,10 +215,9 @@ export default function useNotes() {
     if (res) toast.success(res?.data?.message)
   }
 
-  const [removeReviewFromNote, { isLoading: removeReviewLoading }] =
-    useRemoveReviewFromNoteMutation()
-
-  /** Remove review from a note */
+  /**
+   * Remove review from a note
+   */
   const handelRemoveReviewFromNote = async ({
     noteId,
     reviewId,
@@ -84,10 +229,9 @@ export default function useNotes() {
     if (res) toast.success(res?.data?.message)
   }
 
-  const [updateReviewFromNote, { isLoading: updateReviewLoading }] =
-    useUpdateReviewFromNoteMutation()
-
-  /** Update review on a note */
+  /**
+   * Update review on a note
+   */
   const handleUpdateReview = async ({
     noteId,
     reviewId,
@@ -102,39 +246,17 @@ export default function useNotes() {
     return res?.data
   }
 
-  const [createNote, { isLoading: createNoteLoading }] = useCreateNoteMutation()
-
-  /** Create new note */
-  const handleCreateNote = async (noteData: CreateNoteData) => {
-    try {
-      const res = await createNote({ noteData })
-      if (res?.data?.message) toast.success('تم إضافة الملخص بنجاح')
-      return res?.data
-    } catch (error) {
-      return {
-        success: false,
-        error: error || 'برجاء فحص المعلومات وحاول مرة اخرى',
-      }
-    }
-  }
-
-  /** Fetch liked notes */
-  const { data: likedNotes, isLoading: likedNotesLoading } =
-    useGetLikedNotesQuery({})
-
-  const [makeUnlikeNote, { isLoading: unlikeLoading }] =
-    useMakeUnlikeNoteMutation()
-
-  const [purchaseNote, { isLoading: purchaseLoading }] =
-    usePurchaseNoteMutation()
-
-  /** Remove note from liked list */
+  /**
+   * Remove note from liked list
+   */
   const removeNoteFromLikeList = async ({ noteId }: { noteId: string }) => {
     const res = await makeUnlikeNote({ noteId })
     if (res) toast.success(res?.data?.message)
   }
 
-  /** Handle purchase of a note */
+  /**
+   * Handle purchase of a note
+   */
   const handlePurchaseNote = async ({
     noteId,
     invoice_id,
@@ -151,7 +273,9 @@ export default function useNotes() {
     return res
   }
 
-  /** Reset all applied filters */
+  /**
+   * Reset all applied filters
+   */
   const resetFilters = () => {
     setFilterCollage('')
     setFilterUniversity('')
@@ -162,75 +286,79 @@ export default function useNotes() {
     setMinPrice(false)
   }
 
-  const { data: bestSellerNotes, isLoading: bestSellerNotesLoading } =
-    useGetBestSellerNotesQuery(undefined)
-
   // Pagination calculations
   const total = data?.pagination?.total || 0
   const totalPages = data?.pagination?.totalPages || 1
 
-  /** Go to next page */
+  /** Navigate to next page */
   const nextPage = () => {
     if (page < totalPages) setPage((prev) => prev + 1)
   }
 
-  /** Go to previous page */
+  /** Navigate to previous page */
   const prevPage = () => {
     if (page > 1) setPage((prev) => prev - 1)
   }
 
-  /** Jump to a specific page */
+  /** Jump to specific page */
   const goToPage = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) setPage(pageNumber)
   }
 
-  /** Change number of notes per page */
+  /** Change items per page */
   const changeLimit = (newLimit: number) => {
     setLimit(newLimit)
     setPage(1)
   }
 
   return {
+    // Data
     notes: data?.data || [],
+    userNotes: userNotes?.data,
+    likedNotes: likedNotes?.data,
+    bestSellerNotes: bestSellerNotes?.data,
+
+    // Loading states
     notesLoading,
     isFetching,
-    handleCreateNote,
-    createNoteLoading,
+    createNoteLoading: uploadLoading || createNoteLoading,
     userNotesLoading,
-    userNotes: userNotes?.data,
     likedNotesLoading,
-    likedNotes: likedNotes?.data,
-    removeNoteFromLikeList,
-    bestSellerNotes: bestSellerNotes?.data,
     bestSellerNotesLoading,
     unlikeLoading,
     purchaseLoading,
+    addReviewLoading,
+    removeReviewLoading,
+    updateReviewLoading,
+
+    // Actions
+    handleCreateNote,
+    removeNoteFromLikeList,
     handlePurchaseNote,
     handelAddReviewToNote,
-    addReviewLoading,
     handelRemoveReviewFromNote,
-    removeReviewLoading,
     handleUpdateReview,
-    updateReviewLoading,
+
+    // Filters
     filterUniversity,
     setFilterUniversity,
     filterCollage,
     setFilterCollage,
     filterYear,
     setFilterYear,
-    resetFilters,
-    sortOrder,
-    maxDownloads,
-    maxPrice,
-    minPrice,
-    setSortOrder,
-    setMaxDownloads,
-    setMaxPrice,
-    setMinPrice,
     filterTitle,
     setFilterTitle,
+    sortOrder,
+    setSortOrder,
+    maxDownloads,
+    setMaxDownloads,
+    maxPrice,
+    setMaxPrice,
+    minPrice,
+    setMinPrice,
+    resetFilters,
 
-    // Pagination handlers
+    // Pagination
     pagination: {
       total,
       page,
