@@ -1,31 +1,31 @@
-"use client";
+'use client'
 
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react'
 
-import NotesListHeader from "@/components/organisms/notes/NotesListHeader";
-import NotesSearchBar from "@/components/organisms/notes/NotesSearchBar";
-import NotesSortDropdown from "@/components/organisms/notes/NotesSortDropdown";
-import NotesFilterSection from "@/components/organisms/notes/NotesFilterSection";
-import NotesResultsSection from "@/components/organisms/notes/NotesResultsSection";
-import NoteCardSkeleton from "@/components/atoms/NotesSkeleton";
-import Pagination from "@/components/atoms/Pagination";
+import NotesListHeader from '@/components/organisms/notes/NotesListHeader'
+import NotesSearchBar from '@/components/organisms/notes/NotesSearchBar'
+import NotesSortDropdown from '@/components/organisms/notes/NotesSortDropdown'
+import NotesFilterSection from '@/components/organisms/notes/NotesFilterSection'
+import NotesResultsSection from '@/components/organisms/notes/NotesResultsSection'
+import NoteCardSkeleton from '@/components/atoms/NotesSkeleton'
+import Pagination from '@/components/atoms/Pagination'
 
-import useNotes from "@/hooks/useNotes";
-import useAuth from "@/hooks/useAuth";
-import UserModeSection from "./UserModeSection";
-import { FileText, SearchIcon, User } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import useNotes from '@/hooks/useNotes'
+import useAuth from '@/hooks/useAuth'
+import UserModeSection from './UserModeSection'
+import { FileText, SearchIcon, User } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 const NotesListPage = () => {
   /** UI state */
-  const [searchType, setSearchType] = useState<string>("file");
-  const [showFilters, setShowFilters] = useState(false);
+  const [searchType, setSearchType] = useState<string>('file')
+  const [showFilters, setShowFilters] = useState(false)
 
   /** Hooks */
   const {
@@ -46,7 +46,7 @@ const NotesListPage = () => {
     sortOrder,
     filterTitle,
     setFilterTitle,
-  } = useNotes();
+  } = useNotes()
 
   const {
     allUsers,
@@ -58,13 +58,13 @@ const NotesListPage = () => {
     totalPages,
     handleNextPage,
     handlePrevPage,
-  } = useAuth();
+  } = useAuth()
 
   /** Toggle filters sidebar */
-  const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), []);
+  const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), [])
 
   return (
-    <div className="py-12 px-4 md:px-6">
+    <div className="px-4 py-12 md:px-6">
       {/* Header */}
       <NotesListHeader
         onToggleFilters={toggleFilters}
@@ -79,15 +79,15 @@ const NotesListPage = () => {
       />
 
       {/* Search and Sort Bar */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
-        {searchType === "user" && (
+      <div className="mb-6 flex flex-col items-center gap-4 md:flex-row">
+        {searchType === 'user' && (
           <>
-            <div className="relative flex w-full items-center mr-4">
-              <SearchIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative mr-4 flex w-full items-center">
+              <SearchIcon className="text-muted-foreground absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
 
               <Input
                 type="search"
-                placeholder={"ابحث عن المستخدمين..."}
+                placeholder={'ابحث عن المستخدمين...'}
                 className="pr-10"
                 value={filterFullName}
                 onChange={(e) => setFilterFullName(e.target.value)}
@@ -111,14 +111,14 @@ const NotesListPage = () => {
           </>
         )}
 
-        {searchType === "file" && (
+        {searchType === 'file' && (
           <NotesSearchBar
             searchQuery={filterTitle}
             setSearchQuery={setFilterTitle}
             setSearchType={setSearchType}
           />
         )}
-        {searchType === "file" && (
+        {searchType === 'file' && (
           <NotesSortDropdown
             sortBy={sortOrder}
             onSortChange={setSortOrder}
@@ -129,7 +129,7 @@ const NotesListPage = () => {
         )}
       </div>
 
-      {showFilters && searchType === "file" && (
+      {showFilters && searchType === 'file' && (
         <NotesFilterSection
           years={[2026, 2025, 2023, 2022, 2021]}
           filterUniversity={filterUniversity}
@@ -142,13 +142,13 @@ const NotesListPage = () => {
         />
       )}
 
-      {searchType === "file" ? (
+      {searchType === 'file' ? (
         notesLoading ? (
           <NoteCardSkeleton />
         ) : (
           <>
             <NotesResultsSection filteredNotes={notes} />
-            {pagination?.total > 5 && <Pagination pagination={pagination} />}
+            {pagination?.total > 10 && <Pagination pagination={pagination} />}
           </>
         )
       ) : (
@@ -163,7 +163,7 @@ const NotesListPage = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default NotesListPage;
+export default NotesListPage
