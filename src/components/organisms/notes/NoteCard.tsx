@@ -15,15 +15,14 @@ const NoteCard = ({ note }: { note: Note }) => {
         prefetch={false}
       >
         <Card className="hover:border-primary/30 flex h-full flex-col overflow-hidden rounded-xl border-1 py-0 transition-all duration-300">
-          <div className="relative aspect-[3/2] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 py-0 dark:from-gray-800 dark:to-gray-900">
+          <div className="relative aspect-[3/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 py-0">
             <div className="h-full w-full">
               <Image
                 loading="lazy"
                 src={note.cover_url || ''}
                 alt={`Cover image for ${note.title}`}
-                width={800}
-                height={800}
-                className="rounded-lg object-contain"
+                fill
+                className="rounded-lg object-cover"
               />
             </div>
 

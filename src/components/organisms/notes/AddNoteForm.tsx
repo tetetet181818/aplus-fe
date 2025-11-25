@@ -63,7 +63,6 @@ const initialValues: AddNoteValues = {
  * ============================================================ */
 
 const stepValidationSchemas = [
-  // Step 0: Basic Info
   Yup.object({
     basic: Yup.object({
       title: Yup.string().required('عنوان الملخص مطلوب'),
@@ -105,7 +104,6 @@ const stepValidationSchemas = [
         ),
     }),
   }),
-  // Step 1: File Upload
   Yup.object({
     file: Yup.object({
       file: Yup.mixed<File>()
@@ -115,7 +113,6 @@ const stepValidationSchemas = [
         ),
     }),
   }),
-  // Step 2: Cover Upload
   Yup.object({
     cover: Yup.object({
       cover: Yup.mixed<File>()
@@ -125,7 +122,6 @@ const stepValidationSchemas = [
         ),
     }),
   }),
-  // Step 3: Review
   Yup.object({
     review: Yup.object({
       termsAccepted: Yup.boolean().oneOf([true], 'يجب الموافقة على الشروط'),

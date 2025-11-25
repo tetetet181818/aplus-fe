@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React, { useRef, useState, useCallback } from 'react'
-import Image from 'next/image'
+import Cropper from 'react-easy-crop'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import {
@@ -14,59 +15,108 @@ import {
   ZoomOut,
   RotateCw,
   RotateCcw,
-  FlipHorizontal,
-  FlipVertical,
   RefreshCw,
   Crop,
-  Move,
 } from 'lucide-react'
-import { AddNoteValues } from './AddNoteForm'
-import { FormikProps } from 'formik'
 import { toast } from 'sonner'
+import 'react-easy-crop/react-easy-crop.css'
+import { FormikProps } from 'formik'
+import { AddNoteValues } from './AddNoteForm'
+// Helper function to get cropped image
+const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', (error) => reject(error))
+    image.setAttribute('crossOrigin', 'anonymous')
+    image.src = url
+  })
 
-/** ========== Upload Cover Step (with Preview & Controls) ========== */
+async function getCroppedImg(
+  imageSrc: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  pixelCrop: any,
+  rotation = 0
+): Promise<Blob | null> {
+  const image = await createImage(imageSrc)
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+
+  if (!ctx) return null
+
+  const maxSize = Math.max(image.width, image.height)
+  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
+
+  canvas.width = safeArea
+  canvas.height = safeArea
+
+  ctx.translate(safeArea / 2, safeArea / 2)
+  ctx.rotate((rotation * Math.PI) / 180)
+  ctx.translate(-safeArea / 2, -safeArea / 2)
+
+  ctx.drawImage(
+    image,
+    safeArea / 2 - image.width * 0.5,
+    safeArea / 2 - image.height * 0.5
+  )
+
+  const data = ctx.getImageData(0, 0, safeArea, safeArea)
+
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
+
+  ctx.putImageData(
+    data,
+    Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
+    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
+  )
+
+  return new Promise((resolve) => {
+    canvas.toBlob((file) => resolve(file), 'image/jpeg', 0.95)
+  })
+}
+
+interface UploadCoverNoteProps {
+  formik: FormikProps<AddNoteValues>
+  prevTab: () => void
+  nextTab: () => void
+}
+
 export default function UploadCoverNote({
   formik,
   prevTab,
   nextTab,
-}: {
-  formik: FormikProps<AddNoteValues>
-  prevTab: () => void
-  nextTab: () => Promise<void> | void
-}) {
+}: UploadCoverNoteProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(
-    null,
-  )
+  const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 
-  // Image control states
-  const [zoom, setZoom] = useState(100)
+  // react-easy-crop states
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+
+  // Additional controls
   const [flipH, setFlipH] = useState(false)
   const [flipV, setFlipV] = useState(false)
-  const [brightness, setBrightness] = useState(100)
-  const [contrast, setContrast] = useState(100)
 
-  // Position for panning
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [isPanning, setIsPanning] = useState(false)
-  const [panStart, setPanStart] = useState({ x: 0, y: 0 })
+  const onCropComplete = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (croppedArea: any, croppedAreaPixels: any) => {
+      setCroppedAreaPixels(croppedAreaPixels)
+    },
+    []
+  )
 
-  /** Reset all controls to default */
   const resetControls = () => {
-    setZoom(100)
+    setCrop({ x: 0, y: 0 })
+    setZoom(1)
     setRotation(0)
     setFlipH(false)
     setFlipV(false)
-    setBrightness(100)
-    setContrast(100)
-    setPosition({ x: 0, y: 0 })
   }
 
-  /** Process and load image file */
   const processFile = (file: File) => {
     if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
       toast.error('الرجاء اختيار صورة بصيغة JPG أو PNG فقط')
@@ -81,13 +131,7 @@ export default function UploadCoverNote({
     const reader = new FileReader()
     reader.onload = (e) => {
       const result = e.target?.result as string
-      setPreviewUrl(result)
-
-      // Load image for manipulation
-      const img = new window.Image()
-      img.onload = () => setOriginalImage(img)
-      img.src = result
-
+      setImageSrc(result)
       formik.setFieldValue('cover.cover', file)
       resetControls()
       toast.success('تم رفع الصورة بنجاح ✅')
@@ -108,84 +152,34 @@ export default function UploadCoverNote({
   }
 
   const removeImage = () => {
-    setPreviewUrl(null)
-    setOriginalImage(null)
+    setImageSrc(null)
     formik.setFieldValue('cover.cover', null)
     if (fileInputRef.current) fileInputRef.current.value = ''
     resetControls()
   }
 
-  /** Apply transformations and save */
-  const applyChanges = useCallback(async () => {
-    if (!originalImage || !canvasRef.current) return
+  const applyChanges = async () => {
+    if (!imageSrc || !croppedAreaPixels) return
 
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    try {
+      const croppedBlob = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels,
+        rotation
+      )
 
-    // Calculate dimensions based on rotation
-    const isRotated90 = rotation === 90 || rotation === 270
-    const width = isRotated90 ? originalImage.height : originalImage.width
-    const height = isRotated90 ? originalImage.width : originalImage.height
-
-    canvas.width = width
-    canvas.height = height
-
-    ctx.clearRect(0, 0, width, height)
-    ctx.save()
-
-    // Apply transformations
-    ctx.translate(width / 2, height / 2)
-    ctx.rotate((rotation * Math.PI) / 180)
-    ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1)
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`
-
-    // Draw image centered
-    const drawWidth = isRotated90 ? originalImage.height : originalImage.width
-    const drawHeight = isRotated90 ? originalImage.width : originalImage.height
-    ctx.drawImage(
-      originalImage,
-      -originalImage.width / 2,
-      -originalImage.height / 2,
-      originalImage.width,
-      originalImage.height,
-    )
-
-    ctx.restore()
-
-    // Convert to blob and update formik
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          const file = new File([blob], 'cover-edited.jpg', {
-            type: 'image/jpeg',
-          })
-          formik.setFieldValue('cover.cover', file)
-          toast.success('تم تطبيق التغييرات بنجاح ✅')
-        }
-      },
-      'image/jpeg',
-      0.9,
-    )
-  }, [originalImage, rotation, flipH, flipV, brightness, contrast, formik])
-
-  /** Handle mouse events for panning */
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsPanning(true)
-    setPanStart({ x: e.clientX - position.x, y: e.clientY - position.y })
+      if (croppedBlob) {
+        const file = new File([croppedBlob], 'cover-edited.jpg', {
+          type: 'image/jpeg',
+        })
+        formik.setFieldValue('cover.cover', file)
+        toast.success('تم تطبيق التغييرات بنجاح ✅')
+      }
+    } catch (error) {
+      toast.error('حدث خطأ أثناء معالجة الصورة')
+    }
   }
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isPanning) return
-    setPosition({
-      x: e.clientX - panStart.x,
-      y: e.clientY - panStart.y,
-    })
-  }
-
-  const handleMouseUp = () => setIsPanning(false)
-
-  /** Validate and move to next step */
   const handleNext = async () => {
     try {
       const errors = await formik.validateForm()
@@ -205,29 +199,13 @@ export default function UploadCoverNote({
     }
   }
 
-  // CSS transform string for preview
-  const transformStyle = {
-    transform: `
-      translate(${position.x}px, ${position.y}px)
-      scale(${zoom / 100})
-      rotate(${rotation}deg)
-      scaleX(${flipH ? -1 : 1})
-      scaleY(${flipV ? -1 : 1})
-    `,
-    filter: `brightness(${brightness}%) contrast(${contrast}%)`,
-    transition: isPanning ? 'none' : 'transform 0.2s ease',
-  }
-
   return (
     <div className="space-y-6">
-      {/* Hidden canvas for image processing */}
-      <canvas ref={canvasRef} className="hidden" />
-
       <div
         className={`relative rounded-xl border-2 border-dashed p-8 transition-all duration-200 ${
           isDragging
             ? 'border-blue-500 bg-blue-50'
-            : previewUrl
+            : imageSrc
               ? 'border-green-500 bg-gray-900'
               : 'border-gray-300 hover:border-gray-400'
         }`}
@@ -249,36 +227,38 @@ export default function UploadCoverNote({
           className="hidden"
         />
 
-        {previewUrl ? (
+        {imageSrc ? (
           <div className="text-center">
-            {/* Image Preview Container */}
-            <div
-              className="relative mx-auto mb-4 h-72 w-full max-w-lg cursor-move overflow-hidden rounded-lg bg-gray-800"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-            >
-              <Image
-                src={previewUrl}
-                alt="Preview"
-                fill
-                className="object-contain"
-                style={transformStyle}
-                draggable={false}
-              />
+            {/* Cropper Container */}
+            <div className="relative mx-auto mb-4 h-96 w-full max-w-2xl overflow-hidden rounded-lg bg-gray-800">
+              <div className="absolute inset-0">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  rotation={rotation}
+                  aspect={16 / 9}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onRotationChange={setRotation}
+                  onCropComplete={onCropComplete}
+                  style={{
+                    containerStyle: {
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: '#1f2937',
+                    },
+                  }}
+                />
+              </div>
               {/* Remove button */}
               <button
                 type="button"
                 onClick={removeImage}
-                className="absolute top-2 right-2 z-10 rounded-full bg-red-500 p-1.5 text-white shadow-lg transition hover:bg-red-600"
+                className="absolute top-2 right-2 z-50 rounded-full bg-red-500 p-1.5 text-white shadow-lg transition hover:bg-red-600"
               >
                 <X className="h-4 w-4" />
               </button>
-              {/* Pan indicator */}
-              <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded bg-black/50 px-2 py-1 text-xs text-white">
-                <Move className="h-3 w-3" /> اسحب للتحريك
-              </div>
             </div>
 
             {/* Control Panel */}
@@ -289,49 +269,36 @@ export default function UploadCoverNote({
                   <span className="flex items-center gap-1 font-medium text-gray-700">
                     <ZoomIn className="h-4 w-4" /> التكبير
                   </span>
-                  <span className="text-gray-500">{zoom}%</span>
+                  <span className="text-gray-500">
+                    {Math.round(zoom * 100)}%
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <ZoomOut className="h-4 w-4 text-gray-400" />
                   <Slider
                     value={[zoom]}
                     onValueChange={(v) => setZoom(v[0])}
-                    min={50}
-                    max={200}
-                    step={5}
+                    min={1}
+                    max={3}
+                    step={0.1}
                     className="flex-1"
                   />
                   <ZoomIn className="h-4 w-4 text-gray-400" />
                 </div>
               </div>
 
-              {/* Brightness Control */}
+              {/* Rotation Control */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-gray-700">☀️ السطوع</span>
-                  <span className="text-gray-500">{brightness}%</span>
+                  <span className="font-medium text-gray-700">🔄 الدوران</span>
+                  <span className="text-gray-500">{rotation}°</span>
                 </div>
                 <Slider
-                  value={[brightness]}
-                  onValueChange={(v) => setBrightness(v[0])}
-                  min={50}
-                  max={150}
-                  step={5}
-                />
-              </div>
-
-              {/* Contrast Control */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-gray-700">◐ التباين</span>
-                  <span className="text-gray-500">{contrast}%</span>
-                </div>
-                <Slider
-                  value={[contrast]}
-                  onValueChange={(v) => setContrast(v[0])}
-                  min={50}
-                  max={150}
-                  step={5}
+                  value={[rotation]}
+                  onValueChange={(v) => setRotation(v[0])}
+                  min={0}
+                  max={360}
+                  step={1}
                 />
               </div>
 
@@ -344,7 +311,7 @@ export default function UploadCoverNote({
                   onClick={() => setRotation((r) => (r - 90 + 360) % 360)}
                   className="gap-1"
                 >
-                  <RotateCcw className="h-4 w-4" /> يسار
+                  <RotateCcw className="h-4 w-4" /> يسار 90°
                 </Button>
                 <Button
                   type="button"
@@ -353,7 +320,7 @@ export default function UploadCoverNote({
                   onClick={() => setRotation((r) => (r + 90) % 360)}
                   className="gap-1"
                 >
-                  <RotateCw className="h-4 w-4" /> يمين
+                  <RotateCw className="h-4 w-4" /> يمين 90°
                 </Button>
                 <Button
                   type="button"
@@ -362,7 +329,7 @@ export default function UploadCoverNote({
                   onClick={() => setFlipH(!flipH)}
                   className="gap-1"
                 >
-                  <FlipHorizontal className="h-4 w-4" /> أفقي
+                  ⇄ قلب أفقي
                 </Button>
                 <Button
                   type="button"
@@ -371,7 +338,7 @@ export default function UploadCoverNote({
                   onClick={() => setFlipV(!flipV)}
                   className="gap-1"
                 >
-                  <FlipVertical className="h-4 w-4" /> عمودي
+                  ⇵ قلب عمودي
                 </Button>
               </div>
 
@@ -439,7 +406,7 @@ export default function UploadCoverNote({
         )}
       </div>
 
-      {!previewUrl && (
+      {!imageSrc && (
         <div className="rounded-lg bg-gray-50 p-4">
           <h4 className="mb-2 font-medium text-gray-800">
             مواصفات الصورة المثالية:

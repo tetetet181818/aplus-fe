@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -131,7 +131,8 @@
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1),
+  box-shadow:
+    0 10px 25px -5px rgba(59, 130, 246, 0.1),
     0 8px 10px -6px rgba(59, 130, 246, 0.1);
 }
 
