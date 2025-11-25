@@ -1,31 +1,31 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X } from "lucide-react";
-import { universityData } from "@/constants/index";
+} from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { X } from 'lucide-react'
+import { universityData } from '@/constants/index'
 
 /**
  * Type definition for filters and setter props
  */
 interface FilterPanelProps {
-  years: number[];
-  filterUniversity: string;
-  setFilterUniversity: (value: string) => void;
-  filterCollage: string;
-  setFilterCollage: (value: string) => void;
-  filterYear: string;
-  setFilterYear: (value: string) => void;
-  resetFilters: () => void;
+  years: number[]
+  filterUniversity: string
+  setFilterUniversity: (value: string) => void
+  filterCollage: string
+  setFilterCollage: (value: string) => void
+  filterYear: string
+  setFilterYear: (value: string) => void
+  resetFilters: () => void
 }
 
 /**
@@ -42,26 +42,26 @@ const FilterPanel = ({
   setFilterYear,
   resetFilters,
 }: FilterPanelProps) => {
-  const [availableColleges, setAvailableColleges] = useState<string[]>([]);
-  const [isLoadingColleges, setIsLoadingColleges] = useState(false);
+  const [availableColleges, setAvailableColleges] = useState<string[]>([])
+  const [isLoadingColleges, setIsLoadingColleges] = useState(false)
 
   /** Extract universities from the constants file */
   const universities: string[] =
     universityData
       ?.map((university) => university?.name)
-      .filter((n): n is string => typeof n === "string") || [];
+      .filter((n): n is string => typeof n === 'string') || []
 
   /** When university changes, update colleges accordingly */
   useEffect(() => {
     if (!filterUniversity) {
-      setAvailableColleges([]);
-      return;
+      setAvailableColleges([])
+      return
     }
-    setIsLoadingColleges(true);
-    const selectedUni = universityData.find((u) => u.name === filterUniversity);
-    setAvailableColleges(selectedUni?.colleges || []);
-    setIsLoadingColleges(false);
-  }, [filterUniversity]);
+    setIsLoadingColleges(true)
+    const selectedUni = universityData.find((u) => u.name === filterUniversity)
+    setAvailableColleges(selectedUni?.colleges || [])
+    setIsLoadingColleges(false)
+  }, [filterUniversity])
 
   /** Helper function to render <SelectItem> options */
   const renderSelectOptions = (items: string[], placeholder: string) => {
@@ -70,14 +70,14 @@ const FilterPanel = ({
         <SelectItem value="loading" disabled>
           جاري التحميل...
         </SelectItem>
-      );
+      )
     }
     if (!items || items.length === 0) {
       return (
         <SelectItem value="no-options" disabled>
           {placeholder}
         </SelectItem>
-      );
+      )
     }
     return (
       <>
@@ -88,13 +88,13 @@ const FilterPanel = ({
           </SelectItem>
         ))}
       </>
-    );
-  };
+    )
+  }
 
   /** Handle when user selects a new filter value */
 
   return (
-    <Card className="bg-gray-50/50 dark:bg-gray-900/50 border shadow-sm">
+    <Card className="border bg-gray-50/50 shadow-sm dark:bg-gray-900/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <CardTitle className="text-xl font-semibold">تصفية النتائج</CardTitle>
         <Button
@@ -104,20 +104,20 @@ const FilterPanel = ({
           disabled={isLoadingColleges}
           onClick={resetFilters}
         >
-          <X className="h-4 w-4 ml-1" />
+          <X className="ml-1 h-4 w-4" />
           مسح الفلاتر
         </Button>
       </CardHeader>
 
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {/* University Filter */}
           <div className="space-y-2">
             <Label htmlFor="university">الجامعة</Label>
             <Select
-              value={filterUniversity || ""}
+              value={filterUniversity || ''}
               onValueChange={(value) => {
-                setFilterUniversity(value);
+                setFilterUniversity(value)
               }}
               disabled={universities.length === 0}
             >
@@ -125,13 +125,13 @@ const FilterPanel = ({
                 <SelectValue
                   placeholder={
                     universities.length === 0
-                      ? "لا توجد جامعات متاحة"
-                      : "اختر الجامعة"
+                      ? 'لا توجد جامعات متاحة'
+                      : 'اختر الجامعة'
                   }
                 />
               </SelectTrigger>
               <SelectContent>
-                {renderSelectOptions(universities, "لا توجد جامعات متاحة")}
+                {renderSelectOptions(universities, 'لا توجد جامعات متاحة')}
               </SelectContent>
             </Select>
           </div>
@@ -140,9 +140,9 @@ const FilterPanel = ({
           <div className="space-y-2">
             <Label htmlFor="college">الكلية</Label>
             <Select
-              value={filterCollage || ""}
+              value={filterCollage || ''}
               onValueChange={(value) => {
-                setFilterCollage(value);
+                setFilterCollage(value)
               }}
               disabled={
                 isLoadingColleges ||
@@ -154,17 +154,17 @@ const FilterPanel = ({
                 <SelectValue
                   placeholder={
                     isLoadingColleges
-                      ? "جاري التحميل..."
+                      ? 'جاري التحميل...'
                       : !filterUniversity
-                      ? "اختر جامعة أولاً"
-                      : availableColleges.length === 0
-                      ? "لا توجد كليات متاحة"
-                      : "اختر الكلية"
+                        ? 'اختر جامعة أولاً'
+                        : availableColleges.length === 0
+                          ? 'لا توجد كليات متاحة'
+                          : 'اختر الكلية'
                   }
                 />
               </SelectTrigger>
               <SelectContent>
-                {renderSelectOptions(availableColleges, "لا توجد كليات متاحة")}
+                {renderSelectOptions(availableColleges, 'لا توجد كليات متاحة')}
               </SelectContent>
             </Select>
           </div>
@@ -173,23 +173,23 @@ const FilterPanel = ({
           <div className="space-y-2">
             <Label htmlFor="year">السنة</Label>
             <Select
-              value={filterYear.toString() || ""}
+              value={filterYear.toString() || ''}
               onValueChange={(value) => {
-                setFilterYear(value);
+                setFilterYear(value)
               }}
               disabled={years.length === 0}
             >
               <SelectTrigger id="year" className="w-full">
                 <SelectValue
                   placeholder={
-                    years.length === 0 ? "لا توجد سنوات متاحة" : "اختر السنة"
+                    years.length === 0 ? 'لا توجد سنوات متاحة' : 'اختر السنة'
                   }
                 />
               </SelectTrigger>
               <SelectContent>
                 {renderSelectOptions(
                   years.map((year) => year.toString()),
-                  "لا توجد سنوات متاحة"
+                  'لا توجد سنوات متاحة'
                 )}
               </SelectContent>
             </Select>
@@ -197,7 +197,7 @@ const FilterPanel = ({
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default FilterPanel;
+export default FilterPanel

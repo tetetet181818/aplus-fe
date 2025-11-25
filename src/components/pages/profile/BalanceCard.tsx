@@ -1,15 +1,15 @@
-import { DollarSign } from "lucide-react";
+import { DollarSign } from 'lucide-react'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 
 interface BalanceCardProps {
-  netEarnings: number;
-  platformFeePercentage: number;
+  netEarnings: number
+  platformFeePercentage: number
 }
 
 export default function BalanceCard({
@@ -17,9 +17,9 @@ export default function BalanceCard({
   platformFeePercentage,
 }: BalanceCardProps) {
   return (
-    <Card className="shadow-xl border-transparent bg-gradient-to-br from-green-500 to-emerald-600 text-white overflow-hidden">
+    <Card className="overflow-hidden border-transparent bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <DollarSign className="h-7 w-7" />
           الرصيد المتاح للسحب
         </CardTitle>
@@ -29,14 +29,14 @@ export default function BalanceCard({
       </CardHeader>
       <CardContent>
         <p className="text-5xl font-extrabold tracking-tight">
-          {netEarnings.toFixed(2)}{" "}
+          {netEarnings.toFixed(2)}{' '}
           <span className="text-2xl font-normal">ريال</span>
         </p>
-        <p className="text-sm text-green-200 mt-1">
+        <p className="mt-1 text-sm text-green-200">
           يتم احتساب الرصيد بعد خصم رسوم المنصة ({platformFeePercentage * 100}
           %).
         </p>
       </CardContent>
     </Card>
-  );
+  )
 }

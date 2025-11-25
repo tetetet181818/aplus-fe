@@ -1,43 +1,35 @@
-"use client";
+'use client'
 
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useFormik } from "formik";
-import { registerSchema } from "@/utils/validation/authValidation";
-import {
-  Building2,
-  Eye,
-  EyeOff,
-  Loader2,
-  Lock,
-  Mail,
-  User,
-} from "lucide-react";
-import GoogleLoginButton from "@/components/atoms/GoogleLoginButton";
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { useFormik } from 'formik'
+import { registerSchema } from '@/utils/validation/authValidation'
+import { Building2, Eye, EyeOff, Loader2, Lock, Mail, User } from 'lucide-react'
+import GoogleLoginButton from '@/components/atoms/GoogleLoginButton'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { universities } from "@/constants";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import Image from "next/image";
-import successImage from "../../../../public/success-icon.png";
-import useAuth from "@/hooks/useAuth";
-import { RegisterCredentials } from "@/types";
+} from '@/components/ui/select'
+import { universities } from '@/constants'
+import Link from 'next/link'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import Image from 'next/image'
+import successImage from '../../../../public/success-icon.png'
+import useAuth from '@/hooks/useAuth'
+import { RegisterCredentials } from '@/types'
 
 /**
  * Registration dialog component.
@@ -45,33 +37,30 @@ import { RegisterCredentials } from "@/types";
  * All inputs and selects are disabled when loading is true.
  */
 interface RegisterProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSwitchToLogin: () => void;
+  isOpen: boolean
+  onClose: () => void
+  onSwitchToLogin: () => void
 }
 
 const initialValues: RegisterCredentials = {
-  fullName: "",
-  email: "",
-  password: "",
-  university: "",
-};
+  fullName: '',
+  email: '',
+  password: '',
+  university: '',
+}
 
 const RegisterDialog = ({
   isOpen,
   onClose,
   onSwitchToLogin,
 }: RegisterProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [activeTab, setActiveTab] = useState("register");
-  const [registeredEmail, setRegisteredEmail] = useState("");
-  const { registerUser, loading } = useAuth();
+  const [showPassword, setShowPassword] = useState(false)
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [activeTab, setActiveTab] = useState('register')
+  const [registeredEmail, setRegisteredEmail] = useState('')
+  const { registerUser, loading } = useAuth()
 
-  const togglePassword = useCallback(
-    () => setShowPassword((prev) => !prev),
-    []
-  );
+  const togglePassword = useCallback(() => setShowPassword((prev) => !prev), [])
 
   const formik = useFormik({
     initialValues,
@@ -79,24 +68,24 @@ const RegisterDialog = ({
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { resetForm }) => {
-      if (!termsAccepted) return;
-      setRegisteredEmail(values.email);
-      const res = await registerUser(values);
+      if (!termsAccepted) return
+      setRegisteredEmail(values.email)
+      const res = await registerUser(values)
       if (res) {
-        resetForm();
-        setActiveTab("verify");
+        resetForm()
+        setActiveTab('verify')
       }
     },
-  });
+  })
 
   const disabledClass =
-    "opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300";
+    'opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300'
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent">
+      <DialogContent className="scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent max-h-[90vh] max-w-md overflow-y-auto rounded-2xl shadow-2xl">
         <DialogHeader>
-          {activeTab === "register" && (
+          {activeTab === 'register' && (
             <>
               <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
                 إنشاء حساب جديد
@@ -115,13 +104,13 @@ const RegisterDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="fullName">اسم المستخدم</Label>
                 <div className="relative">
-                  <User className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <User className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="fullName"
                     placeholder="اكتب اسمك هنا"
-                    className={`pr-10 ${loading ? disabledClass : ""}`}
+                    className={`pr-10 ${loading ? disabledClass : ''}`}
                     disabled={loading}
-                    {...formik.getFieldProps("fullName")}
+                    {...formik.getFieldProps('fullName')}
                   />
                 </div>
                 {formik.errors.fullName && (
@@ -135,14 +124,14 @@ const RegisterDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="email">البريد الإلكتروني</Label>
                 <div className="relative">
-                  <Mail className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <Mail className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="example@email.com"
-                    className={`pr-10 ${loading ? disabledClass : ""}`}
+                    className={`pr-10 ${loading ? disabledClass : ''}`}
                     disabled={loading}
-                    {...formik.getFieldProps("email")}
+                    {...formik.getFieldProps('email')}
                   />
                 </div>
                 {formik.errors.email && (
@@ -154,17 +143,17 @@ const RegisterDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="university">الجامعة</Label>
                 <div className="relative">
-                  <Building2 className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <Building2 className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Select
                     value={formik.values.university}
                     onValueChange={(val) =>
-                      formik.setFieldValue("university", val)
+                      formik.setFieldValue('university', val)
                     }
                     disabled={loading}
                   >
                     <SelectTrigger
                       id="university"
-                      className={`pr-10 w-full ${loading ? disabledClass : ""}`}
+                      className={`w-full pr-10 ${loading ? disabledClass : ''}`}
                     >
                       <SelectValue placeholder="اختر الجامعة" />
                     </SelectTrigger>
@@ -188,21 +177,21 @@ const RegisterDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="password">كلمة المرور</Label>
                 <div className="relative">
-                  <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <Lock className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="********"
-                    className={`px-10  ${loading ? disabledClass : ""}`}
+                    className={`px-10 ${loading ? disabledClass : ''}`}
                     disabled={loading}
-                    {...formik.getFieldProps("password")}
+                    {...formik.getFieldProps('password')}
                   />
                   <button
                     type="button"
                     onClick={togglePassword}
                     disabled={loading}
-                    className={`absolute left-3 top-1/2 -translate-y-1/2 ${
-                      loading ? "cursor-not-allowed opacity-50" : ""
+                    className={`absolute top-1/2 left-3 -translate-y-1/2 ${
+                      loading ? 'cursor-not-allowed opacity-50' : ''
                     }`}
                     aria-label="إظهار أو إخفاء كلمة المرور"
                   >
@@ -226,7 +215,7 @@ const RegisterDialog = ({
               {/* Terms */}
               <div
                 className={`flex items-start gap-2 ${
-                  loading ? "opacity-60 pointer-events-none" : ""
+                  loading ? 'pointer-events-none opacity-60' : ''
                 }`}
               >
                 <Checkbox
@@ -239,14 +228,14 @@ const RegisterDialog = ({
                   htmlFor="terms"
                   className="text-sm leading-none text-gray-700 dark:text-gray-300"
                 >
-                  أوافق على{" "}
+                  أوافق على{' '}
                   <Link
                     href="/terms-of-service"
                     className="text-primary hover:underline"
                   >
                     الشروط والأحكام
-                  </Link>{" "}
-                  و{" "}
+                  </Link>{' '}
+                  و{' '}
                   <Link
                     href="/privacy-policy"
                     className="text-primary hover:underline"
@@ -259,7 +248,7 @@ const RegisterDialog = ({
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full rounded-lg shadow-md hover:shadow-lg transition-all"
+                className="w-full rounded-lg shadow-md transition-all hover:shadow-lg"
                 disabled={loading || formik.isSubmitting || !termsAccepted}
               >
                 {loading || formik.isSubmitting ? (
@@ -268,7 +257,7 @@ const RegisterDialog = ({
                     جاري التسجيل...
                   </>
                 ) : (
-                  "إنشاء حساب"
+                  'إنشاء حساب'
                 )}
               </Button>
             </form>
@@ -284,16 +273,16 @@ const RegisterDialog = ({
             </div>
 
             {/* Google Button */}
-            <div className={loading ? "opacity-60 pointer-events-none" : ""}>
+            <div className={loading ? 'pointer-events-none opacity-60' : ''}>
               <GoogleLoginButton />
             </div>
 
             {/* Switch to login */}
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-              لديك حساب؟{" "}
+              لديك حساب؟{' '}
               <button
                 type="button"
-                className="font-semibold text-primary hover:underline"
+                className="text-primary font-semibold hover:underline"
                 onClick={onSwitchToLogin}
                 disabled={loading}
               >
@@ -303,7 +292,7 @@ const RegisterDialog = ({
           </TabsContent>
 
           {/* Verify Tab */}
-          <TabsContent value="verify" className="py-6 text-center space-y-4">
+          <TabsContent value="verify" className="space-y-4 py-6 text-center">
             <Image
               src={successImage}
               alt="نجاح"
@@ -316,19 +305,19 @@ const RegisterDialog = ({
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               تم إرسال رسالة تحقق إلى:
-              <span className="font-medium block mt-1">{registeredEmail}</span>
+              <span className="mt-1 block font-medium">{registeredEmail}</span>
             </p>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               يرجى فتح الرسالة والضغط على رابط التفعيل لإكمال التسجيل.
             </p>
-            <Button onClick={() => setActiveTab("register")} className="mt-4">
+            <Button onClick={() => setActiveTab('register')} className="mt-4">
               العودة إلى التسجيل
             </Button>
           </TabsContent>
         </Tabs>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default RegisterDialog;
+export default RegisterDialog

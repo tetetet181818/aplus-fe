@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useFormik, FormikHelpers } from "formik";
-import * as Yup from "yup";
+import { useRouter } from 'next/navigation'
+import { useFormik, FormikHelpers } from 'formik'
+import * as Yup from 'yup'
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import LoadingSpinner from "@/components/atoms/LoadingSpinner";
-import AddNoteLoginPrompt from "./AddNoteLoginPrompt";
-import useNoteDetail from "@/hooks/useNoteDetail";
-import { toast } from "sonner";
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+import AddNoteLoginPrompt from './AddNoteLoginPrompt'
+import useNoteDetail from '@/hooks/useNoteDetail'
+import { toast } from 'sonner'
 
 import {
   Select,
@@ -20,27 +20,27 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { universityData } from "@/constants/index";
+} from '@/components/ui/select'
+import { universityData } from '@/constants/index'
 
 // ===== Types =====
 interface UpdateNoteFormValues {
-  title: string;
-  description: string;
-  university: string;
-  college: string;
-  subject: string;
-  year: number | string;
-  price: number;
-  pagesNumber: number;
-  contactMethod: string;
-  isPublish: boolean;
+  title: string
+  description: string
+  university: string
+  college: string
+  subject: string
+  year: number | string
+  price: number
+  pagesNumber: number
+  contactMethod: string
+  isPublish: boolean
 }
 
 interface UpdateNotePageProps {
-  edit: string;
-  isAuthenticated: boolean;
-  loading: boolean;
+  edit: string
+  isAuthenticated: boolean
+  loading: boolean
 }
 
 export default function UpdateNotePage({
@@ -48,68 +48,68 @@ export default function UpdateNotePage({
   isAuthenticated,
   loading,
 }: UpdateNotePageProps) {
-  const router = useRouter();
-  const { note, updateNoteLoading, handleUpdateNote } = useNoteDetail(edit);
+  const router = useRouter()
+  const { note, updateNoteLoading, handleUpdateNote } = useNoteDetail(edit)
 
   const formik = useFormik<UpdateNoteFormValues>({
     enableReinitialize: true,
     initialValues: {
-      title: note?.title ?? "",
-      description: note?.description ?? "",
-      university: note?.university ?? "",
-      college: note?.college ?? "",
-      subject: note?.subject ?? "",
-      year: note?.year ?? "",
+      title: note?.title ?? '',
+      description: note?.description ?? '',
+      university: note?.university ?? '',
+      college: note?.college ?? '',
+      subject: note?.subject ?? '',
+      year: note?.year ?? '',
       price: note?.price ?? 0,
       pagesNumber: note?.pagesNumber ?? 0,
-      contactMethod: note?.contactMethod ?? "",
+      contactMethod: note?.contactMethod ?? '',
       isPublish: note?.isPublish ?? false,
     },
     validationSchema: Yup.object({
-      title: Yup.string().required("العنوان مطلوب"),
-      description: Yup.string().required("الوصف مطلوب"),
-      university: Yup.string().required("الجامعة مطلوبة"),
-      college: Yup.string().required("الكلية مطلوبة"),
-      subject: Yup.string().required("المادة مطلوبة"),
+      title: Yup.string().required('العنوان مطلوب'),
+      description: Yup.string().required('الوصف مطلوب'),
+      university: Yup.string().required('الجامعة مطلوبة'),
+      college: Yup.string().required('الكلية مطلوبة'),
+      subject: Yup.string().required('المادة مطلوبة'),
       price: Yup.number()
-        .min(0, "السعر لا يمكن أن يكون سالباً")
-        .required("السعر مطلوب"),
+        .min(0, 'السعر لا يمكن أن يكون سالباً')
+        .required('السعر مطلوب'),
     }),
     onSubmit: async (
       values: UpdateNoteFormValues,
       { setSubmitting }: FormikHelpers<UpdateNoteFormValues>
     ) => {
       try {
-        await handleUpdateNote({ noteId: edit, noteData: values });
+        await handleUpdateNote({ noteId: edit, noteData: values })
       } catch (error: unknown) {
-        if (error && typeof error === "object" && "data" in error) {
-          const err = error as { data?: { messages?: string[] } };
+        if (error && typeof error === 'object' && 'data' in error) {
+          const err = error as { data?: { messages?: string[] } }
           const msg =
-            err.data?.messages?.join(", ") ?? "حدث خطأ أثناء تحديث الملخص";
-          toast.error(msg);
+            err.data?.messages?.join(', ') ?? 'حدث خطأ أثناء تحديث الملخص'
+          toast.error(msg)
         } else {
-          toast.error("حدث خطأ أثناء تحديث الملخص");
+          toast.error('حدث خطأ أثناء تحديث الملخص')
         }
-        console.error(error);
+        console.error(error)
       } finally {
-        setSubmitting(false);
+        setSubmitting(false)
       }
     },
-  });
+  })
 
-  if (loading) return <LoadingSpinner />;
-  if (!isAuthenticated) return <AddNoteLoginPrompt onNavigate={router.push} />;
+  if (loading) return <LoadingSpinner />
+  if (!isAuthenticated) return <AddNoteLoginPrompt onNavigate={router.push} />
 
   const selectedUniversity = universityData.find(
     (u) => u.name === formik.values.university
-  );
-  const colleges = selectedUniversity?.colleges ?? [];
+  )
+  const colleges = selectedUniversity?.colleges ?? []
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
+    <div className="mx-auto max-w-3xl py-8">
       <Card>
         <CardContent className="space-y-6">
-          <h2 className="text-2xl font-semibold text-center mb-4">
+          <h2 className="mb-4 text-center text-2xl font-semibold">
             تحديث الملخص
           </h2>
 
@@ -122,10 +122,10 @@ export default function UpdateNotePage({
                 name="title"
                 value={formik.values.title}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
               {formik.touched.title && formik.errors.title && (
-                <p className="text-red-500 text-sm">{formik.errors.title}</p>
+                <p className="text-sm text-red-500">{formik.errors.title}</p>
               )}
             </div>
 
@@ -137,10 +137,10 @@ export default function UpdateNotePage({
                 name="description"
                 value={formik.values.description}
                 onChange={formik.handleChange}
-                className="h-28 py-6 my-2 rounded-3xl px-5"
+                className="my-2 h-28 rounded-3xl px-5 py-6"
               />
               {formik.touched.description && formik.errors.description && (
-                <p className="text-red-500 text-sm">
+                <p className="text-sm text-red-500">
                   {formik.errors.description}
                 </p>
               )}
@@ -152,11 +152,11 @@ export default function UpdateNotePage({
               <Select
                 value={formik.values.university}
                 onValueChange={(value) => {
-                  formik.setFieldValue("university", value);
-                  formik.setFieldValue("college", "");
+                  formik.setFieldValue('university', value)
+                  formik.setFieldValue('college', '')
                 }}
               >
-                <SelectTrigger className="py-6 my-2 rounded-3xl px-5 w-full">
+                <SelectTrigger className="my-2 w-full rounded-3xl px-5 py-6">
                   <SelectValue placeholder="اختر الجامعة" />
                 </SelectTrigger>
                 <SelectContent>
@@ -168,7 +168,7 @@ export default function UpdateNotePage({
                 </SelectContent>
               </Select>
               {formik.touched.university && formik.errors.university && (
-                <p className="text-red-500 text-sm">
+                <p className="text-sm text-red-500">
                   {formik.errors.university}
                 </p>
               )}
@@ -180,11 +180,11 @@ export default function UpdateNotePage({
               <Select
                 value={formik.values.college}
                 onValueChange={(value) =>
-                  formik.setFieldValue("college", value)
+                  formik.setFieldValue('college', value)
                 }
                 disabled={!formik.values.university}
               >
-                <SelectTrigger className="py-6 my-2 rounded-3xl px-5 w-full">
+                <SelectTrigger className="my-2 w-full rounded-3xl px-5 py-6">
                   <SelectValue placeholder="اختر الكلية" />
                 </SelectTrigger>
                 <SelectContent>
@@ -203,7 +203,7 @@ export default function UpdateNotePage({
                 </SelectContent>
               </Select>
               {formik.touched.college && formik.errors.college && (
-                <p className="text-red-500 text-sm">{formik.errors.college}</p>
+                <p className="text-sm text-red-500">{formik.errors.college}</p>
               )}
             </div>
 
@@ -215,10 +215,10 @@ export default function UpdateNotePage({
                 name="subject"
                 value={formik.values.subject}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
               {formik.touched.subject && formik.errors.subject && (
-                <p className="text-red-500 text-sm">{formik.errors.subject}</p>
+                <p className="text-sm text-red-500">{formik.errors.subject}</p>
               )}
             </div>
 
@@ -231,7 +231,7 @@ export default function UpdateNotePage({
                 type="number"
                 value={formik.values.year}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
             </div>
 
@@ -244,7 +244,7 @@ export default function UpdateNotePage({
                 type="number"
                 value={formik.values.price}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
             </div>
 
@@ -256,7 +256,7 @@ export default function UpdateNotePage({
                 name="contactMethod"
                 value={formik.values.contactMethod}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
             </div>
 
@@ -269,7 +269,7 @@ export default function UpdateNotePage({
                 type="number"
                 value={formik.values.pagesNumber}
                 onChange={formik.handleChange}
-                className="py-6 my-2 rounded-3xl px-5"
+                className="my-2 rounded-3xl px-5 py-6"
               />
             </div>
 
@@ -281,13 +281,13 @@ export default function UpdateNotePage({
                 className="w-full sm:w-1/2"
               >
                 {updateNoteLoading || formik.isSubmitting
-                  ? "جاري التحديث..."
-                  : "تحديث الملخص"}
+                  ? 'جاري التحديث...'
+                  : 'تحديث الملخص'}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

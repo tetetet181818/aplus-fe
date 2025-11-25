@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Table,
@@ -7,8 +7,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function SalesTableSkeleton() {
   return (
@@ -16,13 +16,13 @@ export default function SalesTableSkeleton() {
       <TableHeader>
         <TableRow>
           {[
-            "رقم البيع",
-            "الملاحظة",
-            "الفاتورة",
-            "المبلغ",
-            "التاريخ",
-            "الحالة",
-            "إجراءات",
+            'رقم البيع',
+            'الملاحظة',
+            'الفاتورة',
+            'المبلغ',
+            'التاريخ',
+            'الحالة',
+            'إجراءات',
           ].map((header, idx) => (
             <TableHead key={idx}>{header}</TableHead>
           ))}
@@ -56,5 +56,5 @@ export default function SalesTableSkeleton() {
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+'use client'
+import { Button } from '@/components/ui/button'
+import { Filter, X } from 'lucide-react'
 
 const NotesListHeader = ({
   onToggleFilters,
@@ -10,26 +10,26 @@ const NotesListHeader = ({
   hasActiveFilters,
   onClearFilters,
 }: {
-  onToggleFilters: () => void;
-  showFilters: boolean;
-  itemCount: number;
-  totalCount: number;
-  hasActiveFilters: boolean;
-  onClearFilters: () => void;
+  onToggleFilters: () => void
+  showFilters: boolean
+  itemCount: number
+  totalCount: number
+  hasActiveFilters: boolean
+  onClearFilters: () => void
 }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+    <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">تصفح الملخصات</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {hasActiveFilters ? (
             <>
-              عرض <span className="font-medium">{itemCount}</span> من أصل{" "}
+              عرض <span className="font-medium">{itemCount}</span> من أصل{' '}
               <span className="font-medium">{totalCount}</span> ملخص
             </>
           ) : (
             <>
-              إجمالي الملخصات المتاحة:{" "}
+              إجمالي الملخصات المتاحة:{' '}
               <span className="font-medium">{totalCount}</span>
             </>
           )}
@@ -49,17 +49,17 @@ const NotesListHeader = ({
           </Button>
         )}
         <Button
-          variant={showFilters ? "default" : "outline"}
+          variant={showFilters ? 'default' : 'outline'}
           size="sm"
           onClick={onToggleFilters}
           className="flex items-center gap-1.5"
         >
           <Filter className="h-4 w-4" />
-          {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
+          {showFilters ? 'إخفاء الفلاتر' : 'عرض الفلاتر'}
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotesListHeader;
+export default NotesListHeader

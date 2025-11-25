@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Card,
@@ -6,9 +6,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Avatar } from "@/components/ui/avatar";
-import { Student } from "@/types";
+} from '@/components/ui/card'
+import { Avatar } from '@/components/ui/avatar'
+import { Student } from '@/types'
 
 /**
  * Show list of recent students.
@@ -16,7 +16,7 @@ import { Student } from "@/types";
 export default function RecentStudentsCard({
   students,
 }: {
-  students: Student[];
+  students: Student[]
 }) {
   return (
     <Card className="card-hover border-0 shadow-lg">
@@ -29,23 +29,23 @@ export default function RecentStudentsCard({
           {students?.map((student, index) => (
             <div
               key={student._id}
-              className="flex items-center gap-2 space-x-4 space-x-reverse p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors animate-slide-in"
+              className="bg-muted/30 hover:bg-muted/50 animate-slide-in flex items-center gap-2 space-x-4 space-x-reverse rounded-lg p-3 transition-colors"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <Avatar className="h-10 w-10 flex items-center justify-center bg-primary/10 text-primary font-semibold">
+              <Avatar className="bg-primary/10 text-primary flex h-10 w-10 items-center justify-center font-semibold">
                 {student?.fullName
-                  ?.split(" ")
+                  ?.split(' ')
                   ?.map((n: string) => n[0])
-                  ?.join("")}
+                  ?.join('')}
               </Avatar>
               <div className="flex-1 space-y-1">
                 <p className="text-sm font-medium">{student.fullName}</p>
-                <p className="text-xs text-muted-foreground">{student.email}</p>
+                <p className="text-muted-foreground text-xs">{student.email}</p>
               </div>
             </div>
           ))}
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

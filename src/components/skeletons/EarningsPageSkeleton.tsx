@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Card,
@@ -6,9 +6,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, Zap, Shield, Coins, Banknote, Info } from "lucide-react";
+} from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Calendar, Zap, Shield, Coins, Banknote, Info } from 'lucide-react'
 
 /**
  * Skeleton loader for the EarningsPage component
@@ -27,9 +27,9 @@ export default function EarningsPageSkeleton() {
 
       {/* Balance Card Skeleton */}
       <section>
-        <Card className="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 border-0 shadow-xl overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-gray-200 to-gray-300 shadow-xl dark:from-gray-700 dark:to-gray-800">
+          <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-white/10"></div>
+          <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-white/10"></div>
 
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center gap-2">
@@ -49,7 +49,7 @@ export default function EarningsPageSkeleton() {
 
       {/* Withdrawal Form Skeleton */}
       <section>
-        <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+        <Card className="border-gray-200 shadow-lg dark:border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Banknote className="h-6 w-6 text-gray-400" />
@@ -63,37 +63,37 @@ export default function EarningsPageSkeleton() {
           <CardContent className="space-y-4">
             {/* Account Holder Name Field */}
             <div className="mb-4">
-              <Skeleton className="h-4 w-32 mb-2 bg-gray-300 dark:bg-gray-700" />
+              <Skeleton className="mb-2 h-4 w-32 bg-gray-300 dark:bg-gray-700" />
               <Skeleton className="h-11 w-full bg-gray-200 dark:bg-gray-600" />
             </div>
 
             {/* Bank Select Field */}
             <div className="mb-4">
-              <Skeleton className="h-4 w-20 mb-2 bg-gray-300 dark:bg-gray-700" />
+              <Skeleton className="mb-2 h-4 w-20 bg-gray-300 dark:bg-gray-700" />
               <Skeleton className="h-11 w-full bg-gray-200 dark:bg-gray-600" />
             </div>
 
             {/* IBAN Field */}
             <div className="mb-4">
-              <Skeleton className="h-4 w-28 mb-2 bg-gray-300 dark:bg-gray-700" />
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-300 dark:bg-gray-700" />
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 flex items-center px-3 bg-gray-100 dark:bg-gray-700 border border-r-0 border-gray-300 dark:border-gray-600 rounded-l-md">
+                <div className="absolute inset-y-0 left-0 flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-100 px-3 dark:border-gray-600 dark:bg-gray-700">
                   <span className="text-gray-400">SA</span>
                 </div>
-                <Skeleton className="h-11 w-full bg-gray-200 dark:bg-gray-600 rounded-md" />
+                <Skeleton className="h-11 w-full rounded-md bg-gray-200 dark:bg-gray-600" />
               </div>
             </div>
 
             {/* Withdrawal Amount Field */}
             <div className="mb-4">
-              <Skeleton className="h-4 w-28 mb-2 bg-gray-300 dark:bg-gray-700" />
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-300 dark:bg-gray-700" />
               <Skeleton className="h-11 w-full bg-gray-200 dark:bg-gray-600" />
             </div>
 
             {/* Withdrawal Info */}
-            <div className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md mb-4">
+            <div className="mb-4 rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-2">
-                <Info className="h-5 w-5 text-gray-400 mt-0.5 shrink-0" />
+                <Info className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
                 <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function EarningsPageSkeleton() {
             <Skeleton className="h-11 w-full bg-gray-300 dark:bg-gray-700" />
 
             {/* Form Messages */}
-            <div className="flex flex-col items-center gap-2 mt-2">
+            <div className="mt-2 flex flex-col items-center gap-2">
               <Skeleton className="h-4 w-64 bg-gray-200 dark:bg-gray-600" />
               <Skeleton className="h-4 w-56 bg-gray-200 dark:bg-gray-600" />
             </div>
@@ -112,15 +112,15 @@ export default function EarningsPageSkeleton() {
 
       {/* Fees and Info Skeleton */}
       <section>
-        <Card className="shadow-xl border-0">
-          <CardHeader className="bg-slate-50 dark:bg-gray-800 border-b">
+        <Card className="border-0 shadow-xl">
+          <CardHeader className="border-b bg-slate-50 dark:bg-gray-800">
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-gray-400" />
               <Skeleton className="h-6 w-48 bg-gray-300 dark:bg-gray-700" />
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Left Column Skeleton */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ export default function EarningsPageSkeleton() {
                 <ul className="space-y-2">
                   {[1, 2, 3].map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <Skeleton className="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600 mt-2" />
+                      <Skeleton className="mt-2 h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600" />
                       <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
                     </li>
                   ))}
@@ -143,16 +143,16 @@ export default function EarningsPageSkeleton() {
                   <Coins className="h-5 w-5 text-gray-400" />
                   <Skeleton className="h-6 w-44 bg-gray-300 dark:bg-gray-700" />
                 </div>
-                <ul className="space-y-2 text-sm rounded-xl p-4 bg-gray-50 dark:bg-gray-800">
+                <ul className="space-y-2 rounded-xl bg-gray-50 p-4 text-sm dark:bg-gray-800">
                   {[1, 2, 3].map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <Skeleton className="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600 mt-2" />
+                      <Skeleton className="mt-2 h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600" />
                       <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
                     </li>
                   ))}
                 </ul>
-                <div className="flex items-start gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <Info className="h-4 w-4 text-gray-400 mt-0.5" />
+                <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
+                  <Info className="mt-0.5 h-4 w-4 text-gray-400" />
                   <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
                 </div>
               </div>
@@ -163,8 +163,8 @@ export default function EarningsPageSkeleton() {
 
       {/* Withdrawal Table Skeleton */}
       <section>
-        <Card className="shadow-xl border-0">
-          <CardHeader className="bg-slate-50 dark:bg-gray-800 border-b">
+        <Card className="border-0 shadow-xl">
+          <CardHeader className="border-b bg-slate-50 dark:bg-gray-800">
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-gray-400" />
               <Skeleton className="h-6 w-40 bg-gray-300 dark:bg-gray-700" />
@@ -173,9 +173,9 @@ export default function EarningsPageSkeleton() {
 
           <CardContent className="p-6">
             {/* Desktop Table Skeleton */}
-            <div className="hidden md:block overflow-x-auto rounded-lg border">
+            <div className="hidden overflow-x-auto rounded-lg border md:block">
               <table className="min-w-full text-sm">
-                <thead className="bg-slate-50 dark:bg-gray-800 text-start">
+                <thead className="bg-slate-50 text-start dark:bg-gray-800">
                   <tr>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((header) => (
                       <th key={header} className="px-4 py-3 text-start">
@@ -188,7 +188,7 @@ export default function EarningsPageSkeleton() {
                   {[1, 2, 3].map((row) => (
                     <tr
                       key={row}
-                      className="hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors"
+                      className="transition-colors hover:bg-slate-50 dark:hover:bg-gray-800"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((cell) => (
                         <td key={cell} className="px-4 py-3">
@@ -208,13 +208,13 @@ export default function EarningsPageSkeleton() {
             </div>
 
             {/* Mobile Cards Skeleton */}
-            <div className="md:hidden space-y-4">
+            <div className="space-y-4 md:hidden">
               {[1, 2, 3].map((card) => (
                 <div
                   key={card}
-                  className="border rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800 space-y-3"
+                  className="space-y-3 rounded-lg border bg-white p-4 shadow-sm dark:bg-gray-800"
                 >
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-between">
                     <Skeleton className="h-5 w-24 bg-gray-300 dark:bg-gray-700" />
                     <Skeleton className="h-6 w-16 bg-gray-300 dark:bg-gray-700" />
                   </div>
@@ -222,7 +222,7 @@ export default function EarningsPageSkeleton() {
                   <Skeleton className="h-4 w-40 bg-gray-200 dark:bg-gray-600" />
                   <Skeleton className="h-4 w-20 bg-gray-200 dark:bg-gray-600" />
                   <Skeleton className="h-3 w-28 bg-gray-200 dark:bg-gray-600" />
-                  <div className="flex gap-2 justify-end">
+                  <div className="flex justify-end gap-2">
                     <Skeleton className="h-8 w-8 bg-gray-300 dark:bg-gray-700" />
                     <Skeleton className="h-8 w-8 bg-gray-300 dark:bg-gray-700" />
                   </div>
@@ -233,5 +233,5 @@ export default function EarningsPageSkeleton() {
         </Card>
       </section>
     </div>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   LogOut,
   LogIn,
@@ -11,23 +11,23 @@ import {
   ShoppingBag,
   Settings,
   LayoutDashboard,
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { JSX } from "react";
+} from 'lucide-react'
+import { motion } from 'framer-motion'
+import { JSX } from 'react'
 
 interface User {
-  role?: string;
-  [key: string]: unknown;
+  role?: string
+  [key: string]: unknown
 }
 
 interface MobileMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isAuthenticated: boolean;
-  onLoginOpen: () => void;
-  onRegisterOpen: () => void;
-  user?: User | null;
-  handleLogout: () => void;
+  isOpen: boolean
+  onClose: () => void
+  isAuthenticated: boolean
+  onLoginOpen: () => void
+  onRegisterOpen: () => void
+  user?: User | null
+  handleLogout: () => void
 }
 
 const MobileMenu = ({
@@ -39,32 +39,32 @@ const MobileMenu = ({
   user,
   handleLogout,
 }: MobileMenuProps): JSX.Element | null => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   const handleLinkClick = (action?: () => void) => {
-    if (action) action();
-    onClose();
-  };
+    if (action) action()
+    onClose()
+  }
 
   return (
     <motion.nav
-      className="md:hidden absolute top-full inset-x-0 bg-background shadow-lg border-t z-50"
+      className="bg-background absolute inset-x-0 top-full z-50 border-t shadow-lg md:hidden"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
       aria-label="Mobile navigation menu"
     >
-      <div className="py-4 px-5 space-y-4">
+      <div className="space-y-4 px-5 py-4">
         <div className="flex flex-col space-y-2">
           <Link href="/notes">
             <Button
               variant="ghost"
-              className="w-full justify-start text-base py-3"
+              className="w-full justify-start py-3 text-base"
               onClick={() => handleLinkClick()}
             >
               <BookOpen
-                className="ml-3 h-5 w-5 text-muted-foreground"
+                className="text-muted-foreground ml-3 h-5 w-5"
                 aria-hidden="true"
               />
               تصفح الملخصات
@@ -76,26 +76,26 @@ const MobileMenu = ({
               <Link href="/add-note">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-base py-3"
+                  className="w-full justify-start py-3 text-base"
                   onClick={() => handleLinkClick()}
                 >
                   <PlusCircle
-                    className="ml-3 h-5 w-5 text-muted-foreground"
+                    className="text-muted-foreground ml-3 h-5 w-5"
                     aria-hidden="true"
                   />
                   إضافة ملخص
                 </Button>
               </Link>
 
-              {user?.role === "admin" && (
+              {user?.role === 'admin' && (
                 <Link href="/dashboard">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-base py-3"
+                    className="w-full justify-start py-3 text-base"
                     onClick={() => handleLinkClick()}
                   >
                     <LayoutDashboard
-                      className="ml-2 h-4 w-4 text-muted-foreground"
+                      className="text-muted-foreground ml-2 h-4 w-4"
                       aria-hidden="true"
                     />
                     لوحة التحكم
@@ -106,11 +106,11 @@ const MobileMenu = ({
               <Link href="/profile">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-base py-3"
+                  className="w-full justify-start py-3 text-base"
                   onClick={() => handleLinkClick()}
                 >
                   <Settings
-                    className="ml-3 h-5 w-5 text-muted-foreground"
+                    className="text-muted-foreground ml-3 h-5 w-5"
                     aria-hidden="true"
                   />
                   إدارة الحساب
@@ -120,11 +120,11 @@ const MobileMenu = ({
               <Link href="/profile?tab=purchased">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-base py-3"
+                  className="w-full justify-start py-3 text-base"
                   onClick={() => handleLinkClick()}
                 >
                   <ShoppingBag
-                    className="ml-3 h-5 w-5 text-muted-foreground"
+                    className="text-muted-foreground ml-3 h-5 w-5"
                     aria-hidden="true"
                   />
                   مشترياتي
@@ -133,7 +133,7 @@ const MobileMenu = ({
 
               <Button
                 variant="ghost"
-                className="w-full justify-start text-destructive py-3"
+                className="text-destructive w-full justify-start py-3"
                 onClick={() => handleLinkClick(handleLogout)}
               >
                 <LogOut className="ml-3 h-5 w-5" aria-hidden="true" />
@@ -144,11 +144,11 @@ const MobileMenu = ({
             <>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-base py-3"
+                className="w-full justify-start py-3 text-base"
                 onClick={() => handleLinkClick(onLoginOpen)}
               >
                 <LogIn
-                  className="ml-3 h-5 w-5 text-muted-foreground"
+                  className="text-muted-foreground ml-3 h-5 w-5"
                   aria-hidden="true"
                 />
                 تسجيل الدخول
@@ -156,11 +156,11 @@ const MobileMenu = ({
 
               <Button
                 variant="ghost"
-                className="w-full justify-start text-base py-3"
+                className="w-full justify-start py-3 text-base"
                 onClick={() => handleLinkClick(onRegisterOpen)}
               >
                 <UserPlus
-                  className="ml-3 h-5 w-5 text-muted-foreground"
+                  className="text-muted-foreground ml-3 h-5 w-5"
                   aria-hidden="true"
                 />
                 إنشاء حساب
@@ -170,7 +170,7 @@ const MobileMenu = ({
         </div>
       </div>
     </motion.nav>
-  );
-};
+  )
+}
 
-export default MobileMenu;
+export default MobileMenu

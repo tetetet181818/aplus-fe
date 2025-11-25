@@ -1,6 +1,6 @@
 export default function ReviewSkeletonItem() {
   return (
-    <div className="flex gap-4 py-4 animate-pulse">
+    <div className="flex animate-pulse gap-4 py-4">
       <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
       <div className="flex-1 space-y-2">
         <div className="flex justify-between">
@@ -21,5 +21,5 @@ export default function ReviewSkeletonItem() {
         <div className="h-2 w-1/4 rounded bg-gray-200 dark:bg-gray-700"></div>
       </div>
     </div>
-  );
+  )
 }

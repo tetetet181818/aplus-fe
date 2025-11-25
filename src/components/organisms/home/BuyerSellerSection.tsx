@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   ShoppingCart,
@@ -13,13 +13,13 @@ import {
   Bookmark,
   DollarSign,
   Tag,
-} from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { ReactNode } from "react";
+} from 'lucide-react'
+import { Card } from '@/components/ui/card'
+import { ReactNode } from 'react'
 
 interface FeatureItemProps {
-  icon: ReactNode;
-  text: string;
+  icon: ReactNode
+  text: string
 }
 
 const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
@@ -29,27 +29,27 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
     </span>
     <span>{text}</span>
   </li>
-);
+)
 
 const BuyerSellerSection: React.FC = () => {
   return (
     <section
-      className="py-16 md:py-24 bg-gray-50 dark:bg-gray-900"
+      className="bg-gray-50 py-16 md:py-24 dark:bg-gray-900"
       aria-labelledby="features-heading"
     >
-      <div className="px-4 md:px-6 max-w-6xl mx-auto">
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2
           id="features-heading"
-          className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white"
+          className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl dark:text-white"
         >
           مميزات المنصة
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-2">
           {/* Buyers Card */}
-          <Card className="p-6 md:p-8 bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow">
-            <header className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full text-blue-600 dark:text-blue-300">
+          <Card className="bg-white p-6 shadow-lg transition-shadow hover:shadow-xl md:p-8 dark:bg-gray-800">
+            <header className="mb-6 flex items-center gap-3">
+              <div className="rounded-full bg-blue-100 p-3 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300">
                 <ShoppingCart className="h-6 w-6" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
@@ -57,7 +57,7 @@ const BuyerSellerSection: React.FC = () => {
               </h3>
             </header>
 
-            <ul className="space-y-4 text-gray-700 dark:text-gray-300 list-none">
+            <ul className="list-none space-y-4 text-gray-700 dark:text-gray-300">
               <FeatureItem
                 icon={<Search className="h-5 w-5" />}
                 text="تصفح جميع الملخصات المصنفة حسب الجامعة والتخصص"
@@ -86,9 +86,9 @@ const BuyerSellerSection: React.FC = () => {
           </Card>
 
           {/* Sellers Card */}
-          <Card className="p-6 md:p-8 bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow">
-            <header className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-green-100 dark:bg-green-900/50 rounded-full text-green-600 dark:text-green-300">
+          <Card className="bg-white p-6 shadow-lg transition-shadow hover:shadow-xl md:p-8 dark:bg-gray-800">
+            <header className="mb-6 flex items-center gap-3">
+              <div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900/50 dark:text-green-300">
                 <Upload className="h-6 w-6" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
@@ -96,7 +96,7 @@ const BuyerSellerSection: React.FC = () => {
               </h3>
             </header>
 
-            <ul className="space-y-4 text-gray-700 dark:text-gray-300 list-none">
+            <ul className="list-none space-y-4 text-gray-700 dark:text-gray-300">
               <FeatureItem
                 icon={<DollarSign className="h-5 w-5" />}
                 text="بيع الملخصات وتحقيق دخل إضافي"
@@ -122,13 +122,13 @@ const BuyerSellerSection: React.FC = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
+          <p className="mx-auto mb-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
             انضم إلى مجتمعنا الأكاديمي وابدأ رحلتك سواء كبائع أو مشتري
           </p>
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default BuyerSellerSection;
+export default BuyerSellerSection

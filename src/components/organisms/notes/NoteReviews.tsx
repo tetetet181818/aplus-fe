@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useState, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import {
   Star,
   MessageSquare,
@@ -10,22 +10,22 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   Loader2,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+} from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import formatArabicDate from "@/utils/formateTime";
-import { User } from "@/types";
-import ReviewSkeletonItem from "@/components/skeletons/ReviewSkeletonItem";
-import UpdateReviewsDialog from "@/components/molecules/dialogs/UpdateReviewsDialog";
+} from '@/components/ui/select'
+import { cn } from '@/lib/utils'
+import formatArabicDate from '@/utils/formateTime'
+import { User } from '@/types'
+import ReviewSkeletonItem from '@/components/skeletons/ReviewSkeletonItem'
+import UpdateReviewsDialog from '@/components/molecules/dialogs/UpdateReviewsDialog'
 
 /** ===================== Types ===================== */
 
@@ -39,12 +39,12 @@ import UpdateReviewsDialog from "@/components/molecules/dialogs/UpdateReviewsDia
  * @property {string} [userId] - ID of the user who posted the review.
  */
 interface Review {
-  _id: string;
-  userName?: string;
-  rating: number;
-  comment?: string;
-  createdAt?: string;
-  userId?: string;
+  _id: string
+  userName?: string
+  rating: number
+  comment?: string
+  createdAt?: string
+  userId?: string
 }
 
 /**
@@ -57,15 +57,15 @@ interface Review {
  * @property {string} noteId - ID of the note these reviews belong to.
  */
 interface NoteReviewsProps {
-  loading: boolean;
-  reviews: Review[];
-  user: User;
+  loading: boolean
+  reviews: Review[]
+  user: User
   removeReviewFromNote: (params: {
-    noteId: string;
-    reviewId: string;
-  }) => Promise<void>;
-  removeReviewLoading: boolean;
-  noteId: string;
+    noteId: string
+    reviewId: string
+  }) => Promise<void>
+  removeReviewLoading: boolean
+  noteId: string
 }
 
 /** ===================== Review Item ===================== */
@@ -88,15 +88,15 @@ const ReviewItem = ({
   noteId,
   setUpdateReview,
 }: {
-  review: Review;
-  user: User;
+  review: Review
+  user: User
   removeReviewFromNote: (params: {
-    noteId: string;
-    reviewId: string;
-  }) => Promise<void>;
-  removeReviewLoading: boolean;
-  noteId: string;
-  setUpdateReview: (updateReview: boolean) => void;
+    noteId: string
+    reviewId: string
+  }) => Promise<void>
+  removeReviewLoading: boolean
+  noteId: string
+  setUpdateReview: (updateReview: boolean) => void
 }) => {
   return (
     <motion.div
@@ -107,43 +107,43 @@ const ReviewItem = ({
     >
       <Avatar className="h-10 w-10 flex-shrink-0">
         <AvatarFallback className="bg-blue-100 text-blue-600">
-          {review.userName?.charAt(0) ?? "U"}
+          {review.userName?.charAt(0) ?? 'U'}
         </AvatarFallback>
       </Avatar>
 
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
-          <h4 className="font-semibold text-gray-800 dark:text-white truncate">
-            {review.userName || "مستخدم مجهول"}
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <h4 className="truncate font-semibold text-gray-800 dark:text-white">
+            {review.userName || 'مستخدم مجهول'}
           </h4>
 
-          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+          <div className="flex flex-shrink-0 items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
             {Array.from({ length: 5 }, (_, i) => (
               <Star
                 key={i}
                 className={cn(
-                  "h-3 w-3",
+                  'h-3 w-3',
                   i < (review?.rating || 0)
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300 dark:text-gray-600"
+                    ? 'fill-yellow-400 text-yellow-400'
+                    : 'text-gray-300 dark:text-gray-600'
                 )}
               />
             ))}
           </div>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words">
-          {review?.comment || "لا يوجد تعليق"}
+        <p className="text-sm leading-relaxed break-words text-gray-600 dark:text-gray-300">
+          {review?.comment || 'لا يوجد تعليق'}
         </p>
 
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
           {review?.createdAt
             ? formatArabicDate(review?.createdAt)
-            : "تاريخ غير معروف"}
+            : 'تاريخ غير معروف'}
         </p>
 
         {review?.userId === user?._id && (
-          <div className="flex gap-2 mt-4">
+          <div className="mt-4 flex gap-2">
             <Button
               variant="default"
               className="mt-1"
@@ -168,15 +168,15 @@ const ReviewItem = ({
                   جاري الحذف...
                 </>
               ) : (
-                "حذف"
+                'حذف'
               )}
             </Button>
           </div>
         )}
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
 /** ===================== Sort Selector ===================== */
 
@@ -190,24 +190,24 @@ const SortSelector = ({
   sortOption,
   setSortOption,
 }: {
-  sortOption: string;
-  setSortOption: (option: string) => void;
+  sortOption: string
+  setSortOption: (option: string) => void
 }) => {
   const getDescription = useCallback((option: string): string => {
     const desc: Record<string, string> = {
-      latest: "سيتم عرض أحدث العناصر أولاً",
-      oldest: "سيتم عرض أقدم العناصر أولاً",
-      highest: "سيتم عرض أعلى التقييمات أولاً",
-      lowest: "سيتم عرض أدنى التقييمات أولاً",
-    };
-    return desc[option] || desc.latest;
-  }, []);
+      latest: 'سيتم عرض أحدث العناصر أولاً',
+      oldest: 'سيتم عرض أقدم العناصر أولاً',
+      highest: 'سيتم عرض أعلى التقييمات أولاً',
+      lowest: 'سيتم عرض أدنى التقييمات أولاً',
+    }
+    return desc[option] || desc.latest
+  }, [])
 
   return (
-    <div className="flex flex-col space-y-2 w-full max-w-xs rtl">
+    <div className="rtl flex w-full max-w-xs flex-col space-y-2">
       <label
         htmlFor="sort-select"
-        className="text-sm font-medium text-gray-700 text-right"
+        className="text-right text-sm font-medium text-gray-700"
       >
         ترتيب حسب:
       </label>
@@ -215,45 +215,45 @@ const SortSelector = ({
       <Select value={sortOption} onValueChange={setSortOption}>
         <SelectTrigger
           id="sort-select"
-          className="w-full h-12 px-4 text-right border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white shadow-sm hover:border-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+          className="h-12 w-full rounded-lg border-2 border-gray-300 bg-white px-4 text-right shadow-sm transition-all duration-200 hover:border-gray-400 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
         >
           <SelectValue placeholder="اختر طريقة الترتيب" />
         </SelectTrigger>
 
-        <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg rtl text-right dark:bg-gray-800 dark:border-gray-700">
+        <SelectContent className="rtl rounded-lg border border-gray-200 bg-white text-right shadow-lg dark:border-gray-700 dark:bg-gray-800">
           <SelectItem value="latest">
             <div className="flex items-center">
-              <ArrowUp className="h-5 w-5 ml-2 text-blue-500" />
+              <ArrowUp className="ml-2 h-5 w-5 text-blue-500" />
               <span>الأحدث</span>
             </div>
           </SelectItem>
           <SelectItem value="oldest">
             <div className="flex items-center">
-              <ArrowDown className="h-5 w-5 ml-2 text-blue-500" />
+              <ArrowDown className="ml-2 h-5 w-5 text-blue-500" />
               <span>الأقدم</span>
             </div>
           </SelectItem>
           <SelectItem value="highest">
             <div className="flex items-center">
-              <ArrowUpCircle className="h-5 w-5 ml-2 text-blue-500" />
+              <ArrowUpCircle className="ml-2 h-5 w-5 text-blue-500" />
               <span>الأعلى تقييماً</span>
             </div>
           </SelectItem>
           <SelectItem value="lowest">
             <div className="flex items-center">
-              <ArrowDownCircle className="h-5 w-5 ml-2 text-blue-500" />
+              <ArrowDownCircle className="ml-2 h-5 w-5 text-blue-500" />
               <span>الأدنى تقييماً</span>
             </div>
           </SelectItem>
         </SelectContent>
       </Select>
 
-      <p className="text-xs text-gray-500 text-right mt-1 dark:text-gray-400">
+      <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">
         {getDescription(sortOption)}
       </p>
     </div>
-  );
-};
+  )
+}
 
 /** ===================== NoteReviews ===================== */
 
@@ -270,35 +270,35 @@ const NoteReviews = ({
   noteId,
   removeReviewLoading,
 }: NoteReviewsProps) => {
-  const [sortOption, setSortOption] = useState<string>("latest");
-  const [updateReview, setUpdateReview] = useState(false);
+  const [sortOption, setSortOption] = useState<string>('latest')
+  const [updateReview, setUpdateReview] = useState(false)
 
   /** Sorts reviews according to selected option. */
   const sortedReviews = [...(reviews || [])].sort((a, b) => {
-    const dateA = new Date(a.createdAt ?? "").getTime();
-    const dateB = new Date(b.createdAt ?? "").getTime();
+    const dateA = new Date(a.createdAt ?? '').getTime()
+    const dateB = new Date(b.createdAt ?? '').getTime()
 
     switch (sortOption) {
-      case "latest":
-        return dateB - dateA;
-      case "oldest":
-        return dateA - dateB;
-      case "highest":
-        return b.rating - a.rating;
-      case "lowest":
-        return a.rating - b.rating;
+      case 'latest':
+        return dateB - dateA
+      case 'oldest':
+        return dateA - dateB
+      case 'highest':
+        return b.rating - a.rating
+      case 'lowest':
+        return a.rating - b.rating
       default:
-        return 0;
+        return 0
     }
-  });
+  })
 
   /** Skeleton loader */
   if (loading) {
     return (
-      <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
+      <Card className="shadow-lg dark:border-gray-700 dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <MessageSquare className="h-6 w-6 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <MessageSquare className="text-primary h-6 w-6" />
             التقييمات والتعليقات
           </CardTitle>
         </CardHeader>
@@ -308,35 +308,35 @@ const NoteReviews = ({
           ))}
         </CardContent>
       </Card>
-    );
+    )
   }
 
   /** Empty state */
   if (!reviews?.length) {
     return (
-      <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
+      <Card className="shadow-lg dark:border-gray-700 dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <MessageSquare className="h-6 w-6 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <MessageSquare className="text-primary h-6 w-6" />
             التقييمات والتعليقات
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600 dark:text-gray-400 text-center py-4">
+          <p className="py-4 text-center text-gray-600 dark:text-gray-400">
             لا توجد تقييمات أو تعليقات لهذا الملخص حتى الآن.
           </p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   /** Render list */
   return (
-    <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
+    <Card className="shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <CardHeader>
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <MessageSquare className="h-6 w-6 text-primary" />
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <MessageSquare className="text-primary h-6 w-6" />
             التقييمات والتعليقات ({reviews.length})
           </CardTitle>
           <SortSelector sortOption={sortOption} setSortOption={setSortOption} />
@@ -366,7 +366,7 @@ const NoteReviews = ({
         ))}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default NoteReviews;
+export default NoteReviews

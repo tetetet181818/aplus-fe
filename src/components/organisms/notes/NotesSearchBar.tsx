@@ -1,16 +1,16 @@
-import { FileText, Search as SearchIcon, User } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { FileText, Search as SearchIcon, User } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 interface NotesSearchBarProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  setSearchType: (type: string) => void;
+  searchQuery: string
+  setSearchQuery: (query: string) => void
+  setSearchType: (type: string) => void
 }
 
 export default function NotesSearchBar({
@@ -19,20 +19,20 @@ export default function NotesSearchBar({
   setSearchType,
 }: NotesSearchBarProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+    e.preventDefault()
+  }
   return (
     <form
       onSubmit={handleSearchSubmit}
       className="relative flex w-full items-center gap-2"
     >
       <div className="relative flex w-full items-center rounded-lg border border-gray-300">
-        <SearchIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <SearchIcon className="text-muted-foreground absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
 
         <Input
           type="search"
-          placeholder={"ابحث عن ملخصات، مواد، أو جامعات..."}
-          className="pr-10 flex-grow border-none bg-transparent shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none focus:shadow-none focus:border-none"
+          placeholder={'ابحث عن ملخصات، مواد، أو جامعات...'}
+          className="flex-grow border-none bg-transparent pr-10 shadow-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -54,5 +54,5 @@ export default function NotesSearchBar({
         </SelectContent>
       </Select>
     </form>
-  );
+  )
 }

@@ -1,23 +1,23 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Award } from "lucide-react";
+import { useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Menu, X, Award } from 'lucide-react'
 
-import DesktopNav from "@/components/molecules/navbar/DesktopNav";
-import MobileMenu from "@/components/molecules/navbar/MobileMenu";
-import LoginDialog from "@/components/molecules/dialogs/LoginDialog";
-import RegisterDialog from "@/components/molecules/dialogs/RegisterDialog";
-import useAuth from "@/hooks/useAuth";
-import useNotifications from "@/hooks/useNotifications";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
+import DesktopNav from '@/components/molecules/navbar/DesktopNav'
+import MobileMenu from '@/components/molecules/navbar/MobileMenu'
+import LoginDialog from '@/components/molecules/dialogs/LoginDialog'
+import RegisterDialog from '@/components/molecules/dialogs/RegisterDialog'
+import useAuth from '@/hooks/useAuth'
+import useNotifications from '@/hooks/useNotifications'
+import { NotificationBell } from '@/components/atoms/NotificationBell'
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
-  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-  const { isAuthenticated, handleLogout, user, loading } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
+  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
+  const { isAuthenticated, handleLogout, user, loading } = useAuth()
   const {
     notifications,
     notificationLoading,
@@ -25,34 +25,34 @@ export default function Navbar() {
     handleReadAllNotification,
     handelClearAllNotification,
     handleMakeNotificationRead,
-  } = useNotifications();
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  } = useNotifications()
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   const switchToRegister = () => {
-    setIsLoginDialogOpen(false);
-    setIsRegisterDialogOpen(true);
-  };
+    setIsLoginDialogOpen(false)
+    setIsRegisterDialogOpen(true)
+  }
 
   const switchToLogin = () => {
-    setIsRegisterDialogOpen(false);
-    setIsLoginDialogOpen(true);
-  };
+    setIsRegisterDialogOpen(false)
+    setIsLoginDialogOpen(true)
+  }
 
   return (
     <header
       dir="rtl"
       role="banner"
-      className="px-6 md:px-10 sticky top-0 z-40 w-full border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-950/90 backdrop-blur supports-[backdrop-filter]:bg-white/70 shadow-sm"
+      className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/90 px-6 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 md:px-10 dark:border-gray-800 dark:bg-gray-950/90"
     >
       <div className="flex h-16 items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 transition-opacity hover:opacity-90"
           onClick={() => setIsMenuOpen(false)}
           aria-label="الانتقال إلى الصفحة الرئيسية"
         >
-          <Award className="h-7 w-7 text-primary drop-shadow-sm" />
+          <Award className="text-primary h-7 w-7 drop-shadow-sm" />
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             منصة أ+
           </span>
@@ -72,7 +72,7 @@ export default function Navbar() {
         />
 
         {/* Mobile Hamburger */}
-        <div className="md:hidden flex justify-end items-center">
+        <div className="flex items-center justify-end md:hidden">
           {isAuthenticated && (
             <NotificationBell
               notifications={notifications}
@@ -85,7 +85,7 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-lg hover:bg-gray-100 bg-gray-200 transition-colors"
+            className="rounded-lg bg-gray-200 transition-colors hover:bg-gray-100"
             onClick={toggleMenu}
             aria-label="فتح وإغلاق القائمة"
           >
@@ -105,12 +105,12 @@ export default function Navbar() {
         isAuthenticated={isAuthenticated}
         user={user}
         onLoginOpen={() => {
-          setIsLoginDialogOpen(true);
-          setIsMenuOpen(false);
+          setIsLoginDialogOpen(true)
+          setIsMenuOpen(false)
         }}
         onRegisterOpen={() => {
-          setIsRegisterDialogOpen(true);
-          setIsMenuOpen(false);
+          setIsRegisterDialogOpen(true)
+          setIsMenuOpen(false)
         }}
         handleLogout={handleLogout}
       />
@@ -127,5 +127,5 @@ export default function Navbar() {
         onSwitchToLogin={switchToLogin}
       />
     </header>
-  );
+  )
 }

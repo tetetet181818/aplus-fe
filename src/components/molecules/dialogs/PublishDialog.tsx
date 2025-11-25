@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Dialog,
   DialogContent,
@@ -6,15 +6,15 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Loader } from "lucide-react";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Loader } from 'lucide-react'
 
 interface PublishDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  loading: boolean;
+  open: boolean
+  onClose: () => void
+  onConfirm: () => void
+  loading: boolean
 }
 
 export default function PublishDialog({
@@ -36,8 +36,8 @@ export default function PublishDialog({
           <Button variant="outline">إلغاء</Button>
           <Button
             onClick={() => {
-              onConfirm();
-              onClose();
+              onConfirm()
+              onClose()
             }}
             disabled={loading}
           >
@@ -47,11 +47,11 @@ export default function PublishDialog({
                 <span>جاري النشر...</span>
               </>
             ) : (
-              "نشر"
+              'نشر'
             )}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

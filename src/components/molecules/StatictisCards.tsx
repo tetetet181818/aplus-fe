@@ -1,7 +1,7 @@
-import React from "react";
-import StatictisCard from "../atoms/StatictisCard";
-import { Banknote, BarChart3, NotebookText, Star, Users } from "lucide-react";
-import { StatisticsCardsSkeleton } from "../skeletons/StatictisCardsSkeleton";
+import React from 'react'
+import StatictisCard from '../atoms/StatictisCard'
+import { Banknote, BarChart3, NotebookText, Star, Users } from 'lucide-react'
+import { StatisticsCardsSkeleton } from '../skeletons/StatictisCardsSkeleton'
 
 /**
  * Renders a grid of statistic cards with Arabic titles and icons.
@@ -9,48 +9,48 @@ import { StatisticsCardsSkeleton } from "../skeletons/StatictisCardsSkeleton";
  */
 type StatictisCardsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userStatisticsSales: any;
-  loading: boolean;
-};
+  userStatisticsSales: any
+  loading: boolean
+}
 export default function StatictisCards({
   userStatisticsSales,
   loading,
 }: StatictisCardsProps) {
   if (loading) {
-    return <StatisticsCardsSkeleton />;
+    return <StatisticsCardsSkeleton />
   }
   const statictisCardsData = [
     {
       icon: NotebookText,
       number: userStatisticsSales?.noteCount,
-      title: "إجمالي الملخصات",
+      title: 'إجمالي الملخصات',
     },
     {
       icon: Banknote,
       number: userStatisticsSales?.totalAmount.toFixed(2),
-      title: " إجمالي الأرباح",
+      title: ' إجمالي الأرباح',
     },
     {
       icon: BarChart3,
       number: userStatisticsSales?.salesCount,
-      title: "إجمالي المبيعات",
+      title: 'إجمالي المبيعات',
     },
     {
       icon: Users,
       number: userStatisticsSales?.noteCount,
-      title: "عدد الملخصات المعروضة",
+      title: 'عدد الملخصات المعروضة',
     },
     {
       icon: Star,
       number: userStatisticsSales?.globalRating.toFixed(2),
-      title: "التقييم العام",
+      title: 'التقييم العام',
     },
-  ];
+  ]
 
   return (
     <div
       dir="rtl"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"
+      className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5"
     >
       {statictisCardsData.map((item, index) => (
         <StatictisCard
@@ -61,5 +61,5 @@ export default function StatictisCards({
         />
       ))}
     </div>
-  );
+  )
 }

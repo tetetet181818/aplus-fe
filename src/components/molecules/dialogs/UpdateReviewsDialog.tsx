@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Dialog,
@@ -6,14 +6,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import useNotes from "@/hooks/useNotes";
-import StarRatingInput from "@/components/atoms/StarRatingInput";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import useNotes from '@/hooks/useNotes'
+import StarRatingInput from '@/components/atoms/StarRatingInput'
+import { Label } from '@/components/ui/label'
 
 /**
  * Props for UpdateReviewsDialog component
@@ -36,28 +36,28 @@ export default function UpdateReviewsDialog({
   noteId,
   reviewId,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  noteId: string;
-  reviewId: string;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  noteId: string
+  reviewId: string
 }) {
-  const { handleUpdateReview } = useNotes();
+  const { handleUpdateReview } = useNotes()
 
   /** Initialize formik with validation and submit logic */
   const formik = useFormik({
     initialValues: {
       rating: 0,
-      comment: "",
+      comment: '',
     },
     validationSchema: Yup.object({
       rating: Yup.number()
-        .min(1, "الحد الأدنى هو 1")
-        .max(5, "الحد الأقصى هو 5")
-        .required("يجب إدخال التقييم"),
+        .min(1, 'الحد الأدنى هو 1')
+        .max(5, 'الحد الأقصى هو 5')
+        .required('يجب إدخال التقييم'),
       comment: Yup.string()
         .trim()
-        .min(3, "التعليق قصير جدًا")
-        .required("يجب إدخال تعليق"),
+        .min(3, 'التعليق قصير جدًا')
+        .required('يجب إدخال تعليق'),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -65,13 +65,13 @@ export default function UpdateReviewsDialog({
           noteId,
           reviewId,
           reviewData: values,
-        });
-        if (res) resetForm();
-        onOpenChange(false);
+        })
+        if (res) resetForm()
+        onOpenChange(false)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {}
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -87,7 +87,7 @@ export default function UpdateReviewsDialog({
 
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 mt-4"
+          className="mt-4 flex flex-col gap-4"
         >
           {/* Rating field */}
           <div>
@@ -96,10 +96,10 @@ export default function UpdateReviewsDialog({
             </Label>
             <StarRatingInput
               rating={formik.values.rating}
-              setRating={(value) => formik.setFieldValue("rating", value)}
+              setRating={(value) => formik.setFieldValue('rating', value)}
             />
             {formik.touched.rating && formik.errors.rating && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {formik.errors.rating}
               </p>
             )}
@@ -123,22 +123,22 @@ export default function UpdateReviewsDialog({
               onBlur={formik.handleBlur}
             />
             {formik.touched.comment && formik.errors.comment && (
-              <p className="text-red-500 text-xs">{formik.errors.comment}</p>
+              <p className="text-xs text-red-500">{formik.errors.comment}</p>
             )}
           </div>
 
           {/* Submit button */}
-          <div className="flex justify-end mt-4">
+          <div className="mt-4 flex justify-end">
             <Button
               type="submit"
               disabled={formik.isSubmitting}
               className="px-6"
             >
-              {formik.isSubmitting ? "جارٍ التحديث..." : "تحديث"}
+              {formik.isSubmitting ? 'جارٍ التحديث...' : 'تحديث'}
             </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

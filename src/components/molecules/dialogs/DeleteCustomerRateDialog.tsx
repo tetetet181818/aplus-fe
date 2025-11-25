@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -6,8 +6,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { CustomerRatingTypes } from "@/types";
+} from '@/components/ui/dialog'
+import { CustomerRatingTypes } from '@/types'
 
 export default function DeleteCustomerRateDialog({
   open,
@@ -15,10 +15,10 @@ export default function DeleteCustomerRateDialog({
   item,
   onConfirm,
 }: {
-  open: boolean;
-  onClose: () => void;
-  item: CustomerRatingTypes | null;
-  onConfirm: (noteId: string) => void;
+  open: boolean
+  onClose: () => void
+  item: CustomerRatingTypes | null
+  onConfirm: (noteId: string) => void
 }) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -41,8 +41,8 @@ export default function DeleteCustomerRateDialog({
             variant="destructive"
             className="cursor-pointer"
             onClick={() => {
-              onConfirm(item?._id || "");
-              onClose();
+              onConfirm(item?._id || '')
+              onClose()
             }}
           >
             حذف
@@ -50,5 +50,5 @@ export default function DeleteCustomerRateDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,43 +1,43 @@
 // CheckoutClient.tsx
-"use client";
+'use client'
 
-import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import useNoteDetail from "@/hooks/useNoteDetail";
+import { useSearchParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import useNoteDetail from '@/hooks/useNoteDetail'
 
 export default function CheckoutClient() {
-  const searchParams = useSearchParams();
-  const noteId = searchParams.get("noteId");
-  const userId = searchParams.get("userId");
-  const amount = searchParams.get("amount");
+  const searchParams = useSearchParams()
+  const noteId = searchParams.get('noteId')
+  const userId = searchParams.get('userId')
+  const amount = searchParams.get('amount')
   const { handleCreatePaymentLink, createPaymentLinkLoading } = useNoteDetail(
-    noteId || ""
-  );
+    noteId || ''
+  )
 
   const handlePay = async () => {
     if (!noteId || !userId || !amount) {
-      return;
+      return
     }
     await handleCreatePaymentLink({
       userId,
       noteId,
       amount,
-    });
-  };
+    })
+  }
 
   return (
-    <main className="min-h-3/6 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+    <main className="flex min-h-3/6 items-center justify-center p-4">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 text-center shadow-lg dark:bg-gray-800">
+        <h1 className="mb-4 text-2xl font-bold text-gray-800 dark:text-white">
           إتمام عملية الشراء
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="mb-6 text-gray-600 dark:text-gray-400">
           سيتم تحويلك إلى بوابة الدفع الآمنة لإتمام عملية الشراء
         </p>
 
-        <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-6">
+        <div className="mb-6 rounded-lg bg-gray-100 p-4 dark:bg-gray-700">
           <p className="font-medium text-gray-800 dark:text-gray-200">
-            المبلغ:{" "}
+            المبلغ:{' '}
             <span className="text-primary dark:text-primary-light">
               {amount} ريال
             </span>
@@ -49,13 +49,13 @@ export default function CheckoutClient() {
           disabled={createPaymentLinkLoading}
           className="w-full py-3 text-lg"
         >
-          {createPaymentLinkLoading ? "جاري التحميل..." : "الانتقال للدفع"}
+          {createPaymentLinkLoading ? 'جاري التحميل...' : 'الانتقال للدفع'}
         </Button>
 
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+        <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
           عملية الدفع آمنة ومشفرة بالكامل
         </p>
       </div>
     </main>
-  );
+  )
 }

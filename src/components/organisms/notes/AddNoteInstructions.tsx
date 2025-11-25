@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Lightbulb,
   CheckCircle,
@@ -13,36 +13,36 @@ import {
   Users,
   FileUp,
   Info,
-} from "lucide-react";
+} from 'lucide-react'
 import {
   MAX_NOTES_PER_USER,
   MAX_FILE_SIZE_MB,
   MAX_PAGES_PER_NOTE,
   ALLOWED_FILE_TYPES_STRING,
-} from "@/constants/index";
+} from '@/constants/index'
 
 interface InstructionItemProps {
-  icon: React.ReactNode;
-  title: string;
-  children: React.ReactNode;
+  icon: React.ReactNode
+  title: string
+  children: React.ReactNode
 }
 
 const InstructionItem = ({ icon, title, children }: InstructionItemProps) => (
   <div className="flex items-start space-x-3 rtl:space-x-reverse">
-    <div className="flex-shrink-0 text-primary">{icon}</div>
+    <div className="text-primary flex-shrink-0">{icon}</div>
     <div>
       <h4 className="font-semibold text-gray-800 dark:text-white">{title}</h4>
       <p className="text-sm text-gray-600 dark:text-gray-400">{children}</p>
     </div>
   </div>
-);
+)
 
 const AddNoteInstructions = () => {
   return (
-    <Card className="bg-gray-50 dark:bg-gray-800 mt-6">
+    <Card className="mt-6 bg-gray-50 dark:bg-gray-800">
       <CardHeader>
         <div className="flex items-center gap-2">
-          <Lightbulb className="h-6 w-6 text-primary" />
+          <Lightbulb className="text-primary h-6 w-6" />
           <CardTitle className="text-xl">إرشادات وشروط الإضافة</CardTitle>
         </div>
         <CardDescription>
@@ -51,11 +51,11 @@ const AddNoteInstructions = () => {
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <h3 className="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200 flex items-center">
-            <Info className="h-5 w-5 mr-2 text-red-500" />
+          <h3 className="mb-3 flex items-center text-lg font-semibold text-gray-700 dark:text-gray-200">
+            <Info className="mr-2 h-5 w-5 text-red-500" />
             شروط أساسية (إلزامية):
           </h3>
-          <div className="space-y-4 pl-2 border-r-2 border-red-500 dark:border-red-400 pr-4">
+          <div className="space-y-4 border-r-2 border-red-500 pr-4 pl-2 dark:border-red-400">
             <InstructionItem
               icon={<Users className="h-5 w-5 text-red-500" />}
               title={`الحد الأقصى للملخصات: ${MAX_NOTES_PER_USER}`}
@@ -72,7 +72,7 @@ const AddNoteInstructions = () => {
               icon={<FileUp className="h-5 w-5 text-red-500" />}
               title={`الملف: ${ALLOWED_FILE_TYPES_STRING} فقط، بحجم ${MAX_FILE_SIZE_MB}MB كحد أقصى`}
             >
-              يجب أن يكون الملف بصيغة PDF وألا يتجاوز حجمه {MAX_FILE_SIZE_MB}{" "}
+              يجب أن يكون الملف بصيغة PDF وألا يتجاوز حجمه {MAX_FILE_SIZE_MB}{' '}
               ميجابايت.
             </InstructionItem>
             <InstructionItem
@@ -88,11 +88,11 @@ const AddNoteInstructions = () => {
         <hr className="my-6 border-gray-200 dark:border-gray-700" />
 
         <div>
-          <h3 className="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200 flex items-center">
-            <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
+          <h3 className="mb-3 flex items-center text-lg font-semibold text-gray-700 dark:text-gray-200">
+            <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
             نصائح لتحسين ملخصك:
           </h3>
-          <div className="space-y-4 pl-2 border-r-2 border-green-500 dark:border-green-400 pr-4">
+          <div className="space-y-4 border-r-2 border-green-500 pr-4 pl-2 dark:border-green-400">
             <InstructionItem
               icon={<CheckCircle className="h-5 w-5 text-green-500" />}
               title="عنوان واضح وجذاب"
@@ -137,7 +137,7 @@ const AddNoteInstructions = () => {
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AddNoteInstructions;
+export default AddNoteInstructions

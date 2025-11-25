@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 import {
   Pagination,
   PaginationContent,
@@ -13,20 +13,20 @@ import {
   PaginationNext,
   PaginationPrevious,
   PaginationLink,
-} from "@/components/ui/pagination";
-import { Sale } from "@/types";
-import formatArabicDate from "@/utils/formateTime";
+} from '@/components/ui/pagination'
+import { Sale } from '@/types'
+import formatArabicDate from '@/utils/formateTime'
 
 interface DetailsNoteSalesTableProps {
-  sales: Sale[];
+  sales: Sale[]
   pagination: {
-    page: number;
-    limit: number;
-    totalPages: number;
-    totalItems: number;
-  };
-  onNextPage: () => void;
-  onPrevPage: () => void;
+    page: number
+    limit: number
+    totalPages: number
+    totalItems: number
+  }
+  onNextPage: () => void
+  onPrevPage: () => void
 }
 
 export default function DetailsNoteSalesTable({
@@ -35,7 +35,7 @@ export default function DetailsNoteSalesTable({
   onNextPage,
   onPrevPage,
 }: DetailsNoteSalesTableProps) {
-  const { page, totalPages, totalItems } = pagination;
+  const { page, totalPages, totalItems } = pagination
 
   return (
     <div className="col-span-2 mt-8">
@@ -62,14 +62,14 @@ export default function DetailsNoteSalesTable({
               <TableCell>{sale.invoice_id}</TableCell>
               <TableCell>{sale.amount}</TableCell>
               <TableCell>
-                {formatArabicDate(sale.createdAt || "", { time: false })}
+                {formatArabicDate(sale.createdAt || '', { time: false })}
               </TableCell>
             </TableRow>
           ))}
 
           {sales.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-6 text-gray-500">
+              <TableCell colSpan={4} className="py-6 text-center text-gray-500">
                 لا يوجد نتائج لعرضها
               </TableCell>
             </TableRow>
@@ -79,13 +79,13 @@ export default function DetailsNoteSalesTable({
 
       {/* Pagination */}
       {totalItems > pagination.limit && (
-        <Pagination className="flex justify-center mt-6">
+        <Pagination className="mt-6 flex justify-center">
           <PaginationContent className="flex gap-2">
             {/* Previous */}
             <PaginationItem onClick={onPrevPage}>
               <PaginationPrevious
                 href="#"
-                className={page === 1 ? "pointer-events-none opacity-40" : ""}
+                className={page === 1 ? 'pointer-events-none opacity-40' : ''}
               />
             </PaginationItem>
 
@@ -101,7 +101,7 @@ export default function DetailsNoteSalesTable({
               <PaginationNext
                 href="#"
                 className={
-                  page === totalPages ? "pointer-events-none opacity-40" : ""
+                  page === totalPages ? 'pointer-events-none opacity-40' : ''
                 }
               />
             </PaginationItem>
@@ -109,5 +109,5 @@ export default function DetailsNoteSalesTable({
         </Pagination>
       )}
     </div>
-  );
+  )
 }

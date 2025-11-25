@@ -1,9 +1,9 @@
-"use client";
-import WithdrawalHistoryTable from "@/components/organisms/dashboard/withdrawals/WithdrawalHistoryTable";
-import WithdrawalsStatistics from "./WithdrawalsStatistics";
-import useDashboard from "@/hooks/useDashboard";
-import ChartLineWithdrawals from "@/components/organisms/dashboard/ChartLineWithdrawals";
-import FiltrationOperation from "./FiltrationOperation";
+'use client'
+import WithdrawalHistoryTable from '@/components/organisms/dashboard/withdrawals/WithdrawalHistoryTable'
+import WithdrawalsStatistics from './WithdrawalsStatistics'
+import useDashboard from '@/hooks/useDashboard'
+import ChartLineWithdrawals from '@/components/organisms/dashboard/ChartLineWithdrawals'
+import FiltrationOperation from './FiltrationOperation'
 
 export default function WithdrawalsDashboard() {
   const {
@@ -34,9 +34,9 @@ export default function WithdrawalsDashboard() {
     loading,
     handleAddAdminNote,
     addAdminNoteLoading,
-  } = useDashboard();
+  } = useDashboard()
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="animate-fade-in space-y-8">
       <WithdrawalsStatistics
         loading={withdrawalStatusesLoading}
         withdrawalStatuses={withdrawalStatuses}
@@ -74,5 +74,5 @@ export default function WithdrawalsDashboard() {
         addAdminNoteLoading={addAdminNoteLoading}
       />
     </div>
-  );
+  )
 }

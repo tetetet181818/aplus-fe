@@ -1,4 +1,4 @@
-import FilterPanel from "./FilterPanel";
+import FilterPanel from './FilterPanel'
 
 export default function FilterPanelContainer({
   filters,
@@ -7,16 +7,16 @@ export default function FilterPanelContainer({
   years,
 }: {
   filters: {
-    university: string;
-    college: string;
-    year: string;
-    maxPrice: string;
-    subject: string;
-    sortBy: string;
-  };
-  onFilterChange: (type: string, value: string) => void;
-  onClearFilters: () => void;
-  years: number[];
+    university: string
+    college: string
+    year: string
+    maxPrice: string
+    subject: string
+    sortBy: string
+  }
+  onFilterChange: (type: string, value: string) => void
+  onClearFilters: () => void
+  years: number[]
 }) {
   return (
     <FilterPanel
@@ -25,5 +25,5 @@ export default function FilterPanelContainer({
       onClearFilters={onClearFilters}
       years={years}
     />
-  );
+  )
 }

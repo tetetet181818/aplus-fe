@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Dialog,
@@ -7,29 +7,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 // ----------------- Validation Schema -----------------
 const validationSchema = Yup.object({
   note: Yup.string()
     .trim()
-    .required("يجب إدخال الملاحظة")
-    .min(5, "الملاحظة يجب أن تكون أطول من 5 أحرف")
-    .max(500, "الملاحظة لا يمكن أن تتجاوز 500 حرف"),
-});
+    .required('يجب إدخال الملاحظة')
+    .min(5, 'الملاحظة يجب أن تكون أطول من 5 أحرف')
+    .max(500, 'الملاحظة لا يمكن أن تتجاوز 500 حرف'),
+})
 
 interface AddAdminNotesDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  withdrawalId: string;
-  handleAddAdminNote: (id: string, note: string) => void;
-  addAdminNoteLoading: boolean;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  withdrawalId: string
+  handleAddAdminNote: (id: string, note: string) => void
+  addAdminNoteLoading: boolean
 }
 
 export default function AddAdminNotesDialog({
@@ -40,16 +40,16 @@ export default function AddAdminNotesDialog({
   addAdminNoteLoading,
 }: AddAdminNotesDialogProps) {
   const formik = useFormik({
-    initialValues: { note: "" },
+    initialValues: { note: '' },
     validateOnBlur: false,
     validateOnChange: false,
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      await handleAddAdminNote(withdrawalId, values.note);
-      resetForm();
-      onOpenChange(false);
+      await handleAddAdminNote(withdrawalId, values.note)
+      resetForm()
+      onOpenChange(false)
     },
-  });
+  })
 
   const {
     values,
@@ -60,7 +60,7 @@ export default function AddAdminNotesDialog({
     isValid,
     dirty,
     isSubmitting,
-  } = formik;
+  } = formik
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -73,7 +73,7 @@ export default function AddAdminNotesDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="adminNote">الملاحظة</Label>
             <Textarea
@@ -85,7 +85,7 @@ export default function AddAdminNotesDialog({
               className="min-h-[100px]"
             />
             {touched.note && errors.note && (
-              <p className="text-sm text-red-500 mt-1">{errors.note}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.note}</p>
             )}
           </div>
 
@@ -105,7 +105,7 @@ export default function AddAdminNotesDialog({
               }
             >
               {(addAdminNoteLoading || isSubmitting) && (
-                <Loader2 className="animate-spin mr-2 size-4" />
+                <Loader2 className="mr-2 size-4 animate-spin" />
               )}
               حفظ الملاحظة
             </Button>
@@ -113,5 +113,5 @@ export default function AddAdminNotesDialog({
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

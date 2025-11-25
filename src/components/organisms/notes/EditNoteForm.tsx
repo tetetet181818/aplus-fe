@@ -1,24 +1,24 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+'use client'
+import { useEffect, useState } from 'react'
+import { useFormik } from 'formik'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 import {
   Upload,
   FileText,
@@ -26,115 +26,115 @@ import {
   ImageDown as ImageUp,
   CopyCheck as Checkbox,
   Loader,
-} from "lucide-react";
+} from 'lucide-react'
 import {
   MAX_FILE_SIZE_MB,
   MAX_PAGES_PER_NOTE,
   ALLOWED_FILE_TYPES_STRING,
-} from "@/constants/index.js";
-import { editNoteSchema } from "../../utils/validation/fileValidation";
-import { universityColleges } from "@/constants/index";
-import { useFileStore } from "../../stores/useFileStore";
-import { toast } from "@/components/ui/use-toast";
+} from '@/constants/index.js'
+import { editNoteSchema } from '../../utils/validation/fileValidation'
+import { universityColleges } from '@/constants/index'
+import { useFileStore } from '../../stores/useFileStore'
+import { toast } from '@/components/ui/use-toast'
 
 const EditNoteForm = ({ universities, note }) => {
-  const { updateNote, loading } = useFileStore((state) => state);
-  const [isUploadingFile, setIsUploadingFile] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [availableColleges, setAvailableColleges] = useState([]);
+  const { updateNote, loading } = useFileStore((state) => state)
+  const [isUploadingFile, setIsUploadingFile] = useState(false)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [availableColleges, setAvailableColleges] = useState([])
 
   const formik = useFormik({
     initialValues: {
-      title: note?.title || "",
-      description: note?.description || "",
+      title: note?.title || '',
+      description: note?.description || '',
       price: note?.price || 0,
-      university: note?.university || "",
-      college: note?.college || "",
-      subject: note?.subject || "",
+      university: note?.university || '',
+      college: note?.college || '',
+      subject: note?.subject || '',
       pagesNumber: note?.pagesNumber || 0,
       year: note?.year || new Date().getFullYear(),
-      contactMethod: note?.contactMethod || "",
+      contactMethod: note?.contactMethod || '',
       file: null,
       imageFile: null,
-      fileName: note?.fileName || "",
-      previewImage: note?.previewImage || "",
+      fileName: note?.fileName || '',
+      previewImage: note?.previewImage || '',
       removeFile: false,
       removePreviewImage: false,
     },
     validationSchema: editNoteSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const formData = new FormData();
-        formData.append("title", values.title);
-        formData.append("description", values.description);
-        formData.append("price", values.price);
-        formData.append("university", values.university);
-        formData.append("college", values.college);
-        formData.append("subject", values.subject);
-        formData.append("pagesNumber", values.pagesNumber);
-        formData.append("year", values.year);
-        formData.append("contactMethod", values.contactMethod);
+        const formData = new FormData()
+        formData.append('title', values.title)
+        formData.append('description', values.description)
+        formData.append('price', values.price)
+        formData.append('university', values.university)
+        formData.append('college', values.college)
+        formData.append('subject', values.subject)
+        formData.append('pagesNumber', values.pagesNumber)
+        formData.append('year', values.year)
+        formData.append('contactMethod', values.contactMethod)
         if (values.file) {
-          formData.append("file", values.file);
+          formData.append('file', values.file)
         }
         if (values.imageFile) {
-          formData.append("imageFile", values.imageFile);
+          formData.append('imageFile', values.imageFile)
         }
-        formData.append("removeFile", values.removeFile);
-        formData.append("removePreviewImage", values.removePreviewImage);
+        formData.append('removeFile', values.removeFile)
+        formData.append('removePreviewImage', values.removePreviewImage)
 
-        await updateNote(note.id, formData);
+        await updateNote(note.id, formData)
         toast({
-          title: "تم التحديث بنجاح",
-          description: "تم تحديث الملخص بنجاح.",
-          variant: "success",
-        });
+          title: 'تم التحديث بنجاح',
+          description: 'تم تحديث الملخص بنجاح.',
+          variant: 'success',
+        })
       } catch (err) {
         toast({
-          title: "خطأ في تحديث الملخص",
-          description: err.message || "حدث خطأ أثناء تحديث الملخص.",
-          variant: "destructive",
-        });
-        console.error("Error updating note:", err);
+          title: 'خطأ في تحديث الملخص',
+          description: err.message || 'حدث خطأ أثناء تحديث الملخص.',
+          variant: 'destructive',
+        })
+        console.error('Error updating note:', err)
       }
     },
-  });
+  })
 
   useEffect(() => {
     if (note?.university) {
-      setAvailableColleges(universityColleges[note.university] || []);
+      setAvailableColleges(universityColleges[note.university] || [])
     }
-  }, [note]);
+  }, [note])
 
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]
+    if (!file) return
 
-    if (e.target.name === "file") {
-      setIsUploadingFile(true);
-      formik.setFieldValue("file", file);
-      formik.setFieldValue("removeFile", false);
-      setIsUploadingFile(false);
-    } else if (e.target.name === "imageFile") {
-      setIsUploadingImage(true);
-      formik.setFieldValue("imageFile", file);
-      formik.setFieldValue("removePreviewImage", false);
-      setIsUploadingImage(false);
+    if (e.target.name === 'file') {
+      setIsUploadingFile(true)
+      formik.setFieldValue('file', file)
+      formik.setFieldValue('removeFile', false)
+      setIsUploadingFile(false)
+    } else if (e.target.name === 'imageFile') {
+      setIsUploadingImage(true)
+      formik.setFieldValue('imageFile', file)
+      formik.setFieldValue('removePreviewImage', false)
+      setIsUploadingImage(false)
     }
-  };
+  }
 
   const handleSelectChange = (name, value) => {
-    formik.setFieldValue(name, value);
-    if (name === "university") {
-      formik.setFieldValue("college", "");
+    formik.setFieldValue(name, value)
+    if (name === 'university') {
+      formik.setFieldValue('college', '')
     }
-  };
+  }
 
   const handleUniversityChange = (value) => {
-    formik.setFieldValue("university", value);
-    formik.setFieldValue("college", "");
-    setAvailableColleges(universityColleges[value] || []);
-  };
+    formik.setFieldValue('university', value)
+    formik.setFieldValue('college', '')
+    setAvailableColleges(universityColleges[value] || [])
+  }
 
   return (
     <Card>
@@ -145,7 +145,7 @@ const EditNoteForm = ({ universities, note }) => {
       <CardContent>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="title">عنوان الملخص *</Label>
                 <Input
@@ -197,7 +197,7 @@ const EditNoteForm = ({ universities, note }) => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="university">الجامعة *</Label>
                 <Select
@@ -208,7 +208,7 @@ const EditNoteForm = ({ universities, note }) => {
                   <SelectTrigger
                     id="university"
                     className={
-                      !formik.values.university ? "text-muted-foreground" : ""
+                      !formik.values.university ? 'text-muted-foreground' : ''
                     }
                   >
                     <SelectValue
@@ -237,7 +237,7 @@ const EditNoteForm = ({ universities, note }) => {
                   name="college"
                   value={formik.values.college}
                   onValueChange={(value) =>
-                    handleSelectChange("college", value)
+                    handleSelectChange('college', value)
                   }
                   disabled={
                     !formik.values.university || availableColleges.length === 0
@@ -262,7 +262,7 @@ const EditNoteForm = ({ universities, note }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="subject">المادة *</Label>
                 <Input
@@ -343,7 +343,7 @@ const EditNoteForm = ({ universities, note }) => {
 
             <div className="space-y-2">
               <Label htmlFor="file">
-                ملف الملخص ({ALLOWED_FILE_TYPES_STRING}، الحد الأقصى:{" "}
+                ملف الملخص ({ALLOWED_FILE_TYPES_STRING}، الحد الأقصى:{' '}
                 {MAX_FILE_SIZE_MB}MB)
               </Label>
               <Input
@@ -353,26 +353,26 @@ const EditNoteForm = ({ universities, note }) => {
                 onChange={handleFileChange}
                 accept={ALLOWED_FILE_TYPES_STRING}
                 disabled={isUploadingFile}
-                className={isUploadingFile ? "opacity-50" : ""}
+                className={isUploadingFile ? 'opacity-50' : ''}
               />
               {isUploadingFile && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-md">
-                  <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center rounded-md bg-gray-100">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
                 </div>
               )}
 
               {formik.values.file ? (
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                  <FileText className="h-4 w-4 mr-2 text-primary" />
+                <div className="mt-2 flex items-center text-sm text-gray-600 dark:text-gray-400">
+                  <FileText className="text-primary mr-2 h-4 w-4" />
                   <span>
                     {formik.values.file.name} (
                     {(formik.values.file.size / 1024 / 1024).toFixed(2)} MB)
                   </span>
                 </div>
               ) : formik.values.fileName && !formik.values.removeFile ? (
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-between p-2 border rounded-md">
+                <div className="mt-2 flex items-center justify-between rounded-md border p-2 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-primary" />
+                    <FileText className="text-primary mr-2 h-4 w-4" />
                     <span>الملف الحالي: {formik.values.fileName}</span>
                   </div>
                   <div className="flex items-center">
@@ -381,13 +381,13 @@ const EditNoteForm = ({ universities, note }) => {
                       name="removeFile"
                       checked={formik.values.removeFile}
                       onCheckedChange={(checked) =>
-                        formik.setFieldValue("removeFile", checked)
+                        formik.setFieldValue('removeFile', checked)
                       }
                       className="ml-2"
                     />
                     <Label
                       htmlFor="removeFile"
-                      className="text-xs text-red-500 cursor-pointer"
+                      className="cursor-pointer text-xs text-red-500"
                     >
                       حذف الملف الحالي (يتطلب رفع ملف جديد)
                     </Label>
@@ -410,29 +410,29 @@ const EditNoteForm = ({ universities, note }) => {
                 onChange={handleFileChange}
                 accept="image/jpeg, image/png"
                 disabled={isUploadingImage}
-                className={isUploadingImage ? "opacity-50" : ""}
+                className={isUploadingImage ? 'opacity-50' : ''}
               />
               {isUploadingImage && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-md">
-                  <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center rounded-md bg-gray-100">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
                 </div>
               )}
               {formik.values.imageFile ? (
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                  <ImageUp className="h-4 w-4 mr-2 text-primary" />
+                <div className="mt-2 flex items-center text-sm text-gray-600 dark:text-gray-400">
+                  <ImageUp className="text-primary mr-2 h-4 w-4" />
                   <span>
                     {formik.values.imageFile.name} (
-                    {(formik.values.imageFile.size / 1024 / 1024).toFixed(2)}{" "}
+                    {(formik.values.imageFile.size / 1024 / 1024).toFixed(2)}{' '}
                     MB)
                   </span>
                 </div>
               ) : formik.values.previewImage &&
                 !formik.values.removePreviewImage ? (
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-between p-2 border rounded-md">
+                <div className="mt-2 flex items-center justify-between rounded-md border p-2 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center">
-                    <ImageUp className="h-4 w-4 mr-2 text-primary" />
+                    <ImageUp className="text-primary mr-2 h-4 w-4" />
                     <span>
-                      صورة الغلاف الحالية:{" "}
+                      صورة الغلاف الحالية:{' '}
                       <a
                         href={formik.values.previewImage}
                         target="_blank"
@@ -449,13 +449,13 @@ const EditNoteForm = ({ universities, note }) => {
                       name="removePreviewImage"
                       checked={formik.values.removePreviewImage}
                       onCheckedChange={(checked) =>
-                        formik.setFieldValue("removePreviewImage", checked)
+                        formik.setFieldValue('removePreviewImage', checked)
                       }
                       className="ml-2"
                     />
                     <Label
                       htmlFor="removePreviewImage"
-                      className="text-xs text-red-500 cursor-pointer"
+                      className="cursor-pointer text-xs text-red-500"
                     >
                       حذف الصورة الحالية
                     </Label>
@@ -495,7 +495,7 @@ const EditNoteForm = ({ universities, note }) => {
         </form>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default EditNoteForm;
+export default EditNoteForm

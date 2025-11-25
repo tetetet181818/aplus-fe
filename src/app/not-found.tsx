@@ -1,36 +1,36 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: "404 | الصفحة غير موجودة",
-  description: "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
-};
+  title: '404 | الصفحة غير موجودة',
+  description: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+}
 
 export default function NotFound() {
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4"
+      className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4"
       dir="rtl"
     >
-      <div className="text-center max-w-md mx-auto">
+      <div className="mx-auto max-w-md text-center">
         <div className="mb-6">
-          <span className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] to-[#3b82f6]">
+          <span className="bg-gradient-to-r from-[#3b82f6] to-[#3b82f6] bg-clip-text text-9xl font-bold text-transparent">
             404
           </span>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-3">
+        <h1 className="mb-3 text-3xl font-bold text-gray-800">
           عذرًا! الصفحة غير موجودة
         </h1>
 
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="mb-8 text-lg text-gray-600">
           الصفحة التي تبحث عنها غير موجودة أو تم نقلها. لا تقلق، دعنا نعيدك إلى
           الصفحة الرئيسية.
         </p>
 
         <Link
           href="/"
-          className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-[#3b82f6] to-[#3b82f6] text-[#f8fafc] font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          className="inline-block rounded-lg bg-gradient-to-r from-[#3b82f6] to-[#3b82f6] px-6 py-3 font-medium text-[#f8fafc] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
         >
           العودة للصفحة الرئيسية
         </Link>
@@ -39,12 +39,12 @@ export default function NotFound() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="w-3 h-3 rounded-full bg-blue-200 animate-bounce"
+              className="h-3 w-3 animate-bounce rounded-full bg-blue-200"
               style={{ animationDelay: `${i * 0.1}s` }}
             />
           ))}
         </div>
       </div>
     </div>
-  );
+  )
 }

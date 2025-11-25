@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BestSellerNotes from "@/components/molecules/BestSellerNotes";
-import BestSellerUsers from "@/components/molecules/BestSellerUsers";
-import useNotes from "@/hooks/useNotes";
-import useAuth from "@/hooks/useAuth";
-import LoadingSpinner from "@/components/atoms/LoadingSpinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import BestSellerNotes from '@/components/molecules/BestSellerNotes'
+import BestSellerUsers from '@/components/molecules/BestSellerUsers'
+import useNotes from '@/hooks/useNotes'
+import useAuth from '@/hooks/useAuth'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner'
 
 export default function BestSellerSection() {
-  const { bestSellerNotes, bestSellerNotesLoading } = useNotes();
-  const { getBestSellerUsers, getBestSellerUsersLoading } = useAuth();
+  const { bestSellerNotes, bestSellerNotesLoading } = useNotes()
+  const { getBestSellerUsers, getBestSellerUsersLoading } = useAuth()
   if (getBestSellerUsersLoading || bestSellerNotesLoading) {
-    return <LoadingSpinner message="" />;
+    return <LoadingSpinner message="" />
   }
   return (
-    <section className="w-full mx-auto py-10 overflow-x-hidden">
-      <div className="flex flex-col items-center my-10 text-center">
+    <section className="mx-auto w-full overflow-x-hidden py-10">
+      <div className="my-10 flex flex-col items-center text-center">
         <h1 className="text-2xl font-bold">
           الأكثر مبيعًا في منصة <span className="text-primary">أ+</span>
         </h1>
-        <p className="text-xl text-gray-600 mt-2 max-w-3xl">
+        <p className="mt-2 max-w-3xl text-xl text-gray-600">
           تصفّح قائمة منتجاتنا وخدماتنا الأكثر رواجًا بين المستخدمين في منصة
           <span className="text-primary mx-1">أ+</span>، حيث الجودة تلتقي
           بالثقة، والتجربة تثبت تميزنا يومًا بعد يوم.
@@ -27,15 +27,15 @@ export default function BestSellerSection() {
       </div>
 
       <Tabs defaultValue="notes" className="mx-auto w-full max-w-6xl">
-        <TabsList className="w-1/2 mx-auto rounded-full bg-primary/20 p-1 flex justify-between px-0">
+        <TabsList className="bg-primary/20 mx-auto flex w-1/2 justify-between rounded-full p-1 px-0">
           <TabsTrigger
-            className="cursor-pointer py-4 rounded-full w-1/2 data-[state=active]:bg-primary data-[state=active]:text-white transition-colors"
+            className="data-[state=active]:bg-primary w-1/2 cursor-pointer rounded-full py-4 transition-colors data-[state=active]:text-white"
             value="sellers"
           >
             البائعين
           </TabsTrigger>
           <TabsTrigger
-            className="cursor-pointer py-4 rounded-full w-1/2 data-[state=active]:bg-primary data-[state=active]:text-white transition-colors"
+            className="data-[state=active]:bg-primary w-1/2 cursor-pointer rounded-full py-4 transition-colors data-[state=active]:text-white"
             value="notes"
           >
             الملخصات
@@ -57,5 +57,5 @@ export default function BestSellerSection() {
         </TabsContent>
       </Tabs>
     </section>
-  );
+  )
 }

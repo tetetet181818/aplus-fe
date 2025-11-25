@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+'use client'
+import { Button } from '@/components/ui/button'
+import { Filter, X } from 'lucide-react'
 
 const NotesListHeader = ({
   onToggleFilters,
@@ -13,51 +13,51 @@ const NotesListHeader = ({
   onClearFilters,
   searchType,
 }: {
-  onToggleFilters: () => void;
-  showFilters: boolean;
-  itemCount: number;
-  totalCount: number;
-  usersCount: number;
-  usersTotalCount: number;
-  hasActiveFilters: boolean;
-  onClearFilters: () => void;
-  searchType: string;
+  onToggleFilters: () => void
+  showFilters: boolean
+  itemCount: number
+  totalCount: number
+  usersCount: number
+  usersTotalCount: number
+  hasActiveFilters: boolean
+  onClearFilters: () => void
+  searchType: string
 }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+    <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="space-y-1">
-        {searchType === "user" && (
+        {searchType === 'user' && (
           <h1 className="text-2xl font-bold tracking-tight">تصفح المستخدمين</h1>
         )}
-        {searchType === "file" && (
+        {searchType === 'file' && (
           <h1 className="text-2xl font-bold tracking-tight">تصفح الملخصات</h1>
         )}
-        {searchType === "user" && (
-          <p className="text-sm text-muted-foreground">
+        {searchType === 'user' && (
+          <p className="text-muted-foreground text-sm">
             {hasActiveFilters ? (
               <>
-                عرض <span className="font-medium">{usersCount}</span> من أصل{" "}
+                عرض <span className="font-medium">{usersCount}</span> من أصل{' '}
                 <span className="font-medium">{usersTotalCount}</span> مستخدم
               </>
             ) : (
               <>
-                إجمالي المستخدمين المسجلين:{" "}
+                إجمالي المستخدمين المسجلين:{' '}
                 <span className="font-medium">{usersTotalCount}</span>
               </>
             )}
           </p>
         )}
 
-        {searchType === "note" && (
-          <p className="text-sm text-muted-foreground">
+        {searchType === 'note' && (
+          <p className="text-muted-foreground text-sm">
             {hasActiveFilters ? (
               <>
-                عرض <span className="font-medium">{itemCount}</span> من أصل{" "}
+                عرض <span className="font-medium">{itemCount}</span> من أصل{' '}
                 <span className="font-medium">{totalCount}</span> ملخص
               </>
             ) : (
               <>
-                إجمالي الملخصات المتاحة:{" "}
+                إجمالي الملخصات المتاحة:{' '}
                 <span className="font-medium">{totalCount}</span>
               </>
             )}
@@ -77,20 +77,20 @@ const NotesListHeader = ({
             مسح الفلاتر
           </Button>
         )}
-        {searchType === "file" && (
+        {searchType === 'file' && (
           <Button
-            variant={showFilters ? "default" : "outline"}
+            variant={showFilters ? 'default' : 'outline'}
             size="sm"
             onClick={onToggleFilters}
             className="flex items-center gap-1.5"
           >
             <Filter className="h-4 w-4" />
-            {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
+            {showFilters ? 'إخفاء الفلاتر' : 'عرض الفلاتر'}
           </Button>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotesListHeader;
+export default NotesListHeader

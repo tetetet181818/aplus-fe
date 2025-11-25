@@ -1,15 +1,15 @@
-"use client";
-import { motion } from "framer-motion";
-import Head from "next/head";
-import Link from "next/link";
+'use client'
+import { motion } from 'framer-motion'
+import Head from 'next/head'
+import Link from 'next/link'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Palette } from "lucide-react";
-import { faqData } from "@/constants/index";
+} from '@/components/ui/accordion'
+import { Palette } from 'lucide-react'
+import { faqData } from '@/constants/index'
 
 const FAQPage = () => {
   return (
@@ -30,12 +30,12 @@ const FAQPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6"
+        className="min-h-screen bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 px-4 py-12 sm:px-6 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900"
       >
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-12 text-center">
             <motion.h1
-              className="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent dark:from-primary-light dark:to-accent-light mb-4"
+              className="from-primary to-accent dark:from-primary-light dark:to-accent-light mb-4 bg-gradient-to-r bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl"
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
@@ -60,9 +60,9 @@ const FAQPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index, duration: 0.5 }}
               >
-                <div className="flex items-center mb-4">
-                  <categoryItem.icon className="h-6 w-6 mr-3 text-primary dark:text-primary-light" />
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white">
+                <div className="mb-4 flex items-center">
+                  <categoryItem.icon className="text-primary dark:text-primary-light mr-3 h-6 w-6" />
+                  <h2 className="text-xl font-semibold text-gray-800 sm:text-2xl dark:text-white">
                     {categoryItem.category}
                   </h2>
                 </div>
@@ -72,9 +72,9 @@ const FAQPage = () => {
                     <AccordionItem
                       value={`item-${index}-${qIndex}`}
                       key={qIndex}
-                      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
+                      className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800"
                     >
-                      <AccordionTrigger className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-start">
+                      <AccordionTrigger className="px-4 py-3 text-start hover:bg-gray-50 dark:hover:bg-gray-700">
                         {faq.question}
                       </AccordionTrigger>
                       <AccordionContent className="px-4 py-3 text-gray-600 dark:text-gray-400">
@@ -88,23 +88,23 @@ const FAQPage = () => {
           </div>
 
           <motion.div
-            className="mt-16 text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md"
+            className="mt-16 rounded-xl bg-white p-6 text-center shadow-md dark:bg-gray-800"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <div className="flex justify-center mb-4">
-              <Palette className="h-10 w-10 text-accent dark:text-accent-light" />
+            <div className="mb-4 flex justify-center">
+              <Palette className="text-accent dark:text-accent-light h-10 w-10" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+            <h3 className="mb-2 text-xl font-semibold text-gray-800 dark:text-white">
               لم تجد إجابتك؟
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="mb-4 text-gray-600 dark:text-gray-400">
               فريق الدعم لدينا جاهز لمساعدتك
             </p>
             <Link
               href="/contact-us"
-              className="inline-block px-6 py-2 bg-primary hover:bg-primary-dark dark:bg-primary-light dark:hover:bg-primary text-white dark:text-gray-900 rounded-md transition-colors"
+              className="bg-primary hover:bg-primary-dark dark:bg-primary-light dark:hover:bg-primary inline-block rounded-md px-6 py-2 text-white transition-colors dark:text-gray-900"
             >
               اتصل بنا الآن
             </Link>
@@ -112,7 +112,7 @@ const FAQPage = () => {
         </div>
       </motion.main>
     </>
-  );
-};
+  )
+}
 
-export default FAQPage;
+export default FAQPage

@@ -4,64 +4,64 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 
 export default function FinancialDashboardSkeleton() {
   return (
     <div className="space-y-8">
       {/* Header Skeleton */}
       <header className="flex items-center gap-2">
-        <div className="p-2 bg-gray-200 rounded-lg animate-pulse">
-          <div className="h-6 w-6 bg-gray-300 rounded"></div>
+        <div className="animate-pulse rounded-lg bg-gray-200 p-2">
+          <div className="h-6 w-6 rounded bg-gray-300"></div>
         </div>
-        <div className="h-8 w-64 bg-gray-200 rounded animate-pulse"></div>
+        <div className="h-8 w-64 animate-pulse rounded bg-gray-200"></div>
       </header>
 
       {/* Balance Card Skeleton */}
       <section>
-        <Card className="bg-gray-100 border-0 shadow-xl overflow-hidden relative animate-pulse">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gray-200 rounded-full -translate-y-16 translate-x-16"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gray-200 rounded-full translate-y-12 -translate-x-12"></div>
+        <Card className="relative animate-pulse overflow-hidden border-0 bg-gray-100 shadow-xl">
+          <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-gray-200"></div>
+          <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-gray-200"></div>
 
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-gray-300 rounded-full">
-                <div className="h-5 w-5 bg-gray-400 rounded"></div>
+              <div className="rounded-full bg-gray-300 p-2">
+                <div className="h-5 w-5 rounded bg-gray-400"></div>
               </div>
-              <div className="h-6 w-48 bg-gray-300 rounded"></div>
+              <div className="h-6 w-48 rounded bg-gray-300"></div>
             </CardTitle>
             <CardDescription>
-              <div className="h-4 w-64 bg-gray-300 rounded mt-2"></div>
+              <div className="mt-2 h-4 w-64 rounded bg-gray-300"></div>
             </CardDescription>
           </CardHeader>
 
           <CardContent className="relative z-10">
-            <div className="h-12 w-40 bg-gray-300 rounded animate-pulse"></div>
+            <div className="h-12 w-40 animate-pulse rounded bg-gray-300"></div>
           </CardContent>
         </Card>
       </section>
 
       {/* Fees and Info Skeleton */}
       <section>
-        <Card className="shadow-xl border-0 animate-pulse">
-          <CardHeader className="bg-gray-100 border-b">
+        <Card className="animate-pulse border-0 shadow-xl">
+          <CardHeader className="border-b bg-gray-100">
             <CardTitle className="flex items-center gap-2">
-              <div className="h-5 w-5 bg-gray-300 rounded"></div>
-              <div className="h-6 w-48 bg-gray-300 rounded"></div>
+              <div className="h-5 w-5 rounded bg-gray-300"></div>
+              <div className="h-6 w-48 rounded bg-gray-300"></div>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <div className="h-5 w-5 bg-gray-300 rounded"></div>
-                  <div className="h-6 w-40 bg-gray-300 rounded"></div>
+                  <div className="h-5 w-5 rounded bg-gray-300"></div>
+                  <div className="h-6 w-40 rounded bg-gray-300"></div>
                 </div>
                 <div className="space-y-3">
                   {[1, 2, 3].map((item) => (
                     <div key={item} className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-gray-300 mt-2"></div>
-                      <div className="h-4 bg-gray-200 rounded flex-1"></div>
+                      <div className="mt-2 h-2 w-2 rounded-full bg-gray-300"></div>
+                      <div className="h-4 flex-1 rounded bg-gray-200"></div>
                     </div>
                   ))}
                 </div>
@@ -69,20 +69,20 @@ export default function FinancialDashboardSkeleton() {
 
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <div className="h-5 w-5 bg-gray-300 rounded"></div>
-                  <div className="h-6 w-40 bg-gray-300 rounded"></div>
+                  <div className="h-5 w-5 rounded bg-gray-300"></div>
+                  <div className="h-6 w-40 rounded bg-gray-300"></div>
                 </div>
-                <div className="space-y-3 rounded-xl p-4 bg-gray-50">
+                <div className="space-y-3 rounded-xl bg-gray-50 p-4">
                   {[1, 2, 3].map((item) => (
                     <div key={item} className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-gray-300 mt-2"></div>
-                      <div className="h-4 bg-gray-200 rounded flex-1"></div>
+                      <div className="mt-2 h-2 w-2 rounded-full bg-gray-300"></div>
+                      <div className="h-4 flex-1 rounded bg-gray-200"></div>
                     </div>
                   ))}
                 </div>
-                <div className="flex items-start gap-2 p-3 rounded-lg border border-gray-200 bg-gray-50">
-                  <div className="h-4 w-4 bg-gray-300 rounded mt-0.5"></div>
-                  <div className="h-4 bg-gray-200 rounded flex-1"></div>
+                <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                  <div className="mt-0.5 h-4 w-4 rounded bg-gray-300"></div>
+                  <div className="h-4 flex-1 rounded bg-gray-200"></div>
                 </div>
               </div>
             </div>
@@ -92,23 +92,23 @@ export default function FinancialDashboardSkeleton() {
 
       {/* Withdrawal Table Skeleton */}
       <section>
-        <Card className="shadow-xl border-0 animate-pulse">
-          <CardHeader className="bg-gray-100 border-b">
+        <Card className="animate-pulse border-0 shadow-xl">
+          <CardHeader className="border-b bg-gray-100">
             <CardTitle className="flex items-center gap-2">
-              <div className="h-5 w-5 bg-gray-300 rounded"></div>
-              <div className="h-6 w-40 bg-gray-300 rounded"></div>
+              <div className="h-5 w-5 rounded bg-gray-300"></div>
+              <div className="h-6 w-40 rounded bg-gray-300"></div>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="p-6">
             {/* Desktop Table Skeleton */}
-            <div className="hidden md:block overflow-x-auto rounded-lg border">
+            <div className="hidden overflow-x-auto rounded-lg border md:block">
               <div className="min-w-full">
                 {/* Table Header */}
-                <div className="bg-gray-50 p-4 border-b">
+                <div className="border-b bg-gray-50 p-4">
                   <div className="grid grid-cols-10 gap-4">
                     {[...Array(10)].map((_, i) => (
-                      <div key={i} className="h-4 bg-gray-300 rounded"></div>
+                      <div key={i} className="h-4 rounded bg-gray-300"></div>
                     ))}
                   </div>
                 </div>
@@ -118,13 +118,13 @@ export default function FinancialDashboardSkeleton() {
                   {[...Array(3)].map((_, rowIndex) => (
                     <div
                       key={rowIndex}
-                      className="p-4 hover:bg-gray-50 transition-colors"
+                      className="p-4 transition-colors hover:bg-gray-50"
                     >
                       <div className="grid grid-cols-10 gap-4">
                         {[...Array(10)].map((_, colIndex) => (
                           <div
                             key={colIndex}
-                            className="h-4 bg-gray-200 rounded"
+                            className="h-4 rounded bg-gray-200"
                           ></div>
                         ))}
                       </div>
@@ -135,25 +135,25 @@ export default function FinancialDashboardSkeleton() {
             </div>
 
             {/* Mobile Cards Skeleton */}
-            <div className="md:hidden space-y-4">
+            <div className="space-y-4 md:hidden">
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="border rounded-lg p-4 shadow-sm bg-white space-y-3 animate-pulse"
+                  className="animate-pulse space-y-3 rounded-lg border bg-white p-4 shadow-sm"
                 >
-                  <div className="flex justify-between items-center">
-                    <div className="h-5 w-24 bg-gray-300 rounded"></div>
-                    <div className="h-6 w-16 bg-gray-300 rounded-full"></div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-5 w-24 rounded bg-gray-300"></div>
+                    <div className="h-6 w-16 rounded-full bg-gray-300"></div>
                   </div>
                   <div className="space-y-2">
-                    <div className="h-4 w-32 bg-gray-200 rounded"></div>
-                    <div className="h-4 w-40 bg-gray-200 rounded"></div>
-                    <div className="h-4 w-28 bg-gray-200 rounded"></div>
-                    <div className="h-3 w-24 bg-gray-200 rounded"></div>
+                    <div className="h-4 w-32 rounded bg-gray-200"></div>
+                    <div className="h-4 w-40 rounded bg-gray-200"></div>
+                    <div className="h-4 w-28 rounded bg-gray-200"></div>
+                    <div className="h-3 w-24 rounded bg-gray-200"></div>
                   </div>
-                  <div className="flex gap-2 justify-end">
-                    <div className="h-8 w-8 bg-gray-300 rounded"></div>
-                    <div className="h-8 w-8 bg-gray-300 rounded"></div>
+                  <div className="flex justify-end gap-2">
+                    <div className="h-8 w-8 rounded bg-gray-300"></div>
+                    <div className="h-8 w-8 rounded bg-gray-300"></div>
                   </div>
                 </div>
               ))}
@@ -162,5 +162,5 @@ export default function FinancialDashboardSkeleton() {
         </Card>
       </section>
     </div>
-  );
+  )
 }

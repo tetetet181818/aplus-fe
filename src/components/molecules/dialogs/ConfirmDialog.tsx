@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Dialog,
   DialogContent,
@@ -6,15 +6,15 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 interface ConfirmDialogProps {
-  open: boolean;
-  onClose: (value: boolean) => void;
-  onConfirm: () => void;
-  title: string;
-  description: string;
+  open: boolean
+  onClose: (value: boolean) => void
+  onConfirm: () => void
+  title: string
+  description: string
 }
 
 export default function ConfirmDialog({
@@ -37,8 +37,8 @@ export default function ConfirmDialog({
           </Button>
           <Button
             onClick={() => {
-              onConfirm();
-              onClose(false);
+              onConfirm()
+              onClose(false)
             }}
             variant="destructive"
           >
@@ -47,5 +47,5 @@ export default function ConfirmDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

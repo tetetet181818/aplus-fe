@@ -1,14 +1,14 @@
-import { motion } from "framer-motion";
-import visaImage from "../../../public/visa.png";
-import mada_image from "../../../public/mada.svg";
-import mastercard_image from "../../../public/MasterCard-logo.webp";
-import applepay_image from "../../../public/apple_pay_logo.png";
-import Image from "next/image";
+import { motion } from 'framer-motion'
+import visaImage from '../../../public/visa.png'
+import mada_image from '../../../public/mada.svg'
+import mastercard_image from '../../../public/MasterCard-logo.webp'
+import applepay_image from '../../../public/apple_pay_logo.png'
+import Image from 'next/image'
 
 const PaymentMethodsSection = () => {
   const paymentMethods = [
     {
-      name: "Visa",
+      name: 'Visa',
       icon: (
         <Image
           loading="lazy"
@@ -19,7 +19,7 @@ const PaymentMethodsSection = () => {
       ),
     },
     {
-      name: "Mada",
+      name: 'Mada',
       icon: (
         <Image
           loading="lazy"
@@ -30,7 +30,7 @@ const PaymentMethodsSection = () => {
       ),
     },
     {
-      name: "Master card",
+      name: 'Master card',
       icon: (
         <Image
           loading="lazy"
@@ -41,7 +41,7 @@ const PaymentMethodsSection = () => {
       ),
     },
     {
-      name: "Apple Pay",
+      name: 'Apple Pay',
       icon: (
         <Image
           loading="lazy"
@@ -51,7 +51,7 @@ const PaymentMethodsSection = () => {
         />
       ),
     },
-  ];
+  ]
 
   const sectionVariants = {
     hidden: { opacity: 0 },
@@ -62,20 +62,20 @@ const PaymentMethodsSection = () => {
         delayChildren: 0.2,
       },
     },
-  };
+  }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
+  }
 
   return (
     <div>
-      <h3 className="font-semibold text-lg mb-4 text-gray-700 dark:text-gray-200">
+      <h3 className="mb-4 text-lg font-semibold text-gray-700 dark:text-gray-200">
         طرق الدفع
       </h3>
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        className="grid grid-cols-1 gap-4 md:grid-cols-2"
         variants={sectionVariants}
         initial="hidden"
         animate="visible"
@@ -84,7 +84,7 @@ const PaymentMethodsSection = () => {
           <motion.div
             key={method.name}
             variants={itemVariants}
-            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-md flex flex-col flex-1 text-center items-center justify-center"
+            className="flex flex-1 flex-col items-center justify-center rounded-md bg-gray-100 p-3 text-center dark:bg-gray-800"
           >
             <div className="mb-1">{method.icon}</div>
             <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -94,7 +94,7 @@ const PaymentMethodsSection = () => {
         ))}
       </motion.div>
       <motion.p
-        className="text-gray-500 dark:text-gray-500 mt-3 text-xs"
+        className="mt-3 text-xs text-gray-500 dark:text-gray-500"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
@@ -102,7 +102,7 @@ const PaymentMethodsSection = () => {
         جميع المعاملات مشفرة وآمنة.
       </motion.p>
     </div>
-  );
-};
+  )
+}
 
-export default PaymentMethodsSection;
+export default PaymentMethodsSection

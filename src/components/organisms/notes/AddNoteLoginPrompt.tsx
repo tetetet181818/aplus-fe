@@ -4,21 +4,21 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { LogIn } from "lucide-react";
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { LogIn } from 'lucide-react'
 
 const AddNoteLoginPrompt = ({
   onNavigate,
 }: {
-  onNavigate: (path: string) => void;
+  onNavigate: (path: string) => void
 }) => {
   return (
-    <div className=" py-12 px-4 md:px-6 flex justify-center items-center min-h-[calc(100vh-200px)]">
+    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center px-4 py-12 md:px-6">
       <Card className="w-full max-w-md text-center shadow-xl">
         <CardHeader>
-          <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-4">
-            <LogIn className="h-8 w-8 text-primary" />
+          <div className="bg-primary/10 mx-auto mb-4 w-fit rounded-full p-3">
+            <LogIn className="text-primary h-8 w-8" />
           </div>
           <CardTitle className="text-2xl">يجب تسجيل الدخول</CardTitle>
           <CardDescription>
@@ -30,17 +30,17 @@ const AddNoteLoginPrompt = ({
             انضم إلى مجتمعنا وشارك ملخصاتك مع آلاف الطلاب.
           </p>
           <div className="flex justify-center gap-4">
-            <Button onClick={() => onNavigate("/")} className="w-full">
+            <Button onClick={() => onNavigate('/')} className="w-full">
               العودة للرئيسية
             </Button>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-300 pt-2">
+          <p className="pt-2 text-xs text-gray-500 dark:text-gray-300">
             تسجيل الدخول متاح من خلال القائمة العلوية.
           </p>
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default AddNoteLoginPrompt;
+export default AddNoteLoginPrompt

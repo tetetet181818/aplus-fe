@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Notes Dashboard
@@ -15,16 +15,16 @@ import {
   LinkIcon,
   Eye,
   RotateCcw,
-} from "lucide-react";
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
+} from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -32,30 +32,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/table'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import SectionHeader from "@/components/atoms/SectionHeader";
-import Head from "next/head";
-import Link from "next/link";
-import FileDetailsDialog from "@/components/molecules/dialogs/FileDetailsDialog";
-import UnpublishDialog from "@/components/molecules/dialogs/UnpublishDialog";
-import PublishDialog from "@/components/molecules/dialogs/PublishDialog";
-import ChartLineNotes from "@/components/organisms/dashboard/ChartLineNotes";
-import useDashboard from "@/hooks/useDashboard";
-import { Note } from "@/types";
-import { universityData } from "@/constants/index";
-import { downloadFile } from "@/utils/downloadFile";
+} from '@/components/ui/select'
+import SectionHeader from '@/components/atoms/SectionHeader'
+import Head from 'next/head'
+import Link from 'next/link'
+import FileDetailsDialog from '@/components/molecules/dialogs/FileDetailsDialog'
+import UnpublishDialog from '@/components/molecules/dialogs/UnpublishDialog'
+import PublishDialog from '@/components/molecules/dialogs/PublishDialog'
+import ChartLineNotes from '@/components/organisms/dashboard/ChartLineNotes'
+import useDashboard from '@/hooks/useDashboard'
+import { Note } from '@/types'
+import { universityData } from '@/constants/index'
+import { downloadFile } from '@/utils/downloadFile'
 
 /** Helper: truncate long text */
 const truncateText = (text: string, maxLength = 20) =>
-  text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text || "N/A";
+  text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'N/A'
 
 export default function NotesDashboard() {
   const {
@@ -79,44 +79,44 @@ export default function NotesDashboard() {
     setCollageFilterNote,
     yearFilterNote,
     setYearFilterNote,
-  } = useDashboard();
+  } = useDashboard()
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<Note | null>(null);
-  const [unpublishedNote, setUnpublishedNote] = useState(false);
-  const [publishedNote, setPublishedNote] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<Note | null>(null)
+  const [unpublishedNote, setUnpublishedNote] = useState(false)
+  const [publishedNote, setPublishedNote] = useState(false)
 
   /** Dynamically get colleges based on selected university */
   const collegeOptions = useMemo(() => {
-    const uni = universityData.find((u) => u.name === universityFilterNote);
-    return uni ? uni.colleges : [];
-  }, [universityFilterNote]);
+    const uni = universityData.find((u) => u.name === universityFilterNote)
+    return uni ? uni.colleges : []
+  }, [universityFilterNote])
 
   /** Reset filters */
   const resetFilters = () => {
-    setSearchTitleNote("");
-    setUniversityFilterNote("");
-    setCollageFilterNote("");
-    setYearFilterNote("");
-  };
+    setSearchTitleNote('')
+    setUniversityFilterNote('')
+    setCollageFilterNote('')
+    setYearFilterNote('')
+  }
 
   const hasActiveFilters =
     searchTitleNote ||
     universityFilterNote ||
     collageFilterNote ||
-    yearFilterNote;
+    yearFilterNote
 
   /** Table column config */
   const columns = [
-    { header: "العنوان", accessor: "title", render: truncateText },
-    { header: "الوصف", accessor: "description", render: truncateText },
-    { header: "الجامعة", accessor: "university" },
-    { header: "الكلية", accessor: "college" },
-    { header: "المادة", accessor: "subject" },
-    { header: "السنة", accessor: "year" },
+    { header: 'العنوان', accessor: 'title', render: truncateText },
+    { header: 'الوصف', accessor: 'description', render: truncateText },
+    { header: 'الجامعة', accessor: 'university' },
+    { header: 'الكلية', accessor: 'college' },
+    { header: 'المادة', accessor: 'subject' },
+    { header: 'السنة', accessor: 'year' },
     {
-      header: "صاحب الملخص",
-      accessor: "owner_id",
+      header: 'صاحب الملخص',
+      accessor: 'owner_id',
       render: (ownerId: string) => (
         <Link
           href={`/seller/${ownerId}`}
@@ -127,16 +127,16 @@ export default function NotesDashboard() {
       ),
     },
     {
-      header: "السعر",
-      accessor: "price",
+      header: 'السعر',
+      accessor: 'price',
       render: (p: number) => `${p} ر.س`,
     },
     {
-      header: "تاريخ الإضافة",
-      accessor: "created_at",
+      header: 'تاريخ الإضافة',
+      accessor: 'created_at',
       render: (d: string) => new Date(d).toLocaleDateString(),
     },
-  ];
+  ]
 
   return (
     <>
@@ -160,7 +160,7 @@ export default function NotesDashboard() {
             {/* Filters */}
             <div className="flex flex-col gap-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                 <Input
                   placeholder="ابحث عن ملاحظة..."
                   className="pl-10"
@@ -169,17 +169,17 @@ export default function NotesDashboard() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                 {/* University Filter */}
                 <Select
-                  value={universityFilterNote || ""}
+                  value={universityFilterNote || ''}
                   onValueChange={(value) => {
-                    setUniversityFilterNote(value);
-                    setCollageFilterNote("");
+                    setUniversityFilterNote(value)
+                    setCollageFilterNote('')
                   }}
                 >
                   <SelectTrigger className="w-full">
-                    <School className="h-4 w-4 opacity-70 mr-2" />
+                    <School className="mr-2 h-4 w-4 opacity-70" />
                     <SelectValue placeholder="كل الجامعات" />
                   </SelectTrigger>
                   <SelectContent>
@@ -193,7 +193,7 @@ export default function NotesDashboard() {
 
                 {/* College Filter */}
                 <Select
-                  value={collageFilterNote || ""}
+                  value={collageFilterNote || ''}
                   onValueChange={setCollageFilterNote}
                   disabled={!universityFilterNote}
                 >
@@ -213,18 +213,18 @@ export default function NotesDashboard() {
                 <Input
                   className="w-full"
                   placeholder="السنة"
-                  value={yearFilterNote || ""}
+                  value={yearFilterNote || ''}
                   onChange={(e) => setYearFilterNote(e.target.value)}
                 />
 
                 {/* Reset Button */}
                 <Button
-                  className="w-full flex items-center gap-2"
+                  className="flex w-full items-center gap-2"
                   variant="outline"
                   onClick={resetFilters}
                   disabled={!hasActiveFilters}
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="h-4 w-4" />
                   مسح الفلاتر
                 </Button>
               </div>
@@ -233,15 +233,15 @@ export default function NotesDashboard() {
 
           <CardContent>
             {/* Mobile View (Cards) */}
-            <div className="block md:hidden space-y-4">
+            <div className="block space-y-4 md:hidden">
               {notes?.length === 0 ? (
-                <p className="text-center text-muted-foreground font-semibold text-lg my-10">
+                <p className="text-muted-foreground my-10 text-center text-lg font-semibold">
                   لا يوجد نتائج
                 </p>
               ) : (
                 notes?.map((note: Note) => (
                   <Card key={note._id} className="border p-4 shadow-sm">
-                    <CardHeader className="p-0 mb-2">
+                    <CardHeader className="mb-2 p-0">
                       <CardTitle className="text-base">
                         {truncateText(note.title, 40)}
                       </CardTitle>
@@ -249,21 +249,21 @@ export default function NotesDashboard() {
                         {truncateText(note.description, 60)}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-0 space-y-1 text-sm">
+                    <CardContent className="space-y-1 p-0 text-sm">
                       <p>
-                        <span className="font-semibold">الجامعة: </span>{" "}
+                        <span className="font-semibold">الجامعة: </span>{' '}
                         {note.university}
                       </p>
                       <p>
-                        <span className="font-semibold"> الكلية: </span>{" "}
+                        <span className="font-semibold"> الكلية: </span>{' '}
                         {note.college}
                       </p>
                       <p>
-                        <span className="font-semibold"> السنة: </span>{" "}
+                        <span className="font-semibold"> السنة: </span>{' '}
                         {note.year}
                       </p>
                       <p>
-                        <span className="font-semibold">السعر: </span>{" "}
+                        <span className="font-semibold">السعر: </span>{' '}
                         {note.price} ر.س
                       </p>
                       <div className="flex gap-2 pt-2">
@@ -271,8 +271,8 @@ export default function NotesDashboard() {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setIsDialogOpen(true);
-                            setSelectedFile(note);
+                            setIsDialogOpen(true)
+                            setSelectedFile(note)
                           }}
                         >
                           <Eye className="size-4" />
@@ -294,8 +294,8 @@ export default function NotesDashboard() {
                             variant="destructive"
                             size="sm"
                             onClick={() => {
-                              setSelectedFile(note);
-                              setUnpublishedNote(true);
+                              setSelectedFile(note)
+                              setUnpublishedNote(true)
                             }}
                           >
                             إلغاء النشر
@@ -304,8 +304,8 @@ export default function NotesDashboard() {
                           <Button
                             size="sm"
                             onClick={() => {
-                              setSelectedFile(note);
-                              setPublishedNote(true);
+                              setSelectedFile(note)
+                              setPublishedNote(true)
                             }}
                           >
                             نشر
@@ -319,7 +319,7 @@ export default function NotesDashboard() {
             </div>
 
             {/* Desktop View (Table) */}
-            <div className="hidden md:block overflow-x-auto">
+            <div className="hidden overflow-x-auto md:block">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -337,7 +337,7 @@ export default function NotesDashboard() {
                     <TableRow>
                       <TableCell
                         colSpan={columns.length + 2}
-                        className="h-24 text-center font-semibold my-5 text-2xl"
+                        className="my-5 h-24 text-center text-2xl font-semibold"
                       >
                         لا يوجد نتائج
                       </TableCell>
@@ -352,16 +352,16 @@ export default function NotesDashboard() {
                                   note[col.accessor as keyof Note] as never
                                 )
                               : (note[col.accessor as keyof Note] as never) ||
-                                "N/A"}
+                                'N/A'}
                           </TableCell>
                         ))}
                         <TableCell>
-                          <div className="flex gap-2 justify-end">
+                          <div className="flex justify-end gap-2">
                             <Button
                               variant="ghost"
                               onClick={() => {
-                                setIsDialogOpen(true);
-                                setSelectedFile(note);
+                                setIsDialogOpen(true)
+                                setSelectedFile(note)
                               }}
                             >
                               <Eye className="size-4" />
@@ -385,8 +385,8 @@ export default function NotesDashboard() {
                             <Button
                               variant="destructive"
                               onClick={() => {
-                                setSelectedFile(note);
-                                setUnpublishedNote(true);
+                                setSelectedFile(note)
+                                setUnpublishedNote(true)
                               }}
                             >
                               إلغاء النشر
@@ -394,8 +394,8 @@ export default function NotesDashboard() {
                           ) : (
                             <Button
                               onClick={() => {
-                                setSelectedFile(note);
-                                setPublishedNote(true);
+                                setSelectedFile(note)
+                                setPublishedNote(true)
                               }}
                             >
                               نشر
@@ -411,10 +411,10 @@ export default function NotesDashboard() {
 
             {/* Pagination */}
             {notesPagination?.totalItems > 10 && (
-              <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
-                <span className="text-sm text-muted-foreground">
+              <div className="mt-4 flex flex-col items-center justify-between gap-3 sm:flex-row">
+                <span className="text-muted-foreground text-sm">
                   عرض {(notePage - 1) * noteLimit + 1}-
-                  {Math.min(notePage * noteLimit, notesPagination.totalItems)}{" "}
+                  {Math.min(notePage * noteLimit, notesPagination.totalItems)}{' '}
                   من {notesPagination.totalItems}
                 </span>
 
@@ -472,15 +472,15 @@ export default function NotesDashboard() {
       <UnpublishDialog
         open={unpublishedNote}
         onClose={() => setUnpublishedNote(false)}
-        onConfirm={() => handelUnpublishNote(selectedFile?._id || "")}
+        onConfirm={() => handelUnpublishNote(selectedFile?._id || '')}
         loading={unpublishLoading}
       />
       <PublishDialog
         open={publishedNote}
         onClose={() => setPublishedNote(false)}
-        onConfirm={() => handelPublishNote(selectedFile?._id || "")}
+        onConfirm={() => handelPublishNote(selectedFile?._id || '')}
         loading={publishLoading}
       />
     </>
-  );
+  )
 }

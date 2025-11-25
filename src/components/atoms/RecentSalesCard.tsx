@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Card,
@@ -6,9 +6,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Sale } from "@/types";
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Sale } from '@/types'
 
 /**
  * Show recent sales card with list of transactions.
@@ -27,22 +27,22 @@ export default function RecentSalesCard({ sales }: { sales: Sale[] }) {
           {sales?.map((sale, index) => (
             <div
               key={sale._id}
-              className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors animate-slide-in"
+              className="bg-muted/30 hover:bg-muted/50 animate-slide-in flex items-center justify-between rounded-lg p-3 transition-colors"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="space-y-1">
                 <p className="text-sm font-medium">{sale.note_title}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {sale.users?.fullName}
                 </p>
               </div>
-              <div className="text-right space-y-1">
+              <div className="space-y-1 text-right">
                 <p className="text-sm font-semibold text-green-600">
                   {sale.amount} ر.س
                 </p>
                 <Badge
-                  variant={sale.status === "مكتمل" ? "default" : "secondary"}
-                  className="text-xs animate-scale-in"
+                  variant={sale.status === 'مكتمل' ? 'default' : 'secondary'}
+                  className="animate-scale-in text-xs"
                 >
                   {sale.status}
                 </Badge>
@@ -52,5 +52,5 @@ export default function RecentSalesCard({ sales }: { sales: Sale[] }) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

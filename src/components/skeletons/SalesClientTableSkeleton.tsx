@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -6,36 +6,36 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function SalesClientTableSkeleton() {
   return (
     <Card
-      className="border-none bg-transparent shadow-none gap-3 col-span-2"
+      className="col-span-2 gap-3 border-none bg-transparent shadow-none"
       dir="rtl"
     >
       <CardHeader className="p-2">
-        <CardTitle className="font-semibold text-xl text-right">
-          <Skeleton className="h-6 w-48 ml-auto" />
+        <CardTitle className="text-right text-xl font-semibold">
+          <Skeleton className="ml-auto h-6 w-48" />
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="dark:bg-[#00143473] bg-[#FFFFFFBF] rounded-2xl p-4">
+      <CardContent className="rounded-2xl bg-[#FFFFFFBF] p-4 dark:bg-[#00143473]">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">
-                <Skeleton className="h-4 w-24 ml-auto" />
+                <Skeleton className="ml-auto h-4 w-24" />
               </TableHead>
               <TableHead className="text-right">
-                <Skeleton className="h-4 w-20 ml-auto" />
+                <Skeleton className="ml-auto h-4 w-20" />
               </TableHead>
               <TableHead className="text-right">
-                <Skeleton className="h-4 w-16 ml-auto" />
+                <Skeleton className="ml-auto h-4 w-16" />
               </TableHead>
               <TableHead className="text-right">
-                <Skeleton className="h-4 w-24 ml-auto" />
+                <Skeleton className="ml-auto h-4 w-24" />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -44,17 +44,17 @@ export default function SalesClientTableSkeleton() {
             {Array.from({ length: 5 }).map((_, index) => (
               <TableRow key={index}>
                 <TableCell className="text-right">
-                  <Skeleton className="h-4 w-32 ml-auto" />
+                  <Skeleton className="ml-auto h-4 w-32" />
                 </TableCell>
                 <TableCell className="text-right">
-                  <Skeleton className="h-4 w-16 ml-auto" />
+                  <Skeleton className="ml-auto h-4 w-16" />
                 </TableCell>
                 <TableCell className="text-right">
-                  <Skeleton className="h-4 w-20 ml-auto" />
+                  <Skeleton className="ml-auto h-4 w-20" />
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="w-full space-y-2">
-                    <Skeleton className="h-4 w-12 ml-auto" />
+                    <Skeleton className="ml-auto h-4 w-12" />
                     <Skeleton className="h-2 w-full rounded-full" />
                   </div>
                 </TableCell>
@@ -64,5 +64,5 @@ export default function SalesClientTableSkeleton() {
         </Table>
       </CardContent>
     </Card>
-  );
+  )
 }

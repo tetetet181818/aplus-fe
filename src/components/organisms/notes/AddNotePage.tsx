@@ -1,31 +1,31 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import AddNoteForm from "./AddNoteForm";
-import AddNoteLoginPrompt from "./AddNoteLoginPrompt";
-import AddNotePageHeader from "./AddNotePageHeader";
-import useAuth from "@/hooks/useAuth";
-import LoadingSpinner from "@/components/atoms/LoadingSpinner";
+import { useRouter } from 'next/navigation'
+import AddNoteForm from './AddNoteForm'
+import AddNoteLoginPrompt from './AddNoteLoginPrompt'
+import AddNotePageHeader from './AddNotePageHeader'
+import useAuth from '@/hooks/useAuth'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner'
 
 const AddNotePage = () => {
-  const router = useRouter();
-  const { user, loading } = useAuth();
+  const router = useRouter()
+  const { user, loading } = useAuth()
 
   if (loading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner />
   }
 
   if (!user) {
-    return <AddNoteLoginPrompt onNavigate={router.push} />;
+    return <AddNoteLoginPrompt onNavigate={router.push} />
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6">
+    <div className="min-h-screen w-full bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 px-4 py-12 sm:px-6 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900">
       <AddNotePageHeader onBack={router.back} />
 
       <AddNoteForm />
     </div>
-  );
-};
+  )
+}
 
-export default AddNotePage;
+export default AddNotePage

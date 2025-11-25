@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "../ui/skeleton";
+} from '@/components/ui/card'
+import { Skeleton } from '../ui/skeleton'
 
 /**
  * Skeleton placeholder for RecentStudentsCard while loading.
@@ -22,7 +22,7 @@ export default function RecentStudentsCardSkeleton() {
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}
-              className="flex items-center space-x-4 space-x-reverse p-3 rounded-lg bg-muted/30"
+              className="bg-muted/30 flex items-center space-x-4 space-x-reverse rounded-lg p-3"
             >
               <Skeleton className="h-10 w-10 rounded-full" />
               <div className="flex-1 space-y-1">
@@ -34,5 +34,5 @@ export default function RecentStudentsCardSkeleton() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

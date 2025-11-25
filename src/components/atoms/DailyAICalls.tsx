@@ -1,47 +1,47 @@
-"use client";
+'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { NotebookText } from "lucide-react";
-import useSales from "@/hooks/useSales";
-import LoadingSpinner from "./LoadingSpinner";
+} from '@/components/ui/chart'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { NotebookText } from 'lucide-react'
+import useSales from '@/hooks/useSales'
+import LoadingSpinner from './LoadingSpinner'
 
-export const description = "مخطط المكالمات اليومية للذكاء الاصطناعي";
+export const description = 'مخطط المكالمات اليومية للذكاء الاصطناعي'
 
 const chartConfig = {
   desktop: {
-    label: "الملخصات المباعه",
-    color: "var(--color-primary)",
+    label: 'الملخصات المباعه',
+    color: 'var(--color-primary)',
   },
   mobile: {
-    label: "الملخصات المعرضه",
-    color: "var(--chart-2)",
+    label: 'الملخصات المعرضه',
+    color: 'var(--chart-2)',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export default function DailyAICalls() {
-  const { userStatisticsSales, userStatisticsSalesLoading } = useSales();
+  const { userStatisticsSales, userStatisticsSalesLoading } = useSales()
 
   if (userStatisticsSalesLoading) {
-    return <LoadingSpinner message="" />;
+    return <LoadingSpinner message="" />
   }
 
   return (
-    <Card dir="rtl" className="border-none bg-transparent shadow-none gap-3">
-      <CardHeader className="p-2 flex flex-row items-center justify-between">
-        <CardTitle className="font-semibold text-xl flex items-center gap-2">
-          <NotebookText className="w-5 h-5 text-blue-500" />
+    <Card dir="rtl" className="gap-3 border-none bg-transparent shadow-none">
+      <CardHeader className="flex flex-row items-center justify-between p-2">
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold">
+          <NotebookText className="h-5 w-5 text-blue-500" />
           احصائيات الملخصات
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="dark:bg-[#00143473] bg-[#FFFFFFBF] rounded-2xl px-1">
+      <CardContent className="rounded-2xl bg-[#FFFFFFBF] px-1 dark:bg-[#00143473]">
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
@@ -107,5 +107,5 @@ export default function DailyAICalls() {
         </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

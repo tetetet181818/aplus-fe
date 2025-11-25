@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
 function GoogleLoginButton() {
   const loginWithGoogle = () => {
-    window.open(process.env.NEXT_PUBLIC_GOOGLE_LOGIN, "_self");
-  };
+    window.open(process.env.NEXT_PUBLIC_GOOGLE_LOGIN, '_self')
+  }
   return (
     <button
       onClick={loginWithGoogle}
-      className="flex items-center justify-center gap-2 w-full py-2 bg-white border border-gray-300 rounded shadow-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+      className="flex w-full items-center justify-center gap-2 rounded border border-gray-300 bg-white py-2 text-gray-700 shadow-sm hover:bg-gray-100 disabled:opacity-50"
     >
       <svg
-        className="w-5 h-5"
+        className="h-5 w-5"
         viewBox="0 0 533.5 544.3"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -33,7 +33,7 @@ function GoogleLoginButton() {
       </svg>
       <span>تسجيل الدخول عبر Google</span>
     </button>
-  );
+  )
 }
 
-export default GoogleLoginButton;
+export default GoogleLoginButton

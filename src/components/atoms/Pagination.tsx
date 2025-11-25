@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 interface PaginationProps {
   pagination: {
-    page: number;
-    limit: number;
-    totalPages: number;
-    total: number;
-    nextPage: () => void;
-    prevPage: () => void;
-    goToPage: (page: number) => void;
-    changeLimit: (limit: number) => void;
-  };
+    page: number
+    limit: number
+    totalPages: number
+    total: number
+    nextPage: () => void
+    prevPage: () => void
+    goToPage: (page: number) => void
+    changeLimit: (limit: number) => void
+  }
 }
 
 const Pagination = ({ pagination }: PaginationProps) => {
@@ -32,35 +32,35 @@ const Pagination = ({ pagination }: PaginationProps) => {
     prevPage,
     goToPage,
     changeLimit,
-  } = pagination;
+  } = pagination
 
   const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
+    const pages: (number | string)[] = []
 
     if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
     } else {
       if (page > 2) {
-        pages.push(1);
-        if (page > 3) pages.push("...");
+        pages.push(1)
+        if (page > 3) pages.push('...')
       }
 
-      const start = Math.max(2, page - 1);
-      const end = Math.min(totalPages - 1, page + 1);
+      const start = Math.max(2, page - 1)
+      const end = Math.min(totalPages - 1, page + 1)
 
-      for (let i = start; i <= end; i++) pages.push(i);
+      for (let i = start; i <= end; i++) pages.push(i)
 
       if (page < totalPages - 1) {
-        if (page < totalPages - 2) pages.push("...");
-        pages.push(totalPages);
+        if (page < totalPages - 2) pages.push('...')
+        pages.push(totalPages)
       }
     }
 
-    return pages;
-  };
+    return pages
+  }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-10 w-full">
+    <div className="mt-10 flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
       {/* الصفحات */}
       <div className="flex flex-wrap items-center justify-center gap-2">
         <Button variant="outline" disabled={page === 1} onClick={prevPage}>
@@ -68,14 +68,14 @@ const Pagination = ({ pagination }: PaginationProps) => {
         </Button>
 
         {getPageNumbers().map((p, idx) =>
-          p === "..." ? (
+          p === '...' ? (
             <span key={`ellipsis-${idx}`} className="px-3">
               ...
             </span>
           ) : (
             <Button
               key={p}
-              variant={page === p ? "default" : "outline"}
+              variant={page === p ? 'default' : 'outline'}
               onClick={() => goToPage(p as number)}
             >
               {p}
@@ -93,7 +93,7 @@ const Pagination = ({ pagination }: PaginationProps) => {
       </div>
 
       {/* اختيار limit */}
-      <div className="flex items-center justify-center md:justify-end gap-3 text-sm text-muted-foreground">
+      <div className="text-muted-foreground flex items-center justify-center gap-3 text-sm md:justify-end">
         <span className="whitespace-nowrap">
           عرض {limit} من أصل {total}
         </span>
@@ -114,7 +114,7 @@ const Pagination = ({ pagination }: PaginationProps) => {
         </Select>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

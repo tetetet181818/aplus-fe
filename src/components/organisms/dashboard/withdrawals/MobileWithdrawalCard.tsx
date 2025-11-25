@@ -1,13 +1,13 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card'
 const MobileWithdrawalCard = ({
   withdrawal,
   columns,
 }: {
-  withdrawal: any;
-  columns: any;
+  withdrawal: any
+  columns: any
 }) => (
-  <Card key={withdrawal.id} className="border-muted/30 mb-4 animate-fade-in">
-    <CardContent className="p-4 space-y-3">
+  <Card key={withdrawal.id} className="border-muted/30 animate-fade-in mb-4">
+    <CardContent className="space-y-3 p-4">
       {columns
         .filter((col) => col.accessor)
         .map((column) => (
@@ -16,7 +16,7 @@ const MobileWithdrawalCard = ({
             <span className="text-muted-foreground">
               {column.customRender
                 ? column.customRender(withdrawal[column.accessor], withdrawal)
-                : withdrawal[column.accessor] || "غير محدد"}
+                : withdrawal[column.accessor] || 'غير محدد'}
             </span>
           </div>
         ))}
@@ -25,6 +25,6 @@ const MobileWithdrawalCard = ({
       </div>
     </CardContent>
   </Card>
-);
+)
 
-export default MobileWithdrawalCard;
+export default MobileWithdrawalCard

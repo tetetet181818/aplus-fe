@@ -1,96 +1,96 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { FormikProps } from "formik";
+import { useState } from 'react'
+import { FormikProps } from 'formik'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import useAuth from "@/hooks/useAuth";
-import { universityColleges } from "@/constants";
-import { Button } from "@/components/ui/button";
-import AddNoteInstructions from "./AddNoteInstructions";
-import { AddNoteValues } from "./AddNoteForm";
-import { toast } from "sonner";
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { ArrowLeft } from 'lucide-react'
+import { Switch } from '@/components/ui/switch'
+import useAuth from '@/hooks/useAuth'
+import { universityColleges } from '@/constants'
+import { Button } from '@/components/ui/button'
+import AddNoteInstructions from './AddNoteInstructions'
+import { AddNoteValues } from './AddNoteForm'
+import { toast } from 'sonner'
 
 /** ========== Basic Info Step (Updated) ========== */
 export default function BasicInfo({
   formik,
   nextTab,
 }: {
-  formik: FormikProps<AddNoteValues>;
-  nextTab: () => Promise<void> | void;
+  formik: FormikProps<AddNoteValues>
+  nextTab: () => Promise<void> | void
 }) {
-  const { user } = useAuth();
-  const [isUsingRegisteredEmail, setIsUsingRegisteredEmail] = useState(false);
-  const [email, setEmail] = useState("");
+  const { user } = useAuth()
+  const [isUsingRegisteredEmail, setIsUsingRegisteredEmail] = useState(false)
+  const [email, setEmail] = useState('')
 
   // safely get nested Formik errors and touched
   const err = (path: string): string | undefined | { [key: string]: any } =>
     path
-      .split(".")
+      .split('.')
       .reduce(
         (acc: any, k: string) => (acc ? acc[k] : undefined),
         formik.errors
-      );
+      )
 
   const touched = (
     path: string
   ): boolean | undefined | { [key: string]: any } =>
     path
-      .split(".")
+      .split('.')
       .reduce(
         (acc: any, k: string) => (acc ? acc[k] : undefined),
         formik.touched
-      );
+      )
 
   const handleToggleEmail = () => {
-    const next = !isUsingRegisteredEmail;
-    setIsUsingRegisteredEmail(next);
+    const next = !isUsingRegisteredEmail
+    setIsUsingRegisteredEmail(next)
 
-    const newEmail = next ? user?.email || "" : "";
-    setEmail(newEmail);
+    const newEmail = next ? user?.email || '' : ''
+    setEmail(newEmail)
 
-    formik.setFieldValue("basic.contactMethod", newEmail);
-  };
+    formik.setFieldValue('basic.contactMethod', newEmail)
+  }
 
-  const selectedUniversity = formik.values.basic.university;
+  const selectedUniversity = formik.values.basic.university
   const selectedKey = formik.values.basic.university as
     | keyof typeof universityColleges
-    | "";
+    | ''
   const colleges =
     selectedKey && selectedKey in universityColleges
       ? universityColleges[selectedKey]
-      : [];
+      : []
 
   /** Handle step validation before moving forward */
   const handleNext = async () => {
     try {
-      await formik.validateForm();
-      const errors = await formik.validateForm();
+      await formik.validateForm()
+      const errors = await formik.validateForm()
       if (Object.keys(errors).length > 0) {
-        toast.error("تحقق من البيانات قبل المتابعة");
-        return;
+        toast.error('تحقق من البيانات قبل المتابعة')
+        return
       }
-      await nextTab();
+      await nextTab()
     } catch {
-      toast.error("حدث خطأ أثناء التحقق من البيانات");
+      toast.error('حدث خطأ أثناء التحقق من البيانات')
     }
-  };
+  }
 
   return (
     <div dir="rtl" className="grid grid-cols-1 md:grid-cols-4">
-      <div className="md:col-span-3 sm:p-0 md:p-6 space-y-6">
+      <div className="space-y-6 sm:p-0 md:col-span-3 md:p-6">
         {/* عنوان وسعر */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* عنوان الملخص */}
           <div className="space-y-2">
             <Label className="font-bold">
@@ -102,11 +102,11 @@ export default function BasicInfo({
               value={formik.values.basic.title}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="rounded-3xl py-6 px-5 border-2"
+              className="rounded-3xl border-2 px-5 py-6"
             />
-            {err("basic.title") && err("basic.title") && (
+            {err('basic.title') && err('basic.title') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.title"))}
+                {String(err('basic.title'))}
               </p>
             )}
           </div>
@@ -124,11 +124,11 @@ export default function BasicInfo({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               min={0}
-              className="rounded-3xl py-6 px-5 border-2"
+              className="rounded-3xl border-2 px-5 py-6"
             />
-            {err("basic.price") && err("basic.price") && (
+            {err('basic.price') && err('basic.price') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.price"))}
+                {String(err('basic.price'))}
               </p>
             )}
           </div>
@@ -146,17 +146,17 @@ export default function BasicInfo({
             value={formik.values.basic.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className="rounded-3xl py-6 px-5 border-2"
+            className="rounded-3xl border-2 px-5 py-6"
           />
-          {err("basic.description") && err("basic.description") && (
+          {err('basic.description') && err('basic.description') && (
             <p className="text-xs text-red-500">
-              {String(err("basic.description"))}
+              {String(err('basic.description'))}
             </p>
           )}
         </div>
 
         {/* الجامعة والكلية */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* الجامعة */}
           <div className="space-y-2">
             <Label className="font-bold">
@@ -165,11 +165,11 @@ export default function BasicInfo({
             <Select
               value={formik.values.basic.university}
               onValueChange={(v) => {
-                formik.setFieldValue("basic.university", v);
-                formik.setFieldValue("basic.college", ""); // reset college
+                formik.setFieldValue('basic.university', v)
+                formik.setFieldValue('basic.college', '') // reset college
               }}
             >
-              <SelectTrigger className="rounded-3xl py-6 px-5 w-full border-2">
+              <SelectTrigger className="w-full rounded-3xl border-2 px-5 py-6">
                 <SelectValue placeholder="اختر الجامعة" />
               </SelectTrigger>
               <SelectContent>
@@ -180,9 +180,9 @@ export default function BasicInfo({
                 ))}
               </SelectContent>
             </Select>
-            {err("basic.university") && err("basic.university") && (
+            {err('basic.university') && err('basic.university') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.university"))}
+                {String(err('basic.university'))}
               </p>
             )}
           </div>
@@ -194,10 +194,10 @@ export default function BasicInfo({
             </Label>
             <Select
               value={formik.values.basic.college}
-              onValueChange={(v) => formik.setFieldValue("basic.college", v)}
+              onValueChange={(v) => formik.setFieldValue('basic.college', v)}
               disabled={!selectedUniversity}
             >
-              <SelectTrigger className="rounded-3xl py-6 px-5 w-full border-2">
+              <SelectTrigger className="w-full rounded-3xl border-2 px-5 py-6">
                 <SelectValue placeholder="اختر الكلية" />
               </SelectTrigger>
               <SelectContent>
@@ -214,16 +214,16 @@ export default function BasicInfo({
                 )}
               </SelectContent>
             </Select>
-            {err("basic.college") && err("basic.college") && (
+            {err('basic.college') && err('basic.college') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.college"))}
+                {String(err('basic.college'))}
               </p>
             )}
           </div>
         </div>
 
         {/* المادة / الصفحات / السنة */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {/* المادة */}
           <div className="space-y-2">
             <Label className="font-bold">
@@ -235,11 +235,11 @@ export default function BasicInfo({
               value={formik.values.basic.subject}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="rounded-3xl py-6 px-5 border-2"
+              className="rounded-3xl border-2 px-5 py-6"
             />
-            {err("basic.subject") && err("basic.subject") && (
+            {err('basic.subject') && err('basic.subject') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.subject"))}
+                {String(err('basic.subject'))}
               </p>
             )}
           </div>
@@ -257,11 +257,11 @@ export default function BasicInfo({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               min={1}
-              className="rounded-3xl py-6 px-5 border-2"
+              className="rounded-3xl border-2 px-5 py-6"
             />
-            {err("basic.pagesNumber") && err("basic.pagesNumber") && (
+            {err('basic.pagesNumber') && err('basic.pagesNumber') && (
               <p className="text-xs text-red-500">
-                {String(err("basic.pagesNumber"))}
+                {String(err('basic.pagesNumber'))}
               </p>
             )}
           </div>
@@ -273,10 +273,10 @@ export default function BasicInfo({
               type="number"
               name="basic.year"
               placeholder="سنة الإصدار"
-              value={formik.values.basic.year ?? ""}
+              value={formik.values.basic.year ?? ''}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="rounded-3xl py-6 px-5 border-2"
+              className="rounded-3xl border-2 px-5 py-6"
             />
           </div>
         </div>
@@ -289,8 +289,8 @@ export default function BasicInfo({
           <div className="flex items-center gap-3">
             <span className="ml-2 text-sm">
               {isUsingRegisteredEmail
-                ? "استخدم البريد المسجل"
-                : "استخدم بريدًا آخر"}
+                ? 'استخدم البريد المسجل'
+                : 'استخدم بريدًا آخر'}
             </span>
             <Switch
               checked={isUsingRegisteredEmail}
@@ -304,19 +304,19 @@ export default function BasicInfo({
             placeholder="اكتب بريدك الإلكتروني أو رقم التواصل"
             value={
               isUsingRegisteredEmail
-                ? email || (user?.email ?? "")
+                ? email || (user?.email ?? '')
                 : formik.values.basic.contactMethod
             }
             onChange={(e) => {
-              setEmail(e.target.value);
-              formik.setFieldValue("basic.contactMethod", e.target.value);
+              setEmail(e.target.value)
+              formik.setFieldValue('basic.contactMethod', e.target.value)
             }}
             onBlur={formik.handleBlur}
-            className="rounded-3xl py-6 px-5 border-2"
+            className="rounded-3xl border-2 px-5 py-6"
           />
-          {err("basic.contactMethod") && err("basic.contactMethod") && (
+          {err('basic.contactMethod') && err('basic.contactMethod') && (
             <p className="text-xs text-red-500">
-              {String(err("basic.contactMethod"))}
+              {String(err('basic.contactMethod'))}
             </p>
           )}
         </div>
@@ -326,7 +326,7 @@ export default function BasicInfo({
           <Button
             type="button"
             onClick={handleNext}
-            className="gap-2 w-full py-6 bg-blue-500 hover:bg-blue-600"
+            className="w-full gap-2 bg-blue-500 py-6 hover:bg-blue-600"
           >
             التالي <ArrowLeft className="size-5" />
           </Button>
@@ -336,5 +336,5 @@ export default function BasicInfo({
       {/* قسم التعليمات */}
       <AddNoteInstructions />
     </div>
-  );
+  )
 }

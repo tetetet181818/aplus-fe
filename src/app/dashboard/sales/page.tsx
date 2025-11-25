@@ -1,27 +1,27 @@
-"use client";
-import { useState, useMemo } from "react";
-import Head from "next/head";
+'use client'
+import { useState, useMemo } from 'react'
+import Head from 'next/head'
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import SalesTable from "@/components/organisms/dashboard/sales/SalesTable";
-import Pagination from "@/components/organisms/dashboard/sales/Pagination";
-import SalesDetailsDialog from "@/components/molecules/dialogs/SalesDetailsDialog";
-import useDashboard from "@/hooks/useDashboard";
-import ChartLineSales from "@/components/organisms/dashboard/ChartLineSales";
-import SalesTableSkeleton from "@/components/skeletons/SalesTableSkeleton";
+} from '@/components/ui/select'
+import SalesTable from '@/components/organisms/dashboard/sales/SalesTable'
+import Pagination from '@/components/organisms/dashboard/sales/Pagination'
+import SalesDetailsDialog from '@/components/molecules/dialogs/SalesDetailsDialog'
+import useDashboard from '@/hooks/useDashboard'
+import ChartLineSales from '@/components/organisms/dashboard/ChartLineSales'
+import SalesTableSkeleton from '@/components/skeletons/SalesTableSkeleton'
 
 export default function SalesDashboard() {
   const {
@@ -34,48 +34,48 @@ export default function SalesDashboard() {
     prevSalePage,
     changeSaleLimit,
     salesLoading,
-  } = useDashboard();
+  } = useDashboard()
 
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [searchInvoiceId, setSearchInvoiceId] = useState("");
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [searchInvoiceId, setSearchInvoiceId] = useState('')
   const [sortConfig, setSortConfig] = useState({
-    key: "created_at",
-    direction: "desc",
-  });
+    key: 'created_at',
+    direction: 'desc',
+  })
 
-  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
-  const [selectedSalesId, setSelectedSalesId] = useState<string | null>(null);
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false)
+  const [selectedSalesId, setSelectedSalesId] = useState<string | null>(null)
 
   /** filter + sort client-side */
   const filteredSales = useMemo(() => {
-    let data = [...sales];
-    if (statusFilter !== "all")
-      data = data.filter((s) => s.status === statusFilter);
+    let data = [...sales]
+    if (statusFilter !== 'all')
+      data = data.filter((s) => s.status === statusFilter)
     if (searchInvoiceId)
       data = data.filter((s) =>
         s.invoice_id.toLowerCase().includes(searchInvoiceId.toLowerCase())
-      );
+      )
     data.sort((a, b) => {
-      const valA = a[sortConfig.key as keyof typeof a];
-      const valB = b[sortConfig.key as keyof typeof b];
-      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
-      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-    return data;
-  }, [sales, statusFilter, searchInvoiceId, sortConfig]);
+      const valA = a[sortConfig.key as keyof typeof a]
+      const valB = b[sortConfig.key as keyof typeof b]
+      if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1
+      if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1
+      return 0
+    })
+    return data
+  }, [sales, statusFilter, searchInvoiceId, sortConfig])
 
   const handleSort = (key: string) => {
-    let direction = "desc";
-    if (sortConfig.key === key && sortConfig.direction === "desc")
-      direction = "asc";
-    setSortConfig({ key, direction });
-  };
+    let direction = 'desc'
+    if (sortConfig.key === key && sortConfig.direction === 'desc')
+      direction = 'asc'
+    setSortConfig({ key, direction })
+  }
 
   const renderSortIcon = (key: string) => {
-    if (sortConfig.key !== key) return <span className="opacity-30">⇅</span>;
-    return sortConfig.direction === "asc" ? "↑" : "↓";
-  };
+    if (sortConfig.key !== key) return <span className="opacity-30">⇅</span>
+    return sortConfig.direction === 'asc' ? '↑' : '↓'
+  }
 
   return (
     <>
@@ -89,7 +89,7 @@ export default function SalesDashboard() {
           <CardHeader>
             <CardTitle>المبيعات</CardTitle>
             <CardDescription>إدارة جميع عمليات البيع</CardDescription>
-            <div className="flex gap-2 mt-2">
+            <div className="mt-2 flex gap-2">
               <Input
                 placeholder="ابحث برقم العملية"
                 value={searchInvoiceId}
@@ -120,8 +120,8 @@ export default function SalesDashboard() {
                   handleSort={handleSort}
                   renderSortIcon={renderSortIcon}
                   onShowDetails={(id) => {
-                    setSelectedSalesId(id);
-                    setShowDetailsDialog(true);
+                    setSelectedSalesId(id)
+                    setShowDetailsDialog(true)
                   }}
                 />
 
@@ -146,8 +146,8 @@ export default function SalesDashboard() {
       <SalesDetailsDialog
         open={showDetailsDialog}
         onClose={() => setShowDetailsDialog(false)}
-        salesId={selectedSalesId || ""}
+        salesId={selectedSalesId || ''}
       />
     </>
-  );
+  )
 }

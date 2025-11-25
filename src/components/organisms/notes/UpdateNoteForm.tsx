@@ -1,52 +1,52 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import BasicInfo from "./BasicInfo";
-import UploadFileNote from "./UploadFileNote";
-import UploadCoverNote from "./UploadCoverNote";
-import ReviewNote from "./ReviewNote";
-import SuccessUploadNoteDialog from "@/components/molecules/dialogs/SuccessUploadNoteDialog";
-import { Note, UpdateNoteData } from "@/types";
-import useNoteDetail from "@/hooks/useNoteDetail";
+import { useState, useEffect } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { Progress } from '@/components/ui/progress'
+import BasicInfo from './BasicInfo'
+import UploadFileNote from './UploadFileNote'
+import UploadCoverNote from './UploadCoverNote'
+import ReviewNote from './ReviewNote'
+import SuccessUploadNoteDialog from '@/components/molecules/dialogs/SuccessUploadNoteDialog'
+import { Note, UpdateNoteData } from '@/types'
+import useNoteDetail from '@/hooks/useNoteDetail'
 
 /** Form value types */
 type UpdateNoteValues = {
   basic: {
-    title: string;
-    price: number;
-    description: string;
-    university: string;
-    college: string;
-    subject: string;
-    pagesNumber: number;
-    year: number | null;
-    contactMethod: string;
-  };
+    title: string
+    price: number
+    description: string
+    university: string
+    college: string
+    subject: string
+    pagesNumber: number
+    year: number | null
+    contactMethod: string
+  }
   files: {
-    cover: File | null;
-    file: File | null;
-  };
+    cover: File | null
+    file: File | null
+  }
   review: {
-    termsAccepted: boolean;
-  };
-};
+    termsAccepted: boolean
+  }
+}
 
 const initialValues: UpdateNoteValues = {
   basic: {
-    title: "",
+    title: '',
     price: 0,
-    description: "",
-    university: "",
-    college: "",
-    subject: "",
+    description: '',
+    university: '',
+    college: '',
+    subject: '',
     pagesNumber: 0,
     year: new Date().getFullYear(),
-    contactMethod: "",
+    contactMethod: '',
   },
   files: {
     cover: null,
@@ -55,82 +55,82 @@ const initialValues: UpdateNoteValues = {
   review: {
     termsAccepted: true,
   },
-};
+}
 
 /** Validation schema */
 const validationSchemas = {
   basic: Yup.object({
-    title: Yup.string().required("العنوان مطلوب"),
-    price: Yup.number().positive("يجب أن يكون موجب").required("السعر مطلوب"),
-    description: Yup.string().required("الوصف مطلوب"),
-    university: Yup.string().required("الجامعة مطلوبة"),
-    college: Yup.string().required("الكلية مطلوبة"),
-    subject: Yup.string().required("المادة مطلوبة"),
+    title: Yup.string().required('العنوان مطلوب'),
+    price: Yup.number().positive('يجب أن يكون موجب').required('السعر مطلوب'),
+    description: Yup.string().required('الوصف مطلوب'),
+    university: Yup.string().required('الجامعة مطلوبة'),
+    college: Yup.string().required('الكلية مطلوبة'),
+    subject: Yup.string().required('المادة مطلوبة'),
     pagesNumber: Yup.number()
-      .positive("عدد الصفحات يجب أن يكون موجب")
-      .required("عدد الصفحات مطلوب"),
+      .positive('عدد الصفحات يجب أن يكون موجب')
+      .required('عدد الصفحات مطلوب'),
     year: Yup.number().nullable(),
     contactMethod: Yup.string()
-      .email("البريد الإلكتروني غير صالح")
-      .required("طريقة التواصل مطلوبة"),
+      .email('البريد الإلكتروني غير صالح')
+      .required('طريقة التواصل مطلوبة'),
   }),
   files: Yup.object({
     cover: Yup.mixed<File>().nullable(),
     file: Yup.mixed<File>().nullable(),
   }),
   review: Yup.object({
-    termsAccepted: Yup.boolean().oneOf([true], "يجب الموافقة على الشروط"),
+    termsAccepted: Yup.boolean().oneOf([true], 'يجب الموافقة على الشروط'),
   }),
-};
+}
 
 /** Helper to build FormData */
 function buildFormData(values: UpdateNoteValues): FormData {
-  const formData = new FormData();
+  const formData = new FormData()
   Object.entries(values.basic).forEach(([key, val]) => {
-    if (val !== null && val !== undefined) formData.append(key, String(val));
-  });
+    if (val !== null && val !== undefined) formData.append(key, String(val))
+  })
 
-  if (values.files.cover) formData.append("cover", values.files.cover);
-  if (values.files.file) formData.append("file", values.files.file);
+  if (values.files.cover) formData.append('cover', values.files.cover)
+  if (values.files.file) formData.append('file', values.files.file)
 
-  formData.append("termsAccepted", String(values.review.termsAccepted));
-  return formData;
+  formData.append('termsAccepted', String(values.review.termsAccepted))
+  return formData
 }
 
 /**
  * Multi-step form for updating an existing note
  */
 const UpdateNoteForm = ({ note }: { note: Note }) => {
-  const tabs = ["basic", "file", "cover", "review"] as const;
-  type TabKey = (typeof tabs)[number];
-  const [tab, setTab] = useState<TabKey>("basic");
-  const { handleUpdateNote, updateNoteLoading } = useNoteDetail(note._id);
-  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
+  const tabs = ['basic', 'file', 'cover', 'review'] as const
+  type TabKey = (typeof tabs)[number]
+  const [tab, setTab] = useState<TabKey>('basic')
+  const { handleUpdateNote, updateNoteLoading } = useNoteDetail(note._id)
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
 
   /** Prefill note data */
-  const [formInitials, setFormInitials] = useState(initialValues);
+  const [formInitials, setFormInitials] = useState(initialValues)
   useEffect(() => {
     if (note) {
       setFormInitials({
         basic: {
-          title: note.title || "",
+          title: note.title || '',
           price: note.price || 0,
-          description: note.description || "",
-          university: note.university || "",
-          college: note.college || "",
-          subject: note.subject || "",
+          description: note.description || '',
+          university: note.university || '',
+          college: note.college || '',
+          subject: note.subject || '',
           pagesNumber: note.pagesNumber || 0,
           year: note.year || new Date().getFullYear(),
-          contactMethod: note.contactMethod || "",
+          contactMethod: note.contactMethod || '',
         },
         files: {
           cover: null,
           file: null,
         },
         review: { termsAccepted: true },
-      });
+      })
     }
-  }, [note]);
+  }, [note])
 
   const formik = useFormik<UpdateNoteValues>({
     enableReinitialize: true,
@@ -141,25 +141,25 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
       review: validationSchemas.review,
     }),
     onSubmit: async (values) => {
-      const formData: UpdateNoteData = buildFormData(values);
+      const formData: UpdateNoteData = buildFormData(values)
       const res = await handleUpdateNote({
         noteId: note._id,
         noteData: formData,
-      });
-      if (res) setOpenSuccessDialog(true);
+      })
+      if (res) setOpenSuccessDialog(true)
     },
-  });
+  })
 
-  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100;
+  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100
 
   return (
     <>
       <div dir="rtl" className="min-h-screen py-8 md:px-6">
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-          <Card className="w-full shadow-xl border-0 rounded-2xl overflow-hidden">
+          <Card className="w-full overflow-hidden rounded-2xl border-0 shadow-xl">
             {/* Progress Header */}
-            <div className="bg-white py-4 px-6 border-b">
-              <div className="flex items-center justify-between mb-2">
+            <div className="border-b bg-white px-6 py-4">
+              <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-bold text-blue-600">
                   {progress.toFixed(0)}%
                 </span>
@@ -169,7 +169,7 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
               </div>
               <Progress
                 value={progress}
-                className="h-2 bg-gray-200 [&>div]:!left-0 [&>div]:!right-0 transform rotate-180"
+                className="h-2 rotate-180 transform bg-gray-200 [&>div]:!right-0 [&>div]:!left-0"
               />
             </div>
 
@@ -181,22 +181,22 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
                 className="w-full"
               >
                 <TabsContent value="basic" className="p-6">
-                  <BasicInfo formik={formik} nextTab={() => setTab("file")} />
+                  <BasicInfo formik={formik} nextTab={() => setTab('file')} />
                 </TabsContent>
 
                 <TabsContent value="file" className="p-6">
                   <UploadFileNote
                     formik={formik}
-                    prevTab={() => setTab("basic")}
-                    nextTab={() => setTab("cover")}
+                    prevTab={() => setTab('basic')}
+                    nextTab={() => setTab('cover')}
                   />
                 </TabsContent>
 
                 <TabsContent value="cover" className="p-6">
                   <UploadCoverNote
                     formik={formik}
-                    prevTab={() => setTab("file")}
-                    nextTab={() => setTab("review")}
+                    prevTab={() => setTab('file')}
+                    nextTab={() => setTab('review')}
                   />
                 </TabsContent>
 
@@ -204,7 +204,7 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
                   <ReviewNote
                     loading={updateNoteLoading}
                     formik={formik}
-                    prevTab={() => setTab("cover")}
+                    prevTab={() => setTab('cover')}
                   />
                 </TabsContent>
               </Tabs>
@@ -218,7 +218,7 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
         onOpenChange={setOpenSuccessDialog}
       />
     </>
-  );
-};
+  )
+}
 
-export default UpdateNoteForm;
+export default UpdateNoteForm

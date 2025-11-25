@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { JSX, useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { JSX, useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   User as UserIcon,
   Mail,
@@ -18,19 +18,19 @@ import {
   Trash2,
   Link2,
   Award,
-} from "lucide-react";
-import UpdateInfoDialog from "../../molecules/dialogs/UpdateInfoDialog";
-import useAuth from "@/hooks/useAuth";
-import { User } from "@/types";
-import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
-import { toast } from "sonner";
-import ProfileInfoSkeleton from "@/components/skeletons/ProfileInfoSkeleton";
-import Image from "next/image";
+} from 'lucide-react'
+import UpdateInfoDialog from '../../molecules/dialogs/UpdateInfoDialog'
+import useAuth from '@/hooks/useAuth'
+import { User } from '@/types'
+import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog'
+import { toast } from 'sonner'
+import ProfileInfoSkeleton from '@/components/skeletons/ProfileInfoSkeleton'
+import Image from 'next/image'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip'
 
 /**
  * Renders the user's profile information and actions (edit, delete, reset password).
@@ -40,33 +40,33 @@ import {
  */
 interface ProfileInfoTabProps {
   /** Authenticated user info */
-  user: User;
+  user: User
   /** Loading state */
-  loading: boolean;
+  loading: boolean
 }
 
 const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
-  const { handleDeleteAccount, handleUpdateUserInfo } = useAuth();
-  const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
-  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const { handleDeleteAccount, handleUpdateUserInfo } = useAuth()
+  const [openDialogUpdate, setOpenDialogUpdate] = useState(false)
+  const [openDialogDelete, setOpenDialogDelete] = useState(false)
 
   const copyToClipboard = (text: string) => {
-    toast.success("تم نسخ رابط حسابك");
-    navigator.clipboard.writeText(text);
-  };
+    toast.success('تم نسخ رابط حسابك')
+    navigator.clipboard.writeText(text)
+  }
 
-  if (loading) return <ProfileInfoSkeleton />;
-  if (!user) return null;
+  if (loading) return <ProfileInfoSkeleton />
+  if (!user) return null
 
   return (
     <>
-      <div className="w-full max-w-3xl mx-auto">
-        <Card className="shadow-lg border-gray-200 dark:border-gray-700">
-          <CardHeader className="border-b border-gray-200 dark:border-gray-700 pb-4 px-4 sm:px-6">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+      <div className="mx-auto w-full max-w-3xl">
+        <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+          <CardHeader className="border-b border-gray-200 px-4 pb-4 sm:px-6 dark:border-gray-700">
+            <CardTitle className="text-xl font-bold text-gray-800 sm:text-2xl dark:text-white">
               المعلومات الشخصية
             </CardTitle>
-            <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-sm text-gray-600 sm:text-base dark:text-gray-400">
               <div className="flex gap-1">
                 <span>+أ</span>
                 <span>تفاصيل حسابك في المنصة</span>
@@ -74,20 +74,20 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
             {/* Name */}
             <InfoField
               icon={
-                <UserIcon className="h-5 w-5 text-primary dark:text-primary-light" />
+                <UserIcon className="text-primary dark:text-primary-light h-5 w-5" />
               }
               label="الاسم الكامل"
-              value={user.fullName || "غير محدد"}
+              value={user.fullName || 'غير محدد'}
             />
 
             {/* Email */}
             <InfoField
               icon={
-                <Mail className="h-5 w-5 text-primary dark:text-primary-light" />
+                <Mail className="text-primary dark:text-primary-light h-5 w-5" />
               }
               label="البريد الإلكتروني"
               value={user.email}
@@ -96,27 +96,27 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
             {/* University */}
             <InfoField
               icon={
-                <School className="h-5 w-5 text-primary dark:text-primary-light" />
+                <School className="text-primary dark:text-primary-light h-5 w-5" />
               }
               label="الجامعة"
-              value={user.university || "لم يتم التحديد"}
+              value={user.university || 'لم يتم التحديد'}
             />
 
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-              <div className="p-2 rounded-full bg-primary/10 dark:bg-primary/20">
-                <Award className="h-5 w-5 text-primary dark:text-primary-light" />
+            <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+              <div className="bg-primary/10 dark:bg-primary/20 rounded-full p-2">
+                <Award className="text-primary dark:text-primary-light h-5 w-5" />
               </div>
               <div className="flex-1">
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
                   الشارات
                 </p>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="ghost" className="p-0">
-                      <p className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mt-1">
+                      <p className="mt-1 text-sm font-medium text-gray-700 sm:text-base dark:text-gray-200">
                         {user?.badgeSales === true && (
                           <Image
-                            src={"/best-sales.png"}
+                            src={'/best-sales.png'}
                             alt=""
                             width={30}
                             height={30}
@@ -134,7 +134,7 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
             </div>
 
             {/* Actions */}
-            <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col justify-center gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:pt-6 dark:border-gray-700">
               <Button
                 onClick={() =>
                   copyToClipboard(
@@ -173,7 +173,7 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
               </Button>
             </div>
 
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center pt-2 px-2">
+            <p className="px-2 pt-2 text-center text-xs text-gray-500 dark:text-gray-400">
               تذكّر: حذف الحساب إجراء نهائي ولا يمكن التراجع عنه. سيتم حذف جميع
               بياناتك وملخصاتك.
             </p>
@@ -195,8 +195,8 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
         loading={Boolean(loading)}
       />
     </>
-  );
-};
+  )
+}
 
 /**
  * Small helper component for displaying a labeled info row with an icon.
@@ -211,23 +211,23 @@ const InfoField = ({
   label,
   value,
 }: {
-  icon: JSX.Element;
-  label: string;
-  value: string;
+  icon: JSX.Element
+  label: string
+  value: string
 }) => (
-  <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-    <div className="p-2 rounded-full bg-primary/10 dark:bg-primary/20">
+  <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+    <div className="bg-primary/10 dark:bg-primary/20 rounded-full p-2">
       {icon}
     </div>
     <div className="flex-1">
-      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
         {label}
       </p>
-      <p className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mt-1">
+      <p className="mt-1 text-sm font-medium text-gray-700 sm:text-base dark:text-gray-200">
         {value}
       </p>
     </div>
   </div>
-);
+)
 
-export default ProfileInfoTab;
+export default ProfileInfoTab

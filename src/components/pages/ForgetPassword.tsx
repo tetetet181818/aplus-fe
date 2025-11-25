@@ -1,39 +1,39 @@
-"use client";
-import { useFormik } from "formik";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Mail, Loader2, ArrowRight } from "lucide-react";
-import { validationForgetPassword } from "@/utils/validation/authValidation";
-import useAuth from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
+'use client'
+import { useFormik } from 'formik'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { Mail, Loader2, ArrowRight } from 'lucide-react'
+import { validationForgetPassword } from '@/utils/validation/authValidation'
+import useAuth from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
 export default function ForgetPassword() {
-  const { forgetPasswordLoading, handleForgetPassword } = useAuth();
-  const router = useRouter();
+  const { forgetPasswordLoading, handleForgetPassword } = useAuth()
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema: validationForgetPassword,
     onSubmit: async (values, { resetForm }) => {
-      const res = await handleForgetPassword({ email: values.email });
+      const res = await handleForgetPassword({ email: values.email })
       if (res) {
-        resetForm();
+        resetForm()
       }
     },
-  });
+  })
 
   return (
     <>
-      <div className="max-w-md mx-auto mt-20 p-6 border rounded-xl shadow-sm my-20">
-        <h2 className="text-2xl font-semibold text-center mb-4 flex items-center justify-start gap-2">
+      <div className="mx-auto my-20 mt-20 max-w-md rounded-xl border p-6 shadow-sm">
+        <h2 className="mb-4 flex items-center justify-start gap-2 text-center text-2xl font-semibold">
           <Button onClick={() => router.back()}>
             <ArrowRight className="size-5" />
           </Button>
           نسيت كلمة المرور
         </h2>
-        <p className="text-sm text-muted-foreground text-center mb-6">
+        <p className="text-muted-foreground mb-6 text-center text-sm">
           أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور
         </p>
 
@@ -49,10 +49,10 @@ export default function ForgetPassword() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="pr-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100"
+                className="pr-10 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50"
                 disabled={forgetPasswordLoading}
               />
-              <Mail className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+              <Mail className="absolute top-3 right-3 h-5 w-5 text-gray-400" />
             </div>
             {formik.touched.email && formik.errors.email && (
               <p className="text-sm text-red-500">{formik.errors.email}</p>
@@ -66,15 +66,15 @@ export default function ForgetPassword() {
           >
             {forgetPasswordLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin ml-2" />
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                 جارٍ الإرسال...
               </>
             ) : (
-              "إرسال رابط إعادة التعيين"
+              'إرسال رابط إعادة التعيين'
             )}
           </Button>
         </form>
       </div>
     </>
-  );
+  )
 }

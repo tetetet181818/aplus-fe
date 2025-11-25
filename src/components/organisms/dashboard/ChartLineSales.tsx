@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
-import * as React from "react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import * as React from 'react'
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from '@/components/ui/chart'
 
 const chartConfig = {
   sales: {
-    label: "المبيعات",
-    color: "var(--chart-2)",
+    label: 'المبيعات',
+    color: 'var(--chart-2)',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export default function ChartLineSales({
   total,
   data,
 }: {
-  total: number;
+  total: number
   data: {
-    date: string;
-    sales: number;
-  }[];
+    date: string
+    sales: number
+  }[]
 }) {
-  const [activeChart] = React.useState<keyof typeof chartConfig>("sales");
+  const [activeChart] = React.useState<keyof typeof chartConfig>('sales')
 
   return (
     <Card className="py-4 sm:py-0">
@@ -77,11 +77,11 @@ export default function ChartLineSales({
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("ar-EG", {
-                  month: "short",
-                  day: "numeric",
-                });
+                const date = new Date(value)
+                return date.toLocaleDateString('ar-EG', {
+                  month: 'short',
+                  day: 'numeric',
+                })
               }}
             />
             <ChartTooltip
@@ -90,10 +90,10 @@ export default function ChartLineSales({
                   className="w-[150px]"
                   nameKey="sales"
                   labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("ar-EG", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
+                    new Date(value).toLocaleDateString('ar-EG', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
                     })
                   }
                 />
@@ -110,5 +110,5 @@ export default function ChartLineSales({
         </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

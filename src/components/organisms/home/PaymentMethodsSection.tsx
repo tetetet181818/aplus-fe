@@ -1,20 +1,20 @@
-import visaImage from "../../../public/visa.png";
-import mada_image from "../../../public/mada.svg";
-import mastercard_image from "../../../public/MasterCard-logo.webp";
-import Image from "next/image";
-import { JSX } from "react";
+import visaImage from '../../../public/visa.png'
+import mada_image from '../../../public/mada.svg'
+import mastercard_image from '../../../public/MasterCard-logo.webp'
+import Image from 'next/image'
+import { JSX } from 'react'
 
 interface PaymentMethod {
-  name: string;
-  icon: JSX.Element;
-  description: string;
+  name: string
+  icon: JSX.Element
+  description: string
 }
 
 const PaymentMethodsSection = (): JSX.Element => {
   const paymentMethods: PaymentMethod[] = [
     {
-      name: "Visa",
-      description: "Pay securely with Visa credit or debit cards",
+      name: 'Visa',
+      description: 'Pay securely with Visa credit or debit cards',
       icon: (
         <Image
           loading="lazy"
@@ -27,8 +27,8 @@ const PaymentMethodsSection = (): JSX.Element => {
       ),
     },
     {
-      name: "Mada",
-      description: "Saudi Arabian Mada payment system",
+      name: 'Mada',
+      description: 'Saudi Arabian Mada payment system',
       icon: (
         <Image
           loading="lazy"
@@ -41,8 +41,8 @@ const PaymentMethodsSection = (): JSX.Element => {
       ),
     },
     {
-      name: "MasterCard",
-      description: "Pay with Mastercard credit or debit cards",
+      name: 'MasterCard',
+      description: 'Pay with Mastercard credit or debit cards',
       icon: (
         <Image
           loading="lazy"
@@ -54,13 +54,13 @@ const PaymentMethodsSection = (): JSX.Element => {
         />
       ),
     },
-  ];
+  ]
 
   return (
     <section aria-labelledby="payment-methods-heading">
       <h3
         id="payment-methods-heading"
-        className="font-semibold text-lg mb-4 text-gray-700 dark:text-gray-200"
+        className="mb-4 text-lg font-semibold text-gray-700 dark:text-gray-200"
       >
         طرق الدفع المتاحة
       </h3>
@@ -69,7 +69,7 @@ const PaymentMethodsSection = (): JSX.Element => {
         {paymentMethods.map((method) => (
           <div
             key={method.name}
-            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-md flex flex-col flex-1 text-center items-center justify-center"
+            className="flex flex-1 flex-col items-center justify-center rounded-md bg-gray-100 p-3 text-center dark:bg-gray-800"
             role="listitem"
           >
             <div className="mb-1" aria-hidden="true">
@@ -82,7 +82,7 @@ const PaymentMethodsSection = (): JSX.Element => {
         ))}
       </div>
 
-      <p className="text-gray-500 dark:text-gray-500 mt-3 text-xs">
+      <p className="mt-3 text-xs text-gray-500 dark:text-gray-500">
         جميع المعاملات مشفرة وآمنة.
       </p>
 
@@ -91,18 +91,18 @@ const PaymentMethodsSection = (): JSX.Element => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "طرق الدفع المتاحة",
-            description: "خيارات الدفع الآمنة والمشفرة المتاحة للعملاء",
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'طرق الدفع المتاحة',
+            description: 'خيارات الدفع الآمنة والمشفرة المتاحة للعملاء',
             paymentAccepted: paymentMethods
               .map((method) => method.name)
-              .join(", "),
+              .join(', '),
           }),
         }}
       />
     </section>
-  );
-};
+  )
+}
 
-export default PaymentMethodsSection;
+export default PaymentMethodsSection

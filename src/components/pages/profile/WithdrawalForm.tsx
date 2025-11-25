@@ -1,40 +1,40 @@
-"use client";
+'use client'
 
-import { Banknote, AlertTriangle, Info, Loader } from "lucide-react";
+import { Banknote, AlertTriangle, Info, Loader } from 'lucide-react'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { FormikProps } from "formik";
-import { SAUDI_BANKS } from "@/constants";
+} from '@/components/ui/select'
+import { FormikProps } from 'formik'
+import { SAUDI_BANKS } from '@/constants'
 
 export interface WithdrawalFormValues {
-  accountHolderName: string;
-  bankName: string;
-  iban: string;
-  withdrawalAmount: number;
+  accountHolderName: string
+  bankName: string
+  iban: string
+  withdrawalAmount: number
 }
 
 interface WithdrawalFormProps {
-  formik: FormikProps<WithdrawalFormValues>;
-  isProcessingWithdrawal: boolean;
-  netEarnings: number;
-  remainingWithdrawals: number;
-  maxWithdrawalsPerMonth: number;
-  loading: boolean;
+  formik: FormikProps<WithdrawalFormValues>
+  isProcessingWithdrawal: boolean
+  netEarnings: number
+  remainingWithdrawals: number
+  maxWithdrawalsPerMonth: number
+  loading: boolean
 }
 
 export default function WithdrawalForm({
@@ -45,13 +45,13 @@ export default function WithdrawalForm({
   maxWithdrawalsPerMonth,
   loading,
 }: WithdrawalFormProps) {
-  const disabled = isProcessingWithdrawal || loading;
+  const disabled = isProcessingWithdrawal || loading
 
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <Banknote className="h-6 w-6 text-primary" />
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+          <Banknote className="text-primary h-6 w-6" />
           سحب الأرباح
         </CardTitle>
         <CardDescription className="text-gray-600 dark:text-gray-400">
@@ -96,7 +96,7 @@ export default function WithdrawalForm({
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 /* ----------------- Subcomponents ----------------- */
@@ -104,20 +104,20 @@ export default function WithdrawalForm({
 const FormField = ({
   label,
   id,
-  type = "text",
+  type = 'text',
   formik,
   disabled,
   placeholder,
 }: {
-  label: string;
-  id: keyof WithdrawalFormValues;
-  type?: string;
-  formik: FormikProps<WithdrawalFormValues>;
-  disabled: boolean;
-  placeholder?: string;
+  label: string
+  id: keyof WithdrawalFormValues
+  type?: string
+  formik: FormikProps<WithdrawalFormValues>
+  disabled: boolean
+  placeholder?: string
 }) => (
   <div className="mb-4">
-    <Label htmlFor={id} className="block mb-2">
+    <Label htmlFor={id} className="mb-2 block">
       {label}
     </Label>
     <Input
@@ -126,33 +126,33 @@ const FormField = ({
       type={type}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
-      value={formik.values[id] ?? ""}
+      value={formik.values[id] ?? ''}
       placeholder={placeholder}
       className="h-11"
       disabled={disabled}
     />
     {formik.touched[id] && formik.errors[id] && (
-      <p className="text-xs text-red-500 dark:text-red-400 mt-1">
+      <p className="mt-1 text-xs text-red-500 dark:text-red-400">
         {formik.errors[id]}
       </p>
     )}
   </div>
-);
+)
 
 const BankSelectField = ({
   formik,
   disabled,
 }: {
-  formik: FormikProps<WithdrawalFormValues>;
-  disabled: boolean;
+  formik: FormikProps<WithdrawalFormValues>
+  disabled: boolean
 }) => (
   <div className="mb-4">
-    <Label htmlFor="bankName" className="block mb-2">
+    <Label htmlFor="bankName" className="mb-2 block">
       اسم البنك
     </Label>
     <Select
-      onValueChange={(value) => formik.setFieldValue("bankName", value)}
-      value={formik.values.bankName || ""}
+      onValueChange={(value) => formik.setFieldValue('bankName', value)}
+      value={formik.values.bankName || ''}
       disabled={disabled}
     >
       <SelectTrigger className="w-full">
@@ -167,26 +167,26 @@ const BankSelectField = ({
       </SelectContent>
     </Select>
     {formik.touched.bankName && formik.errors.bankName && (
-      <p className="text-xs text-red-500 dark:text-red-400 mt-1">
+      <p className="mt-1 text-xs text-red-500 dark:text-red-400">
         {formik.errors.bankName}
       </p>
     )}
   </div>
-);
+)
 
 const IbanField = ({
   formik,
   disabled,
 }: {
-  formik: FormikProps<WithdrawalFormValues>;
-  disabled: boolean;
+  formik: FormikProps<WithdrawalFormValues>
+  disabled: boolean
 }) => (
   <div className="mb-4">
-    <Label htmlFor="iban" className="block mb-2">
+    <Label htmlFor="iban" className="mb-2 block">
       رقم الحساب (IBAN)
     </Label>
     <div className="relative">
-      <div className="absolute inset-y-0 left-0 flex items-center px-3 bg-gray-100 dark:bg-gray-700 border border-r-0 border-gray-300 dark:border-gray-600 rounded-l-md">
+      <div className="absolute inset-y-0 left-0 flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-100 px-3 dark:border-gray-600 dark:bg-gray-700">
         <span className="text-gray-700 dark:text-gray-300">SA</span>
       </div>
       <Input
@@ -194,53 +194,53 @@ const IbanField = ({
         name="iban"
         type="text"
         onChange={(e) => {
-          let value = e.target.value.toUpperCase().replace(/\s/g, "");
-          if (value.startsWith("SA")) value = value.substring(2);
-          formik.setFieldValue("iban", "SA" + value);
+          let value = e.target.value.toUpperCase().replace(/\s/g, '')
+          if (value.startsWith('SA')) value = value.substring(2)
+          formik.setFieldValue('iban', 'SA' + value)
         }}
         onBlur={formik.handleBlur}
-        value={(formik.values.iban || "").replace(/^SA/, "")}
+        value={(formik.values.iban || '').replace(/^SA/, '')}
         placeholder="XXXXXXXXXXXXXX"
-        className="pl-12 h-11"
+        className="h-11 pl-12"
         maxLength={22}
         disabled={disabled}
       />
     </div>
     {formik.touched.iban && formik.errors.iban && (
-      <p className="text-xs text-red-500 dark:text-red-400 mt-1">
+      <p className="mt-1 text-xs text-red-500 dark:text-red-400">
         {formik.errors.iban}
       </p>
     )}
   </div>
-);
+)
 
 const WithdrawalInfo = ({
   remainingWithdrawals,
   maxWithdrawalsPerMonth,
 }: {
-  remainingWithdrawals: number;
-  maxWithdrawalsPerMonth: number;
+  remainingWithdrawals: number
+  maxWithdrawalsPerMonth: number
 }) => (
-  <div className="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md text-sm text-blue-700 dark:text-blue-300 flex items-start gap-2 mb-4">
-    <Info className="h-5 w-5 mt-0.5 shrink-0" />
+  <div className="mb-4 flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+    <Info className="mt-0.5 h-5 w-5 shrink-0" />
     <span>
       يمكنك إجراء {maxWithdrawalsPerMonth} عمليات سحب بحد أقصى كل شهر. عدد
-      عمليات السحب المتبقية لك هذا الشهر:{" "}
+      عمليات السحب المتبقية لك هذا الشهر:{' '}
       <strong>{remainingWithdrawals > 0 ? remainingWithdrawals : 0}</strong>.
     </span>
   </div>
-);
+)
 
 const SubmitButton = ({
   isProcessing,
   disabled,
 }: {
-  isProcessing: boolean;
-  disabled: boolean;
+  isProcessing: boolean
+  disabled: boolean
 }) => (
   <Button
     type="submit"
-    className="w-full h-11 text-base bg-primary hover:bg-primary/90"
+    className="bg-primary hover:bg-primary/90 h-11 w-full text-base"
     disabled={disabled || isProcessing}
     id="moyasar-payment-button"
   >
@@ -250,30 +250,30 @@ const SubmitButton = ({
         جاري المعالجة...
       </>
     ) : (
-      "تأكيد طلب السحب"
+      'تأكيد طلب السحب'
     )}
   </Button>
-);
+)
 
 const FormMessages = ({
   netEarnings,
   remainingWithdrawals,
 }: {
-  netEarnings: number;
-  remainingWithdrawals: number;
+  netEarnings: number
+  remainingWithdrawals: number
 }) => (
   <>
     {netEarnings < 100 && (
-      <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center mt-2 flex items-center justify-center gap-1">
+      <p className="mt-2 flex items-center justify-center gap-1 text-center text-xs text-yellow-600 dark:text-yellow-400">
         <AlertTriangle className="h-4 w-4" />
         يجب أن يصل رصيدك إلى 100 ريال على الأقل لتتمكن من السحب.
       </p>
     )}
     {remainingWithdrawals <= 0 && netEarnings >= 100 && (
-      <p className="text-xs text-orange-600 dark:text-orange-400 text-center mt-2 flex items-center justify-center gap-1">
+      <p className="mt-2 flex items-center justify-center gap-1 text-center text-xs text-orange-600 dark:text-orange-400">
         <Info className="h-4 w-4" />
         لقد استنفدت عمليات السحب المتاحة لهذا الشهر.
       </p>
     )}
   </>
-);
+)

@@ -1,8 +1,8 @@
-"use client";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+'use client'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import {
   Star,
   Edit,
@@ -19,12 +19,12 @@ import {
   Loader2,
   Loader,
   Link2,
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-import { cloneElement, JSX, useState } from "react";
-import Image from "next/image";
-import formatArabicDate from "@/utils/formateTime";
+import { cloneElement, JSX, useState } from 'react'
+import Image from 'next/image'
+import formatArabicDate from '@/utils/formateTime'
 import {
   Dialog,
   DialogContent,
@@ -32,20 +32,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { User } from "@/types";
-import { toast } from "sonner";
+} from '@/components/ui/dialog'
+import { User } from '@/types'
+import { toast } from 'sonner'
 
 interface NoteHeaderProps {
-  title: string;
-  price?: number;
-  rating: number;
-  noteId: string;
-  addNoteToLikeList: (args: { noteId: string }) => void;
-  removeNoteFromLikeList: (args: { noteId: string }) => void;
-  likeLoading: boolean;
-  user: User;
-  toggleLike: boolean;
+  title: string
+  price?: number
+  rating: number
+  noteId: string
+  addNoteToLikeList: (args: { noteId: string }) => void
+  removeNoteFromLikeList: (args: { noteId: string }) => void
+  likeLoading: boolean
+  user: User
+  toggleLike: boolean
 }
 
 export const NoteHeader = ({
@@ -61,25 +61,25 @@ export const NoteHeader = ({
 }: NoteHeaderProps) => {
   if (!title) {
     return (
-      <Card className="shadow-lg border-red-200 dark:border-red-700">
+      <Card className="border-red-200 shadow-lg dark:border-red-700">
         <CardHeader>
           <CardTitle className="text-red-600 dark:text-red-400">
             خطأ في عرض بيانات الملخص
           </CardTitle>
         </CardHeader>
       </Card>
-    );
+    )
   }
 
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
       <CardHeader>
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
           <div>
             <CardTitle className="text-3xl font-extrabold text-gray-800 dark:text-white">
-              {title || "عنوان غير متوفر"}
+              {title || 'عنوان غير متوفر'}
             </CardTitle>
-            <div className="flex items-center justify-center gap-2 flex-wrap">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {user ? (
                 toggleLike ? (
                   <Button
@@ -91,7 +91,7 @@ export const NoteHeader = ({
                     {likeLoading ? (
                       <Loader2 className="size-5 animate-spin" />
                     ) : (
-                      "إلغاء الإعجاب بالملخص"
+                      'إلغاء الإعجاب بالملخص'
                     )}
                   </Button>
                 ) : (
@@ -103,7 +103,7 @@ export const NoteHeader = ({
                     {likeLoading ? (
                       <Loader2 className="size-5 animate-spin" />
                     ) : (
-                      "الإعجاب بالملخص"
+                      'الإعجاب بالملخص'
                     )}
                   </Button>
                 )
@@ -112,14 +112,14 @@ export const NoteHeader = ({
           </div>
 
           <div className="flex flex-col items-end gap-2">
-            <Badge className="text-xl px-4 py-2 bg-gradient-to-tr from-primary to-blue-500 text-white shadow-md">
-              {price !== undefined ? `${price} ريال` : "السعر غير متوفر"}
+            <Badge className="from-primary bg-gradient-to-tr to-blue-500 px-4 py-2 text-xl text-white shadow-md">
+              {price !== undefined ? `${price} ريال` : 'السعر غير متوفر'}
             </Badge>
 
             {rating && rating > 0 && (
               <div className="flex items-center gap-1 text-yellow-500">
                 <Star className="h-5 w-5 fill-current" />
-                <span className="font-semibold text-lg">
+                <span className="text-lg font-semibold">
                   {rating.toFixed(1)}
                 </span>
               </div>
@@ -128,33 +128,33 @@ export const NoteHeader = ({
         </div>
       </CardHeader>
     </Card>
-  );
-};
+  )
+}
 
 interface NoteImageProps {
-  src: string;
-  alt: string;
+  src: string
+  alt: string
 }
 
 export const NoteImage = ({ src, alt }: NoteImageProps) => {
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState(false)
 
   const handleImageError = () => {
-    setImageError(true);
-  };
+    setImageError(true)
+  }
 
   return (
-    <Card className="shadow-lg overflow-hidden border-gray-200 dark:border-gray-700 py-0">
-      <div className="bg-gray-100 flex items-center justify-center py-0">
+    <Card className="overflow-hidden border-gray-200 py-0 shadow-lg dark:border-gray-700">
+      <div className="flex items-center justify-center bg-gray-100 py-0">
         {imageError ? (
-          <div className="text-gray-500 flex flex-col items-center">
-            <FileText className="h-16 w-16 mb-2" />
+          <div className="flex flex-col items-center text-gray-500">
+            <FileText className="mb-2 h-16 w-16" />
             <span>تعذر تحميل الصورة</span>
           </div>
         ) : (
           <Image
             loading="lazy"
-            alt={alt || "صورة الملخص"}
+            alt={alt || 'صورة الملخص'}
             className="mx-auto object-cover"
             src={src}
             width={500}
@@ -164,64 +164,60 @@ export const NoteImage = ({ src, alt }: NoteImageProps) => {
         )}
       </div>
     </Card>
-  );
-};
+  )
+}
 
 interface NoteDescriptionProps {
-  description?: string;
+  description?: string
 }
 
 export const NoteDescription = ({ description }: NoteDescriptionProps) => {
   if (!description) {
     return (
-      <Card className="w-full shadow-lg border-gray-200 dark:border-gray-700 mx-auto max-w-full">
+      <Card className="mx-auto w-full max-w-full border-gray-200 shadow-lg dark:border-gray-700">
         <CardHeader className="px-4 sm:px-6">
-          <CardTitle className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-            <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-800 sm:text-xl dark:text-white">
+            <FileText className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
             وصف الملخص
           </CardTitle>
         </CardHeader>
         <CardContent className="px-4 sm:px-6">
-          <p className="text-gray-500 italic text-sm sm:text-base">
+          <p className="text-sm text-gray-500 italic sm:text-base">
             لا يوجد وصف متوفر لهذا الملخص
           </p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
-    <Card className="w-full shadow-lg border-gray-200 dark:border-gray-700 mx-auto max-w-full overflow-hidden">
-      <CardHeader className="px-4 sm:px-6 pb-3">
-        <CardTitle className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+    <Card className="mx-auto w-full max-w-full overflow-hidden border-gray-200 shadow-lg dark:border-gray-700">
+      <CardHeader className="px-4 pb-3 sm:px-6">
+        <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-800 sm:text-xl dark:text-white">
+          <FileText className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
           وصف الملخص
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-4 sm:px-6 pt-0">
+      <CardContent className="px-4 pt-0 sm:px-6">
         <div className="overflow-hidden">
-          <p
-            className="text-gray-700 dark:text-gray-300 leading-relaxed sm:leading-loose 
-                        whitespace-pre-wrap break-words overflow-wrap-anywhere
-                        text-sm sm:text-base max-w-full"
-          >
+          <p className="overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words whitespace-pre-wrap text-gray-700 sm:text-base sm:leading-loose dark:text-gray-300">
             {description}
           </p>
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
 interface NoteMetaProps {
-  university: string;
-  college: string;
-  subject: string;
-  pages: number;
-  year: number;
-  createdAt: string;
-  downloads: number;
-  rating: number;
+  university: string
+  college: string
+  subject: string
+  pages: number
+  year: number
+  createdAt: string
+  downloads: number
+  rating: number
 }
 
 export const NoteMeta = ({
@@ -235,10 +231,10 @@ export const NoteMeta = ({
   rating,
 }: NoteMetaProps) => {
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <Layers className="h-6 w-6 text-primary" /> تفاصيل الملخص
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+          <Layers className="text-primary h-6 w-6" /> تفاصيل الملخص
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -266,33 +262,33 @@ export const NoteMeta = ({
         />
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
 interface MetaItemProps {
-  icon: JSX.Element;
-  label: string;
-  value: string | number | undefined;
-  defaultValue?: string | number;
+  icon: JSX.Element
+  label: string
+  value: string | number | undefined
+  defaultValue?: string | number
 }
 
 const MetaItem = ({
   icon,
   label,
   value,
-  defaultValue = "غير محدد",
+  defaultValue = 'غير محدد',
 }: MetaItemProps) => (
   <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-    {cloneElement(icon, { className: "h-5 w-5 text-primary/80" })}
+    {cloneElement(icon, { className: 'h-5 w-5 text-primary/80' })}
     <strong>{label}:</strong> {value !== undefined ? value : defaultValue}
   </div>
-);
+)
 
 interface NoteAuthorInfoProps {
-  authorId: string;
-  authorName: string;
-  isOwner: boolean;
-  user: User;
+  authorId: string
+  authorName: string
+  isOwner: boolean
+  user: User
 }
 
 export const NoteAuthorInfo = ({
@@ -303,52 +299,52 @@ export const NoteAuthorInfo = ({
 }: NoteAuthorInfoProps) => {
   if (!authorId || !authorName) {
     return (
-      <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+      <Card className="border-gray-200 shadow-lg dark:border-gray-700">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-            <UserIcon className="h-6 w-6 text-primary" /> عن البائع
+          <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+            <UserIcon className="text-primary h-6 w-6" /> عن البائع
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500">معلومات البائع غير متوفرة</p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <UserIcon className="h-6 w-6 text-primary" /> عن البائع
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+          <UserIcon className="text-primary h-6 w-6" /> عن البائع
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center sm:items-start sm:flex-row gap-4">
+      <CardContent className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         <Avatar className="h-16 w-16">
           <AvatarImage
             src={`https://api.dicebear.com/6.x/initials/svg?seed=${authorName}`}
             alt={authorName}
           />
           <AvatarFallback>
-            {authorName?.charAt(0)?.toUpperCase() || "?"}
+            {authorName?.charAt(0)?.toUpperCase() || '?'}
           </AvatarFallback>
         </Avatar>
         <div className="text-center sm:text-right">
-          <p className="font-semibold text-lg text-gray-800 dark:text-white">
-            {authorName || "بائع غير معروف"}
+          <p className="text-lg font-semibold text-gray-800 dark:text-white">
+            {authorName || 'بائع غير معروف'}
           </p>
           {user && (
-            <Link href={isOwner ? "/profile" : `/seller/${authorId}`}>
-              <Button variant="link" className="text-primary p-0 h-auto">
-                {isOwner ? "إدارة حسابي" : "عرض ملف البائع"}
+            <Link href={isOwner ? '/profile' : `/seller/${authorId}`}>
+              <Button variant="link" className="text-primary h-auto p-0">
+                {isOwner ? 'إدارة حسابي' : 'عرض ملف البائع'}
               </Button>
             </Link>
           )}
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
 /**
  * Actions for a single note (purchase, edit, share, etc.)
@@ -371,58 +367,58 @@ export const NoteActions = ({
   noteTitle,
   noteDescription,
 }: {
-  isOwner: boolean;
-  hasPurchased: boolean;
-  price: number;
-  onPurchase: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onDownload: () => void;
-  onReview: () => void;
-  alreadyReviewed: boolean;
-  isAuthenticated: boolean;
-  contactMethod: string;
-  downloadLoading: boolean;
-  deleteLoading: boolean;
-  noteId: string;
-  noteTitle: string;
-  noteDescription?: string;
+  isOwner: boolean
+  hasPurchased: boolean
+  price: number
+  onPurchase: () => void
+  onEdit: () => void
+  onDelete: () => void
+  onDownload: () => void
+  onReview: () => void
+  alreadyReviewed: boolean
+  isAuthenticated: boolean
+  contactMethod: string
+  downloadLoading: boolean
+  deleteLoading: boolean
+  noteId: string
+  noteTitle: string
+  noteDescription?: string
 }) => {
   /**
    * Copy or share note info
    */
   const handleShare = async () => {
-    const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`;
+    const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`
 
     try {
       if (navigator.share) {
         await navigator.share({
           text: shareText,
           url: `https://www.aplusplatformsa.com/notes/${noteId}`,
-        });
+        })
       } else {
-        await navigator.clipboard.writeText(shareText);
-        toast.success("تم نسخ معلومات الملخص بنجاح");
+        await navigator.clipboard.writeText(shareText)
+        toast.success('تم نسخ معلومات الملخص بنجاح')
       }
     } catch (err) {
-      console.error("Error sharing note:", err);
-      toast.error("حدث خطأ أثناء المشاركة");
+      console.error('Error sharing note:', err)
+      toast.error('حدث خطأ أثناء المشاركة')
     }
-  };
+  }
 
   const handleAction = (action: () => void) => {
     try {
-      action?.();
+      action?.()
     } catch (error) {
-      console.error("Error executing action:", error);
+      console.error('Error executing action:', error)
     }
-  };
+  }
 
   return (
-    <Card className="shadow-lg border-gray-200 dark:border-gray-700">
+    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-          <ShoppingCart className="h-6 w-6 text-primary" /> الإجراءات
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+          <ShoppingCart className="text-primary h-6 w-6" /> الإجراءات
         </CardTitle>
       </CardHeader>
 
@@ -431,14 +427,14 @@ export const NoteActions = ({
           <>
             <Button
               onClick={handleShare}
-              className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
             >
               <Link2 className="h-4 w-4" /> مشاركة الملخص
             </Button>
 
             <Button
               onClick={() => handleAction(onEdit)}
-              className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
             >
               <Edit className="h-4 w-4" /> تعديل الملخص
             </Button>
@@ -446,7 +442,7 @@ export const NoteActions = ({
             <Button
               onClick={() => handleAction(onDelete)}
               variant="destructive"
-              className="w-full flex items-center gap-2"
+              className="flex w-full items-center gap-2"
               disabled={deleteLoading}
             >
               {deleteLoading ? (
@@ -464,7 +460,7 @@ export const NoteActions = ({
             <Button
               onClick={() => handleAction(onDownload)}
               variant="outline"
-              className="w-full flex items-center gap-2"
+              className="flex w-full items-center gap-2"
             >
               {downloadLoading ? (
                 <>
@@ -482,20 +478,20 @@ export const NoteActions = ({
           <>
             {hasPurchased ? (
               <>
-                <p className="text-green-600 dark:text-green-400 font-semibold text-center">
+                <p className="text-center font-semibold text-green-600 dark:text-green-400">
                   لقد قمت بشراء هذا الملخص.
                 </p>
 
                 <Button
                   onClick={handleShare}
-                  className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
 
                 <Button
                   onClick={() => handleAction(onDownload)}
-                  className="w-full bg-green-600 hover:bg-green-700 flex items-center gap-2"
+                  className="flex w-full items-center gap-2 bg-green-600 hover:bg-green-700"
                   disabled={downloadLoading}
                 >
                   {downloadLoading ? (
@@ -513,36 +509,36 @@ export const NoteActions = ({
                 <Button
                   onClick={() => handleAction(onReview)}
                   disabled={alreadyReviewed}
-                  className={`w-full flex items-center gap-2 ${
+                  className={`flex w-full items-center gap-2 ${
                     alreadyReviewed
-                      ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
-                      : "bg-yellow-500 hover:bg-yellow-600"
+                      ? 'cursor-not-allowed bg-gray-400 hover:bg-gray-400'
+                      : 'bg-yellow-500 hover:bg-yellow-600'
                   }`}
                 >
-                  <Star className="h-4 w-4" />{" "}
-                  {alreadyReviewed ? "تم التقييم" : "تقييم الملخص"}
+                  <Star className="h-4 w-4" />{' '}
+                  {alreadyReviewed ? 'تم التقييم' : 'تقييم الملخص'}
                 </Button>
               </>
             ) : (
               <>
                 <Button
                   onClick={handleShare}
-                  className="w-full bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
 
                 <Button
                   onClick={() => handleAction(onPurchase)}
-                  className="w-full bg-primary hover:bg-primary/90 flex items-center gap-2"
+                  className="bg-primary hover:bg-primary/90 flex w-full items-center gap-2"
                   disabled={!isAuthenticated && price > 0}
                 >
-                  <ShoppingCart className="h-4 w-4" />{" "}
-                  {price > 0 ? `شراء الآن (${price} ريال)` : "الحصول مجاناً"}
+                  <ShoppingCart className="h-4 w-4" />{' '}
+                  {price > 0 ? `شراء الآن (${price} ريال)` : 'الحصول مجاناً'}
                 </Button>
 
                 {!isAuthenticated && price > 0 && (
-                  <p className="text-xs text-red-500 text-center mt-2">
+                  <p className="mt-2 text-center text-xs text-red-500">
                     يجب تسجيل الدخول أولاً للشراء.
                   </p>
                 )}
@@ -553,26 +549,25 @@ export const NoteActions = ({
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
 interface ContactMethodProps {
-  method?: string;
+  method?: string
 }
 export const ContactMethod = ({ method }: ContactMethodProps) => {
-  if (!method) return null;
+  if (!method) return null
 
-  const isEmail = method.includes("@");
-  const isPhone =
-    !isEmail && /^(\+?\d{1,3}[- ]?)?\d{8,15}$/.test(method.trim());
+  const isEmail = method.includes('@')
+  const isPhone = !isEmail && /^(\+?\d{1,3}[- ]?)?\d{8,15}$/.test(method.trim())
 
   return (
-    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+    <div className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
+      <h3 className="mb-2 flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
         {isEmail ? (
-          <Mail className="h-4 w-4 ml-2 text-primary" />
+          <Mail className="text-primary ml-2 h-4 w-4" />
         ) : (
-          <Phone className="h-4 w-4 ml-2 text-primary" />
+          <Phone className="text-primary ml-2 h-4 w-4" />
         )}
         تواصل مع البائع:
       </h3>
@@ -580,30 +575,30 @@ export const ContactMethod = ({ method }: ContactMethodProps) => {
       {isEmail ? (
         <a
           href={`mailto:${method}`}
-          className="text-primary hover:underline break-all"
+          className="text-primary break-all hover:underline"
         >
           {method}
         </a>
       ) : isPhone ? (
         <a
-          href={`tel:${method.replace(/\s+/g, "")}`}
-          className="text-primary hover:underline break-all"
+          href={`tel:${method.replace(/\s+/g, '')}`}
+          className="text-primary break-all hover:underline"
         >
           {method}
         </a>
       ) : (
-        <p className="text-gray-800 dark:text-gray-200 break-all">{method}</p>
+        <p className="break-all text-gray-800 dark:text-gray-200">{method}</p>
       )}
     </div>
-  );
-};
+  )
+}
 
 interface NotePurchaseConfirmationDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-  noteTitle: string;
-  notePrice: number;
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: () => void
+  noteTitle: string
+  notePrice: number
 }
 
 export const NotePurchaseConfirmationDialog = ({
@@ -615,15 +610,15 @@ export const NotePurchaseConfirmationDialog = ({
 }: NotePurchaseConfirmationDialogProps) => {
   const handleConfirm = () => {
     try {
-      if (typeof onConfirm === "function") {
-        onConfirm();
+      if (typeof onConfirm === 'function') {
+        onConfirm()
       }
     } catch (error) {
-      console.error("Error confirming purchase:", error);
+      console.error('Error confirming purchase:', error)
     } finally {
-      onOpenChange(false);
+      onOpenChange(false)
     }
-  };
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -633,8 +628,8 @@ export const NotePurchaseConfirmationDialog = ({
           <DialogDescription>
             {noteTitle
               ? `هل أنت متأكد أنك تريد شراء ملخص "${noteTitle}" بسعر ${notePrice} ريال؟`
-              : "هل أنت متأكد أنك تريد شراء هذا الملخص؟"}
-            {notePrice === 0 && " (الملخص مجاني)"}
+              : 'هل أنت متأكد أنك تريد شراء هذا الملخص؟'}
+            {notePrice === 0 && ' (الملخص مجاني)'}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:justify-end">
@@ -643,10 +638,10 @@ export const NotePurchaseConfirmationDialog = ({
             onClick={handleConfirm}
             className="bg-primary hover:bg-primary/90"
           >
-            {notePrice > 0 ? "تأكيد الشراء" : "الحصول على الملخص"}
+            {notePrice > 0 ? 'تأكيد الشراء' : 'الحصول على الملخص'}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

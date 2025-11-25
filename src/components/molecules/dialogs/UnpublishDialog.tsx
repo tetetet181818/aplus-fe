@@ -5,15 +5,15 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Loader } from "lucide-react";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Loader } from 'lucide-react'
 
 interface UnpublishDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  loading: boolean;
+  open: boolean
+  onClose: () => void
+  onConfirm: () => void
+  loading: boolean
 }
 
 export default function UnpublishDialog({
@@ -35,8 +35,8 @@ export default function UnpublishDialog({
           <Button variant="outline">إلغاء</Button>
           <Button
             onClick={() => {
-              onConfirm();
-              onClose();
+              onConfirm()
+              onClose()
             }}
             disabled={loading}
           >
@@ -46,11 +46,11 @@ export default function UnpublishDialog({
                 <span>جاري الغاء نشر...</span>
               </>
             ) : (
-              "الغاء نشر"
+              'الغاء نشر'
             )}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

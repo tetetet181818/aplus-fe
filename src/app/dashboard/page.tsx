@@ -1,22 +1,22 @@
-"use client";
-import { FileText, Users } from "lucide-react";
-import StatCard from "@/components/atoms/StatCard";
-import RecentStudentsCard from "@/components/atoms/RecentStudentsCard";
-import RecentSalesCard from "@/components/atoms/RecentSalesCard";
-import useDashboard from "@/hooks/useDashboard";
-import StatCardSkeleton from "@/components/skeletons/StatCardSkeleton";
-import RecentStudentsCardSkeleton from "@/components/skeletons/RecentStudentsCardSkeleton";
-import RecentSalesCardSkeleton from "@/components/skeletons/RecentSalesCardSkeleton";
+'use client'
+import { FileText, Users } from 'lucide-react'
+import StatCard from '@/components/atoms/StatCard'
+import RecentStudentsCard from '@/components/atoms/RecentStudentsCard'
+import RecentSalesCard from '@/components/atoms/RecentSalesCard'
+import useDashboard from '@/hooks/useDashboard'
+import StatCardSkeleton from '@/components/skeletons/StatCardSkeleton'
+import RecentStudentsCardSkeleton from '@/components/skeletons/RecentStudentsCardSkeleton'
+import RecentSalesCardSkeleton from '@/components/skeletons/RecentSalesCardSkeleton'
 
 export default function Dashboard() {
-  const { overviews, overviewLoading } = useDashboard();
+  const { overviews, overviewLoading } = useDashboard()
 
   return (
     <>
-      <div className="flex-1 space-y-4 p-4 md:p-8 bg-gradient-to-br from-background via-muted/5 to-primary/5">
-        <div className="space-y-8 animate-fade-in">
+      <div className="from-background via-muted/5 to-primary/5 flex-1 space-y-4 bg-gradient-to-br p-4 md:p-8">
+        <div className="animate-fade-in space-y-8">
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+            <h1 className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent">
               لوحة التحكم
             </h1>
             <p className="text-muted-foreground text-lg">
@@ -61,5 +61,5 @@ export default function Dashboard() {
         </div>
       </div>
     </>
-  );
+  )
 }

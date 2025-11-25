@@ -1,13 +1,13 @@
-import { useState, useCallback, memo } from "react";
-import { ChevronDown, Check } from "lucide-react";
+import { useState, useCallback, memo } from 'react'
+import { ChevronDown, Check } from 'lucide-react'
 
 const sortOptions = [
-  { value: "default", label: "الافتراضي", icon: "📝" },
-  { value: "downloads_desc", label: "الأكثر تحميلًا", icon: "📥" },
-  { value: "price_asc", label: "السعر: من الأقل للأعلى", icon: "💰" },
-  { value: "price_desc", label: "السعر: من الأعلى للأقل", icon: "💎" },
-  { value: "date_desc", label: "الأحدث", icon: "🆕" },
-];
+  { value: 'default', label: 'الافتراضي', icon: '📝' },
+  { value: 'downloads_desc', label: 'الأكثر تحميلًا', icon: '📥' },
+  { value: 'price_asc', label: 'السعر: من الأقل للأعلى', icon: '💰' },
+  { value: 'price_desc', label: 'السعر: من الأعلى للأقل', icon: '💎' },
+  { value: 'date_desc', label: 'الأحدث', icon: '🆕' },
+]
 
 const NotesSortDropdown = memo(
   ({
@@ -17,40 +17,40 @@ const NotesSortDropdown = memo(
     setMaxPrice,
     setMinPrice,
   }: {
-    sortBy: string;
-    onSortChange: (value: string) => void;
-    setMaxDownloads: (value: boolean) => void;
-    setMaxPrice: (value: boolean) => void;
-    setMinPrice: (value: boolean) => void;
+    sortBy: string
+    onSortChange: (value: string) => void
+    setMaxDownloads: (value: boolean) => void
+    setMaxPrice: (value: boolean) => void
+    setMinPrice: (value: boolean) => void
   }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
 
     const currentOption =
-      sortOptions.find((option) => option.value === sortBy) || sortOptions[0];
+      sortOptions.find((option) => option.value === sortBy) || sortOptions[0]
 
     const handleSelect = useCallback(
       (value: string) => {
-        setMaxDownloads(false);
-        setMaxPrice(false);
-        setMinPrice(false);
+        setMaxDownloads(false)
+        setMaxPrice(false)
+        setMinPrice(false)
 
         switch (value) {
-          case "downloads_desc":
-            setMaxDownloads(true);
-            break;
-          case "price_desc":
-            setMaxPrice(true);
-            break;
-          case "price_asc":
-            setMinPrice(true);
-            break;
+          case 'downloads_desc':
+            setMaxDownloads(true)
+            break
+          case 'price_desc':
+            setMaxPrice(true)
+            break
+          case 'price_asc':
+            setMinPrice(true)
+            break
         }
 
-        onSortChange(value);
-        setIsOpen(false);
+        onSortChange(value)
+        setIsOpen(false)
       },
       [onSortChange, setMaxDownloads, setMaxPrice, setMinPrice]
-    );
+    )
 
     return (
       <div className="relative w-full md:w-64">
@@ -58,7 +58,7 @@ const NotesSortDropdown = memo(
           <button
             id="sort-dropdown"
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full flex items-center justify-between px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-all duration-200 hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
@@ -68,7 +68,7 @@ const NotesSortDropdown = memo(
             </div>
             <ChevronDown
               className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${
-                isOpen ? "rotate-180" : ""
+                isOpen ? 'rotate-180' : ''
               }`}
             />
           </button>
@@ -80,7 +80,7 @@ const NotesSortDropdown = memo(
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
               />
-              <div className="absolute z-20 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute z-20 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
                 <ul
                   className="py-1 text-sm text-gray-700 dark:text-gray-300"
                   role="listbox"
@@ -88,10 +88,10 @@ const NotesSortDropdown = memo(
                   {sortOptions.map((option) => (
                     <li
                       key={option.value}
-                      className={`flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150 ${
+                      className={`flex cursor-pointer items-center px-4 py-2 transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                         sortBy === option.value
-                          ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                          : ""
+                          ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                          : ''
                       }`}
                       onClick={() => handleSelect(option.value)}
                       role="option"
@@ -110,10 +110,10 @@ const NotesSortDropdown = memo(
           )}
         </div>
       </div>
-    );
+    )
   }
-);
+)
 
-NotesSortDropdown.displayName = "NotesSortDropdown";
+NotesSortDropdown.displayName = 'NotesSortDropdown'
 
-export default NotesSortDropdown;
+export default NotesSortDropdown

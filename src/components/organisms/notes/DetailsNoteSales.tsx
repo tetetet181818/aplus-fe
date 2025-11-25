@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import {
   Card,
@@ -8,36 +8,36 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import formatArabicDate from "@/utils/formateTime";
+} from '@/components/ui/chart'
+import formatArabicDate from '@/utils/formateTime'
 
-export const description = "A simple area chart";
+export const description = 'A simple area chart'
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "var(--color-primary)",
+    label: 'Desktop',
+    color: 'var(--color-primary)',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function DetailsNoteSales({
   salesState,
 }: {
-  salesState: { count: number; date: Date }[];
+  salesState: { count: number; date: Date }[]
 }) {
   return (
-    <Card className="w-full m-0 p-0 border-none shadow-none mt-10 col-span-2">
+    <Card className="col-span-2 m-0 mt-10 w-full border-none p-0 shadow-none">
       <CardHeader>
         <CardTitle>احصائيات مبيعات الملخص</CardTitle>
         <CardDescription>احصائيات مبيعات الملخص</CardDescription>
       </CardHeader>
-      <CardContent className="w-full m-0 p-0 border-none shadow-none">
+      <CardContent className="m-0 w-full border-none p-0 shadow-none">
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
@@ -72,5 +72,5 @@ export function DetailsNoteSales({
         </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

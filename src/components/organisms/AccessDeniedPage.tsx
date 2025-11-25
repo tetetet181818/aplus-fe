@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import { ShieldAlert } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ShieldAlert } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 
 export default function AccessDeniedPage({
   onNavigate,
 }: {
-  onNavigate: (path: string) => void;
+  onNavigate: (path: string) => void
 }) {
   return (
-    <div className="w-screen h-screen flex justify-center items-center px-4 py-12 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Card className="w-full max-w-md text-center shadow-2xl border border-red-100 dark:border-gray-700">
+    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 px-4 py-12 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <Card className="w-full max-w-md border border-red-100 text-center shadow-2xl dark:border-gray-700">
         <CardHeader>
-          <div className="mx-auto bg-red-100 dark:bg-red-900/30 p-3 rounded-full w-fit mb-4">
+          <div className="mx-auto mb-4 w-fit rounded-full bg-red-100 p-3 dark:bg-red-900/30">
             <ShieldAlert className="h-10 w-10 text-red-600 dark:text-red-400" />
           </div>
           <CardTitle className="text-2xl font-bold text-red-700 dark:text-red-400">
@@ -37,8 +37,8 @@ export default function AccessDeniedPage({
           </p>
           <div className="flex justify-center">
             <Button
-              onClick={() => onNavigate("/")}
-              className="w-full bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => onNavigate('/')}
+              className="w-full bg-red-600 text-white hover:bg-red-700"
             >
               العودة إلى الصفحة الرئيسية
             </Button>
@@ -46,5 +46,5 @@ export default function AccessDeniedPage({
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

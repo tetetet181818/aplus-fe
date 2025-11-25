@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -6,46 +6,46 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import useSales from "@/hooks/useSales";
-import SalesClientTableSkeleton from "../skeletons/SalesClientTableSkeleton";
-import formatArabicDate from "@/utils/formateTime";
-import { SalesUser } from "@/types";
+} from '@/components/ui/table'
+import useSales from '@/hooks/useSales'
+import SalesClientTableSkeleton from '../skeletons/SalesClientTableSkeleton'
+import formatArabicDate from '@/utils/formateTime'
+import { SalesUser } from '@/types'
 
 export default function SalesPerformance() {
-  const { userStatisticsSales, userStatisticsSalesLoading } = useSales();
+  const { userStatisticsSales, userStatisticsSalesLoading } = useSales()
 
   if (userStatisticsSalesLoading) {
-    return <SalesClientTableSkeleton />;
+    return <SalesClientTableSkeleton />
   }
 
   return (
     <Card
-      className="border-none bg-transparent shadow-none gap-3 col-span-2"
+      className="col-span-2 gap-3 border-none bg-transparent shadow-none"
       dir="rtl"
     >
       <CardHeader className="p-2">
-        <CardTitle className="font-semibold text-xl text-right">
+        <CardTitle className="text-right text-xl font-semibold">
           أداء مبيعات الملخصات
         </CardTitle>
       </CardHeader>
 
       <CardContent>
         {/* Desktop Table View - hidden on mobile */}
-        <div className="hidden md:block rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="hidden overflow-hidden rounded-2xl border border-gray-200 shadow-sm md:block dark:border-gray-700">
           <Table>
             <TableHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30">
-              <TableRow className="hover:bg-transparent border-b border-gray-200 dark:border-gray-600">
-                <TableHead className="text-right py-4 px-6 font-bold text-blue-900 dark:text-blue-100 text-lg border-l border-gray-200 dark:border-gray-600">
+              <TableRow className="border-b border-gray-200 hover:bg-transparent dark:border-gray-600">
+                <TableHead className="border-l border-gray-200 px-6 py-4 text-right text-lg font-bold text-blue-900 dark:border-gray-600 dark:text-blue-100">
                   اسم الملخص
                 </TableHead>
-                <TableHead className="text-right py-4 px-6 font-bold text-blue-900 dark:text-blue-100 text-lg border-l border-gray-200 dark:border-gray-600">
+                <TableHead className="border-l border-gray-200 px-6 py-4 text-right text-lg font-bold text-blue-900 dark:border-gray-600 dark:text-blue-100">
                   عدد المبيعات
                 </TableHead>
-                <TableHead className="text-right py-4 px-6 font-bold text-blue-900 dark:text-blue-100 text-lg border-l border-gray-200 dark:border-gray-600">
+                <TableHead className="border-l border-gray-200 px-6 py-4 text-right text-lg font-bold text-blue-900 dark:border-gray-600 dark:text-blue-100">
                   الإيرادات
                 </TableHead>
-                <TableHead className="text-right py-4 px-6 font-bold text-blue-900 dark:text-blue-100 text-lg">
+                <TableHead className="px-6 py-4 text-right text-lg font-bold text-blue-900 dark:text-blue-100">
                   تاريخ المبيعات
                 </TableHead>
               </TableRow>
@@ -56,33 +56,28 @@ export default function SalesPerformance() {
                 (sale: SalesUser, index: number) => (
                   <TableRow
                     key={sale?._id}
-                    className={`
-                    transition-all duration-200 ease-in-out 
-                    border-b border-gray-100 dark:border-gray-700
-                    hover:bg-blue-50/50 dark:hover:bg-blue-900/20
-                    ${
+                    className={`border-b border-gray-100 transition-all duration-200 ease-in-out hover:bg-blue-50/50 dark:border-gray-700 dark:hover:bg-blue-900/20 ${
                       index % 2 === 0
-                        ? "bg-white/50 dark:bg-gray-800/50"
-                        : "bg-gray-50/30 dark:bg-gray-700/30"
-                    }
-                  `}
+                        ? 'bg-white/50 dark:bg-gray-800/50'
+                        : 'bg-gray-50/30 dark:bg-gray-700/30'
+                    } `}
                   >
-                    <TableCell className="text-right py-4 px-6 font-medium text-gray-700 dark:text-gray-200 border-l border-gray-100 dark:border-gray-700">
+                    <TableCell className="border-l border-gray-100 px-6 py-4 text-right font-medium text-gray-700 dark:border-gray-700 dark:text-gray-200">
                       <div className="flex items-center justify-end gap-3">
                         {sale.note_title}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right py-4 px-6">
-                      <span className="inline-flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-semibold min-w-[60px]">
+                    <TableCell className="px-6 py-4 text-right">
+                      <span className="inline-flex min-w-[60px] items-center justify-center rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                         {sale?.count}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right py-4 px-6">
-                      <span className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1 rounded-full text-sm font-semibold min-w-[80px]">
+                    <TableCell className="px-6 py-4 text-right">
+                      <span className="inline-flex min-w-[80px] items-center justify-center rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">
                         {sale?.totalProfit?.toFixed(2)} ر.س
                       </span>
                     </TableCell>
-                    <TableCell className="text-right py-4 px-6 text-gray-600 dark:text-gray-300 font-medium">
+                    <TableCell className="px-6 py-4 text-right font-medium text-gray-600 dark:text-gray-300">
                       {formatArabicDate(sale.date)}
                     </TableCell>
                   </TableRow>
@@ -93,28 +88,23 @@ export default function SalesPerformance() {
         </div>
 
         {/* Mobile Card View - shown only on mobile */}
-        <div className="md:hidden space-y-4">
+        <div className="space-y-4 md:hidden">
           {userStatisticsSales?.sales?.map((sale: SalesUser, index: number) => (
             <Card
               key={sale?._id}
-              className={`
-                transition-all duration-200 ease-in-out 
-                border border-gray-200 dark:border-gray-700 
-                shadow-sm hover:shadow-md
-                ${
-                  index % 2 === 0
-                    ? "bg-white/50 dark:bg-gray-800/50"
-                    : "bg-gray-50/30 dark:bg-gray-700/30"
-                }
-              `}
+              className={`border border-gray-200 shadow-sm transition-all duration-200 ease-in-out hover:shadow-md dark:border-gray-700 ${
+                index % 2 === 0
+                  ? 'bg-white/50 dark:bg-gray-800/50'
+                  : 'bg-gray-50/30 dark:bg-gray-700/30'
+              } `}
             >
               <CardContent className="p-4">
                 {/* Summary Title */}
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-600">
-                  <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">
+                <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-600">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                     {sale.note_title}
                   </h3>
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <div className="h-3 w-3 rounded-full bg-blue-500"></div>
                 </div>
 
                 {/* Sales Data Grid */}
@@ -124,7 +114,7 @@ export default function SalesPerformance() {
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       عدد المبيعات
                     </p>
-                    <span className="inline-flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-2 rounded-lg text-sm font-semibold w-full">
+                    <span className="inline-flex w-full items-center justify-center rounded-lg bg-blue-100 px-3 py-2 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                       {sale?.count}
                     </span>
                   </div>
@@ -134,17 +124,17 @@ export default function SalesPerformance() {
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       الإيرادات
                     </p>
-                    <span className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-2 rounded-lg text-sm font-semibold w-full">
+                    <span className="inline-flex w-full items-center justify-center rounded-lg bg-green-100 px-3 py-2 text-sm font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">
                       {sale?.totalProfit?.toFixed(2)} ر.س
                     </span>
                   </div>
 
                   {/* Sales Date */}
-                  <div className="col-span-2 space-y-2 pt-2 border-t border-gray-100 dark:border-gray-600">
+                  <div className="col-span-2 space-y-2 border-t border-gray-100 pt-2 dark:border-gray-600">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       تاريخ المبيعات
                     </p>
-                    <p className="text-right text-gray-700 dark:text-gray-300 font-medium">
+                    <p className="text-right font-medium text-gray-700 dark:text-gray-300">
                       {formatArabicDate(sale.date)}
                     </p>
                   </div>
@@ -157,10 +147,10 @@ export default function SalesPerformance() {
         {/* Empty state for both desktop and mobile */}
         {(!userStatisticsSales?.sales ||
           userStatisticsSales.sales.length === 0) && (
-          <div className="text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+          <div className="py-12 text-center">
+            <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
               <svg
-                className="w-12 h-12 text-gray-400"
+                className="h-12 w-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,7 +163,7 @@ export default function SalesPerformance() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">
+            <h3 className="mb-2 text-lg font-semibold text-gray-600 dark:text-gray-300">
               لا توجد مبيعات حالياً
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
@@ -183,5 +173,5 @@ export default function SalesPerformance() {
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Dialog,
@@ -7,41 +7,41 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Loader } from "lucide-react";
-import { useFormik } from "formik";
-import { SAUDI_BANKS } from "@/constants";
-import { editWithdrawalValidationSchema } from "@/utils/validation/editWithdrawalValidation";
-import useWithdrawals from "@/hooks/useWithdrawals";
-import { Withdrawal } from "@/types";
+} from '@/components/ui/select'
+import { Loader } from 'lucide-react'
+import { useFormik } from 'formik'
+import { SAUDI_BANKS } from '@/constants'
+import { editWithdrawalValidationSchema } from '@/utils/validation/editWithdrawalValidation'
+import useWithdrawals from '@/hooks/useWithdrawals'
+import { Withdrawal } from '@/types'
 
 /**
  * Type for editing withdrawal fields.
  */
 export interface EditWithdrawalValues {
-  accountName: string;
-  bankName: string;
-  iban: string;
-  amount: number;
+  accountName: string
+  bankName: string
+  iban: string
+  amount: number
 }
 
 /**
  * Props for EditWithdrawalDialog.
  */
 interface EditWithdrawalDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  selectWithdrawal: Withdrawal;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  selectWithdrawal: Withdrawal
 }
 
 /**
@@ -52,12 +52,12 @@ export default function EditWithdrawalDialog({
   onOpenChange,
   selectWithdrawal,
 }: EditWithdrawalDialogProps) {
-  const { updateWithdrawalLoading, handleUpdateWithdrawal } = useWithdrawals();
+  const { updateWithdrawalLoading, handleUpdateWithdrawal } = useWithdrawals()
   const formik = useFormik<EditWithdrawalValues>({
     initialValues: {
-      accountName: selectWithdrawal.accountName || "",
-      bankName: selectWithdrawal.bankName || "",
-      iban: selectWithdrawal.iban || "",
+      accountName: selectWithdrawal.accountName || '',
+      bankName: selectWithdrawal.bankName || '',
+      iban: selectWithdrawal.iban || '',
       amount: selectWithdrawal.amount || 0,
     },
     validationSchema: editWithdrawalValidationSchema,
@@ -65,10 +65,10 @@ export default function EditWithdrawalDialog({
       await handleUpdateWithdrawal({
         withdrawalId: selectWithdrawal._id,
         updateData: values,
-      });
-      onOpenChange(false);
+      })
+      onOpenChange(false)
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -82,10 +82,10 @@ export default function EditWithdrawalDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={formik.handleSubmit} className="space-y-4 mt-2">
+        <form onSubmit={formik.handleSubmit} className="mt-2 space-y-4">
           {/* Account Name */}
           <div>
-            <Label htmlFor="accountName" className="block mb-2">
+            <Label htmlFor="accountName" className="mb-2 block">
               اسم صاحب الحساب
             </Label>
             <Input
@@ -99,7 +99,7 @@ export default function EditWithdrawalDialog({
               disabled={updateWithdrawalLoading}
             />
             {formik.touched.accountName && formik.errors.accountName && (
-              <p className="text-xs text-red-500 mt-1">
+              <p className="mt-1 text-xs text-red-500">
                 {formik.errors.accountName}
               </p>
             )}
@@ -107,11 +107,11 @@ export default function EditWithdrawalDialog({
 
           {/* Bank Name */}
           <div>
-            <Label htmlFor="bankName" className="block mb-2">
+            <Label htmlFor="bankName" className="mb-2 block">
               اسم البنك
             </Label>
             <Select
-              onValueChange={(v) => formik.setFieldValue("bankName", v)}
+              onValueChange={(v) => formik.setFieldValue('bankName', v)}
               value={formik.values.bankName}
               disabled={updateWithdrawalLoading}
             >
@@ -127,7 +127,7 @@ export default function EditWithdrawalDialog({
               </SelectContent>
             </Select>
             {formik.touched.bankName && formik.errors.bankName && (
-              <p className="text-xs text-red-500 mt-1">
+              <p className="mt-1 text-xs text-red-500">
                 {formik.errors.bankName}
               </p>
             )}
@@ -135,11 +135,11 @@ export default function EditWithdrawalDialog({
 
           {/* IBAN */}
           <div>
-            <Label htmlFor="iban" className="block mb-2">
+            <Label htmlFor="iban" className="mb-2 block">
               رقم الحساب (IBAN)
             </Label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none bg-gray-100 border border-r-0 border-gray-300 rounded-l-md">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-100 px-3">
                 <span className="text-gray-700">SA</span>
               </div>
               <Input
@@ -149,24 +149,24 @@ export default function EditWithdrawalDialog({
                 className="pl-12"
                 placeholder="XXXXXXXXXXXXXX"
                 onChange={(e) => {
-                  let val = e.target.value.toUpperCase().replace(/\s/g, "");
-                  if (val.startsWith("SA")) val = val.slice(2);
-                  formik.setFieldValue("iban", "SA" + val);
+                  let val = e.target.value.toUpperCase().replace(/\s/g, '')
+                  if (val.startsWith('SA')) val = val.slice(2)
+                  formik.setFieldValue('iban', 'SA' + val)
                 }}
                 onBlur={formik.handleBlur}
-                value={formik.values.iban.replace(/^SA/, "")}
+                value={formik.values.iban.replace(/^SA/, '')}
                 disabled={updateWithdrawalLoading}
                 maxLength={22}
               />
             </div>
             {formik.touched.iban && formik.errors.iban && (
-              <p className="text-xs text-red-500 mt-1">{formik.errors.iban}</p>
+              <p className="mt-1 text-xs text-red-500">{formik.errors.iban}</p>
             )}
           </div>
 
           {/* Amount */}
           <div>
-            <Label htmlFor="amount" className="block mb-2">
+            <Label htmlFor="amount" className="mb-2 block">
               مبلغ السحب (ريال)
             </Label>
             <Input
@@ -181,14 +181,14 @@ export default function EditWithdrawalDialog({
               disabled={updateWithdrawalLoading}
             />
             {formik.touched.amount && formik.errors.amount && (
-              <p className="text-xs text-red-500 mt-1">
+              <p className="mt-1 text-xs text-red-500">
                 {formik.errors.amount}
               </p>
             )}
           </div>
 
           {/* Footer Buttons */}
-          <DialogFooter className="pt-4 flex justify-end gap-2">
+          <DialogFooter className="flex justify-end gap-2 pt-4">
             <Button
               type="button"
               variant="outline"
@@ -204,16 +204,16 @@ export default function EditWithdrawalDialog({
             >
               {updateWithdrawalLoading ? (
                 <>
-                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
                   جاري الحفظ...
                 </>
               ) : (
-                "حفظ التغييرات"
+                'حفظ التغييرات'
               )}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

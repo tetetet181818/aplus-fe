@@ -1,8 +1,8 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, AlertTriangle } from "lucide-react";
-import NoResults from "@/components/atoms/NoResults";
+'use client'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { ArrowRight, AlertTriangle } from 'lucide-react'
+import NoResults from '@/components/atoms/NoResults'
 import {
   NoteHeader,
   NoteImage,
@@ -11,16 +11,16 @@ import {
   NoteAuthorInfo,
   NoteActions,
   NotePurchaseConfirmationDialog,
-} from "@/components/organisms/notes/NoteDetailComponents";
-import ReviewDialog from "@/components/molecules/dialogs/ReviewDialog";
-import Head from "next/head";
-import NoteReviews from "@/components/organisms/notes/NoteReviews";
-import useNoteDetail from "@/hooks/useNoteDetail";
-import { Skeleton } from "@/components/ui/skeleton";
-import useAuth from "@/hooks/useAuth";
-import { useState } from "react";
-import useNotes from "@/hooks/useNotes";
-import { downloadFile } from "@/utils/downloadFile";
+} from '@/components/organisms/notes/NoteDetailComponents'
+import ReviewDialog from '@/components/molecules/dialogs/ReviewDialog'
+import Head from 'next/head'
+import NoteReviews from '@/components/organisms/notes/NoteReviews'
+import useNoteDetail from '@/hooks/useNoteDetail'
+import { Skeleton } from '@/components/ui/skeleton'
+import useAuth from '@/hooks/useAuth'
+import { useState } from 'react'
+import useNotes from '@/hooks/useNotes'
+import { downloadFile } from '@/utils/downloadFile'
 
 /**
  * Note detail page component with skeleton loader and error handling.
@@ -45,57 +45,57 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     confirmPurchase,
     isPurchaseConfirmOpen,
     setIsPurchaseConfirmOpen,
-  } = useNoteDetail(id);
-  const { user, isAuthenticated } = useAuth();
-  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
+  } = useNoteDetail(id)
+  const { user, isAuthenticated } = useAuth()
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     handelAddReviewToNote,
     addReviewLoading,
     handelRemoveReviewFromNote,
     removeReviewLoading,
-  } = useNotes();
+  } = useNotes()
   if (!loading && !note) {
     return (
       <NoResults
-        icon={<AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />}
+        icon={<AlertTriangle className="mx-auto mb-4 h-16 w-16 text-red-500" />}
         title="حدث خطأ"
         message="الملخص غير موجود"
         actionButton={
-          <Button onClick={() => router.push("/notes")}>
+          <Button onClick={() => router.push('/notes')}>
             العودة إلى قائمة الملخصات
           </Button>
         }
       />
-    );
+    )
   }
 
   if (loading) {
     return (
-      <main className="py-8 px-4 md:px-6">
+      <main className="px-4 py-8 md:px-6">
         <div className="mb-6">
           <Skeleton className="h-10 w-32" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             <Skeleton className="h-10 w-2/3" />
             <Skeleton className="h-64 w-full rounded-lg" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-32 w-full" />
           </div>
-          <div className="lg:col-span-1 space-y-6">
+          <div className="space-y-6 lg:col-span-1">
             <Skeleton className="h-40 w-full" />
             <Skeleton className="h-20 w-full" />
             <Skeleton className="h-32 w-full" />
           </div>
         </div>
       </main>
-    );
+    )
   }
-  const isOwner = note?.owner_id === user?._id;
+  const isOwner = note?.owner_id === user?._id
 
   return (
     <>
@@ -104,7 +104,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
         <meta name="description" content={note.description.substring(0, 160)} />
       </Head>
 
-      <main className="py-8 px-4 md:px-6">
+      <main className="px-4 py-8 md:px-6">
         <Button
           variant="outline"
           onClick={() => router.back()}
@@ -113,8 +113,8 @@ const NoteDetailPage = ({ id }: { id: string }) => {
           <ArrowRight className="h-4 w-4" /> العودة
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             <NoteHeader
               title={note.title}
               price={note.price}
@@ -139,7 +139,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
             />
           </div>
 
-          <div className="lg:col-span-1 space-y-6">
+          <div className="space-y-6 lg:col-span-1">
             <NoteMeta
               university={note.university}
               college={note.college}
@@ -189,7 +189,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
               contactMethod={note.contactMethod}
               noteId={note._id}
               noteTitle={note.title}
-              noteDescription={note.description.substring(0, 160) + "....."}
+              noteDescription={note.description.substring(0, 160) + '.....'}
             />
           </div>
         </div>
@@ -209,14 +209,14 @@ const NoteDetailPage = ({ id }: { id: string }) => {
             noteTitle={note.title}
             noteId={note._id}
             addReviewToNote={async (noteId, reviewData) => {
-              handelAddReviewToNote({ noteId, reviewData });
+              handelAddReviewToNote({ noteId, reviewData })
             }}
             loading={addReviewLoading}
           />
         )}
       </main>
     </>
-  );
-};
+  )
+}
 
-export default NoteDetailPage;
+export default NoteDetailPage

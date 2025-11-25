@@ -1,31 +1,31 @@
-import type { Metadata } from "next";
-import "../styles/globals.css";
-import { Providers } from "@/utils/Providers";
-import Layout from "@/components/templates/Layout";
-import { Tajawal } from "next/font/google";
+import type { Metadata } from 'next'
+import '../styles/globals.css'
+import { Providers } from '@/utils/Providers'
+import Layout from '@/components/templates/Layout'
+import { Tajawal } from 'next/font/google'
 
 export const metadata: Metadata = {
-  title: "سوق الملخصات الجامعية",
+  title: 'سوق الملخصات الجامعية',
   description:
-    "منصة لبيع وشراء الملخصات الجامعية بين الطلاب، وفر وقتك واستفد من خبرات زملائك",
+    'منصة لبيع وشراء الملخصات الجامعية بين الطلاب، وفر وقتك واستفد من خبرات زملائك',
   keywords: [
-    "ملخصات",
-    "جامعة",
-    "طلاب",
-    "مذاكرة",
-    "بيع",
-    "شراء",
-    "ملخصات جامعية",
+    'ملخصات',
+    'جامعة',
+    'طلاب',
+    'مذاكرة',
+    'بيع',
+    'شراء',
+    'ملخصات جامعية',
   ],
-  authors: [{ name: " أ+" }],
-  creator: " أ+ Team",
+  authors: [{ name: ' أ+' }],
+  creator: ' أ+ Team',
   openGraph: {
-    title: "سوق الملخصات الجامعية",
-    description: "اشترِ أو بع ملخصاتك الجامعية بسهولة وأمان عبر منصة  أ+",
-    url: "https://aplusplatformsa.com",
-    siteName: "سوق الملخصات الجامعية",
-    locale: "ar_EG",
-    type: "website",
+    title: 'سوق الملخصات الجامعية',
+    description: 'اشترِ أو بع ملخصاتك الجامعية بسهولة وأمان عبر منصة  أ+',
+    url: 'https://aplusplatformsa.com',
+    siteName: 'سوق الملخصات الجامعية',
+    locale: 'ar_EG',
+    type: 'website',
   },
   robots: {
     index: true,
@@ -36,37 +36,38 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    card: "summary_large_image",
-    title: "سوق الملخصات الجامعية",
-    description: "منصة تبادل ملخصات دراسية بين طلاب الجامعات.",
-    creator: "@your_handle",
+    card: 'summary_large_image',
+    title: 'سوق الملخصات الجامعية',
+    description: 'منصة تبادل ملخصات دراسية بين طلاب الجامعات.',
+    creator: '@your_handle',
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
-};
+}
 
 const tajawal = Tajawal({
-  subsets: ["arabic"],
-  variable: "--font-tajawal",
-  weight: ["400", "500", "700", "800"],
-});
+  subsets: ['arabic'],
+  variable: '--font-tajawal',
+  weight: ['400', '500', '700', '800'],
+  display: 'swap',
+})
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="ar" dir="rtl">
       <body
         dir="rtl"
-        className={`${tajawal.className} overflow-x-hidden w-screen`}
+        className={`${tajawal.className} w-screen overflow-x-hidden`}
       >
         <Providers>
           <Layout>{children}</Layout>
         </Providers>
       </body>
     </html>
-  );
+  )
 }

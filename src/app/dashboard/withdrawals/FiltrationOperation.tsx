@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Search, X } from "lucide-react";
-import { staticWithdrawalStatuses } from "@/constants";
+} from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Search, X } from 'lucide-react'
+import { staticWithdrawalStatuses } from '@/constants'
 
 /**
  * Withdrawal Filtration Component
@@ -31,46 +31,46 @@ export default function FiltrationOperation({
   setSortOrder,
   refetchWithdrawals,
 }: {
-  withdrawalStatus: string;
-  setWithdrawalStatus: (value: string) => void;
-  ibanFilter: string;
-  setIbanFilter: (value: string) => void;
-  startDate: string;
-  setStartDate: (value: string) => void;
-  endDate: string;
-  setEndDate: (value: string) => void;
-  sortBy: string;
-  setSortBy: (value: string) => void;
-  sortOrder: "asc" | "desc";
-  setSortOrder: (value: "asc" | "desc") => void;
-  refetchWithdrawals: () => void;
+  withdrawalStatus: string
+  setWithdrawalStatus: (value: string) => void
+  ibanFilter: string
+  setIbanFilter: (value: string) => void
+  startDate: string
+  setStartDate: (value: string) => void
+  endDate: string
+  setEndDate: (value: string) => void
+  sortBy: string
+  setSortBy: (value: string) => void
+  sortOrder: 'asc' | 'desc'
+  setSortOrder: (value: 'asc' | 'desc') => void
+  refetchWithdrawals: () => void
 }) {
   /** Reset filters */
   const handleReset = () => {
-    setWithdrawalStatus("all");
-    setIbanFilter("");
-    setStartDate("");
-    setEndDate("");
-    setSortBy("createdAt");
-    setSortOrder("desc");
-    refetchWithdrawals();
-  };
+    setWithdrawalStatus('all')
+    setIbanFilter('')
+    setStartDate('')
+    setEndDate('')
+    setSortBy('createdAt')
+    setSortOrder('desc')
+    refetchWithdrawals()
+  }
 
   return (
-    <div className="flex flex-col gap-6 mb-6 p-4 bg-card rounded-lg border shadow-sm">
+    <div className="bg-card mb-6 flex flex-col gap-6 rounded-lg border p-4 shadow-sm">
       {/* 🔍 IBAN search */}
       <div className="relative w-full">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <Input
           placeholder="ابحث برقم الـ IBAN..."
-          className="pl-10 pr-4 py-2 w-full"
+          className="w-full py-2 pr-4 pl-10"
           value={ibanFilter}
           onChange={(e) => setIbanFilter(e.target.value)}
         />
       </div>
 
       {/* 🧮 Filters row */}
-      <div className="flex flex-col sm:flex-row gap-3 w-full">
+      <div className="flex w-full flex-col gap-3 sm:flex-row">
         {/* Status filter */}
         <div className="w-full sm:w-[180px]">
           <Select
@@ -84,15 +84,15 @@ export default function FiltrationOperation({
               <SelectItem value="all">كل الحالات</SelectItem>
               {staticWithdrawalStatuses?.map((status) => (
                 <SelectItem key={status} value={status}>
-                  {status === "pending"
-                    ? "قيد الانتظار"
-                    : status === "accepted"
-                    ? "مقبول"
-                    : status === "rejected"
-                    ? "مرفوض"
-                    : status === "completed"
-                    ? "مكتمل"
-                    : status}
+                  {status === 'pending'
+                    ? 'قيد الانتظار'
+                    : status === 'accepted'
+                      ? 'مقبول'
+                      : status === 'rejected'
+                        ? 'مرفوض'
+                        : status === 'completed'
+                          ? 'مكتمل'
+                          : status}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -100,7 +100,7 @@ export default function FiltrationOperation({
         </div>
 
         {/* Date filters */}
-        <div className="flex flex-col sm:flex-row gap-3 flex-1">
+        <div className="flex flex-1 flex-col gap-3 sm:flex-row">
           <Input
             type="date"
             placeholder="من تاريخ"
@@ -119,7 +119,7 @@ export default function FiltrationOperation({
         </div>
 
         {/* Sort by */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-[260px]">
+        <div className="flex w-full flex-col gap-3 sm:w-[260px] sm:flex-row">
           <Select value={sortBy} onValueChange={(v) => setSortBy(v)}>
             <SelectTrigger className="w-full sm:w-[130px]">
               <SelectValue placeholder="ترتيب حسب" />
@@ -133,7 +133,7 @@ export default function FiltrationOperation({
 
           <Select
             value={sortOrder}
-            onValueChange={(v: "asc" | "desc") => setSortOrder(v)}
+            onValueChange={(v: 'asc' | 'desc') => setSortOrder(v)}
           >
             <SelectTrigger className="w-full sm:w-[130px]">
               <SelectValue placeholder="الترتيب" />
@@ -146,24 +146,24 @@ export default function FiltrationOperation({
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col xs:flex-row gap-2 w-full sm:w-auto">
+        <div className="xs:flex-row flex w-full flex-col gap-2 sm:w-auto">
           <Button
             onClick={refetchWithdrawals}
-            className="flex-1 sm:flex-none sm:w-[120px]"
+            className="flex-1 sm:w-[120px] sm:flex-none"
           >
-            <Search className="h-4 w-4 ml-2" />
+            <Search className="ml-2 h-4 w-4" />
             بحث
           </Button>
           <Button
             variant="outline"
             onClick={handleReset}
-            className="flex-1 sm:flex-none sm:w-[120px]"
+            className="flex-1 sm:w-[120px] sm:flex-none"
           >
-            <X className="h-4 w-4 ml-2" />
+            <X className="ml-2 h-4 w-4" />
             إعادة تعيين
           </Button>
         </div>
       </div>
     </div>
-  );
+  )
 }

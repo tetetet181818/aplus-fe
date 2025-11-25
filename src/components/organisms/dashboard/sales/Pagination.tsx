@@ -1,23 +1,23 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+'use client'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-  limit: number;
-  onNext: () => void;
-  onPrev: () => void;
-  onLimitChange: (limit: number) => void;
-  loading?: boolean;
+  currentPage: number
+  totalPages: number
+  totalItems: number
+  limit: number
+  onNext: () => void
+  onPrev: () => void
+  onLimitChange: (limit: number) => void
+  loading?: boolean
 }
 
 export default function Pagination({
@@ -31,9 +31,9 @@ export default function Pagination({
   loading,
 }: PaginationProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+    <div className="mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
       {/* Items info */}
-      <span className="text-sm text-muted-foreground">
+      <span className="text-muted-foreground text-sm">
         عرض {(currentPage - 1) * limit + 1}-
         {Math.min(currentPage * limit, totalItems)} من {totalItems}
       </span>
@@ -82,5 +82,5 @@ export default function Pagination({
         </div>
       </div>
     </div>
-  );
+  )
 }

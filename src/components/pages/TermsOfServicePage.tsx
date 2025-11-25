@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 import {
   FileText,
@@ -11,7 +11,7 @@ import {
   MessageSquare,
   CheckSquare,
   AlertTriangle,
-} from "lucide-react";
+} from 'lucide-react'
 
 const TermsOfServicePage = () => {
   const ListItem = ({
@@ -19,47 +19,47 @@ const TermsOfServicePage = () => {
     title,
     children,
   }: {
-    icon?: React.ReactElement<{ className?: string }>;
-    title: string;
-    children: React.ReactNode;
+    icon?: React.ReactElement<{ className?: string }>
+    title: string
+    children: React.ReactNode
   }) => (
     <div className="mb-8">
       <div className="flex items-start">
-        <div className="flex-shrink-0 mr-4 mt-1">
+        <div className="mt-1 mr-4 flex-shrink-0">
           {icon
             ? React.cloneElement(icon, {
                 className: `${
-                  icon.props.className ?? ""
+                  icon.props.className ?? ''
                 } size-7 p-1 text-primary dark:text-primary-light`.trim(),
               })
             : null}
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">
+          <h2 className="mb-3 text-xl font-semibold text-gray-800 dark:text-white">
             {title}
           </h2>
-          <div className="text-gray-600 dark:text-gray-400 leading-relaxed space-y-2">
+          <div className="space-y-2 leading-relaxed text-gray-600 dark:text-gray-400">
             {children}
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 
   return (
-    <div className=" mx-auto py-12 px-4 md:px-6 bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
-      <header className="text-center mb-12">
-        <div className="inline-block p-4 bg-primary/10 dark:bg-primary-light/10 rounded-full mb-4">
-          <FileText className="h-12 w-12 text-primary dark:text-primary-light" />
+    <div className="mx-auto min-h-screen bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 px-4 py-12 md:px-6 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900">
+      <header className="mb-12 text-center">
+        <div className="bg-primary/10 dark:bg-primary-light/10 mb-4 inline-block rounded-full p-4">
+          <FileText className="text-primary dark:text-primary-light h-12 w-12" />
         </div>
-        <h1 className="text-4xl md:text-5xl text-primary font-bold  mb-4">
+        <h1 className="text-primary mb-4 text-4xl font-bold md:text-5xl">
           شروط الاستخدام – منصة أ+
         </h1>
       </header>
 
-      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl">
+      <div className="mx-auto max-w-4xl rounded-xl bg-white p-6 shadow-2xl sm:p-8 md:p-10 dark:bg-gray-800">
         <ListItem icon={<Users className="size-4" />} title="١. التعريفات">
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               <strong>المنصة:</strong> تشير إلى منصة &quot;أ+&quot; بجميع
               خدماتها الإلكترونية.
@@ -82,7 +82,7 @@ const TermsOfServicePage = () => {
           icon={<CheckSquare className="size-4" />}
           title="٢. شروط التسجيل والاستخدام"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               يجب أن يكون المستخدم طالبًا جامعيًا أو ذا علاقة بالتعليم الجامعي.
             </li>
@@ -108,7 +108,7 @@ const TermsOfServicePage = () => {
           icon={<UploadCloud className="size-4" />}
           title="٣. رفع وبيع المحتوى"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>يتحمل البائع المسؤولية الكاملة عن المحتوى الذي يقوم برفعه.</li>
             <li>
               يجب أن يكون المحتوى من إعداد البائع شخصيًا، أو لديه الحق القانوني
@@ -132,7 +132,7 @@ const TermsOfServicePage = () => {
           icon={<ShieldCheck className="size-4" />}
           title="٤. حقوق المنصة"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               تحتفظ المنصة بحق حذف أو تعطيل أي حساب أو محتوى مخالف دون إشعار
               مسبق.
@@ -155,7 +155,7 @@ const TermsOfServicePage = () => {
           icon={<CreditCard className="size-4" />}
           title="٥. عمليات الشراء والدفع وسحب الأرباح"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>تتم جميع عمليات الدفع عبر بوابات إلكترونية آمنة</li>
             <li>
               لا تُسترد المبالغ المدفوعة بعد إتمام عملية الشراء، إلا في حالة
@@ -164,7 +164,7 @@ const TermsOfServicePage = () => {
             <li>تخصم المنصة عمولة ثابتة بنسبة 15% من قيمة كل عملية بيع.</li>
             <li>
               بالإضافة إلى عمولة المنصة، يتم خصم رسوم إضافية، وتشمل الآتي:
-              <ul className="list-disc list-inside pl-6 mt-1">
+              <ul className="mt-1 list-inside list-disc pl-6">
                 <li>2.75% من قيمة العملية.</li>
                 <li>
                   {2}
@@ -198,7 +198,7 @@ const TermsOfServicePage = () => {
           icon={<Book className="size-4" />}
           title="٦. المحتوى والملكية الفكرية"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>تظل جميع الحقوق محفوظة لأصحاب المحتوى.</li>
             <li>
               يُمنع إعادة نشر أو توزيع أي ملخص تم شراؤه دون موافقة خطية من
@@ -207,7 +207,7 @@ const TermsOfServicePage = () => {
           </ul>
         </ListItem>
         <ListItem icon={<UserX className="size-4" />} title="٧. الإيقاف والحذف">
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               يحق للمنصة إيقاف الحسابات التي تخالف الشروط أو تسيء استخدام
               الخدمة.
@@ -227,7 +227,7 @@ const TermsOfServicePage = () => {
             <br />
             <a
               href="mailto:aplusplatformsa@gmail.com"
-              className="text-primary dark:text-primary-light hover:underline inline-flex items-center mt-1"
+              className="text-primary dark:text-primary-light mt-1 inline-flex items-center hover:underline"
             >
               📧 aplusplatformsa@gmail.com
             </a>
@@ -237,7 +237,7 @@ const TermsOfServicePage = () => {
           icon={<AlertTriangle className="size-4" />}
           title="٩. إخلاء المسؤولية"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               لا تضمن المنصة استمرارية الوصول إلى الخدمات في جميع الأوقات، ولا
               تتحمل أي مسؤولية عن الأعطال التقنية أو الانقطاعات خارج إرادتها.
@@ -266,7 +266,7 @@ const TermsOfServicePage = () => {
           icon={<Book className="size-4" />}
           title="١١. الملكية الفكرية"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               كل المحتوى المرفوع من قبل المستخدمين يظل ملكًا لهم، إلا إذا تم
               بيعه، فيُمنح المشتري حق الاستخدام فقط، دون إعادة النشر أو التوزيع.
@@ -281,7 +281,7 @@ const TermsOfServicePage = () => {
           icon={<Book className="size-4" />}
           title="١٢. استرداد المبالغ"
         >
-          <ul className="list-disc list-inside space-y-1 pl-4">
+          <ul className="list-inside list-disc space-y-1 pl-4">
             <li>
               لا تُسترد المبالغ بعد الشراء، إلا إذا لم يطابق المحتوى الوصف، ويجب
               تقديم المطالبة خلال 7 أيام من الاستلام.
@@ -292,11 +292,11 @@ const TermsOfServicePage = () => {
           icon={<Book className="size-4" />}
           title="١٣. المسؤولية والاعتراضات"
         >
-          <ul className="list-decimal list-inside space-y-2 pl-4 text-right">
+          <ul className="list-inside list-decimal space-y-2 pl-4 text-right">
             <li>
               بما أن البائع هو الذي يقوم بإعداد وتحميل المحتوى، فإنه يُقرّ
               ويوافق على الآتي:
-              <ul className="list-decimal list-inside space-y-2 pr-4">
+              <ul className="list-inside list-decimal space-y-2 pr-4">
                 <li>
                   يجب أن يكون المحتوى مطابقًا للوصف المعروض داخل المنصّة، وغير
                   مضلِّل، ولا يحتوي على معلومات غير دقيقة تؤثر على قرار أو تجربة
@@ -306,7 +306,7 @@ const TermsOfServicePage = () => {
                   في حال تبيّن أن المحتوى لا يتوافق مع الوصف أو يُعدّ مضلِّلًا،
                   فإن للمنصّة الحق في اتخاذ واحد أو أكثر من الإجراءات التالية
                   دون إشعار مسبق:
-                  <ul className="list-disc list-inside space-y-1 pr-6">
+                  <ul className="list-inside list-disc space-y-1 pr-6">
                     <li>إزالة المحتوى فورًا.</li>
                     <li>
                       خصم قيمة الملخص من رصيد البائع وإعادة المبلغ كاملًا
@@ -322,7 +322,7 @@ const TermsOfServicePage = () => {
                 <li>
                   يتحمّل البائع كافة التبعات المالية الناتجة عن الإخلال، بما في
                   ذلك على سبيل المثال لا الحصر:
-                  <ul className="list-disc list-inside space-y-1 pr-6">
+                  <ul className="list-inside list-disc space-y-1 pr-6">
                     <li>إعادة قيمة الملخص للمشتري وخصمها من رصيد البائع.</li>
                     <li>تكاليف الاسترجاع.</li>
                     <li>
@@ -345,7 +345,7 @@ const TermsOfServicePage = () => {
         </ListItem>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TermsOfServicePage;
+export default TermsOfServicePage

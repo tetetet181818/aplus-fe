@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   User as UserIcon,
   BookOpen,
@@ -10,22 +10,22 @@ import {
   DollarSign,
   Heart,
   ChartLine,
-} from "lucide-react";
+} from 'lucide-react'
 
-import UserNotesTab from "@/components/pages/profile/UserNotesTab";
-import PurchasedNotesTab from "@/components/pages/profile/PurchasedNotesTab";
-import DeleteConfirmationDialog from "@/components/molecules/dialogs/DeleteConfirmationDialog";
-import ProfileInfoTab from "@/components/pages/profile/ProfileInfoTab";
-import EarningsTab from "@/components/pages/profile/EarningsTab";
-import NotesLikedTab from "@/components/pages/profile/NotesLikedTab";
+import UserNotesTab from '@/components/pages/profile/UserNotesTab'
+import PurchasedNotesTab from '@/components/pages/profile/PurchasedNotesTab'
+import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog'
+import ProfileInfoTab from '@/components/pages/profile/ProfileInfoTab'
+import EarningsTab from '@/components/pages/profile/EarningsTab'
+import NotesLikedTab from '@/components/pages/profile/NotesLikedTab'
 
-import useAuth from "@/hooks/useAuth";
-import useNotes from "@/hooks/useNotes";
-import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
-import useNoteDetail from "@/hooks/useNoteDetail";
-import ShouldLoginPrompt from "@/components/organisms/ShouldLoginPrompt";
-import { downloadFile } from "@/utils/downloadFile";
-import MyStatisticsTab from "./MyStatisticsTab";
+import useAuth from '@/hooks/useAuth'
+import useNotes from '@/hooks/useNotes'
+import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton'
+import useNoteDetail from '@/hooks/useNoteDetail'
+import ShouldLoginPrompt from '@/components/organisms/ShouldLoginPrompt'
+import { downloadFile } from '@/utils/downloadFile'
+import MyStatisticsTab from './MyStatisticsTab'
 
 /**
  * UserDashboardPage
@@ -40,21 +40,21 @@ import MyStatisticsTab from "./MyStatisticsTab";
  * Displays skeleton placeholders while loading user data.
  */
 const UserDashboardPage = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { user, loading } = useAuth();
-  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { user, loading } = useAuth()
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null)
   const { userNotes, userNotesLoading, likedNotes, likedNotesLoading } =
-    useNotes();
+    useNotes()
   const { handleDeleteNote, deleteNoteLoading } = useNoteDetail(
-    itemToDelete || ""
-  );
+    itemToDelete || ''
+  )
 
   // Dialog states
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
 
   // Current active tab (from URL query param)
-  const activeTab = searchParams.get("tab") || "profile";
+  const activeTab = searchParams.get('tab') || 'profile'
 
   /**
    * Update URL query param when the active tab changes
@@ -62,32 +62,32 @@ const UserDashboardPage = () => {
    */
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("tab", value);
-    router.replace(`/profile?${params.toString()}`);
-  };
+    const params = new URLSearchParams(searchParams)
+    params.set('tab', value)
+    router.replace(`/profile?${params.toString()}`)
+  }
 
   if (!loading && !user) {
-    return <ShouldLoginPrompt onNavigate={router.push} />;
+    return <ShouldLoginPrompt onNavigate={router.push} />
   }
 
   // ----------------- UI -----------------
   return (
-    <div className="py-8 sm:px-4 md:px-6 px-2">
+    <div className="px-2 py-8 sm:px-4 md:px-6">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-20">
-        <TabsList className="w-full h-auto grid grid-cols-1 md:grid-cols-6">
+        <TabsList className="grid h-auto w-full grid-cols-1 md:grid-cols-6">
           {[
-            { value: "profile", icon: UserIcon, label: "معلوماتي" },
-            { value: "my-notes", icon: BookOpen, label: "ملخصاتي" },
-            { value: "purchased", icon: ShoppingBag, label: "مشترياتي" },
-            { value: "earnings", icon: DollarSign, label: "أرباحي" },
-            { value: "notesLiked", icon: Heart, label: "إعجاباتي" },
-            { value: "myStatistics", icon: ChartLine, label: "احصائياتي " },
+            { value: 'profile', icon: UserIcon, label: 'معلوماتي' },
+            { value: 'my-notes', icon: BookOpen, label: 'ملخصاتي' },
+            { value: 'purchased', icon: ShoppingBag, label: 'مشترياتي' },
+            { value: 'earnings', icon: DollarSign, label: 'أرباحي' },
+            { value: 'notesLiked', icon: Heart, label: 'إعجاباتي' },
+            { value: 'myStatistics', icon: ChartLine, label: 'احصائياتي ' },
           ].map(({ value, icon: Icon, label }) => (
             <TabsTrigger
               key={value}
               value={value}
-              className="cursor-pointer py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:shadow-lg"
+              className="cursor-pointer py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
               <Icon className="size-4" />
               <span>{label}</span>
@@ -105,8 +105,8 @@ const UserDashboardPage = () => {
             <UserNotesTab
               notes={userNotes}
               onDeleteRequest={(noteId: string) => {
-                setIsDeleteConfirmOpen(true);
-                setItemToDelete(noteId);
+                setIsDeleteConfirmOpen(true)
+                setItemToDelete(noteId)
               }}
               router={router}
               onDownloadRequest={(note) =>
@@ -160,12 +160,12 @@ const UserDashboardPage = () => {
       <DeleteConfirmationDialog
         isOpen={isDeleteConfirmOpen}
         onOpenChange={setIsDeleteConfirmOpen}
-        onConfirm={() => handleDeleteNote({ noteId: itemToDelete || "" })}
-        itemName={"ملخص تجريبي"}
+        onConfirm={() => handleDeleteNote({ noteId: itemToDelete || '' })}
+        itemName={'ملخص تجريبي'}
         loading={deleteNoteLoading}
       />
     </div>
-  );
-};
+  )
+}
 
-export default UserDashboardPage;
+export default UserDashboardPage

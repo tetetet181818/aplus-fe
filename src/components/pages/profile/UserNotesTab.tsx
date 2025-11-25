@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import {
   Edit,
   Trash,
@@ -12,23 +12,23 @@ import {
   Loader,
   BookOpen,
   ListCollapse,
-} from "lucide-react";
-import NoResults from "@/components/atoms/NoResults";
-import Image from "next/image";
-import { Note } from "@/types";
-import { useRouter } from "next/navigation";
-import { NoteCardSkeleton } from "@/components/skeletons/NoteCardSkeleton";
-import Link from "next/link";
+} from 'lucide-react'
+import NoResults from '@/components/atoms/NoResults'
+import Image from 'next/image'
+import { Note } from '@/types'
+import { useRouter } from 'next/navigation'
+import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton'
+import Link from 'next/link'
 
 interface UserNotesTabProps {
-  notes: Note[];
-  onDeleteRequest: (noteId: string) => void;
-  router: ReturnType<typeof useRouter>;
-  onDownloadRequest: (note: Note) => void;
+  notes: Note[]
+  onDeleteRequest: (noteId: string) => void
+  router: ReturnType<typeof useRouter>
+  onDownloadRequest: (note: Note) => void
 
   /** Loading state for download actions */
-  loading: boolean;
-  authLoading: boolean;
+  loading: boolean
+  authLoading: boolean
 }
 
 /**
@@ -53,24 +53,24 @@ const UserNotesTab = ({
   if (!notes || notes.length === 0) {
     return (
       <NoResults
-        icon={<BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />}
+        icon={<BookOpen className="mx-auto mb-4 h-12 w-12 text-gray-400" />}
         title="لا توجد ملخصات"
         message="لم تقم بإضافة أي ملخصات بعد."
         actionButton={
           <Button
-            onClick={() => router.push("/add-note")}
-            className="flex items-center gap-2 w-full"
+            onClick={() => router.push('/add-note')}
+            className="flex w-full items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" />
             إضافة ملخص جديد
           </Button>
         }
       />
-    );
+    )
   }
 
   if (authLoading) {
-    return <NoteCardSkeleton />;
+    return <NoteCardSkeleton />
   }
 
   return (
@@ -78,37 +78,37 @@ const UserNotesTab = ({
       {notes.map((note) => (
         <Card
           key={note._id}
-          className="py-0 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+          className="overflow-hidden py-0 shadow-md transition-shadow duration-300 hover:shadow-lg"
         >
           <div className="flex flex-col sm:flex-row">
             {/* Note Cover */}
-            <div className="relative w-full sm:w-1/3 lg:w-1/4 aspect-video sm:aspect-[4/3] bg-gradient-to-br from-blue-50 dark:from-gray-700 dark:to-gray-900">
+            <div className="relative aspect-video w-full bg-gradient-to-br from-blue-50 sm:aspect-[4/3] sm:w-1/3 lg:w-1/4 dark:from-gray-700 dark:to-gray-900">
               <Image
                 loading="lazy"
                 alt={note.title}
                 width={500}
                 height={500}
-                src={note.cover_url || ""}
-                className="object-cover w-full h-full"
+                src={note.cover_url || ''}
+                className="h-full w-full object-cover"
                 sizes="(max-width: 639px) 100vw, (max-width: 1023px) 33vw, 25vw"
               />
             </div>
 
             {/* Note Info */}
-            <div className="p-4 flex-1 flex flex-col justify-between">
+            <div className="flex flex-1 flex-col justify-between p-4">
               <div>
-                <div className="flex justify-between items-start mb-1">
+                <div className="mb-1 flex items-start justify-between">
                   <Badge className="bg-primary text-primary-foreground">
                     {note.price} ريال
                   </Badge>
                 </div>
-                <h3 className="font-semibold text-gray-800 dark:text-white mb-2">
+                <h3 className="mb-2 font-semibold text-gray-800 dark:text-white">
                   {note.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
+                <p className="mb-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
                   {note.description}
                 </p>
-                <div className="flex flex-wrap gap-2 text-xs mb-3">
+                <div className="mb-3 flex flex-wrap gap-2 text-xs">
                   {note.university && (
                     <Badge variant="outline">{note.university}</Badge>
                   )}
@@ -119,18 +119,18 @@ const UserNotesTab = ({
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row justify-between items-center mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 sm:mb-0">
-                  التحميلات: {note.downloads || 0} | التقييم:{" "}
-                  {note.rating ? note.rating.toFixed(1) : "N/A"}
+              <div className="mt-3 flex flex-col items-center justify-between border-t border-gray-200 pt-3 sm:flex-row dark:border-gray-700">
+                <div className="mb-2 text-sm text-gray-500 sm:mb-0 dark:text-gray-400">
+                  التحميلات: {note.downloads || 0} | التقييم:{' '}
+                  {note.rating ? note.rating.toFixed(1) : 'N/A'}
                 </div>
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="outline" size="sm">
                     <Link
                       href={`/details-note/${note._id}`}
                       className="flex items-center gap-2"
                     >
-                      <ListCollapse className="h-4 w-4 ml-1" />
+                      <ListCollapse className="ml-1 h-4 w-4" />
                       التفاصيل
                     </Link>
                   </Button>
@@ -139,7 +139,7 @@ const UserNotesTab = ({
                     size="sm"
                     onClick={() => router.push(`/notes/${note._id}`)}
                   >
-                    <Eye className="h-4 w-4 ml-1" />
+                    <Eye className="ml-1 h-4 w-4" />
                     عرض
                   </Button>
                   <Button
@@ -155,7 +155,7 @@ const UserNotesTab = ({
                       </>
                     ) : (
                       <>
-                        <Download className="h-4 w-4 ml-1" />
+                        <Download className="ml-1 h-4 w-4" />
                         تحميل
                       </>
                     )}
@@ -166,7 +166,7 @@ const UserNotesTab = ({
                     className="text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900"
                     onClick={() => router.push(`/add-note/${note._id}`)}
                   >
-                    <Edit className="h-4 w-4 ml-1" />
+                    <Edit className="ml-1 h-4 w-4" />
                     تعديل
                   </Button>
                   <Button
@@ -174,7 +174,7 @@ const UserNotesTab = ({
                     size="sm"
                     onClick={() => onDeleteRequest(note?._id)}
                   >
-                    <Trash className="h-4 w-4 ml-1" />
+                    <Trash className="ml-1 h-4 w-4" />
                     حذف
                   </Button>
                 </div>
@@ -184,7 +184,7 @@ const UserNotesTab = ({
         </Card>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default UserNotesTab;
+export default UserNotesTab

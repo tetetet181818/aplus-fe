@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Card,
@@ -6,8 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import {
   DollarSign,
   Info,
@@ -18,29 +18,29 @@ import {
   Coins,
   Edit,
   Trash2,
-} from "lucide-react";
-import formatArabicDate from "@/utils/formateTime";
+} from 'lucide-react'
+import formatArabicDate from '@/utils/formateTime'
 import {
   paymentProcessingPercent,
   platformFeePercent,
   safeValue,
   statusLabelMap,
   statusVariantMap,
-} from "@/constants";
-import { Withdrawal } from "@/types";
-import { Button } from "@/components/ui/button";
-import EditWithdrawalDialog from "@/components/molecules/dialogs/EditWithdrawalDialog";
-import { useState } from "react";
+} from '@/constants'
+import { Withdrawal } from '@/types'
+import { Button } from '@/components/ui/button'
+import EditWithdrawalDialog from '@/components/molecules/dialogs/EditWithdrawalDialog'
+import { useState } from 'react'
 
 /**
  * Props for FinanceDashboard component
  */
 interface EarningsInfoProps {
-  availableBalance: number;
-  meWithdrawals: Withdrawal[];
-  loading: boolean;
-  handelDeleteWithdrawal: (withdrawalId: string) => void;
-  deleteWithdrawalLoading: boolean;
+  availableBalance: number
+  meWithdrawals: Withdrawal[]
+  loading: boolean
+  handelDeleteWithdrawal: (withdrawalId: string) => void
+  deleteWithdrawalLoading: boolean
 }
 
 /**
@@ -52,33 +52,33 @@ export default function FinanceDashboard({
   handelDeleteWithdrawal,
   deleteWithdrawalLoading,
 }: EarningsInfoProps) {
-  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false)
   const [selectWithdrawal, SetSelectWithdrawal] = useState<Withdrawal | null>(
     null
-  );
+  )
 
   const formatCurrency = (amount: number) =>
-    amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 
   const getStatusBadge = (status: string) => {
     return (
       <Badge
         variant={
-          statusVariantMap[status as keyof typeof statusVariantMap] || "default"
+          statusVariantMap[status as keyof typeof statusVariantMap] || 'default'
         }
       >
         {statusLabelMap[status as keyof typeof statusLabelMap] ||
           safeValue(status)}
       </Badge>
-    );
-  };
+    )
+  }
 
   return (
     <>
       <div className="space-y-8">
         {/* Header */}
         <header className="flex items-center gap-2">
-          <div className="p-2 bg-primary rounded-lg">
+          <div className="bg-primary rounded-lg p-2">
             <CreditCard className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800">
@@ -88,13 +88,13 @@ export default function FinanceDashboard({
 
         {/* Balance Card */}
         <section>
-          <Card className="bg-gradient-to-br from-primary to-primary/90 text-white border-0 shadow-xl overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+          <Card className="from-primary to-primary/90 relative overflow-hidden border-0 bg-gradient-to-br text-white shadow-xl">
+            <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-white/10"></div>
+            <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-white/10"></div>
 
             <CardHeader className="relative z-10">
-              <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                <div className="p-2 bg-white/20 rounded-full">
+              <CardTitle className="flex items-center gap-2 text-2xl font-bold">
+                <div className="rounded-full bg-white/20 p-2">
                   <DollarSign className="size-5" />
                 </div>
                 الرصيد المتاح للسحب
@@ -106,7 +106,7 @@ export default function FinanceDashboard({
 
             <CardContent className="relative z-10">
               <p className="text-4xl font-bold tracking-tight">
-                {formatCurrency(availableBalance)}{" "}
+                {formatCurrency(availableBalance)}{' '}
                 <span className="text-xl font-medium">ريال</span>
               </p>
             </CardContent>
@@ -115,34 +115,34 @@ export default function FinanceDashboard({
 
         {/* Fees and Info */}
         <section>
-          <Card className="shadow-xl border-0">
-            <CardHeader className="bg-slate-50 border-b">
+          <Card className="border-0 shadow-xl">
+            <CardHeader className="border-b bg-slate-50">
               <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-primary" />
+                <Shield className="text-primary h-5 w-5" />
                 تفاصيل الرسوم والخصومات
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <h3 className="flex items-center gap-2 text-lg font-semibold">
                     <Zap className="h-5 w-5 text-amber-500" />
                     شروط ومعلومات السحب
                   </h3>
-                  <ul className="space-y-2 text-muted-foreground">
+                  <ul className="text-muted-foreground space-y-2">
                     {[
-                      "تساعد هذه الرسوم في الحفاظ على جودة الخدمات والتطوير المستمر",
-                      "يتم احتساب الرسوم تلقائياً عند كل عملية بيع",
+                      'تساعد هذه الرسوم في الحفاظ على جودة الخدمات والتطوير المستمر',
+                      'يتم احتساب الرسوم تلقائياً عند كل عملية بيع',
                     ].map((text, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <div className="h-2 w-2 rounded-full bg-primary mt-2"></div>
+                        <div className="bg-primary mt-2 h-2 w-2 rounded-full"></div>
                         <span>{text}</span>
                       </li>
                     ))}
                     <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-2"></div>
+                      <div className="bg-primary mt-2 h-2 w-2 rounded-full"></div>
                       <span>
-                        الحد الأدنى للسحب{" "}
+                        الحد الأدنى للسحب{' '}
                         <strong className="text-gray-900 dark:text-gray-100">
                           100 ريال سعودي
                         </strong>
@@ -152,35 +152,35 @@ export default function FinanceDashboard({
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <h3 className="flex items-center gap-2 text-lg font-semibold">
                     <Coins className="h-5 w-5 text-emerald-500" />
                     خصومات ورسوم الدفع
                   </h3>
-                  <ul className="space-y-2 text-sm text-muted-foreground rounded-xl p-4">
+                  <ul className="text-muted-foreground space-y-2 rounded-xl p-4 text-sm">
                     <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-2"></div>
+                      <div className="bg-primary mt-2 h-2 w-2 rounded-full"></div>
                       <span>
                         تطبق رسوم المنصة بنسبة {platformFeePercent}% على
                         المعاملات
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-2"></div>
+                      <div className="bg-primary mt-2 h-2 w-2 rounded-full"></div>
                       <span>
-                        رسوم معالجة بنسبة{" "}
+                        رسوم معالجة بنسبة{' '}
                         <strong className="text-gray-900 dark:text-gray-100">
                           {paymentProcessingPercent}%
-                        </strong>{" "}
+                        </strong>{' '}
                         تطبق تلقائيًا على كل سحب.
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-2"></div>
+                      <div className="bg-primary mt-2 h-2 w-2 rounded-full"></div>
                       <span>2 ريال رسوم إضافية ثابتة</span>
                     </li>
                   </ul>
-                  <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 bg-amber-50 dark:bg-amber-900/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <Info className="h-4 w-4 text-amber-500 mt-0.5" />
+                  <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-gray-600 dark:border-amber-800 dark:bg-amber-900/30 dark:text-gray-400">
+                    <Info className="mt-0.5 h-4 w-4 text-amber-500" />
                     <span>
                       يتم خصم رسوم المعالجة تلقائيًا من كل عملية شراء.
                     </span>
@@ -194,31 +194,31 @@ export default function FinanceDashboard({
         {/* Withdrawal Table */}
         {meWithdrawals?.length > 0 && (
           <section>
-            <Card className="shadow-xl border-0">
-              <CardHeader className="bg-slate-50 border-b">
+            <Card className="border-0 shadow-xl">
+              <CardHeader className="border-b bg-slate-50">
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+                  <Calendar className="text-primary h-5 w-5" />
                   سجل التحويلات البنكية
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-6">
                 {/* Desktop Table */}
-                <div className="hidden md:block overflow-x-auto rounded-lg border">
+                <div className="hidden overflow-x-auto rounded-lg border md:block">
                   <table className="min-w-full text-sm">
                     <thead className="bg-slate-50 text-start">
                       <tr>
                         {[
-                          "اسم الحساب",
-                          "اسم البنك",
-                          "رقم IBAN",
-                          "رقم التحويل",
-                          "المبلغ",
-                          "الحالة",
-                          "ملاحظات المشرف",
-                          "تاريخ التحويل",
-                          "تاريخ الإنشاء",
-                          "الإجراءات",
+                          'اسم الحساب',
+                          'اسم البنك',
+                          'رقم IBAN',
+                          'رقم التحويل',
+                          'المبلغ',
+                          'الحالة',
+                          'ملاحظات المشرف',
+                          'تاريخ التحويل',
+                          'تاريخ الإنشاء',
+                          'الإجراءات',
                         ].map((h, i) => (
                           <th
                             key={i}
@@ -233,7 +233,7 @@ export default function FinanceDashboard({
                       {meWithdrawals.map((w, i) => (
                         <tr
                           key={i}
-                          className="hover:bg-slate-50 transition-colors text-gray-700"
+                          className="text-gray-700 transition-colors hover:bg-slate-50"
                         >
                           <td className="px-4 py-3 font-medium">
                             {w.accountName}
@@ -241,7 +241,7 @@ export default function FinanceDashboard({
                           <td className="px-4 py-3">{w.bankName}</td>
                           <td className="px-4 py-3">{w.iban}</td>
                           <td className="px-4 py-3">
-                            {w.routingNumber || "-"}
+                            {w.routingNumber || '-'}
                           </td>
                           <td className="px-4 py-3 font-medium">
                             {formatCurrency(w.amount)} ر.س
@@ -249,23 +249,23 @@ export default function FinanceDashboard({
                           <td className="px-4 py-3">
                             {getStatusBadge(w.status)}
                           </td>
-                          <td className="px-4 py-3 text-muted-foreground">
-                            {w.adminNotes || "لا يوجد ملاحظات"}
+                          <td className="text-muted-foreground px-4 py-3">
+                            {w.adminNotes || 'لا يوجد ملاحظات'}
                           </td>
-                          <td className="px-4 py-3 text-muted-foreground">
+                          <td className="text-muted-foreground px-4 py-3">
                             {w.routingDate
                               ? formatArabicDate(w.routingDate)
-                              : "—"}
+                              : '—'}
                           </td>
-                          <td className="px-4 py-3 text-muted-foreground">
-                            {formatArabicDate(w.createdAt || "")}
+                          <td className="text-muted-foreground px-4 py-3">
+                            {formatArabicDate(w.createdAt || '')}
                           </td>
-                          <td className="flex gap-1 justify-center items-center mt-2 mx-2">
+                          <td className="mx-2 mt-2 flex items-center justify-center gap-1">
                             <Button
                               onClick={() => handelDeleteWithdrawal(w._id)}
                               disabled={
                                 deleteWithdrawalLoading ||
-                                w.status === "completed"
+                                w.status === 'completed'
                               }
                               variant="destructive"
                               size="sm"
@@ -274,12 +274,12 @@ export default function FinanceDashboard({
                             </Button>
                             <Button
                               onClick={() => {
-                                SetSelectWithdrawal(w);
-                                setOpenEditDialog(true);
+                                SetSelectWithdrawal(w)
+                                setOpenEditDialog(true)
                               }}
                               variant="outline"
                               size="sm"
-                              disabled={w.status === "completed"}
+                              disabled={w.status === 'completed'}
                             >
                               <Edit className="size-4" />
                             </Button>
@@ -291,14 +291,14 @@ export default function FinanceDashboard({
                 </div>
 
                 {/* Mobile Cards */}
-                <div className="md:hidden space-y-4">
+                <div className="space-y-4 md:hidden">
                   {meWithdrawals.map((w, i) => (
                     <div
                       key={i}
-                      className="border rounded-lg p-4 shadow-sm bg-white space-y-2"
+                      className="space-y-2 rounded-lg border bg-white p-4 shadow-sm"
                     >
-                      <div className="flex justify-between items-center">
-                        <h3 className="font-semibold text-primary">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-primary font-semibold">
                           {w.accountName}
                         </h3>
                         {getStatusBadge(w.status)}
@@ -311,17 +311,17 @@ export default function FinanceDashboard({
                         المبلغ: {formatCurrency(w.amount)} ر.س
                       </p>
                       <p className="text-xs text-gray-500">
-                        {formatArabicDate(w.createdAt || "")}
+                        {formatArabicDate(w.createdAt || '')}
                       </p>
-                      <div className="flex gap-2 justify-end">
+                      <div className="flex justify-end gap-2">
                         <Button
                           onClick={() => {
-                            setOpenEditDialog(true);
-                            SetSelectWithdrawal(w);
+                            setOpenEditDialog(true)
+                            SetSelectWithdrawal(w)
                           }}
                           variant="outline"
                           size="sm"
-                          disabled={w.status === "completed"}
+                          disabled={w.status === 'completed'}
                         >
                           <Edit className="size-4" />
                         </Button>
@@ -329,7 +329,7 @@ export default function FinanceDashboard({
                           onClick={() => handelDeleteWithdrawal(w._id)}
                           variant="destructive"
                           size="sm"
-                          disabled={w.status === "completed"}
+                          disabled={w.status === 'completed'}
                         >
                           <Trash2 className="size-4" />
                         </Button>
@@ -350,5 +350,5 @@ export default function FinanceDashboard({
         />
       )}
     </>
-  );
+  )
 }

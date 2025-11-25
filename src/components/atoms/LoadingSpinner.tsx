@@ -1,12 +1,12 @@
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react'
 
-const LoadingSpinner = ({ message = "جاري التحميل..." }) => {
+const LoadingSpinner = ({ message = 'جاري التحميل...' }) => {
   return (
-    <div className=" py-12 px-4 md:px-6 flex flex-col justify-center items-center min-h-screen">
-      <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      <p className="text-gray-600 dark:text-gray-400 text-lg">{message}</p>
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12 md:px-6">
+      <Loader2 className="text-primary mb-4 h-12 w-12 animate-spin" />
+      <p className="text-lg text-gray-600 dark:text-gray-400">{message}</p>
     </div>
-  );
-};
+  )
+}
 
-export default LoadingSpinner;
+export default LoadingSpinner
