@@ -217,3 +217,12 @@ export interface SalesUser {
   totalProfit: number
   count: number
 }
+
+export interface Profits {
+  _id: string
+  fullName: string
+  email: string
+  balance: number
+  profit: number
+  total: number
+}

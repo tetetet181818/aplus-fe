@@ -1,7 +1,8 @@
 'use client'
 
-import { JSX, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -10,6 +11,11 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import {
   User as UserIcon,
   Mail,
@@ -20,39 +26,31 @@ import {
   Award,
 } from 'lucide-react'
 import UpdateInfoDialog from '../../molecules/dialogs/UpdateInfoDialog'
+import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog'
+import ProfileInfoSkeleton from '@/components/skeletons/ProfileInfoSkeleton'
 import useAuth from '@/hooks/useAuth'
 import { User } from '@/types'
-import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog'
 import { toast } from 'sonner'
-import ProfileInfoSkeleton from '@/components/skeletons/ProfileInfoSkeleton'
-import Image from 'next/image'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 
-/**
- * Renders the user's profile information and actions (edit, delete, reset password).
- *
- * @param {ProfileInfoTabProps} props - Component props
- * @returns {JSX.Element | null}
- */
+/** Props for ProfileInfoTab */
 interface ProfileInfoTabProps {
-  /** Authenticated user info */
   user: User
-  /** Loading state */
   loading: boolean
 }
 
-const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
+/** User profile information with edit and delete actions */
+export default function ProfileInfoTab({
+  user,
+  loading,
+}: Partial<ProfileInfoTabProps>) {
   const { handleDeleteAccount, handleUpdateUserInfo } = useAuth()
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false)
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
 
-  const copyToClipboard = (text: string) => {
+  const copyProfileLink = () => {
+    const profileUrl = `https://aplusplatformsa.com/seller/${user?._id}`
+    navigator.clipboard.writeText(profileUrl)
     toast.success('تم نسخ رابط حسابك')
-    navigator.clipboard.writeText(text)
   }
 
   if (loading) return <ProfileInfoSkeleton />
@@ -61,125 +59,54 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
   return (
     <>
       <div className="mx-auto w-full max-w-3xl">
-        <Card className="border-gray-200 shadow-lg dark:border-gray-700">
-          <CardHeader className="border-b border-gray-200 px-4 pb-4 sm:px-6 dark:border-gray-700">
-            <CardTitle className="text-xl font-bold text-gray-800 sm:text-2xl dark:text-white">
+        <Card className="border-gray-200 shadow-lg transition-colors dark:border-gray-700 dark:bg-gray-800">
+          <CardHeader className="border-b border-gray-200 px-4 pb-4 transition-colors sm:px-6 dark:border-gray-700">
+            <CardTitle className="text-xl font-bold text-gray-800 sm:text-2xl dark:text-gray-50">
               المعلومات الشخصية
             </CardTitle>
             <CardDescription className="text-sm text-gray-600 sm:text-base dark:text-gray-400">
-              <div className="flex gap-1">
-                <span>+أ</span>
-                <span>تفاصيل حسابك في المنصة</span>
-              </div>
+              تفاصيل حسابك في المنصة
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
-            {/* Name */}
             <InfoField
               icon={
-                <UserIcon className="text-primary dark:text-primary-light h-5 w-5" />
+                <UserIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               }
               label="الاسم الكامل"
               value={user.fullName || 'غير محدد'}
             />
 
-            {/* Email */}
             <InfoField
               icon={
-                <Mail className="text-primary dark:text-primary-light h-5 w-5" />
+                <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               }
               label="البريد الإلكتروني"
               value={user.email}
             />
 
-            {/* University */}
             <InfoField
               icon={
-                <School className="text-primary dark:text-primary-light h-5 w-5" />
+                <School className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               }
               label="الجامعة"
               value={user.university || 'لم يتم التحديد'}
             />
 
-            <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
-              <div className="bg-primary/10 dark:bg-primary/20 rounded-full p-2">
-                <Award className="text-primary dark:text-primary-light h-5 w-5" />
-              </div>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
-                  الشارات
-                </p>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" className="p-0">
-                      <p className="mt-1 text-sm font-medium text-gray-700 sm:text-base dark:text-gray-200">
-                        {user?.badgeSales === true && (
-                          <Image
-                            src={'/best-sales.png'}
-                            alt=""
-                            width={30}
-                            height={30}
-                            className="my-2"
-                          />
-                        )}
-                      </p>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p> شارة المبيعات الممتازة</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            </div>
+            {user?.badgeSales && <BadgesField />}
 
-            {/* Actions */}
-            <div className="flex flex-col justify-center gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:pt-6 dark:border-gray-700">
-              <Button
-                onClick={() =>
-                  copyToClipboard(
-                    `https://aplusplatformsa.com/seller/${user._id}`
-                  )
-                }
-              >
-                <Link2 className="size-4" />
-                مشاركة الحساب
-              </Button>
+            <ActionButtons
+              onShare={copyProfileLink}
+              onEdit={() => setOpenDialogUpdate(true)}
+              onDelete={() => setOpenDialogDelete(true)}
+            />
 
-              <Button>
-                <Link
-                  href="/forget-password"
-                  className="flex items-center gap-1"
-                >
-                  <Edit3 className="size-4" />
-                  <span>تعديل كلمة المرور</span>
-                </Link>
-              </Button>
-
-              <Button
-                onClick={() => setOpenDialogUpdate(true)}
-                className="flex gap-1"
-              >
-                <Edit3 className="size-4" />
-                <span>تعديل الملف الشخصي</span>
-              </Button>
-
-              <Button
-                variant="destructive"
-                onClick={() => setOpenDialogDelete(true)}
-              >
-                <Trash2 className="size-4" />
-                <span>حذف الحساب</span>
-              </Button>
-            </div>
-
-            <p className="px-2 pt-2 text-center text-xs text-gray-500 dark:text-gray-400">
-              تذكّر: حذف الحساب إجراء نهائي ولا يمكن التراجع عنه. سيتم حذف جميع
-              بياناتك وملخصاتك.
-            </p>
+            <WarningText />
           </CardContent>
         </Card>
       </div>
+
       <UpdateInfoDialog
         isOpen={openDialogUpdate}
         onClose={() => setOpenDialogUpdate(false)}
@@ -187,6 +114,7 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
         loading={Boolean(loading)}
         handelUpdateUserInfo={handleUpdateUserInfo}
       />
+
       <DeleteConfirmationDialog
         isOpen={openDialogDelete}
         onOpenChange={() => setOpenDialogDelete(false)}
@@ -198,36 +126,123 @@ const ProfileInfoTab = ({ user, loading }: Partial<ProfileInfoTabProps>) => {
   )
 }
 
-/**
- * Small helper component for displaying a labeled info row with an icon.
- *
- * @param {Object} props
- * @param {JSX.Element} props.icon - Field icon
- * @param {string} props.label - Field label
- * @param {string} props.value - Field value
- */
-const InfoField = ({
+/** Single info field with icon and label */
+function InfoField({
   icon,
   label,
   value,
 }: {
-  icon: JSX.Element
+  icon: React.ReactNode
   label: string
   value: string
-}) => (
-  <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
-    <div className="bg-primary/10 dark:bg-primary/20 rounded-full p-2">
-      {icon}
+}) {
+  return (
+    <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 transition-colors dark:bg-gray-700/50">
+      <div className="rounded-full bg-blue-50 p-2 dark:bg-blue-900/30">
+        {icon}
+      </div>
+      <div className="flex-1">
+        <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
+          {label}
+        </p>
+        <p className="mt-1 text-sm font-medium text-gray-700 sm:text-base dark:text-gray-200">
+          {value}
+        </p>
+      </div>
     </div>
-    <div className="flex-1">
-      <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
-        {label}
-      </p>
-      <p className="mt-1 text-sm font-medium text-gray-700 sm:text-base dark:text-gray-200">
-        {value}
-      </p>
-    </div>
-  </div>
-)
+  )
+}
 
-export default ProfileInfoTab
+/** User badges display */
+function BadgesField() {
+  return (
+    <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 transition-colors dark:bg-gray-700/50">
+      <div className="rounded-full bg-blue-50 p-2 dark:bg-blue-900/30">
+        <Award className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+      </div>
+      <div className="flex-1">
+        <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">
+          الشارات
+        </p>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button className="mt-1">
+              <Image
+                src="/best-sales.png"
+                alt="شارة المبيعات الممتازة"
+                width={30}
+                height={30}
+                className="transition-transform hover:scale-110"
+              />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>شارة المبيعات الممتازة</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+    </div>
+  )
+}
+
+/** Action buttons section */
+function ActionButtons({
+  onShare,
+  onEdit,
+  onDelete,
+}: {
+  onShare: () => void
+  onEdit: () => void
+  onDelete: () => void
+}) {
+  return (
+    <div className="flex flex-col justify-center gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:pt-6 dark:border-gray-700">
+      <Button
+        onClick={onShare}
+        className="gap-2 bg-blue-600 transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+      >
+        <Link2 className="size-4" />
+        مشاركة الحساب
+      </Button>
+
+      <Button
+        asChild
+        variant="outline"
+        className="gap-2 border-gray-300 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+      >
+        <Link href="/forget-password">
+          <Edit3 className="size-4" />
+          تعديل كلمة المرور
+        </Link>
+      </Button>
+
+      <Button
+        onClick={onEdit}
+        variant="outline"
+        className="gap-2 border-gray-300 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+      >
+        <Edit3 className="size-4" />
+        تعديل الملف الشخصي
+      </Button>
+
+      <Button
+        variant="destructive"
+        onClick={onDelete}
+        className="gap-2 bg-red-600 transition-colors hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+      >
+        <Trash2 className="size-4" />
+        حذف الحساب
+      </Button>
+    </div>
+  )
+}
+
+/** Account deletion warning text */
+function WarningText() {
+  return (
+    <p className="px-2 pt-2 text-center text-xs text-gray-500 transition-colors dark:text-gray-400">
+      تذكّر: حذف الحساب إجراء نهائي ولا يمكن التراجع عنه. سيتم حذف جميع بياناتك
+      وملخصاتك.
+    </p>
+  )
+}

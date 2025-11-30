@@ -215,7 +215,7 @@ const AddNoteForm = (): JSX.Element => {
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
           <Card className="w-full overflow-hidden rounded-2xl border-0 shadow-xl">
             {/* Progress Header */}
-            <div className="border-b bg-white px-6 py-4">
+            <div className="dark:bg-card border-b bg-white px-6 py-4">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-bold text-blue-600">
                   {progress.toFixed(0)}%
@@ -226,7 +226,7 @@ const AddNoteForm = (): JSX.Element => {
               </div>
               <Progress
                 value={progress}
-                className="h-2 rotate-180 transform bg-gray-200 [&>div]:!right-0 [&>div]:!left-0"
+                className="h-2 rotate-180 transform bg-gray-200 dark:bg-gray-700 [&>div]:!right-0 [&>div]:!left-0"
               />
             </div>
 

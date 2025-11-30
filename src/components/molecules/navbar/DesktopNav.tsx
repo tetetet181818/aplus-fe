@@ -5,6 +5,7 @@ import UserMenu from './UserMenu'
 import { NotificationBell } from '@/components/atoms/NotificationBell'
 import { notificationType, User } from '@/types'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
 
 /**
  * Desktop navigation bar.
@@ -46,6 +47,7 @@ const DesktopNav = ({
   }
   return (
     <nav className="hidden items-center gap-3 md:flex">
+      <ThemeSwitcher />
       <Link href="/notes">
         <Button variant="outline" className="hover:bg-primary/10 text-base">
           تصفح الملخصات

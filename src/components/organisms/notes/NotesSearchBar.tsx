@@ -26,13 +26,13 @@ export default function NotesSearchBar({
       onSubmit={handleSearchSubmit}
       className="relative flex w-full items-center gap-2"
     >
-      <div className="relative flex w-full items-center rounded-lg border border-gray-300">
+      <div className="relative flex w-full items-center rounded-lg border border-gray-300 ring-0 dark:border-gray-800">
         <SearchIcon className="text-muted-foreground absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
 
         <Input
           type="search"
           placeholder={'ابحث عن ملخصات، مواد، أو جامعات...'}
-          className="flex-grow border-none bg-transparent pr-10 shadow-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none"
+          className="flex-grow border-none bg-transparent pr-10 shadow-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none dark:border-gray-800"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

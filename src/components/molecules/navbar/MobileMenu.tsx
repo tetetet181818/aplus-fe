@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { JSX } from 'react'
+import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
 
 interface User {
   role?: string
@@ -57,6 +58,7 @@ const MobileMenu = ({
     >
       <div className="space-y-4 px-5 py-4">
         <div className="flex flex-col space-y-2">
+          <ThemeSwitcher />
           <Link href="/notes">
             <Button
               variant="ghost"

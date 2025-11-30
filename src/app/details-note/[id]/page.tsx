@@ -1,5 +1,9 @@
 'use client'
 
+/**
+ * تفاصيل المذكرة مع دعم الوضع الداكن والفاتح.
+ * @component
+ */
 import useNoteDetail from '@/hooks/useNoteDetail'
 import {
   Loader2,
@@ -23,20 +27,28 @@ interface DetailsNoteProps {
   params: { id: string }
 }
 
+/** ألوان قابلة لإعادة الاستخدام */
+const baseText = 'text-gray-800 dark:text-gray-100'
+const subText = 'text-gray-600 dark:text-gray-400'
+const cardStyle =
+  'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'
+const iconBg = 'bg-gray-50 dark:bg-gray-800'
+
 export default function DetailsNote({ params }: DetailsNoteProps) {
   const [page, setPage] = useState(1)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [limit, setLimit] = useState(10)
+  const [limit] = useState(10)
+
   const { id } = params
   const { note, loading } = useNoteDetail(id)
-  const { data: detailsNoteSales, isLoading: detailsNoteSalesLoading } =
+  const { data: detailsNoteSales, isLoading: salesLoading } =
     useGetDetailsNoteSalesQuery({ noteId: id, page, limit })
-  if (loading || detailsNoteSalesLoading) {
+
+  if (loading || salesLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="space-y-4 text-center">
           <Loader2 className="text-primary mx-auto h-12 w-12 animate-spin" />
-          <p className="text-gray-500">جاري تحميل المذكرة...</p>
+          <p className={subText}>جاري تحميل المذكرة...</p>
         </div>
       </div>
     )
@@ -44,10 +56,8 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
 
   if (!note) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-gray-500">
-        <div className="text-center">
-          <p className="text-lg">لا توجد بيانات للمذكرة المطلوبة</p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center">
+        <p className={`${subText} text-lg`}>لا توجد بيانات للمذكرة المطلوبة</p>
       </div>
     )
   }
@@ -62,24 +72,22 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
   }
 
   const prevPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1)
-    }
+    if (page > 1) setPage((prev) => prev - 1)
   }
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-4 lg:p-8">
-      {/* Header Section */}
+      {/* Header */}
       <div className="space-y-4 text-center">
-        <h1 className="text-3xl leading-tight font-bold text-gray-800 lg:text-4xl">
+        <h1 className={`text-3xl font-bold lg:text-4xl ${baseText}`}>
           {note.title}
         </h1>
-        <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
+        <p className={`mx-auto max-w-3xl text-lg leading-relaxed ${subText}`}>
           {note.description}
         </p>
       </div>
 
-      {/* Cover Image */}
+      {/* Cover */}
       {note.cover_url && (
         <div className="overflow-hidden rounded-2xl border shadow-lg">
           <Image
@@ -93,93 +101,86 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
       )}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Main Content */}
+        {/* Main Section */}
         <div className="space-y-6 lg:col-span-2">
           {/* Quick Stats */}
-          <Card className={`border-2 border-gray-100`}>
+          <Card className={cardStyle}>
             <CardContent className="p-6">
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                <div className="text-center">
-                  <div
-                    className={`mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-50`}
-                  >
-                    <FileText className={`text-primary h-6 w-6`} />
+                {/* Stat Item */}
+                {[
+                  {
+                    icon: FileText,
+                    label: 'عدد الصفحات',
+                    value: note.pagesNumber || 'غير محدد',
+                  },
+                  {
+                    icon: Download,
+                    label: 'عدد التحميلات',
+                    value: note.downloads || 0,
+                  },
+                  {
+                    icon: Star,
+                    label: 'التقييم',
+                    value: note.reviews.length,
+                  },
+                  {
+                    icon: Calendar,
+                    label: 'السنة',
+                    value: note.year,
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="text-center">
+                    <div
+                      className={`mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full ${iconBg}`}
+                    >
+                      <item.icon className="text-primary h-6 w-6" />
+                    </div>
+                    <p className={`text-sm ${subText}`}>{item.label}</p>
+                    <p className={`text-xl font-semibold ${baseText}`}>
+                      {item.value}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600">عدد الصفحات</p>
-                  <p className="text-xl font-semibold text-gray-800">
-                    {note.pagesNumber || 'غير محدد'}
-                  </p>
-                </div>
-
-                <div className="text-center">
-                  <div
-                    className={`mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-50`}
-                  >
-                    <Download className={`text-primary h-6 w-6`} />
-                  </div>
-                  <p className="text-sm text-gray-600">عدد التحميلات</p>
-                  <p className="text-xl font-semibold text-gray-800">
-                    {note.downloads || 0}
-                  </p>
-                </div>
-
-                <div className="text-center">
-                  <div
-                    className={`mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-50`}
-                  >
-                    <Star className={`text-primary h-6 w-6`} />
-                  </div>
-                  <p className="text-sm text-gray-600">التقييم</p>
-                  <p className="text-xl font-semibold text-gray-800">
-                    {note.reviews.length}
-                  </p>
-                </div>
-
-                <div className="text-center">
-                  <div
-                    className={`mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-50`}
-                  >
-                    <Calendar className={`text-primary h-6 w-6`} />
-                  </div>
-                  <p className="text-sm text-gray-600">السنة</p>
-                  <p className="text-xl font-semibold text-gray-800">
-                    {note.year}
-                  </p>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>
 
-          {/* Academic Information */}
-          <Card className="border-2 border-gray-100">
+          {/* Academic Info */}
+          <Card className={cardStyle}>
             <CardContent className="p-6">
-              <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-800">
+              <h3
+                className={`mb-4 flex items-center gap-2 text-xl font-semibold ${baseText}`}
+              >
                 <School className="text-primary h-5 w-5" />
                 المعلومات الأكاديمية
               </h3>
+
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">الجامعة</p>
+                  <p className={`text-sm ${subText}`}>الجامعة</p>
                   <Badge variant="secondary" className="px-3 py-1 text-base">
                     <Building className="ml-1 h-4 w-4" />
                     {note.university}
                   </Badge>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">الكلية</p>
+                  <p className={`text-sm ${subText}`}>الكلية</p>
                   <Badge variant="secondary" className="px-3 py-1 text-base">
                     <Users className="ml-1 h-4 w-4" />
                     {note.college}
                   </Badge>
                 </div>
+
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">المادة</p>
-                  <Badge className={`px-3 py-1 text-base text-white`}>
+                  <p className={`text-sm ${subText}`}>المادة</p>
+                  <Badge className="px-3 py-1 text-base text-white">
                     {note.subject}
                   </Badge>
                 </div>
+
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">حالة النشر</p>
+                  <p className={`text-sm ${subText}`}>حالة النشر</p>
                   <Badge
                     variant={note.isPublish ? 'default' : 'secondary'}
                     className="px-3 py-1 text-base"
@@ -187,7 +188,9 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
                     {note.isPublish ? 'منشور' : 'مسودة'}
                   </Badge>
                 </div>
+
                 <DetailsNoteSales salesState={detailsNoteSales?.stateSales} />
+
                 <DetailsNoteSalesTable
                   sales={detailsNoteSales?.sales}
                   pagination={detailsNoteSales?.pagination}
@@ -199,15 +202,18 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
           </Card>
         </div>
 
+        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Price Card */}
-          <Card className={`border-2 border-gray-100 shadow-lg`}>
+          {/* Price */}
+          <Card className={`${cardStyle} shadow-lg`}>
             <CardContent className="p-6 text-center">
-              <h3 className="mb-2 text-xl font-semibold text-gray-800">
+              <h3 className={`mb-2 text-xl font-semibold ${baseText}`}>
                 السعر
               </h3>
-              <p className="flex items-center justify-center gap-2 text-3xl font-bold text-gray-900">
-                <p>{note.price}</p>
+              <p
+                className={`flex items-center justify-center gap-2 text-3xl font-bold ${baseText}`}
+              >
+                {note.price}
                 <Image
                   src="/riyal-icon.svg"
                   alt="ريال"
@@ -218,30 +224,31 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
             </CardContent>
           </Card>
 
-          {/* Contact & Details */}
-          <Card className="border-2 border-gray-100">
+          {/* Contact */}
+          <Card className={cardStyle}>
             <CardContent className="p-6">
-              <h3 className="mb-4 text-lg font-semibold text-gray-800">
+              <h3 className={`mb-4 text-lg font-semibold ${baseText}`}>
                 معلومات الاتصال
               </h3>
+
               <div className="space-y-3">
                 <div>
-                  <p className="text-sm text-gray-600">طريقة التواصل</p>
-                  <p className="font-medium text-gray-800">
+                  <p className={`text-sm ${subText}`}>طريقة التواصل</p>
+                  <p className={`font-medium ${baseText}`}>
                     {note.contactMethod}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600">تاريخ الإنشاء</p>
-                  <p className="font-medium text-gray-800">
+                  <p className={`text-sm ${subText}`}>تاريخ الإنشاء</p>
+                  <p className={baseText}>
                     {new Date(note.createdAt).toLocaleDateString('ar-SA')}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600">آخر تحديث</p>
-                  <p className="font-medium text-gray-800">
+                  <p className={`text-sm ${subText}`}>آخر تحديث</p>
+                  <p className={baseText}>
                     {new Date(note.updatedAt).toLocaleDateString('ar-SA')}
                   </p>
                 </div>

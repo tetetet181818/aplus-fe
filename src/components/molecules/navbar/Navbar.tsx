@@ -42,7 +42,7 @@ export default function Navbar() {
     <header
       dir="rtl"
       role="banner"
-      className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/90 px-6 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 md:px-10 dark:border-gray-800 dark:bg-gray-950/90"
+      className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/90 px-6 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 md:px-10 dark:border-gray-800 dark:bg-gray-900"
     >
       <div className="flex h-16 items-center justify-between">
         {/* Logo */}

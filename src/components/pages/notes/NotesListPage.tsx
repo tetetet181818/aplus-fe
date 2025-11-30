@@ -64,7 +64,7 @@ const NotesListPage = () => {
   const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), [])
 
   return (
-    <div className="px-4 py-12 md:px-6">
+    <div className="px-4 py-12 md:px-6 dark:bg-gray-900">
       {/* Header */}
       <NotesListHeader
         onToggleFilters={toggleFilters}
@@ -88,7 +88,7 @@ const NotesListPage = () => {
               <Input
                 type="search"
                 placeholder={'ابحث عن المستخدمين...'}
-                className="pr-10"
+                className="border pr-10 dark:border-gray-900"
                 value={filterFullName}
                 onChange={(e) => setFilterFullName(e.target.value)}
               />
@@ -118,6 +118,7 @@ const NotesListPage = () => {
             setSearchType={setSearchType}
           />
         )}
+
         {searchType === 'file' && (
           <NotesSortDropdown
             sortBy={sortOrder}

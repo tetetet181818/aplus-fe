@@ -74,7 +74,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
 
   if (loading) {
     return (
-      <main className="px-4 py-8 md:px-6">
+      <main className="px-4 py-8 md:px-6 dark:bg-gray-900">
         <div className="mb-6">
           <Skeleton className="h-10 w-32" />
         </div>

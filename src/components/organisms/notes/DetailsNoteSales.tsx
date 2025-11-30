@@ -32,7 +32,7 @@ export function DetailsNoteSales({
   salesState: { count: number; date: Date }[]
 }) {
   return (
-    <Card className="col-span-2 m-0 mt-10 w-full border-none p-0 shadow-none">
+    <Card className="col-span-2 m-0 mt-10 w-full border-none bg-gray-800 p-0 py-10 shadow-none">
       <CardHeader>
         <CardTitle>احصائيات مبيعات الملخص</CardTitle>
         <CardDescription>احصائيات مبيعات الملخص</CardDescription>

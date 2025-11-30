@@ -27,7 +27,7 @@ const HeroSection = (): JSX.Element => {
       <div className="relative z-10 px-4 md:px-6">
         {/* Title */}
         <h1 className="mb-6 text-4xl leading-tight font-extrabold text-white md:text-6xl">
-          مرحبًا بك في منصة <span className="text-primary">أ+</span>
+          مرحبًا بك في منصة <span className="text-blue-600">أ+</span>
         </h1>
 
         {/* Subtitle */}
@@ -64,7 +64,7 @@ const HeroSection = (): JSX.Element => {
           <Link href={'/notes'}>
             <Button
               size="lg"
-              className="text-primary w-full bg-white shadow-lg hover:bg-gray-100 sm:w-auto"
+              className="text-primary w-full bg-white shadow-lg hover:bg-gray-100 sm:w-auto dark:bg-gray-800"
             >
               تصفح الملخصات <BookOpen className="mr-2 h-5 w-5" />
             </Button>
@@ -73,7 +73,7 @@ const HeroSection = (): JSX.Element => {
             <Button
               size="lg"
               variant="default"
-              className="w-full border-white text-white shadow-lg hover:bg-white/10 sm:w-auto"
+              className="w-full border-white bg-blue-600 text-white shadow-lg hover:bg-white/10 sm:w-auto"
             >
               أضف ملخصك الآن <Upload className="mr-2 h-5 w-5" />
             </Button>

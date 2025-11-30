@@ -8,6 +8,7 @@ import {
 import { Note } from '@/types'
 import NoteCard from '../organisms/notes/NoteCard'
 import BestSellerNotesSkeleton from '../skeletons/BestSellerNotesSkeleton'
+
 export default function BestSellerNotes({
   data,
   loading,
@@ -21,7 +22,7 @@ export default function BestSellerNotes({
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center py-20 font-medium text-gray-500">
+      <div className="flex items-center justify-center py-20 font-medium text-gray-500 dark:text-gray-400">
         لا توجد بيانات للملخصات حتى الآن
       </div>
     )
@@ -40,8 +41,8 @@ export default function BestSellerNotes({
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white" />
+        <CarouselNext className="dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white" />
       </Carousel>
     </>
   )

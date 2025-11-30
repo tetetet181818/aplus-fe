@@ -106,6 +106,12 @@ export const navigationItems: NavigationItem[] = [
     id: 'customers-rating',
     href: '/dashboard/customers-rating',
   },
+  {
+    title: 'الارباح',
+    icon: DollarSign,
+    id: 'profits',
+    href: '/dashboard/profits',
+  },
 ]
 
 export const platformFeePercent: number = 15

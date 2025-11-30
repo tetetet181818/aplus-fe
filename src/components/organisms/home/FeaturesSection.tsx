@@ -19,12 +19,12 @@ const FeatureCard = ({
   description,
 }: FeatureCardProps): JSX.Element => (
   <article
-    className="flex h-full flex-col items-center rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+    className="flex h-full flex-col items-center rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
     role="listitem"
     aria-label={`ميزة: ${title}`}
   >
     <div
-      className="from-primary mb-4 inline-flex items-center justify-center rounded-full bg-gradient-to-br to-blue-500 p-4 text-white shadow-md"
+      className="mb-4 inline-flex items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-blue-500 p-4 text-white shadow-md"
       aria-hidden="true"
     >
       {icon}

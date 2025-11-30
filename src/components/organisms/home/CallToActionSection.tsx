@@ -6,7 +6,7 @@ import { JSX } from 'react'
 const CallToActionSection = (): JSX.Element => {
   return (
     <section
-      className="from-primary bg-gradient-to-br to-blue-600 py-16 text-white md:py-24 dark:from-gray-800 dark:to-gray-900"
+      className="from-primary bg-gradient-to-br to-blue-600 py-16 text-white md:py-24 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
       role="region"
       aria-labelledby="cta-heading"
     >
@@ -14,13 +14,13 @@ const CallToActionSection = (): JSX.Element => {
         {/* Heading */}
         <h2
           id="cta-heading"
-          className="mb-6 text-3xl leading-tight font-extrabold md:text-4xl lg:text-5xl"
+          className="mb-6 text-3xl leading-tight font-extrabold md:text-4xl lg:text-5xl dark:text-white"
         >
           هل أنت مستعد لمشاركة معرفتك أو العثور على أفضل الملخصات؟
         </h2>
 
         {/* Subtext */}
-        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl dark:text-gray-300">
+        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl dark:text-gray-300">
           انضم إلى مجتمعنا اليوم وابدأ رحلتك نحو التميز الأكاديمي. شارك ملخصاتك،
           ساعد الآخرين، وحقق دخلاً إضافياً.
         </p>
@@ -30,7 +30,7 @@ const CallToActionSection = (): JSX.Element => {
           <Link href="/notes">
             <Button
               size="lg"
-              className="text-primary flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold transition-all hover:scale-105 hover:bg-gray-100 hover:shadow-2xl sm:w-auto"
+              className="text-primary flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold shadow-lg transition-all hover:scale-105 hover:bg-gray-50 hover:shadow-2xl sm:w-auto dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white"
               aria-label="تصفح الملخصات المتاحة على المنصة"
             >
               <BookOpen className="mr-2 h-5 w-5" aria-hidden="true" />
@@ -42,7 +42,7 @@ const CallToActionSection = (): JSX.Element => {
             <Button
               size="lg"
               variant="outline"
-              className="text-primary flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white px-8 py-3.5 text-base font-semibold transition-all hover:scale-105 hover:bg-white/10 hover:shadow-2xl sm:w-auto dark:border-white dark:text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-transparent px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-white/10 hover:shadow-2xl sm:w-auto dark:border-gray-300 dark:text-gray-100 dark:hover:border-white dark:hover:bg-white/20"
               aria-label="أضف ملخصك الآن إلى منصة أ+"
             >
               <PlusCircle className="mr-2 h-5 w-5" aria-hidden="true" />

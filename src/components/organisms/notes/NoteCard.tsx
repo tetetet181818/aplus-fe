@@ -14,21 +14,21 @@ const NoteCard = ({ note }: { note: Note }) => {
         aria-label={`View ${note.title} note details`}
         prefetch={false}
       >
-        <Card className="hover:border-primary/30 flex h-full flex-col overflow-hidden rounded-xl border-1 py-0 transition-all duration-300">
-          <div className="relative aspect-[3/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 py-0">
+        <Card className="hover:border-primary/30 dark:hover:border-primary/40 flex h-full flex-col overflow-hidden rounded-xl border-1 py-0 transition-all duration-300 dark:border-gray-800 dark:bg-gray-900">
+          <div className="relative aspect-[3/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 py-0 dark:from-gray-800 dark:to-gray-900">
             <div className="h-full w-full">
               <Image
                 loading="lazy"
                 src={note.cover_url || ''}
                 alt={`Cover image for ${note.title}`}
                 fill
-                className="rounded-lg object-cover"
+                className="rounded-lg object-cover transition-opacity duration-300 group-hover:opacity-90"
               />
             </div>
 
             {note?.reviews?.length > 0 && (
-              <div className="bg-background/80 text-foreground absolute bottom-3 left-3 flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm">
-                <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+              <div className="bg-background/80 text-foreground absolute bottom-3 left-3 flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-100">
+                <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500" />
                 <span className="font-medium">
                   {(
                     note.reviews
@@ -41,28 +41,28 @@ const NoteCard = ({ note }: { note: Note }) => {
           </div>
 
           <CardContent className="flex h-fit flex-grow flex-col space-y-3 p-4 pt-0">
-            <h3 className="text-foreground group-hover:text-primary line-clamp-2 text-lg leading-tight font-semibold transition-colors">
+            <h3 className="text-foreground group-hover:text-primary dark:group-hover:text-primary/90 line-clamp-2 text-lg leading-tight font-semibold transition-colors dark:text-white">
               {note.title}
             </h3>
 
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant="outline"
-                className="rounded-full px-3 py-1 text-xs"
+                className="rounded-full px-3 py-1 text-xs dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300"
               >
                 <Layers className="mr-1 h-3.5 w-3.5" />
                 {note.university}
               </Badge>
               <Badge
                 variant="outline"
-                className="rounded-full px-3 py-1 text-xs"
+                className="rounded-full px-3 py-1 text-xs dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300"
               >
                 <BookOpen className="mr-1 h-3.5 w-3.5" />
                 {note.college}
               </Badge>
               <Badge
                 variant="outline"
-                className="rounded-full px-3 py-1 text-xs"
+                className="rounded-full px-3 py-1 text-xs dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300"
               >
                 <Star className="mr-1 h-3.5 w-3.5" />
                 {note.reviews && note.reviews.length > 0
@@ -75,13 +75,13 @@ const NoteCard = ({ note }: { note: Note }) => {
                 تقييم
               </Badge>
 
-              <Badge className="from-primary rounded-full bg-gradient-to-r to-blue-600 px-3 py-1 text-xs font-medium text-white shadow-md">
+              <Badge className="rounded-full bg-gradient-to-r to-blue-600 px-3 py-1 text-xs font-medium text-white shadow-md dark:from-blue-600 dark:to-blue-700">
                 {note.price > 0 ? `${note.price} ريال` : 'مجاني'}
               </Badge>
             </div>
 
-            <div className="border-border mt-auto border-t pt-3">
-              <div className="text-muted-foreground flex items-center justify-between text-sm">
+            <div className="border-border mt-auto border-t pt-3 dark:border-gray-800">
+              <div className="text-muted-foreground flex items-center justify-between text-sm dark:text-gray-400">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4" />
                   <span>{note.pagesNumber || 'N/A'} صفحة</span>

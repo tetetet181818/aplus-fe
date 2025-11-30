@@ -73,7 +73,7 @@ const UserDashboardPage = () => {
 
   // ----------------- UI -----------------
   return (
-    <div className="px-2 py-8 sm:px-4 md:px-6">
+    <div className="px-2 py-8 sm:px-4 md:px-6 dark:bg-gray-950">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-20">
         <TabsList className="grid h-auto w-full grid-cols-1 md:grid-cols-6">
           {[

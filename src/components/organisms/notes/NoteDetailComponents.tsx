@@ -1,8 +1,20 @@
 'use client'
+
 import Link from 'next/link'
+import Image from 'next/image'
+import { cloneElement, JSX, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Star,
   Edit,
@@ -20,21 +32,9 @@ import {
   Loader,
   Link2,
 } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
-import { cloneElement, JSX, useState } from 'react'
-import Image from 'next/image'
-import formatArabicDate from '@/utils/formateTime'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { User } from '@/types'
 import { toast } from 'sonner'
+import formatArabicDate from '@/utils/formateTime'
+import { User } from '@/types'
 
 interface NoteHeaderProps {
   title: string
@@ -48,6 +48,7 @@ interface NoteHeaderProps {
   toggleLike: boolean
 }
 
+/** Displays note title, price, rating, and like button */
 export const NoteHeader = ({
   title,
   price,
@@ -61,7 +62,7 @@ export const NoteHeader = ({
 }: NoteHeaderProps) => {
   if (!title) {
     return (
-      <Card className="border-red-200 shadow-lg dark:border-red-700">
+      <Card className="border-red-200 bg-white shadow-lg dark:border-red-800 dark:bg-gray-900">
         <CardHeader>
           <CardTitle className="text-red-600 dark:text-red-400">
             خطأ في عرض بيانات الملخص
@@ -72,52 +73,44 @@ export const NoteHeader = ({
   }
 
   return (
-    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+    <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
       <CardHeader>
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
           <div>
-            <CardTitle className="text-3xl font-extrabold text-gray-800 dark:text-white">
-              {title || 'عنوان غير متوفر'}
+            <CardTitle className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+              {title}
             </CardTitle>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {user ? (
-                toggleLike ? (
-                  <Button
-                    className="mt-2"
-                    onClick={() => removeNoteFromLikeList({ noteId })}
-                    variant="destructive"
-                    disabled={likeLoading}
-                  >
-                    {likeLoading ? (
-                      <Loader2 className="size-5 animate-spin" />
-                    ) : (
-                      'إلغاء الإعجاب بالملخص'
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    className="mt-2"
-                    onClick={() => addNoteToLikeList({ noteId })}
-                    disabled={likeLoading}
-                  >
-                    {likeLoading ? (
-                      <Loader2 className="size-5 animate-spin" />
-                    ) : (
-                      'الإعجاب بالملخص'
-                    )}
-                  </Button>
-                )
-              ) : null}
-            </div>
+            {user && (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <Button
+                  onClick={() =>
+                    toggleLike
+                      ? removeNoteFromLikeList({ noteId })
+                      : addNoteToLikeList({ noteId })
+                  }
+                  variant={toggleLike ? 'destructive' : 'default'}
+                  disabled={likeLoading}
+                  className="dark:bg-opacity-90"
+                >
+                  {likeLoading ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : toggleLike ? (
+                    'إلغاء الإعجاب'
+                  ) : (
+                    'الإعجاب بالملخص'
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col items-end gap-2">
-            <Badge className="from-primary bg-gradient-to-tr to-blue-500 px-4 py-2 text-xl text-white shadow-md">
+            <Badge className="from-primary bg-gradient-to-tr to-blue-500 px-4 py-2 text-xl text-white shadow-md dark:from-blue-600 dark:to-blue-700">
               {price !== undefined ? `${price} ريال` : 'السعر غير متوفر'}
             </Badge>
 
-            {rating && rating > 0 && (
-              <div className="flex items-center gap-1 text-yellow-500">
+            {rating > 0 && (
+              <div className="flex items-center gap-1 text-yellow-500 dark:text-yellow-400">
                 <Star className="h-5 w-5 fill-current" />
                 <span className="text-lg font-semibold">
                   {rating.toFixed(1)}
@@ -136,18 +129,15 @@ interface NoteImageProps {
   alt: string
 }
 
+/** Displays note cover image with error fallback */
 export const NoteImage = ({ src, alt }: NoteImageProps) => {
   const [imageError, setImageError] = useState(false)
 
-  const handleImageError = () => {
-    setImageError(true)
-  }
-
   return (
-    <Card className="overflow-hidden border-gray-200 py-0 shadow-lg dark:border-gray-700">
-      <div className="flex items-center justify-center bg-gray-100 py-0">
+    <Card className="overflow-hidden border-gray-200 bg-white py-0 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+      <div className="flex items-center justify-center bg-gray-100 py-0 dark:bg-gray-800">
         {imageError ? (
-          <div className="flex flex-col items-center text-gray-500">
+          <div className="flex flex-col items-center py-16 text-gray-500 dark:text-gray-400">
             <FileText className="mb-2 h-16 w-16" />
             <span>تعذر تحميل الصورة</span>
           </div>
@@ -159,7 +149,7 @@ export const NoteImage = ({ src, alt }: NoteImageProps) => {
             src={src}
             width={500}
             height={500}
-            onError={handleImageError}
+            onError={() => setImageError(true)}
           />
         )}
       </div>
@@ -171,39 +161,26 @@ interface NoteDescriptionProps {
   description?: string
 }
 
+/** Displays note description with fallback message */
 export const NoteDescription = ({ description }: NoteDescriptionProps) => {
-  if (!description) {
-    return (
-      <Card className="mx-auto w-full max-w-full border-gray-200 shadow-lg dark:border-gray-700">
-        <CardHeader className="px-4 sm:px-6">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-800 sm:text-xl dark:text-white">
-            <FileText className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
-            وصف الملخص
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="px-4 sm:px-6">
-          <p className="text-sm text-gray-500 italic sm:text-base">
-            لا يوجد وصف متوفر لهذا الملخص
-          </p>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
-    <Card className="mx-auto w-full max-w-full overflow-hidden border-gray-200 shadow-lg dark:border-gray-700">
-      <CardHeader className="px-4 pb-3 sm:px-6">
-        <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-800 sm:text-xl dark:text-white">
-          <FileText className="text-primary h-5 w-5 sm:h-6 sm:w-6" />
+    <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+      <CardHeader className="px-4 sm:px-6">
+        <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-100">
+          <FileText className="text-primary h-5 w-5 sm:h-6 sm:w-6 dark:text-blue-400" />
           وصف الملخص
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-4 pt-0 sm:px-6">
-        <div className="overflow-hidden">
-          <p className="overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words whitespace-pre-wrap text-gray-700 sm:text-base sm:leading-loose dark:text-gray-300">
+      <CardContent className="px-4 sm:px-6">
+        {description ? (
+          <p className="max-w-full text-sm leading-relaxed break-words whitespace-pre-wrap text-gray-700 sm:text-base sm:leading-loose dark:text-gray-300">
             {description}
           </p>
-        </div>
+        ) : (
+          <p className="text-sm text-gray-500 italic sm:text-base dark:text-gray-400">
+            لا يوجد وصف متوفر لهذا الملخص
+          </p>
+        )}
       </CardContent>
     </Card>
   )
@@ -220,6 +197,7 @@ interface NoteMetaProps {
   rating: number
 }
 
+/** Displays note metadata (university, college, pages, etc.) */
 export const NoteMeta = ({
   university,
   college,
@@ -231,10 +209,11 @@ export const NoteMeta = ({
   rating,
 }: NoteMetaProps) => {
   return (
-    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+    <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
-          <Layers className="text-primary h-6 w-6" /> تفاصيل الملخص
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <Layers className="text-primary h-6 w-6 dark:text-blue-400" />
+          تفاصيل الملخص
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -272,6 +251,7 @@ interface MetaItemProps {
   defaultValue?: string | number
 }
 
+/** Renders a single metadata item with icon */
 const MetaItem = ({
   icon,
   label,
@@ -279,8 +259,10 @@ const MetaItem = ({
   defaultValue = 'غير محدد',
 }: MetaItemProps) => (
   <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-    {cloneElement(icon, { className: 'h-5 w-5 text-primary/80' })}
-    <strong>{label}:</strong> {value !== undefined ? value : defaultValue}
+    {cloneElement(icon, {
+      className: 'h-5 w-5 text-primary/80 dark:text-blue-400/80',
+    })}
+    <strong>{label}:</strong> {value ?? defaultValue}
   </div>
 )
 
@@ -291,6 +273,7 @@ interface NoteAuthorInfoProps {
   user: User
 }
 
+/** Displays author/seller information with avatar */
 export const NoteAuthorInfo = ({
   authorId,
   authorName,
@@ -299,43 +282,50 @@ export const NoteAuthorInfo = ({
 }: NoteAuthorInfoProps) => {
   if (!authorId || !authorName) {
     return (
-      <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+      <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
-            <UserIcon className="text-primary h-6 w-6" /> عن البائع
+          <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <UserIcon className="text-primary h-6 w-6 dark:text-blue-400" />
+            عن البائع
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500">معلومات البائع غير متوفرة</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            معلومات البائع غير متوفرة
+          </p>
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+    <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
-          <UserIcon className="text-primary h-6 w-6" /> عن البائع
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <UserIcon className="text-primary h-6 w-6 dark:text-blue-400" />
+          عن البائع
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-        <Avatar className="h-16 w-16">
+        <Avatar className="h-16 w-16 ring-2 ring-gray-200 dark:ring-gray-700">
           <AvatarImage
             src={`https://api.dicebear.com/6.x/initials/svg?seed=${authorName}`}
             alt={authorName}
           />
-          <AvatarFallback>
+          <AvatarFallback className="bg-gray-200 dark:bg-gray-700">
             {authorName?.charAt(0)?.toUpperCase() || '?'}
           </AvatarFallback>
         </Avatar>
         <div className="text-center sm:text-right">
-          <p className="text-lg font-semibold text-gray-800 dark:text-white">
-            {authorName || 'بائع غير معروف'}
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {authorName}
           </p>
           {user && (
             <Link href={isOwner ? '/profile' : `/seller/${authorId}`}>
-              <Button variant="link" className="text-primary h-auto p-0">
+              <Button
+                variant="link"
+                className="text-primary h-auto p-0 dark:text-blue-400"
+              >
                 {isOwner ? 'إدارة حسابي' : 'عرض ملف البائع'}
               </Button>
             </Link>
@@ -346,9 +336,26 @@ export const NoteAuthorInfo = ({
   )
 }
 
-/**
- * Actions for a single note (purchase, edit, share, etc.)
- */
+interface NoteActionsProps {
+  isOwner: boolean
+  hasPurchased: boolean
+  price: number
+  onPurchase: () => void
+  onEdit: () => void
+  onDelete: () => void
+  onDownload: () => void
+  onReview: () => void
+  alreadyReviewed: boolean
+  isAuthenticated: boolean
+  contactMethod: string
+  downloadLoading: boolean
+  deleteLoading: boolean
+  noteId: string
+  noteTitle: string
+  noteDescription?: string
+}
+
+/** Renders action buttons (buy, download, edit, delete, share) */
 export const NoteActions = ({
   isOwner,
   hasPurchased,
@@ -366,27 +373,7 @@ export const NoteActions = ({
   noteId,
   noteTitle,
   noteDescription,
-}: {
-  isOwner: boolean
-  hasPurchased: boolean
-  price: number
-  onPurchase: () => void
-  onEdit: () => void
-  onDelete: () => void
-  onDownload: () => void
-  onReview: () => void
-  alreadyReviewed: boolean
-  isAuthenticated: boolean
-  contactMethod: string
-  downloadLoading: boolean
-  deleteLoading: boolean
-  noteId: string
-  noteTitle: string
-  noteDescription?: string
-}) => {
-  /**
-   * Copy or share note info
-   */
+}: NoteActionsProps) => {
   const handleShare = async () => {
     const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`
 
@@ -401,24 +388,25 @@ export const NoteActions = ({
         toast.success('تم نسخ معلومات الملخص بنجاح')
       }
     } catch (err) {
-      console.error('Error sharing note:', err)
+      console.error('Share error:', err)
       toast.error('حدث خطأ أثناء المشاركة')
     }
   }
 
-  const handleAction = (action: () => void) => {
+  const safeExecute = (action: () => void) => {
     try {
       action?.()
     } catch (error) {
-      console.error('Error executing action:', error)
+      console.error('Action error:', error)
     }
   }
 
   return (
-    <Card className="border-gray-200 shadow-lg dark:border-gray-700">
+    <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
-          <ShoppingCart className="text-primary h-6 w-6" /> الإجراءات
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <ShoppingCart className="text-primary h-6 w-6 dark:text-blue-400" />
+          الإجراءات
         </CardTitle>
       </CardHeader>
 
@@ -427,22 +415,22 @@ export const NoteActions = ({
           <>
             <Button
               onClick={handleShare}
-              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
+              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
             >
               <Link2 className="h-4 w-4" /> مشاركة الملخص
             </Button>
 
             <Button
-              onClick={() => handleAction(onEdit)}
-              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
+              onClick={() => safeExecute(onEdit)}
+              className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
             >
               <Edit className="h-4 w-4" /> تعديل الملخص
             </Button>
 
             <Button
-              onClick={() => handleAction(onDelete)}
+              onClick={() => safeExecute(onDelete)}
               variant="destructive"
-              className="flex w-full items-center gap-2"
+              className="flex w-full items-center gap-2 dark:bg-red-700 dark:hover:bg-red-800"
               disabled={deleteLoading}
             >
               {deleteLoading ? (
@@ -458,14 +446,15 @@ export const NoteActions = ({
             </Button>
 
             <Button
-              onClick={() => handleAction(onDownload)}
+              onClick={() => safeExecute(onDownload)}
               variant="outline"
-              className="flex w-full items-center gap-2"
+              className="flex w-full items-center gap-2 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700"
+              disabled={downloadLoading}
             >
               {downloadLoading ? (
                 <>
-                  <Loader className="size-5 animate-spin" />
-                  تحميل الملف (معاينة)...
+                  <Loader className="h-4 w-4 animate-spin" />
+                  تحميل الملف...
                 </>
               ) : (
                 <>
@@ -484,20 +473,20 @@ export const NoteActions = ({
 
                 <Button
                   onClick={handleShare}
-                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
 
                 <Button
-                  onClick={() => handleAction(onDownload)}
-                  className="flex w-full items-center gap-2 bg-green-600 hover:bg-green-700"
+                  onClick={() => safeExecute(onDownload)}
+                  className="flex w-full items-center gap-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
                   disabled={downloadLoading}
                 >
                   {downloadLoading ? (
                     <>
-                      <Loader className="h-4 w-4 animate-spin" /> تحميل
-                      الملخص...
+                      <Loader className="h-4 w-4 animate-spin" />
+                      تحميل الملخص...
                     </>
                   ) : (
                     <>
@@ -507,15 +496,15 @@ export const NoteActions = ({
                 </Button>
 
                 <Button
-                  onClick={() => handleAction(onReview)}
+                  onClick={() => safeExecute(onReview)}
                   disabled={alreadyReviewed}
                   className={`flex w-full items-center gap-2 ${
                     alreadyReviewed
-                      ? 'cursor-not-allowed bg-gray-400 hover:bg-gray-400'
-                      : 'bg-yellow-500 hover:bg-yellow-600'
+                      ? 'cursor-not-allowed bg-gray-400 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-600'
+                      : 'bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700'
                   }`}
                 >
-                  <Star className="h-4 w-4" />{' '}
+                  <Star className="h-4 w-4" />
                   {alreadyReviewed ? 'تم التقييم' : 'تقييم الملخص'}
                 </Button>
               </>
@@ -523,22 +512,22 @@ export const NoteActions = ({
               <>
                 <Button
                   onClick={handleShare}
-                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                  className="flex w-full items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800"
                 >
                   <Link2 className="h-4 w-4" /> مشاركة الملخص
                 </Button>
 
                 <Button
-                  onClick={() => handleAction(onPurchase)}
-                  className="bg-primary hover:bg-primary/90 flex w-full items-center gap-2"
+                  onClick={() => safeExecute(onPurchase)}
+                  className="bg-primary hover:bg-primary/90 flex w-full items-center gap-2 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
                   disabled={!isAuthenticated && price > 0}
                 >
-                  <ShoppingCart className="h-4 w-4" />{' '}
+                  <ShoppingCart className="h-4 w-4" />
                   {price > 0 ? `شراء الآن (${price} ريال)` : 'الحصول مجاناً'}
                 </Button>
 
                 {!isAuthenticated && price > 0 && (
-                  <p className="mt-2 text-center text-xs text-red-500">
+                  <p className="mt-2 text-center text-xs text-red-500 dark:text-red-400">
                     يجب تسجيل الدخول أولاً للشراء.
                   </p>
                 )}
@@ -555,6 +544,8 @@ export const NoteActions = ({
 interface ContactMethodProps {
   method?: string
 }
+
+/** Displays seller contact information (email/phone) */
 export const ContactMethod = ({ method }: ContactMethodProps) => {
   if (!method) return null
 
@@ -565,9 +556,9 @@ export const ContactMethod = ({ method }: ContactMethodProps) => {
     <div className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
       <h3 className="mb-2 flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
         {isEmail ? (
-          <Mail className="text-primary ml-2 h-4 w-4" />
+          <Mail className="text-primary ml-2 h-4 w-4 dark:text-blue-400" />
         ) : (
-          <Phone className="text-primary ml-2 h-4 w-4" />
+          <Phone className="text-primary ml-2 h-4 w-4 dark:text-blue-400" />
         )}
         تواصل مع البائع:
       </h3>
@@ -575,14 +566,14 @@ export const ContactMethod = ({ method }: ContactMethodProps) => {
       {isEmail ? (
         <a
           href={`mailto:${method}`}
-          className="text-primary break-all hover:underline"
+          className="text-primary break-all hover:underline dark:text-blue-400"
         >
           {method}
         </a>
       ) : isPhone ? (
         <a
           href={`tel:${method.replace(/\s+/g, '')}`}
-          className="text-primary break-all hover:underline"
+          className="text-primary break-all hover:underline dark:text-blue-400"
         >
           {method}
         </a>
@@ -601,6 +592,7 @@ interface NotePurchaseConfirmationDialogProps {
   notePrice: number
 }
 
+/** Confirmation dialog for note purchase */
 export const NotePurchaseConfirmationDialog = ({
   isOpen,
   onOpenChange,
@@ -610,11 +602,9 @@ export const NotePurchaseConfirmationDialog = ({
 }: NotePurchaseConfirmationDialogProps) => {
   const handleConfirm = () => {
     try {
-      if (typeof onConfirm === 'function') {
-        onConfirm()
-      }
+      onConfirm?.()
     } catch (error) {
-      console.error('Error confirming purchase:', error)
+      console.error('Purchase confirmation error:', error)
     } finally {
       onOpenChange(false)
     }
@@ -622,10 +612,12 @@ export const NotePurchaseConfirmationDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="bg-white dark:bg-gray-900">
         <DialogHeader>
-          <DialogTitle>تأكيد عملية الشراء</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-gray-900 dark:text-gray-100">
+            تأكيد عملية الشراء
+          </DialogTitle>
+          <DialogDescription className="text-gray-600 dark:text-gray-400">
             {noteTitle
               ? `هل أنت متأكد أنك تريد شراء ملخص "${noteTitle}" بسعر ${notePrice} ريال؟`
               : 'هل أنت متأكد أنك تريد شراء هذا الملخص؟'}
@@ -633,10 +625,16 @@ export const NotePurchaseConfirmationDialog = ({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:justify-end">
-          <Button variant="destructive">إلغاء</Button>
+          <Button
+            variant="destructive"
+            onClick={() => onOpenChange(false)}
+            className="dark:bg-red-700 dark:hover:bg-red-800"
+          >
+            إلغاء
+          </Button>
           <Button
             onClick={handleConfirm}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
             {notePrice > 0 ? 'تأكيد الشراء' : 'الحصول على الملخص'}
           </Button>

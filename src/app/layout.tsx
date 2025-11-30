@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import { Providers } from '@/utils/Providers'
 import Layout from '@/components/templates/Layout'
 import { Tajawal } from 'next/font/google'
-
+import { ThemeProvider } from '@/components/atoms/ThemeProvider'
 export const metadata: Metadata = {
   title: 'سوق الملخصات الجامعية',
   description:
@@ -65,7 +65,14 @@ export default async function RootLayout({
         className={`${tajawal.className} w-screen overflow-x-hidden`}
       >
         <Providers>
-          <Layout>{children}</Layout>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Layout>{children}</Layout>
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

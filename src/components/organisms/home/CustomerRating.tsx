@@ -2,6 +2,7 @@
 
 /**
  * CustomerRating Component — displays customer reviews with smooth horizontal scrolling
+ * Now with dark mode support
  */
 import React, { useState, useRef, useEffect } from 'react'
 import AddCoustomerRateDialog from '@/components/molecules/dialogs/AddCoustomerRateDialog'
@@ -30,27 +31,27 @@ export default function CustomerRating() {
         key={index}
         className={`size-4 ${
           index < rating
-            ? 'fill-yellow-400 text-yellow-400'
-            : 'fill-gray-300 text-gray-300'
+            ? 'fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500'
+            : 'fill-gray-300 text-gray-300 dark:fill-gray-600 dark:text-gray-600'
         }`}
       />
     ))
 
   /** Skeleton card while loading */
   const RatingCardSkeleton = () => (
-    <div className="h-[300px] w-[320px] flex-shrink-0 animate-pulse space-y-4 rounded-2xl border border-gray-100 bg-white/80 p-6 shadow-md backdrop-blur-sm">
+    <div className="h-[300px] w-[320px] flex-shrink-0 animate-pulse space-y-4 rounded-2xl border border-gray-100 bg-white/80 p-6 shadow-md backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/80">
       <div className="flex justify-center gap-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-4 w-4 rounded-full" />
+          <Skeleton key={i} className="h-4 w-4 rounded-full dark:bg-gray-700" />
         ))}
       </div>
-      <Skeleton className="h-20 w-full rounded-lg" />
-      <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+      <Skeleton className="h-20 w-full rounded-lg dark:bg-gray-700" />
+      <div className="flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-800">
         <div className="space-y-2">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-4 w-24 dark:bg-gray-700" />
+          <Skeleton className="h-3 w-16 dark:bg-gray-700" />
         </div>
-        <Skeleton className="h-10 w-10 rounded-full" />
+        <Skeleton className="h-10 w-10 rounded-full dark:bg-gray-700" />
       </div>
     </div>
   )
@@ -84,18 +85,20 @@ export default function CustomerRating() {
   return (
     <section
       dir="rtl"
-      className="relative w-full overflow-hidden bg-gradient-to-br from-white via-purple-50 to-blue-50 px-4 py-20"
+      className="via-bule-50 relative w-full overflow-hidden bg-gradient-to-br from-white to-blue-50 px-4 py-20 dark:from-gray-950 dark:via-blue-800/50 dark:to-blue-950/20"
     >
       <div className="relative mx-auto max-w-7xl">
         <div className="flex items-center justify-center">
           <div className="mb-16 space-y-4 text-center">
-            <h2 className="text-primary text-sm font-semibold tracking-wider uppercase">
+            <h2 className="text-primary dark:text-primary/90 text-sm font-semibold tracking-wider uppercase">
               آراء عملائنا
             </h2>
-            <h1 className="text-4xl font-bold text-gray-900 md:text-5xl">
-              ماذا يقول <span className="text-primary">عملاؤنا</span> عنا؟
+            <h1 className="text-4xl font-bold text-gray-900 md:text-5xl dark:text-white">
+              ماذا يقول{' '}
+              <span className="text-primary dark:text-primary/90">عملاؤنا</span>{' '}
+              عنا؟
             </h1>
-            <p className="mx-auto max-w-2xl text-gray-600">
+            <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
               آراء وتجارب عملائنا الكرام تدفعنا دائمًا لتقديم الأفضل وتطوير
               خدماتنا باستمرار.
             </p>
@@ -130,34 +133,34 @@ export default function CustomerRating() {
               customerRating.map((item: CustomerRatingTypes) => (
                 <div
                   key={item._id}
-                  className="relative flex h-[300px] w-[320px] flex-shrink-0 flex-col justify-between rounded-2xl border border-gray-100 bg-white p-8 transition-all duration-300"
+                  className="relative flex h-[300px] w-[320px] flex-shrink-0 flex-col justify-between rounded-2xl border border-gray-100 bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:shadow-gray-900/50"
                 >
                   <div className="flex flex-col items-center space-y-4 text-center">
-                    <Quote className="text-primary/40 size-8" />
+                    <Quote className="text-primary/40 dark:text-primary/30 size-8" />
                     <div className="flex gap-1">{renderStars(item.rating)}</div>
-                    <p className="line-clamp-3 text-base leading-relaxed text-gray-700">
+                    <p className="line-clamp-3 text-base leading-relaxed text-gray-700 dark:text-gray-300">
                       {item.comment}
                     </p>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-center border-t border-gray-100 pt-4">
+                  <div className="mt-6 flex items-center justify-center border-t border-gray-100 pt-4 dark:border-gray-800">
                     <div className="flex items-center gap-3">
                       {item?.fullName && (
-                        <Avatar className="h-10 w-10">
+                        <Avatar className="h-10 w-10 ring-2 ring-gray-100 dark:ring-gray-800">
                           <AvatarImage
                             src={`https://api.dicebear.com/6.x/initials/svg?seed=${item?.fullName}`}
                             alt={item?.fullName}
                           />
-                          <AvatarFallback>
+                          <AvatarFallback className="dark:bg-gray-800 dark:text-gray-300">
                             {item?.fullName?.charAt(0)?.toUpperCase() || '?'}
                           </AvatarFallback>
                         </Avatar>
                       )}
                       <div className="text-right">
-                        <p className="text-sm font-semibold">
+                        <p className="text-sm font-semibold dark:text-white">
                           {item?.fullName}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           {formatArabicDate(item.createdAt)}
                         </p>
                       </div>
@@ -166,7 +169,7 @@ export default function CustomerRating() {
                 </div>
               ))
             ) : (
-              <div className="flex w-full items-center justify-center py-20 text-center text-gray-500">
+              <div className="flex w-full items-center justify-center py-20 text-center text-gray-500 dark:text-gray-400">
                 <p> لا توجد تقييمات حتى الآن.</p>
               </div>
             )}
@@ -176,7 +179,7 @@ export default function CustomerRating() {
         {user && !userRatedBefore && !userRatedBeforeLoading && (
           <div className="mt-16 flex w-full items-center justify-center">
             <Button
-              className="from-primary flex items-center gap-3 rounded-2xl bg-gradient-to-br to-blue-400 px-8 py-6 text-white"
+              className="from-primary dark:from-primary/90 flex items-center gap-3 rounded-2xl bg-gradient-to-br to-blue-400 px-8 py-6 text-white shadow-lg transition-all hover:shadow-xl dark:to-blue-500/90"
               onClick={() => setIsOpen(true)}
             >
               <PlusCircle className="size-5" />

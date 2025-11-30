@@ -11,11 +11,11 @@ import {
   Settings,
   Search,
   Bookmark,
-  DollarSign,
   Tag,
+  DollarSign,
 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 interface FeatureItemProps {
   icon: ReactNode
@@ -34,9 +34,11 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
 const BuyerSellerSection: React.FC = () => {
   return (
     <section
-      className="bg-gray-50 py-16 md:py-24 dark:bg-gray-900"
+      className="relative flex h-screen w-full items-center justify-center"
       aria-labelledby="features-heading"
     >
+      <div className="absolute top-1/2 left-1/2 z-[-1] h-[65%] w-[65%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-400/70 opacity-60 blur-[160px]" />
+
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2
           id="features-heading"
@@ -122,7 +124,7 @@ const BuyerSellerSection: React.FC = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <p className="mx-auto mb-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+          <p className="mx-auto mb-6 max-w-2xl text-lg text-gray-600 dark:text-gray-200">
             انضم إلى مجتمعنا الأكاديمي وابدأ رحلتك سواء كبائع أو مشتري
           </p>
         </div>

@@ -14,12 +14,12 @@ export default function BestSellerSection() {
     return <LoadingSpinner message="" />
   }
   return (
-    <section className="mx-auto w-full overflow-x-hidden py-10">
+    <section className="mx-auto w-full overflow-x-hidden py-10 dark:bg-gradient-to-l dark:from-gray-900 dark:to-gray-800">
       <div className="my-10 flex flex-col items-center text-center">
         <h1 className="text-2xl font-bold">
           الأكثر مبيعًا في منصة <span className="text-primary">أ+</span>
         </h1>
-        <p className="mt-2 max-w-3xl text-xl text-gray-600">
+        <p className="mt-2 max-w-3xl text-xl text-gray-600 dark:text-gray-300">
           تصفّح قائمة منتجاتنا وخدماتنا الأكثر رواجًا بين المستخدمين في منصة
           <span className="text-primary mx-1">أ+</span>، حيث الجودة تلتقي
           بالثقة، والتجربة تثبت تميزنا يومًا بعد يوم.
