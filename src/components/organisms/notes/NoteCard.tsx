@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Star, BookOpen, Layers, Download } from 'lucide-react'
-import Image from 'next/image'
-import { Note } from '@/types'
+import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Star, BookOpen, Layers, Download } from 'lucide-react';
+import Image from 'next/image';
+import { Note } from '@/types';
 
 const NoteCard = ({ note }: { note: Note }) => {
   return (
@@ -32,7 +32,7 @@ const NoteCard = ({ note }: { note: Note }) => {
                 <span className="font-medium">
                   {(
                     note.reviews
-                      .map((review) => review.rating)
+                      .map(review => review.rating)
                       .reduce((a, b) => a + b, 0) / note.reviews.length
                   ).toFixed(1)}
                 </span>
@@ -68,14 +68,14 @@ const NoteCard = ({ note }: { note: Note }) => {
                 {note.reviews && note.reviews.length > 0
                   ? (
                       note.reviews
-                        .map((review) => review.rating)
+                        .map(review => review.rating)
                         .reduce((a, b) => a + b, 0) / note.reviews.length
                     ).toFixed(1)
                   : '0.0'}{' '}
                 تقييم
               </Badge>
 
-              <Badge className="rounded-full bg-gradient-to-r to-blue-600 px-3 py-1 text-xs font-medium text-white shadow-md dark:from-blue-600 dark:to-blue-700">
+              <Badge className="rounded-full bg-gradient-to-r from-blue-500 to-blue-700 px-3 py-1 text-xs font-medium text-white shadow-md">
                 {note.price > 0 ? `${note.price} ريال` : 'مجاني'}
               </Badge>
             </div>
@@ -96,7 +96,7 @@ const NoteCard = ({ note }: { note: Note }) => {
         </Card>
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export default NoteCard
+export default NoteCard;

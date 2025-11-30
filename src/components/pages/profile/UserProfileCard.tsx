@@ -1,24 +1,25 @@
-'use client'
+'use client';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { User } from '@/types';
+import { motion } from 'framer-motion';
 import {
-  Edit3,
   BookOpen,
+  DollarSign,
+  Edit3,
   ShoppingBag,
   School as University,
-  DollarSign,
-} from 'lucide-react'
-import { motion } from 'framer-motion'
-import { User } from '@/types'
+} from 'lucide-react';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface UserProfileCardProps {
-  currentUser: User
-  onEditProfile: () => void
-  userNotesCount?: number
-  purchasedNotesCount?: number
-  totalEarnings?: number
+  currentUser: User;
+  onEditProfile: () => void;
+  userNotesCount?: number;
+  purchasedNotesCount?: number;
+  totalEarnings?: number;
 }
 
 const UserProfileCard = ({
@@ -28,7 +29,7 @@ const UserProfileCard = ({
   purchasedNotesCount,
   totalEarnings,
 }: Partial<UserProfileCardProps>) => {
-  if (!currentUser) return null
+  if (!currentUser) return null;
 
   return (
     <motion.div
@@ -102,7 +103,7 @@ const UserProfileCard = ({
         </CardContent>
       </Card>
     </motion.div>
-  )
-}
+  );
+};
 
-export default UserProfileCard
+export default UserProfileCard;

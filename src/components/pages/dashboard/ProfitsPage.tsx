@@ -1,12 +1,28 @@
-'use client'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+'use client';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+
+import { Profits } from '@/types';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -14,25 +30,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import useProfits from '@/hooks/useProfits'
-import { Profits } from '@/types'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
+} from '@/components/ui/table';
+
+import useProfits from '@/hooks/useProfits';
 
 export default function ProfitsPage() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   const {
     profits,
@@ -56,9 +59,9 @@ export default function ProfitsPage() {
     totalBalance,
     totalProfits,
     totalUsers,
-  } = useProfits()
+  } = useProfits();
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="container mx-auto p-4 sm:p-6" dir="rtl">
@@ -84,7 +87,7 @@ export default function ProfitsPage() {
               type="text"
               placeholder="البحث بالاسم..."
               value={fullName}
-              onChange={(e) => handleSearchFullName(e.target.value)}
+              onChange={e => handleSearchFullName(e.target.value)}
               className="flex-1"
             />
 
@@ -92,7 +95,7 @@ export default function ProfitsPage() {
               type="text"
               placeholder="البحث بالإيميل..."
               value={email}
-              onChange={(e) => handleSearchEmail(e.target.value)}
+              onChange={e => handleSearchEmail(e.target.value)}
               className="flex-1"
             />
 
@@ -288,7 +291,7 @@ export default function ProfitsPage() {
               <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
                 <Select
                   value={pagination.pageSize.toString()}
-                  onValueChange={(value) => handleChangeLimit(Number(value))}
+                  onValueChange={value => handleChangeLimit(Number(value))}
                 >
                   <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue placeholder="اختر الحجم" />
@@ -314,14 +317,14 @@ export default function ProfitsPage() {
                   <div className="flex max-w-[200px] gap-1 overflow-x-auto sm:max-w-none">
                     {Array.from({ length: totalPages }, (_, i) => i + 1)
                       .filter(
-                        (pageNum) =>
+                        pageNum =>
                           pageNum === 1 ||
                           pageNum === totalPages ||
                           Math.abs(pageNum - currentPage) <= 1
                       )
                       .map((pageNum, index, array) => {
                         const showEllipsis =
-                          index > 0 && pageNum - array[index - 1] > 1
+                          index > 0 && pageNum - array[index - 1] > 1;
                         return (
                           <div key={pageNum} className="flex items-center">
                             {showEllipsis && (
@@ -338,7 +341,7 @@ export default function ProfitsPage() {
                               {pageNum}
                             </Button>
                           </div>
-                        )
+                        );
                       })}
                   </div>
 
@@ -362,7 +365,6 @@ export default function ProfitsPage() {
 
         <Separator />
 
-        {/* بطاقات الملخص */}
         <CardContent className="p-4 sm:p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card className="bg-blue-50 dark:bg-blue-900/20">
@@ -370,6 +372,9 @@ export default function ProfitsPage() {
                 <CardTitle className="text-sm font-medium text-blue-900 dark:text-blue-100">
                   إجمالي الأرباح
                 </CardTitle>
+                <CardDescription>
+                  إجمالي المبالغ المُحققة من جميع عمليات المستخدمين
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2">
@@ -394,8 +399,11 @@ export default function ProfitsPage() {
             <Card className="bg-green-50 dark:bg-green-900/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-green-900 dark:text-green-100">
-                  إجمالي المبلغ
+                  إجمالي المبالغ المتداولة
                 </CardTitle>
+                <CardDescription>
+                  مجموع الأرباح والمدفوعات داخل المنصّة
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2">
@@ -420,8 +428,11 @@ export default function ProfitsPage() {
             <Card className="bg-green-50 dark:bg-green-900/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-green-900 dark:text-green-100">
-                  إجمالي الرصيد
+                  رصيد المستخدمين الحالي
                 </CardTitle>
+                <CardDescription>
+                  إجمالي الأرصدة المتاحة لدى جميع المستخدمين
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2">
@@ -446,8 +457,11 @@ export default function ProfitsPage() {
             <Card className="bg-purple-50 dark:bg-purple-900/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-purple-900 dark:text-purple-100">
-                  إجمالي السجلات
+                  عدد المستخدمين النشطين
                 </CardTitle>
+                <CardDescription>
+                  إجمالي المستخدمين الذين حققوا أرباحًا عبر المنصّة
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-purple-700 dark:text-purple-200">
@@ -459,5 +473,5 @@ export default function ProfitsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
