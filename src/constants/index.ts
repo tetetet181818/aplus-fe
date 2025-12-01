@@ -1,18 +1,18 @@
 import {
-  HelpCircle,
-  ShoppingCart,
-  User,
+  BarChart3,
   BookOpen,
-  Shield,
-  Server,
-  Users,
-  FileText,
   DollarSign,
   Download,
-  BarChart3,
+  FileText,
+  HelpCircle,
+  Server,
+  Shield,
+  ShoppingCart,
   Stars,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+  User,
+  Users,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 export const universityColleges = {
   'جامعة الملك سعود': [
@@ -65,14 +65,14 @@ export const universityColleges = {
     'كلية الهندسة',
     'كلية التربية',
   ],
-}
+};
 
 export type NavigationItem = {
-  title: string
-  icon: LucideIcon
-  id: string
-  href: string
-}
+  title: string;
+  icon: LucideIcon;
+  id: string;
+  href: string;
+};
 
 export const navigationItems: NavigationItem[] = [
   {
@@ -112,15 +112,15 @@ export const navigationItems: NavigationItem[] = [
     id: 'profits',
     href: '/dashboard/profits',
   },
-]
+];
 
-export const platformFeePercent: number = 15
-export const paymentProcessingPercent: number = 2.75
-export const MAX_NOTES_PER_USER: number = 50
-export const MAX_FILE_SIZE_MB: number = 30
-export const MAX_PAGES_PER_NOTE: number = 300
-export const ALLOWED_FILE_TYPES: string[] = ['application/pdf']
-export const ALLOWED_FILE_TYPES_STRING: string = 'pdf'
+export const platformFeePercent: number = 15;
+export const paymentProcessingPercent: number = 2.75;
+export const MAX_NOTES_PER_USER: number = 50;
+export const MAX_FILE_SIZE_MB: number = 30;
+export const MAX_PAGES_PER_NOTE: number = 300;
+export const ALLOWED_FILE_TYPES: string[] = ['application/pdf'];
+export const ALLOWED_FILE_TYPES_STRING: string = 'pdf';
 
 export const SAUDI_BANKS = [
   { name: 'البنك الأهلي التجاري', code: 'NCB' },
@@ -135,7 +135,7 @@ export const SAUDI_BANKS = [
   { name: 'بنك الإنماء', code: 'INMA' },
   { name: 'بنك الخليج الدولي', code: 'GIB' },
   { name: 'بنك سامبا', code: 'SAMBA' },
-]
+];
 
 export const faqData = [
   {
@@ -223,26 +223,26 @@ export const faqData = [
       },
     ],
   },
-]
+];
 export const statusLabelMap = {
   pending: 'قيد الانتظار',
   accepted: 'مقبول',
   rejected: 'مرفوض',
   completed: 'مكتمل',
-}
+};
 
 export const statusVariantMap = {
   pending: 'default',
   accepted: 'success',
   rejected: 'destructive',
   completed: 'completed',
-} as const
+} as const;
 export const staticWithdrawalStatuses = [
   'pending',
   'accepted',
   'rejected',
   'completed',
-]
+];
 
 export const universityData = [
   {
@@ -314,11 +314,11 @@ export const universityData = [
       'كلية التربية',
     ],
   },
-]
+];
 
-export const universities = universityData.map((uni) => uni.name)
+export const universities = universityData.map(uni => uni.name);
 
 export const safeValue = (val: unknown): string => {
-  if (val === null || val === undefined || val === '') return 'A/N'
-  return String(val)
-}
+  if (val === null || val === undefined || val === '') return 'A/N';
+  return String(val);
+};

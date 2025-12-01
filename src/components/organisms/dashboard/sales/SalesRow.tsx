@@ -1,26 +1,31 @@
-'use client'
-import { TableRow, TableCell } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Eye } from 'lucide-react'
-import { Sale } from '@/types'
+'use client';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+
+import { Sale } from '@/types';
+import { Eye } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { TableCell, TableRow } from '@/components/ui/table';
 
 interface SalesRowProps {
-  sale: Sale
-  onShowDetails: (item: string) => void
+  sale: Sale;
+  onShowDetails: (item: string) => void;
 }
 
 export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
+  const { theme } = useTheme();
   const formatStatus = (status: string) => {
     switch (status) {
       case 'failed':
-        return { label: 'فشل', variant: 'destructive' as const }
+        return { label: 'فشل', variant: 'destructive' as const };
       case 'paid':
-        return { label: 'مدفوع', variant: 'default' as const }
+        return { label: 'مدفوع', variant: 'default' as const };
     }
-  }
+  };
 
-  const status = formatStatus(sale.status)
+  const status = formatStatus(sale.status);
 
   return (
     <TableRow>
@@ -28,7 +33,20 @@ export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
       <TableCell>{sale.note_title}</TableCell>
       <TableCell>{sale.invoice_id}</TableCell>
       <TableCell>
-        {sale.amount} ر.س
+        <p className="flex items-center gap-2">
+          {sale.amount}
+          <Image
+            src={
+              theme === 'dark'
+                ? '/light-ryial-icon.png'
+                : '/dark-ryial-icon.png'
+            }
+            alt="rial"
+            className="size-4"
+            height={10}
+            width={10}
+          />
+        </p>
         {sale.commission && (
           <div className="text-muted-foreground text-xs">
             عمولة: {sale.commission || 'N/A'} ر.س | طريقة الدفع:{' '}
@@ -52,5 +70,5 @@ export default function SalesRow({ sale, onShowDetails }: SalesRowProps) {
         </Button>
       </TableCell>
     </TableRow>
-  )
+  );
 }

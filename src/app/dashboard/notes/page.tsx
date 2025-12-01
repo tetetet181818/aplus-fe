@@ -1,30 +1,50 @@
-'use client'
+'use client';
 
 /**
  * Notes Dashboard
  * Displays uploaded notes with filters, search, pagination, and publish/unpublish actions.
  * Responsive layout: Cards on mobile, Table on desktop.
  */
+import { useMemo, useState } from 'react';
 
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { universityData } from '@/constants/index';
+import { Note } from '@/types';
 import {
-  Download,
   ChevronLeft,
   ChevronRight,
-  Search,
-  School,
-  LinkIcon,
+  Download,
   Eye,
+  LinkIcon,
   RotateCcw,
-} from 'lucide-react'
-import { useState, useMemo } from 'react'
-import { Button } from '@/components/ui/button'
+  School,
+  Search,
+} from 'lucide-react';
+
+import SectionHeader from '@/components/atoms/SectionHeader';
+import FileDetailsDialog from '@/components/molecules/dialogs/FileDetailsDialog';
+import PublishDialog from '@/components/molecules/dialogs/PublishDialog';
+import UnpublishDialog from '@/components/molecules/dialogs/UnpublishDialog';
+import ChartLineNotes from '@/components/organisms/dashboard/ChartLineNotes';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -32,30 +52,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import SectionHeader from '@/components/atoms/SectionHeader'
-import Head from 'next/head'
-import Link from 'next/link'
-import FileDetailsDialog from '@/components/molecules/dialogs/FileDetailsDialog'
-import UnpublishDialog from '@/components/molecules/dialogs/UnpublishDialog'
-import PublishDialog from '@/components/molecules/dialogs/PublishDialog'
-import ChartLineNotes from '@/components/organisms/dashboard/ChartLineNotes'
-import useDashboard from '@/hooks/useDashboard'
-import { Note } from '@/types'
-import { universityData } from '@/constants/index'
-import { downloadFile } from '@/utils/downloadFile'
+} from '@/components/ui/table';
+
+import useDashboard from '@/hooks/useDashboard';
+
+import { downloadFile } from '@/utils/downloadFile';
 
 /** Helper: truncate long text */
 const truncateText = (text: string, maxLength = 20) =>
-  text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'N/A'
+  text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'N/A';
 
 export default function NotesDashboard() {
   const {
@@ -79,32 +84,32 @@ export default function NotesDashboard() {
     setCollageFilterNote,
     yearFilterNote,
     setYearFilterNote,
-  } = useDashboard()
+  } = useDashboard();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<Note | null>(null)
-  const [unpublishedNote, setUnpublishedNote] = useState(false)
-  const [publishedNote, setPublishedNote] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<Note | null>(null);
+  const [unpublishedNote, setUnpublishedNote] = useState(false);
+  const [publishedNote, setPublishedNote] = useState(false);
 
   /** Dynamically get colleges based on selected university */
   const collegeOptions = useMemo(() => {
-    const uni = universityData.find((u) => u.name === universityFilterNote)
-    return uni ? uni.colleges : []
-  }, [universityFilterNote])
+    const uni = universityData.find(u => u.name === universityFilterNote);
+    return uni ? uni.colleges : [];
+  }, [universityFilterNote]);
 
   /** Reset filters */
   const resetFilters = () => {
-    setSearchTitleNote('')
-    setUniversityFilterNote('')
-    setCollageFilterNote('')
-    setYearFilterNote('')
-  }
+    setSearchTitleNote('');
+    setUniversityFilterNote('');
+    setCollageFilterNote('');
+    setYearFilterNote('');
+  };
 
   const hasActiveFilters =
     searchTitleNote ||
     universityFilterNote ||
     collageFilterNote ||
-    yearFilterNote
+    yearFilterNote;
 
   /** Table column config */
   const columns = [
@@ -129,21 +134,33 @@ export default function NotesDashboard() {
     {
       header: 'السعر',
       accessor: 'price',
-      render: (p: number) => `${p} ر.س`,
+      render: (p: number) => (
+        <p className="flex">
+          {p}{' '}
+          <Image
+            src={
+              theme === 'dark'
+                ? '/light-ryial-icon.png'
+                : '/dark-ryial-icon.png'
+            }
+            alt="أيقونة الريال"
+            className="mr-1 size-5"
+            width={20}
+            height={20}
+          />
+        </p>
+      ),
     },
     {
       header: 'تاريخ الإضافة',
-      accessor: 'created_at',
+      accessor: 'createdAt',
       render: (d: string) => new Date(d).toLocaleDateString(),
     },
-  ]
+  ];
 
+  const { theme } = useTheme();
   return (
     <>
-      <Head>
-        <title>الملفات الدراسية | لوحة التحكم</title>
-      </Head>
-
       <div className="space-y-6">
         <SectionHeader
           title="الملاحظات الدراسية"
@@ -165,7 +182,7 @@ export default function NotesDashboard() {
                   placeholder="ابحث عن ملاحظة..."
                   className="pl-10"
                   value={searchTitleNote}
-                  onChange={(e) => setSearchTitleNote(e.target.value)}
+                  onChange={e => setSearchTitleNote(e.target.value)}
                 />
               </div>
 
@@ -173,9 +190,9 @@ export default function NotesDashboard() {
                 {/* University Filter */}
                 <Select
                   value={universityFilterNote || ''}
-                  onValueChange={(value) => {
-                    setUniversityFilterNote(value)
-                    setCollageFilterNote('')
+                  onValueChange={value => {
+                    setUniversityFilterNote(value);
+                    setCollageFilterNote('');
                   }}
                 >
                   <SelectTrigger className="w-full">
@@ -183,7 +200,7 @@ export default function NotesDashboard() {
                     <SelectValue placeholder="كل الجامعات" />
                   </SelectTrigger>
                   <SelectContent>
-                    {universityData.map((uni) => (
+                    {universityData.map(uni => (
                       <SelectItem key={uni.id} value={uni.name}>
                         {uni.name}
                       </SelectItem>
@@ -201,7 +218,7 @@ export default function NotesDashboard() {
                     <SelectValue placeholder="كل الكليات" />
                   </SelectTrigger>
                   <SelectContent>
-                    {collegeOptions.map((col) => (
+                    {collegeOptions.map(col => (
                       <SelectItem key={col} value={col}>
                         {col}
                       </SelectItem>
@@ -214,7 +231,7 @@ export default function NotesDashboard() {
                   className="w-full"
                   placeholder="السنة"
                   value={yearFilterNote || ''}
-                  onChange={(e) => setYearFilterNote(e.target.value)}
+                  onChange={e => setYearFilterNote(e.target.value)}
                 />
 
                 {/* Reset Button */}
@@ -264,15 +281,26 @@ export default function NotesDashboard() {
                       </p>
                       <p>
                         <span className="font-semibold">السعر: </span>{' '}
-                        {note.price} ر.س
+                        {note.price}{' '}
+                        <Image
+                          src={
+                            theme === 'dark'
+                              ? '/light-ryial-icon.png'
+                              : '/dark-ryial-icon.png'
+                          }
+                          alt="أيقونة الريال"
+                          className="mr-1 size-5"
+                          width={20}
+                          height={20}
+                        />
                       </p>
                       <div className="flex gap-2 pt-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setIsDialogOpen(true)
-                            setSelectedFile(note)
+                            setIsDialogOpen(true);
+                            setSelectedFile(note);
                           }}
                         >
                           <Eye className="size-4" />
@@ -294,8 +322,8 @@ export default function NotesDashboard() {
                             variant="destructive"
                             size="sm"
                             onClick={() => {
-                              setSelectedFile(note)
-                              setUnpublishedNote(true)
+                              setSelectedFile(note);
+                              setUnpublishedNote(true);
                             }}
                           >
                             إلغاء النشر
@@ -304,8 +332,8 @@ export default function NotesDashboard() {
                           <Button
                             size="sm"
                             onClick={() => {
-                              setSelectedFile(note)
-                              setPublishedNote(true)
+                              setSelectedFile(note);
+                              setPublishedNote(true);
                             }}
                           >
                             نشر
@@ -360,8 +388,8 @@ export default function NotesDashboard() {
                             <Button
                               variant="ghost"
                               onClick={() => {
-                                setIsDialogOpen(true)
-                                setSelectedFile(note)
+                                setIsDialogOpen(true);
+                                setSelectedFile(note);
                               }}
                             >
                               <Eye className="size-4" />
@@ -385,8 +413,8 @@ export default function NotesDashboard() {
                             <Button
                               variant="destructive"
                               onClick={() => {
-                                setSelectedFile(note)
-                                setUnpublishedNote(true)
+                                setSelectedFile(note);
+                                setUnpublishedNote(true);
                               }}
                             >
                               إلغاء النشر
@@ -394,8 +422,8 @@ export default function NotesDashboard() {
                           ) : (
                             <Button
                               onClick={() => {
-                                setSelectedFile(note)
-                                setPublishedNote(true)
+                                setSelectedFile(note);
+                                setPublishedNote(true);
                               }}
                             >
                               نشر
@@ -421,13 +449,13 @@ export default function NotesDashboard() {
                 <div className="flex items-center gap-3">
                   <Select
                     value={noteLimit.toString()}
-                    onValueChange={(val) => changeNoteLimit(parseInt(val))}
+                    onValueChange={val => changeNoteLimit(parseInt(val))}
                   >
                     <SelectTrigger className="w-24">
                       <SelectValue placeholder="عدد العناصر" />
                     </SelectTrigger>
                     <SelectContent>
-                      {[5, 10, 20, 50].map((num) => (
+                      {[5, 10, 20, 50].map(num => (
                         <SelectItem key={num} value={num.toString()}>
                           {num} / صفحة
                         </SelectItem>
@@ -482,5 +510,5 @@ export default function NotesDashboard() {
         loading={publishLoading}
       />
     </>
-  )
+  );
 }

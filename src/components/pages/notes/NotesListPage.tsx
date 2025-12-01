@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react';
 
-import NotesListHeader from '@/components/organisms/notes/NotesListHeader'
-import NotesSearchBar from '@/components/organisms/notes/NotesSearchBar'
-import NotesSortDropdown from '@/components/organisms/notes/NotesSortDropdown'
-import NotesFilterSection from '@/components/organisms/notes/NotesFilterSection'
-import NotesResultsSection from '@/components/organisms/notes/NotesResultsSection'
-import NoteCardSkeleton from '@/components/atoms/NotesSkeleton'
-import Pagination from '@/components/atoms/Pagination'
+import { FileText, SearchIcon, User } from 'lucide-react';
 
-import useNotes from '@/hooks/useNotes'
-import useAuth from '@/hooks/useAuth'
-import UserModeSection from './UserModeSection'
-import { FileText, SearchIcon, User } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import NoteCardSkeleton from '@/components/atoms/NotesSkeleton';
+import Pagination from '@/components/atoms/Pagination';
+import NotesFilterSection from '@/components/organisms/notes/NotesFilterSection';
+import NotesListHeader from '@/components/organisms/notes/NotesListHeader';
+import NotesResultsSection from '@/components/organisms/notes/NotesResultsSection';
+import NotesSearchBar from '@/components/organisms/notes/NotesSearchBar';
+import NotesSortDropdown from '@/components/organisms/notes/NotesSortDropdown';
+import { Input } from '@/components/ui/input';
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select'
+  SelectTrigger,
+} from '@/components/ui/select';
+
+import useAuth from '@/hooks/useAuth';
+import useNotes from '@/hooks/useNotes';
+
+import UserModeSection from './UserModeSection';
 
 const NotesListPage = () => {
-  /** UI state */
-  const [searchType, setSearchType] = useState<string>('file')
-  const [showFilters, setShowFilters] = useState(false)
+  const [searchType, setSearchType] = useState<string>('file');
+  const [showFilters, setShowFilters] = useState(false);
 
-  /** Hooks */
   const {
     notes,
     notesLoading,
@@ -46,7 +46,7 @@ const NotesListPage = () => {
     sortOrder,
     filterTitle,
     setFilterTitle,
-  } = useNotes()
+  } = useNotes();
 
   const {
     allUsers,
@@ -58,10 +58,10 @@ const NotesListPage = () => {
     totalPages,
     handleNextPage,
     handlePrevPage,
-  } = useAuth()
+  } = useAuth();
 
   /** Toggle filters sidebar */
-  const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), [])
+  const toggleFilters = useCallback(() => setShowFilters(prev => !prev), []);
 
   return (
     <div className="px-4 py-12 md:px-6 dark:bg-gray-900">
@@ -90,10 +90,10 @@ const NotesListPage = () => {
                 placeholder={'ابحث عن المستخدمين...'}
                 className="border pr-10 dark:border-gray-900"
                 value={filterFullName}
-                onChange={(e) => setFilterFullName(e.target.value)}
+                onChange={e => setFilterFullName(e.target.value)}
               />
             </div>
-            <Select onValueChange={(value) => setSearchType(value)}>
+            <Select onValueChange={value => setSearchType(value)}>
               <SelectTrigger className="w-[60px]">
                 <SearchIcon className="size-5" />
               </SelectTrigger>
@@ -164,7 +164,7 @@ const NotesListPage = () => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default NotesListPage
+export default NotesListPage;

@@ -1,27 +1,29 @@
-'use client'
-import { useState, useMemo } from 'react'
-import Head from 'next/head'
+'use client';
+import { useMemo, useState } from 'react';
+import { useEffect } from 'react';
+
+import SalesDetailsDialog from '@/components/molecules/dialogs/SalesDetailsDialog';
+import ChartLineSales from '@/components/organisms/dashboard/ChartLineSales';
+import Pagination from '@/components/organisms/dashboard/sales/Pagination';
+import SalesTable from '@/components/organisms/dashboard/sales/SalesTable';
+import SalesTableSkeleton from '@/components/skeletons/SalesTableSkeleton';
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import SalesTable from '@/components/organisms/dashboard/sales/SalesTable'
-import Pagination from '@/components/organisms/dashboard/sales/Pagination'
-import SalesDetailsDialog from '@/components/molecules/dialogs/SalesDetailsDialog'
-import useDashboard from '@/hooks/useDashboard'
-import ChartLineSales from '@/components/organisms/dashboard/ChartLineSales'
-import SalesTableSkeleton from '@/components/skeletons/SalesTableSkeleton'
+} from '@/components/ui/select';
+
+import useDashboard from '@/hooks/useDashboard';
 
 export default function SalesDashboard() {
   const {
@@ -34,54 +36,63 @@ export default function SalesDashboard() {
     prevSalePage,
     changeSaleLimit,
     salesLoading,
-  } = useDashboard()
+    setStatus,
+    setId,
+    setInvoiceId,
+  } = useDashboard();
 
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [searchInvoiceId, setSearchInvoiceId] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchSaleId, setSearchSaleId] = useState('');
+  const [searchInvoiceId, setSearchInvoiceId] = useState('');
   const [sortConfig, setSortConfig] = useState({
-    key: 'created_at',
+    key: 'createdAt',
     direction: 'desc',
-  })
+  });
 
-  const [showDetailsDialog, setShowDetailsDialog] = useState(false)
-  const [selectedSalesId, setSelectedSalesId] = useState<string | null>(null)
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [selectedSalesId, setSelectedSalesId] = useState<string | null>(null);
 
-  /** filter + sort client-side */
-  const filteredSales = useMemo(() => {
-    let data = [...sales]
-    if (statusFilter !== 'all')
-      data = data.filter((s) => s.status === statusFilter)
-    if (searchInvoiceId)
-      data = data.filter((s) =>
-        s.invoice_id.toLowerCase().includes(searchInvoiceId.toLowerCase())
-      )
+  useEffect(() => {
+    setStatus(statusFilter === 'all' ? '' : statusFilter);
+  }, [statusFilter, setStatus]);
+
+  useEffect(() => {
+    setId(searchSaleId.trim());
+  }, [searchSaleId, setId]);
+
+  useEffect(() => {
+    setInvoiceId(searchInvoiceId.trim());
+  }, [searchInvoiceId, setInvoiceId]);
+
+  const sortedSales = useMemo(() => {
+    let data = [...sales];
+
+    // Sort
     data.sort((a, b) => {
-      const valA = a[sortConfig.key as keyof typeof a]
-      const valB = b[sortConfig.key as keyof typeof b]
-      if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1
-      if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1
-      return 0
-    })
-    return data
-  }, [sales, statusFilter, searchInvoiceId, sortConfig])
+      const valA = a[sortConfig.key as keyof typeof a];
+      const valB = b[sortConfig.key as keyof typeof b];
+      if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return data;
+  }, [sales, sortConfig]);
 
   const handleSort = (key: string) => {
-    let direction = 'desc'
+    let direction = 'desc';
     if (sortConfig.key === key && sortConfig.direction === 'desc')
-      direction = 'asc'
-    setSortConfig({ key, direction })
-  }
+      direction = 'asc';
+    setSortConfig({ key, direction });
+  };
 
   const renderSortIcon = (key: string) => {
-    if (sortConfig.key !== key) return <span className="opacity-30">⇅</span>
-    return sortConfig.direction === 'asc' ? '↑' : '↓'
-  }
+    if (sortConfig.key !== key) return <span className="opacity-30">⇅</span>;
+    return sortConfig.direction === 'asc' ? '↑' : '↓';
+  };
 
   return (
     <>
-      <Head>
-        <title>إدارة المبيعات</title>
-      </Head>
       <div className="space-y-6">
         <ChartLineSales total={salesPagination?.totalItems} data={salesStats} />
 
@@ -89,24 +100,19 @@ export default function SalesDashboard() {
           <CardHeader>
             <CardTitle>المبيعات</CardTitle>
             <CardDescription>إدارة جميع عمليات البيع</CardDescription>
-            <div className="mt-2 flex gap-2">
+            <div className="my-4 mt-10 grid grid-cols-1 gap-5">
               <Input
-                placeholder="ابحث برقم العملية"
-                value={searchInvoiceId}
-                onChange={(e) => setSearchInvoiceId(e.target.value)}
-                className="w-64"
+                placeholder="ابحث برقم المبيعة"
+                value={searchSaleId}
+                onChange={e => setSearchSaleId(e.target.value)}
+                className="w-full"
               />
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="الحالة" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">كل الحالات</SelectItem>
-                  <SelectItem value="completed">مكتمل</SelectItem>
-                  <SelectItem value="pending">قيد الانتظار</SelectItem>
-                  <SelectItem value="failed">فشل</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                placeholder="ابحث برقم الفاتورة"
+                value={searchInvoiceId}
+                onChange={e => setSearchInvoiceId(e.target.value)}
+                className="w-full"
+              />
             </div>
           </CardHeader>
 
@@ -116,12 +122,12 @@ export default function SalesDashboard() {
             ) : (
               <>
                 <SalesTable
-                  sales={filteredSales}
+                  sales={sortedSales}
                   handleSort={handleSort}
                   renderSortIcon={renderSortIcon}
-                  onShowDetails={(id) => {
-                    setSelectedSalesId(id)
-                    setShowDetailsDialog(true)
+                  onShowDetails={id => {
+                    setSelectedSalesId(id);
+                    setShowDetailsDialog(true);
                   }}
                 />
 
@@ -149,5 +155,5 @@ export default function SalesDashboard() {
         salesId={selectedSalesId || ''}
       />
     </>
-  )
+  );
 }

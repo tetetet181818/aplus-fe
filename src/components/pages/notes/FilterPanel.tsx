@@ -1,31 +1,33 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react';
+
+import { universityData } from '@/constants/index';
+import { X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { X } from 'lucide-react'
-import { universityData } from '@/constants/index'
+} from '@/components/ui/select';
 
 /**
  * Type definition for filters and setter props
  */
 interface FilterPanelProps {
-  years: number[]
-  filterUniversity: string
-  setFilterUniversity: (value: string) => void
-  filterCollage: string
-  setFilterCollage: (value: string) => void
-  filterYear: string
-  setFilterYear: (value: string) => void
-  resetFilters: () => void
+  years: number[];
+  filterUniversity: string;
+  setFilterUniversity: (value: string) => void;
+  filterCollage: string;
+  setFilterCollage: (value: string) => void;
+  filterYear: string;
+  setFilterYear: (value: string) => void;
+  resetFilters: () => void;
 }
 
 /**
@@ -42,26 +44,26 @@ const FilterPanel = ({
   setFilterYear,
   resetFilters,
 }: FilterPanelProps) => {
-  const [availableColleges, setAvailableColleges] = useState<string[]>([])
-  const [isLoadingColleges, setIsLoadingColleges] = useState(false)
+  const [availableColleges, setAvailableColleges] = useState<string[]>([]);
+  const [isLoadingColleges, setIsLoadingColleges] = useState(false);
 
   /** Extract universities from the constants file */
   const universities: string[] =
     universityData
-      ?.map((university) => university?.name)
-      .filter((n): n is string => typeof n === 'string') || []
+      ?.map(university => university?.name)
+      .filter((n): n is string => typeof n === 'string') || [];
 
   /** When university changes, update colleges accordingly */
   useEffect(() => {
-    if (!filterUniversity) {
-      setAvailableColleges([])
-      return
+    if (!filterUniversity || filterUniversity === 'all') {
+      setAvailableColleges([]);
+      return;
     }
-    setIsLoadingColleges(true)
-    const selectedUni = universityData.find((u) => u.name === filterUniversity)
-    setAvailableColleges(selectedUni?.colleges || [])
-    setIsLoadingColleges(false)
-  }, [filterUniversity])
+    setIsLoadingColleges(true);
+    const selectedUni = universityData.find(u => u.name === filterUniversity);
+    setAvailableColleges(selectedUni?.colleges || []);
+    setIsLoadingColleges(false);
+  }, [filterUniversity]);
 
   /** Helper function to render <SelectItem> options */
   const renderSelectOptions = (items: string[], placeholder: string) => {
@@ -70,28 +72,52 @@ const FilterPanel = ({
         <SelectItem value="loading" disabled>
           جاري التحميل...
         </SelectItem>
-      )
+      );
     }
     if (!items || items.length === 0) {
       return (
         <SelectItem value="no-options" disabled>
           {placeholder}
         </SelectItem>
-      )
+      );
     }
     return (
       <>
         <SelectItem value="all">الكل</SelectItem>
-        {items.map((item) => (
+        {items.map(item => (
           <SelectItem key={item} value={item}>
             {item}
           </SelectItem>
         ))}
       </>
-    )
-  }
+    );
+  };
 
-  /** Handle when user selects a new filter value */
+  /** Handle filter value changes */
+  const handleUniversityChange = (value: string) => {
+    if (value === 'all') {
+      setFilterUniversity('');
+      setFilterCollage(''); // Reset college when "all" is selected
+    } else {
+      setFilterUniversity(value);
+    }
+  };
+
+  const handleCollageChange = (value: string) => {
+    if (value === 'all') {
+      setFilterCollage('');
+    } else {
+      setFilterCollage(value);
+    }
+  };
+
+  const handleYearChange = (value: string) => {
+    if (value === 'all') {
+      setFilterYear('');
+    } else {
+      setFilterYear(value);
+    }
+  };
 
   return (
     <Card className="border bg-gray-50/50 shadow-sm dark:bg-gray-900/50">
@@ -115,10 +141,8 @@ const FilterPanel = ({
           <div className="space-y-2">
             <Label htmlFor="university">الجامعة</Label>
             <Select
-              value={filterUniversity || ''}
-              onValueChange={(value) => {
-                setFilterUniversity(value)
-              }}
+              value={filterUniversity || 'all'}
+              onValueChange={handleUniversityChange}
               disabled={universities.length === 0}
             >
               <SelectTrigger id="university" className="w-full">
@@ -140,10 +164,8 @@ const FilterPanel = ({
           <div className="space-y-2">
             <Label htmlFor="college">الكلية</Label>
             <Select
-              value={filterCollage || ''}
-              onValueChange={(value) => {
-                setFilterCollage(value)
-              }}
+              value={filterCollage || 'all'}
+              onValueChange={handleCollageChange}
               disabled={
                 isLoadingColleges ||
                 !filterUniversity ||
@@ -173,10 +195,8 @@ const FilterPanel = ({
           <div className="space-y-2">
             <Label htmlFor="year">السنة</Label>
             <Select
-              value={filterYear.toString() || ''}
-              onValueChange={(value) => {
-                setFilterYear(value)
-              }}
+              value={filterYear || 'all'}
+              onValueChange={handleYearChange}
               disabled={years.length === 0}
             >
               <SelectTrigger id="year" className="w-full">
@@ -188,7 +208,7 @@ const FilterPanel = ({
               </SelectTrigger>
               <SelectContent>
                 {renderSelectOptions(
-                  years.map((year) => year.toString()),
+                  years.map(year => year.toString()),
                   'لا توجد سنوات متاحة'
                 )}
               </SelectContent>
@@ -197,7 +217,7 @@ const FilterPanel = ({
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default FilterPanel
+export default FilterPanel;

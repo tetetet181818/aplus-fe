@@ -1,6 +1,10 @@
-'use client'
+'use client';
 
-import { BookOpen, LucideIcon } from 'lucide-react'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { BookOpen, LucideIcon } from 'lucide-react';
+
 import {
   Sidebar,
   SidebarContent,
@@ -9,24 +13,22 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
-} from '@/components/ui/sidebar'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+} from '@/components/ui/sidebar';
 
 export default function AppSidebar({
   navigationItems,
 }: {
   navigationItems: {
-    id: string
-    title: string
-    href: string
-    icon: LucideIcon
-  }[]
+    id: string;
+    title: string;
+    href: string;
+    icon: LucideIcon;
+  }[];
 }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar className="border-0 shadow-xl" side="right">
@@ -35,7 +37,7 @@ export default function AppSidebar({
           <div className="bg-primary/10 rounded-xl p-2" aria-hidden="true">
             <BookOpen className="text-primary h-6 w-6" />
           </div>
-          <h2 className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-xl font-bold text-transparent">
+          <h2 className="mx-2 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-xl font-bold text-transparent">
             منصة أ+
           </h2>
         </div>
@@ -49,8 +51,8 @@ export default function AppSidebar({
 
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1 px-2">
-              {navigationItems?.map((item) => {
-                const isActive = pathname === item.href
+              {navigationItems?.map(item => {
+                const isActive = pathname === item.href;
 
                 return (
                   <SidebarMenuItem key={item.id}>
@@ -68,7 +70,7 @@ export default function AppSidebar({
                       </SidebarMenuButton>
                     </Link>
                   </SidebarMenuItem>
-                )
+                );
               })}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -77,5 +79,5 @@ export default function AppSidebar({
 
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

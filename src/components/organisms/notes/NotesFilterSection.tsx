@@ -1,14 +1,14 @@
-import FilterPanel from '@/components/pages/notes/FilterPanel'
+import FilterPanel from '@/components/pages/notes/FilterPanel';
 
 interface NotesFilterSectionProps {
-  filterUniversity: string
-  setFilterUniversity: (value: string) => void
-  filterCollage: string
-  setFilterCollage: (value: string) => void
-  filterYear: string
-  resetFilters: () => void
-  setFilterYear: (value: string) => void
-  years: number[]
+  filterUniversity: string;
+  setFilterUniversity: (value: string) => void;
+  filterCollage: string;
+  setFilterCollage: (value: string) => void;
+  filterYear: string;
+  resetFilters: () => void;
+  setFilterYear: (value: string) => void;
+  years: number[];
 }
 export default function NotesFilterSection({
   years,
@@ -33,5 +33,5 @@ export default function NotesFilterSection({
         resetFilters={resetFilters}
       />
     </div>
-  )
+  );
 }
