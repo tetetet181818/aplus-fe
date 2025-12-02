@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react';
 
 const LoadingSpinner = ({ message = 'جاري التحميل...' }) => {
   return (
@@ -6,7 +6,7 @@ const LoadingSpinner = ({ message = 'جاري التحميل...' }) => {
       <Loader2 className="text-primary mb-4 h-12 w-12 animate-spin" />
       <p className="text-lg text-gray-600 dark:text-gray-400">{message}</p>
     </div>
-  )
-}
+  );
+};
 
-export default LoadingSpinner
+export default LoadingSpinner;

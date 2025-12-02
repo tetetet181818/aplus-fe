@@ -1,29 +1,33 @@
-import { useCallback, memo } from 'react'
-import formatArabicDate from '@/utils/formateTime'
-import { Button } from '@/components/ui/button'
+import { memo, useCallback } from 'react';
+
+import Image from 'next/image';
+
+import { Note } from '@/types';
+import { FileDown } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import Image from 'next/image'
-import { Note } from '@/types'
-import { FileDown } from 'lucide-react'
-import { downloadFile } from '@/utils/downloadFile'
+} from '@/components/ui/dialog';
+
+import { downloadFile } from '@/utils/downloadFile';
+import formatArabicDate from '@/utils/formateTime';
 
 interface FileDetailsDialogProps {
-  open: boolean
-  onClose: () => void
-  item: Note | null
+  open: boolean;
+  onClose: () => void;
+  item: Note | null;
 }
 
 const FileDetailsDialog = memo(
   ({ open, onClose, item }: FileDetailsDialogProps) => {
     const handleClose = useCallback(() => {
-      onClose()
-    }, [onClose])
+      onClose();
+    }, [onClose]);
 
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -133,24 +137,24 @@ const FileDetailsDialog = memo(
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    )
+    );
   }
-)
+);
 
 const DetailItem = memo(
   ({ label, value }: { label: string; value: string }) => {
-    if (!value) return null
+    if (!value) return null;
 
     return (
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
         <span className="font-semibold text-gray-700">{label} </span>
         <span className="text-gray-900">{value}</span>
       </div>
-    )
+    );
   }
-)
+);
 
-FileDetailsDialog.displayName = 'FileDetailsDialog'
-DetailItem.displayName = 'DetailItem'
+FileDetailsDialog.displayName = 'FileDetailsDialog';
+DetailItem.displayName = 'DetailItem';
 
-export default FileDetailsDialog
+export default FileDetailsDialog;

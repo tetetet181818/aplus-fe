@@ -1,20 +1,22 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
+import * as React from 'react';
+
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
+} from '@/components/ui/chart';
 
 /**
  * @chartConfig
@@ -25,11 +27,11 @@ const chartConfig = {
     label: 'عمليات السحب',
     color: 'var(--chart-3)',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 interface WithdrawalStats {
-  date: string
-  withdrawals: number
+  date: string;
+  withdrawals: number;
 }
 
 /**
@@ -41,10 +43,10 @@ export default function ChartLineWithdrawals({
   total,
   data,
 }: {
-  total: number
-  data: WithdrawalStats[]
+  total: number;
+  data: WithdrawalStats[];
 }) {
-  const [activeChart] = React.useState<keyof typeof chartConfig>('withdrawals')
+  const [activeChart] = React.useState<keyof typeof chartConfig>('withdrawals');
 
   return (
     <Card className="py-4 sm:py-0">
@@ -89,12 +91,12 @@ export default function ChartLineWithdrawals({
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value)
+              tickFormatter={value => {
+                const date = new Date(value);
                 return date.toLocaleDateString('ar-EG', {
                   month: 'short',
                   day: 'numeric',
-                })
+                });
               }}
             />
 
@@ -103,7 +105,7 @@ export default function ChartLineWithdrawals({
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="withdrawals"
-                  labelFormatter={(value) =>
+                  labelFormatter={value =>
                     new Date(value).toLocaleDateString('ar-EG', {
                       month: 'short',
                       day: 'numeric',
@@ -125,5 +127,5 @@ export default function ChartLineWithdrawals({
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

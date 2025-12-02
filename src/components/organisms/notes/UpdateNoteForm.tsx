@@ -1,40 +1,44 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
-import BasicInfo from './BasicInfo'
-import UploadFileNote from './UploadFileNote'
-import UploadCoverNote from './UploadCoverNote'
-import ReviewNote from './ReviewNote'
-import SuccessUploadNoteDialog from '@/components/molecules/dialogs/SuccessUploadNoteDialog'
-import { Note, UpdateNoteData } from '@/types'
-import useNoteDetail from '@/hooks/useNoteDetail'
+import { useEffect, useState } from 'react';
+
+import { Note, UpdateNoteData } from '@/types';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import SuccessUploadNoteDialog from '@/components/molecules/dialogs/SuccessUploadNoteDialog';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+
+import useNoteDetail from '@/hooks/useNoteDetail';
+
+import BasicInfo from './BasicInfo';
+import ReviewNote from './ReviewNote';
+import UploadCoverNote from './UploadCoverNote';
+import UploadFileNote from './UploadFileNote';
 
 /** Form value types */
 type UpdateNoteValues = {
   basic: {
-    title: string
-    price: number
-    description: string
-    university: string
-    college: string
-    subject: string
-    pagesNumber: number
-    year: number | null
-    contactMethod: string
-  }
+    title: string;
+    price: number;
+    description: string;
+    university: string;
+    college: string;
+    subject: string;
+    pagesNumber: number;
+    year: number | null;
+    contactMethod: string;
+  };
   files: {
-    cover: File | null
-    file: File | null
-  }
+    cover: File | null;
+    file: File | null;
+  };
   review: {
-    termsAccepted: boolean
-  }
-}
+    termsAccepted: boolean;
+  };
+};
 
 const initialValues: UpdateNoteValues = {
   basic: {
@@ -55,7 +59,7 @@ const initialValues: UpdateNoteValues = {
   review: {
     termsAccepted: true,
   },
-}
+};
 
 /** Validation schema */
 const validationSchemas = {
@@ -81,34 +85,34 @@ const validationSchemas = {
   review: Yup.object({
     termsAccepted: Yup.boolean().oneOf([true], 'يجب الموافقة على الشروط'),
   }),
-}
+};
 
 /** Helper to build FormData */
 function buildFormData(values: UpdateNoteValues): FormData {
-  const formData = new FormData()
+  const formData = new FormData();
   Object.entries(values.basic).forEach(([key, val]) => {
-    if (val !== null && val !== undefined) formData.append(key, String(val))
-  })
+    if (val !== null && val !== undefined) formData.append(key, String(val));
+  });
 
-  if (values.files.cover) formData.append('cover', values.files.cover)
-  if (values.files.file) formData.append('file', values.files.file)
+  if (values.files.cover) formData.append('cover', values.files.cover);
+  if (values.files.file) formData.append('file', values.files.file);
 
-  formData.append('termsAccepted', String(values.review.termsAccepted))
-  return formData
+  formData.append('termsAccepted', String(values.review.termsAccepted));
+  return formData;
 }
 
 /**
  * Multi-step form for updating an existing note
  */
 const UpdateNoteForm = ({ note }: { note: Note }) => {
-  const tabs = ['basic', 'file', 'cover', 'review'] as const
-  type TabKey = (typeof tabs)[number]
-  const [tab, setTab] = useState<TabKey>('basic')
-  const { handleUpdateNote, updateNoteLoading } = useNoteDetail(note._id)
-  const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
+  const tabs = ['basic', 'file', 'cover', 'review'] as const;
+  type TabKey = (typeof tabs)[number];
+  const [tab, setTab] = useState<TabKey>('basic');
+  const { handleUpdateNote, updateNoteLoading } = useNoteDetail(note._id);
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
 
   /** Prefill note data */
-  const [formInitials, setFormInitials] = useState(initialValues)
+  const [formInitials, setFormInitials] = useState(initialValues);
   useEffect(() => {
     if (note) {
       setFormInitials({
@@ -128,9 +132,9 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
           file: null,
         },
         review: { termsAccepted: true },
-      })
+      });
     }
-  }, [note])
+  }, [note]);
 
   const formik = useFormik<UpdateNoteValues>({
     enableReinitialize: true,
@@ -140,17 +144,17 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
       files: validationSchemas.files,
       review: validationSchemas.review,
     }),
-    onSubmit: async (values) => {
-      const formData: UpdateNoteData = buildFormData(values)
+    onSubmit: async values => {
+      const formData: UpdateNoteData = buildFormData(values);
       const res = await handleUpdateNote({
         noteId: note._id,
         noteData: formData,
-      })
-      if (res) setOpenSuccessDialog(true)
+      });
+      if (res) setOpenSuccessDialog(true);
     },
-  })
+  });
 
-  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100
+  const progress = ((tabs.indexOf(tab) + 1) / tabs.length) * 100;
 
   return (
     <>
@@ -177,7 +181,7 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
             <CardContent className="p-0" dir="rtl">
               <Tabs
                 value={tab}
-                onValueChange={(v) => setTab(v as TabKey)}
+                onValueChange={v => setTab(v as TabKey)}
                 className="w-full"
               >
                 <TabsContent value="basic" className="p-6">
@@ -218,7 +222,7 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
         onOpenChange={setOpenSuccessDialog}
       />
     </>
-  )
-}
+  );
+};
 
-export default UpdateNoteForm
+export default UpdateNoteForm;

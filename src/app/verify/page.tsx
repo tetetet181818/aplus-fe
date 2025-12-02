@@ -1,7 +1,10 @@
-import React, { Suspense } from 'react'
-import VerifyClient from './VerifyClient'
-import { Metadata } from 'next'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+import React, { Suspense } from 'react';
+
+import { Metadata } from 'next';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+
+import VerifyClient from './VerifyClient';
 
 export const metadata: Metadata = {
   title: 'التحقق من الحساب | منصة +A',
@@ -46,12 +49,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-}
+};
 
 export default function page() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <VerifyClient />
     </Suspense>
-  )
+  );
 }

@@ -1,7 +1,9 @@
-import React from 'react'
-import StatictisCard from '../atoms/StatictisCard'
-import { Banknote, BarChart3, NotebookText, Star, Users } from 'lucide-react'
-import { StatisticsCardsSkeleton } from '../skeletons/StatictisCardsSkeleton'
+import React from 'react';
+
+import { Banknote, BarChart3, NotebookText, Star, Users } from 'lucide-react';
+
+import StatictisCard from '../atoms/StatictisCard';
+import { StatisticsCardsSkeleton } from '../skeletons/StatictisCardsSkeleton';
 
 /**
  * Renders a grid of statistic cards with Arabic titles and icons.
@@ -9,15 +11,15 @@ import { StatisticsCardsSkeleton } from '../skeletons/StatictisCardsSkeleton'
  */
 type StatictisCardsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userStatisticsSales: any
-  loading: boolean
-}
+  userStatisticsSales: any;
+  loading: boolean;
+};
 export default function StatictisCards({
   userStatisticsSales,
   loading,
 }: StatictisCardsProps) {
   if (loading) {
-    return <StatisticsCardsSkeleton />
+    return <StatisticsCardsSkeleton />;
   }
   const statictisCardsData = [
     {
@@ -45,7 +47,7 @@ export default function StatictisCards({
       number: userStatisticsSales?.globalRating.toFixed(2),
       title: 'التقييم العام',
     },
-  ]
+  ];
 
   return (
     <div
@@ -61,5 +63,5 @@ export default function StatictisCards({
         />
       ))}
     </div>
-  )
+  );
 }

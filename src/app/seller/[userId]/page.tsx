@@ -1,7 +1,10 @@
-import { Suspense } from 'react'
-import SellerProfilePage from './SellerClient'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
-import { Metadata } from 'next'
+import { Suspense } from 'react';
+
+import { Metadata } from 'next';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+
+import SellerProfilePage from './SellerClient';
 
 export const metadata: Metadata = {
   title: 'تفاصيل البائع | منصة أ+',
@@ -16,13 +19,13 @@ export const metadata: Metadata = {
     'بائع جاهز',
     'منصة تلخيص',
   ],
-}
+};
 
 export default function page({ params }: { params: { userId: string } }) {
-  const { userId } = params
+  const { userId } = params;
   return (
     <Suspense fallback={<LoadingSpinner message="" />}>
       <SellerProfilePage userId={userId} />
     </Suspense>
-  )
+  );
 }

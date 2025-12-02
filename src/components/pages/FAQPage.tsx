@@ -1,15 +1,17 @@
-'use client'
-import { motion } from 'framer-motion'
-import Head from 'next/head'
-import Link from 'next/link'
+'use client';
+import Head from 'next/head';
+import Link from 'next/link';
+
+import { faqData } from '@/constants/index';
+import { motion } from 'framer-motion';
+import { Palette } from 'lucide-react';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Palette } from 'lucide-react'
-import { faqData } from '@/constants/index'
+} from '@/components/ui/accordion';
 
 const FAQPage = () => {
   return (
@@ -112,7 +114,7 @@ const FAQPage = () => {
         </div>
       </motion.main>
     </>
-  )
-}
+  );
+};
 
-export default FAQPage
+export default FAQPage;

@@ -1,7 +1,28 @@
-'use client'
+'use client';
 
-import React, { JSX, useMemo } from 'react'
-import { Button } from '@/components/ui/button'
+import React, { JSX, useMemo } from 'react';
+
+import { CustomerRatingTypes } from '@/types';
+import {
+  BookCheck,
+  EllipsisVertical,
+  Eye,
+  MessageCircle,
+  Star,
+  Trash2,
+  User,
+} from 'lucide-react';
+
+import DeleteCustomerRateDialog from '@/components/molecules/dialogs/DeleteCustomerRateDialog';
+import SingleCustomerRatingDialog from '@/components/molecules/dialogs/SingleCustomerRatingDialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -9,28 +30,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import useCustomerRating from '@/hooks/useCustomerRating'
-import { CustomerRatingTypes } from '@/types'
-import {
-  BookCheck,
-  EllipsisVertical,
-  Eye,
-  Trash2,
-  Star,
-  User,
-  MessageCircle,
-} from 'lucide-react'
-import formatArabicDate from '@/utils/formateTime'
-import SingleCustomerRatingDialog from '@/components/molecules/dialogs/SingleCustomerRatingDialog'
-import DeleteCustomerRateDialog from '@/components/molecules/dialogs/DeleteCustomerRateDialog'
-import { Badge } from '@/components/ui/badge'
+} from '@/components/ui/table';
+
+import useCustomerRating from '@/hooks/useCustomerRating';
+
+import formatArabicDate from '@/utils/formateTime';
 
 /**
  * @fileoverview CustomersRatingPage component displays a list of customer ratings
@@ -44,16 +48,16 @@ import { Badge } from '@/components/ui/badge'
  * @returns {JSX.Element} The rendered Customers Rating page component.
  */
 function CustomersRatingPage(): JSX.Element {
-  const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false)
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
+  const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [selectedRating, setSelectedRating] =
-    React.useState<CustomerRatingTypes | null>(null)
+    React.useState<CustomerRatingTypes | null>(null);
   const {
     ratingDashboard,
     handelDeleteCustomerRating,
     handelPublishCustomerRate,
     handelUnPublishCustomerRate,
-  } = useCustomerRating()
+  } = useCustomerRating();
 
   /**
    * Memoized mobile cards for responsive design
@@ -64,7 +68,7 @@ function CustomersRatingPage(): JSX.Element {
         const shortComment =
           item.comment.length > 80
             ? `${item.comment.slice(0, 80)}...`
-            : item.comment
+            : item.comment;
 
         return (
           <div
@@ -107,8 +111,8 @@ function CustomersRatingPage(): JSX.Element {
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900 dark:hover:text-blue-300"
                     onClick={() => {
-                      setOpenDetailsDialog(true)
-                      setSelectedRating(item)
+                      setOpenDetailsDialog(true);
+                      setSelectedRating(item);
                     }}
                   >
                     <Eye className="size-4 text-blue-500" /> عرض
@@ -118,7 +122,7 @@ function CustomersRatingPage(): JSX.Element {
                     <DropdownMenuItem
                       className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-900 dark:hover:text-green-300"
                       onClick={() => {
-                        handelPublishCustomerRate(item._id)
+                        handelPublishCustomerRate(item._id);
                       }}
                     >
                       <BookCheck className="size-4 text-green-500" /> نشر
@@ -129,7 +133,7 @@ function CustomersRatingPage(): JSX.Element {
                     <DropdownMenuItem
                       className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300"
                       onClick={() => {
-                        handelUnPublishCustomerRate(item._id)
+                        handelUnPublishCustomerRate(item._id);
                       }}
                     >
                       <BookCheck className="size-4 text-red-500" /> إلغاء نشر
@@ -138,8 +142,8 @@ function CustomersRatingPage(): JSX.Element {
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300"
                     onClick={() => {
-                      setOpenDeleteDialog(true)
-                      setSelectedRating(item)
+                      setOpenDeleteDialog(true);
+                      setSelectedRating(item);
                     }}
                   >
                     <Trash2 className="size-4 text-red-500" /> حذف
@@ -209,11 +213,11 @@ function CustomersRatingPage(): JSX.Element {
               </span>
             </div>
           </div>
-        )
+        );
       }) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [ratingDashboard]
-  )
+  );
 
   /**
    * Memoized table rows for desktop view
@@ -224,7 +228,7 @@ function CustomersRatingPage(): JSX.Element {
         const shortComment =
           item.comment.length > 50
             ? `${item.comment.slice(0, 50)}...`
-            : item.comment
+            : item.comment;
 
         return (
           <TableRow
@@ -287,8 +291,8 @@ function CustomersRatingPage(): JSX.Element {
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900 dark:hover:text-blue-300"
                     onClick={() => {
-                      setOpenDetailsDialog(true)
-                      setSelectedRating(item)
+                      setOpenDetailsDialog(true);
+                      setSelectedRating(item);
                     }}
                   >
                     <Eye className="size-4 text-blue-500" /> عرض
@@ -298,7 +302,7 @@ function CustomersRatingPage(): JSX.Element {
                     <DropdownMenuItem
                       className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-900 dark:hover:text-green-300"
                       onClick={() => {
-                        handelPublishCustomerRate(item._id)
+                        handelPublishCustomerRate(item._id);
                       }}
                     >
                       <BookCheck className="size-4 text-green-500" /> نشر
@@ -309,7 +313,7 @@ function CustomersRatingPage(): JSX.Element {
                     <DropdownMenuItem
                       className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300"
                       onClick={() => {
-                        handelUnPublishCustomerRate(item._id)
+                        handelUnPublishCustomerRate(item._id);
                       }}
                     >
                       <BookCheck className="size-4 text-red-500" /> إلغاء نشر
@@ -318,8 +322,8 @@ function CustomersRatingPage(): JSX.Element {
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center gap-2 rounded-md transition-all hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300"
                     onClick={() => {
-                      setOpenDeleteDialog(true)
-                      setSelectedRating(item)
+                      setOpenDeleteDialog(true);
+                      setSelectedRating(item);
                     }}
                   >
                     <Trash2 className="size-4 text-red-500" /> حذف
@@ -328,11 +332,11 @@ function CustomersRatingPage(): JSX.Element {
               </DropdownMenu>
             </TableCell>
           </TableRow>
-        )
+        );
       }) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [ratingDashboard, handelPublishCustomerRate]
-  )
+  );
 
   return (
     <>
@@ -393,7 +397,7 @@ function CustomersRatingPage(): JSX.Element {
         onConfirm={(noteId: string) => handelDeleteCustomerRating(noteId)}
       />
     </>
-  )
+  );
 }
 
-export default React.memo(CustomersRatingPage)
+export default React.memo(CustomersRatingPage);

@@ -1,5 +1,6 @@
-import TermsOfServicePage from '@/components/pages/TermsOfServicePage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import TermsOfServicePage from '@/components/pages/TermsOfServicePage';
 
 export const metadata: Metadata = {
   title: 'شروط الاستخدام – منصة أ+',
@@ -35,12 +36,12 @@ export const metadata: Metadata = {
     locale: 'ar_SA',
     type: 'article',
   },
-}
+};
 
 export default function TermsOfService() {
   return (
     <>
       <TermsOfServicePage />
     </>
-  )
+  );
 }

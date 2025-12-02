@@ -1,9 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
   process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
-    : process.env.NEXT_PUBLIC_SERVER_PRODUCTION
+    : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
 export const profitsApi = createApi({
   reducerPath: 'profitsApi',
@@ -12,7 +12,7 @@ export const profitsApi = createApi({
     credentials: 'include',
   }),
   tagTypes: ['Profits'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getProfits: builder.query({
       query: ({
         page,
@@ -20,10 +20,10 @@ export const profitsApi = createApi({
         fullName,
         email,
       }: {
-        page: number
-        limit: number
-        fullName: string
-        email: string
+        page: number;
+        limit: number;
+        fullName: string;
+        email: string;
       }) => ({
         url: `?page=${page}&limit=${limit}&fullName=${fullName}&email=${email}`,
         method: 'GET',
@@ -32,6 +32,6 @@ export const profitsApi = createApi({
       keepUnusedDataFor: 300,
     }),
   }),
-})
+});
 
-export const { useGetProfitsQuery } = profitsApi
+export const { useGetProfitsQuery } = profitsApi;

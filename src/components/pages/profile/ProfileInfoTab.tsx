@@ -1,41 +1,46 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { User } from '@/types';
+import {
+  Award,
+  Edit3,
+  Link2,
+  Mail,
+  School,
+  Trash2,
+  User as UserIcon,
+} from 'lucide-react';
+import { toast } from 'sonner';
+
+import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog';
+import ProfileInfoSkeleton from '@/components/skeletons/ProfileInfoSkeleton';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import {
-  User as UserIcon,
-  Mail,
-  School,
-  Edit3,
-  Trash2,
-  Link2,
-  Award,
-} from 'lucide-react'
-import UpdateInfoDialog from '../../molecules/dialogs/UpdateInfoDialog'
-import DeleteConfirmationDialog from '@/components/molecules/dialogs/DeleteConfirmationDialog'
-import ProfileInfoSkeleton from '@/components/skeletons/ProfileInfoSkeleton'
-import useAuth from '@/hooks/useAuth'
-import { User } from '@/types'
-import { toast } from 'sonner'
+} from '@/components/ui/tooltip';
+
+import useAuth from '@/hooks/useAuth';
+
+import UpdateInfoDialog from '../../molecules/dialogs/UpdateInfoDialog';
 
 /** Props for ProfileInfoTab */
 interface ProfileInfoTabProps {
-  user: User
-  loading: boolean
+  user: User;
+  loading: boolean;
 }
 
 /** User profile information with edit and delete actions */
@@ -43,18 +48,18 @@ export default function ProfileInfoTab({
   user,
   loading,
 }: Partial<ProfileInfoTabProps>) {
-  const { handleDeleteAccount, handleUpdateUserInfo } = useAuth()
-  const [openDialogUpdate, setOpenDialogUpdate] = useState(false)
-  const [openDialogDelete, setOpenDialogDelete] = useState(false)
+  const { handleDeleteAccount, handleUpdateUserInfo } = useAuth();
+  const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
 
   const copyProfileLink = () => {
-    const profileUrl = `https://aplusplatformsa.com/seller/${user?._id}`
-    navigator.clipboard.writeText(profileUrl)
-    toast.success('تم نسخ رابط حسابك')
-  }
+    const profileUrl = `https://aplusplatformsa.com/seller/${user?._id}`;
+    navigator.clipboard.writeText(profileUrl);
+    toast.success('تم نسخ رابط حسابك');
+  };
 
-  if (loading) return <ProfileInfoSkeleton />
-  if (!user) return null
+  if (loading) return <ProfileInfoSkeleton />;
+  if (!user) return null;
 
   return (
     <>
@@ -123,7 +128,7 @@ export default function ProfileInfoTab({
         loading={Boolean(loading)}
       />
     </>
-  )
+  );
 }
 
 /** Single info field with icon and label */
@@ -132,9 +137,9 @@ function InfoField({
   label,
   value,
 }: {
-  icon: React.ReactNode
-  label: string
-  value: string
+  icon: React.ReactNode;
+  label: string;
+  value: string;
 }) {
   return (
     <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 transition-colors dark:bg-gray-700/50">
@@ -150,7 +155,7 @@ function InfoField({
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 /** User badges display */
@@ -182,7 +187,7 @@ function BadgesField() {
         </Tooltip>
       </div>
     </div>
-  )
+  );
 }
 
 /** Action buttons section */
@@ -191,9 +196,9 @@ function ActionButtons({
   onEdit,
   onDelete,
 }: {
-  onShare: () => void
-  onEdit: () => void
-  onDelete: () => void
+  onShare: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
   return (
     <div className="flex flex-col justify-center gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:pt-6 dark:border-gray-700">
@@ -234,7 +239,7 @@ function ActionButtons({
         حذف الحساب
       </Button>
     </div>
-  )
+  );
 }
 
 /** Account deletion warning text */
@@ -244,5 +249,5 @@ function WarningText() {
       تذكّر: حذف الحساب إجراء نهائي ولا يمكن التراجع عنه. سيتم حذف جميع بياناتك
       وملخصاتك.
     </p>
-  )
+  );
 }

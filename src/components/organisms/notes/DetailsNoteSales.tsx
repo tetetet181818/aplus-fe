@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 import {
   Card,
@@ -8,28 +8,29 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import formatArabicDate from '@/utils/formateTime'
+} from '@/components/ui/chart';
 
-export const description = 'A simple area chart'
+import formatArabicDate from '@/utils/formateTime';
+
+export const description = 'A simple area chart';
 
 const chartConfig = {
   desktop: {
     label: 'Desktop',
     color: 'var(--color-primary)',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function DetailsNoteSales({
   salesState,
 }: {
-  salesState: { count: number; date: Date }[]
+  salesState: { count: number; date: Date }[];
 }) {
   return (
     <Card className="col-span-2 m-0 mt-10 w-full border-none bg-gray-800 p-0 py-10 shadow-none">
@@ -53,9 +54,7 @@ export function DetailsNoteSales({
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) =>
-                formatArabicDate(value, { time: false })
-              }
+              tickFormatter={value => formatArabicDate(value, { time: false })}
             />
             <ChartTooltip
               cursor={false}
@@ -72,5 +71,5 @@ export function DetailsNoteSales({
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

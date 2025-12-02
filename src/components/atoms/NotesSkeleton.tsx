@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const NoteCardSkeleton = () => {
   return (
@@ -41,7 +41,7 @@ const NoteCardSkeleton = () => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default NoteCardSkeleton
+export default NoteCardSkeleton;

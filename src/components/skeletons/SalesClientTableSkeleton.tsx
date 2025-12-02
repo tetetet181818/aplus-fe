@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -6,8 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
+} from '@/components/ui/table';
 
 export default function SalesClientTableSkeleton() {
   return (
@@ -64,5 +64,5 @@ export default function SalesClientTableSkeleton() {
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

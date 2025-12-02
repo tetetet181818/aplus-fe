@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 export const editWithdrawalValidationSchema = Yup.object().shape({
   accountName: Yup.string()
@@ -19,4 +19,4 @@ export const editWithdrawalValidationSchema = Yup.object().shape({
   amount: Yup.number()
     .required('المبلغ مطلوب')
     .min(50, 'يجب أن يكون المبلغ 50 ريال على الأقل'),
-})
+});

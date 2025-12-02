@@ -1,25 +1,29 @@
-'use client'
-import { Card, CardContent } from '@/components/ui/card'
-import WithdrawalForm from './WithdrawalForm'
-import FinanceDashboard from './FinanceDashboard'
-import { User } from '@/types'
-import { useFormik, FormikHelpers } from 'formik'
-import useWithdrawals from '@/hooks/useWithdrawals'
-import { withdrawalValidationSchema } from '@/utils/validation/withdrawalSchema'
-import EarningsPageSkeleton from '@/components/skeletons/EarningsPageSkeleton'
+'use client';
+import { User } from '@/types';
+import { FormikHelpers, useFormik } from 'formik';
+
+import EarningsPageSkeleton from '@/components/skeletons/EarningsPageSkeleton';
+import { Card, CardContent } from '@/components/ui/card';
+
+import useWithdrawals from '@/hooks/useWithdrawals';
+
+import { withdrawalValidationSchema } from '@/utils/validation/withdrawalSchema';
+
+import FinanceDashboard from './FinanceDashboard';
+import WithdrawalForm from './WithdrawalForm';
 
 /** Props for EarningsTab */
 interface EarningsTabProps {
-  currentUser: User
-  authLoading: boolean
+  currentUser: User;
+  authLoading: boolean;
 }
 
 /** Values for withdrawal form */
 interface WithdrawalFormValues {
-  accountHolderName: string
-  bankName: string
-  iban: string
-  withdrawalAmount: number
+  accountHolderName: string;
+  bankName: string;
+  iban: string;
+  withdrawalAmount: number;
 }
 
 /** Earnings tab showing balance, withdrawals and withdrawal form */
@@ -31,10 +35,10 @@ const EarningsTab = ({ currentUser, authLoading }: EarningsTabProps) => {
     meWithdrawalsLoading,
     handelDeleteWithdrawal,
     deleteWithdrawalLoading,
-  } = useWithdrawals()
+  } = useWithdrawals();
 
-  const availableBalance = currentUser?.balance || 0
-  const currentNetEarnings = availableBalance * 0.9
+  const availableBalance = currentUser?.balance || 0;
+  const currentNetEarnings = availableBalance * 0.9;
 
   const formik = useFormik<WithdrawalFormValues>({
     initialValues: {
@@ -48,19 +52,19 @@ const EarningsTab = ({ currentUser, authLoading }: EarningsTabProps) => {
       values: WithdrawalFormValues,
       { resetForm }: FormikHelpers<WithdrawalFormValues>
     ) => {
-      if (!formik.isValid) return // prevent submit if errors
+      if (!formik.isValid) return; // prevent submit if errors
       const res = await handleCreateWithdrawal({
         amount: values.withdrawalAmount,
         accountName: values.accountHolderName,
         bankName: values.bankName,
         iban: values.iban,
-      })
-      if (res) resetForm()
+      });
+      if (res) resetForm();
     },
-  })
+  });
 
   if (authLoading) {
-    return <EarningsPageSkeleton />
+    return <EarningsPageSkeleton />;
   }
 
   return (
@@ -94,7 +98,7 @@ const EarningsTab = ({ currentUser, authLoading }: EarningsTabProps) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EarningsTab
+export default EarningsTab;

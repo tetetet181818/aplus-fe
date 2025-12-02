@@ -1,7 +1,10 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { BookOpen, PlusCircle } from 'lucide-react'
-import { JSX } from 'react'
+import { JSX } from 'react';
+
+import Link from 'next/link';
+
+import { BookOpen, PlusCircle } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 const CallToActionSection = (): JSX.Element => {
   return (
@@ -86,7 +89,7 @@ const CallToActionSection = (): JSX.Element => {
         }}
       />
     </section>
-  )
-}
+  );
+};
 
-export default CallToActionSection
+export default CallToActionSection;

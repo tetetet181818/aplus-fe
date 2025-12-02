@@ -1,7 +1,10 @@
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
-import { Suspense } from 'react'
-import ResetPasswordWrapper from './ResetPasswordWrapper'
-import { Metadata } from 'next'
+import { Suspense } from 'react';
+
+import { Metadata } from 'next';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+
+import ResetPasswordWrapper from './ResetPasswordWrapper';
 
 export const metadata: Metadata = {
   title: 'إعادة تعيين كلمة المرور | استعادة الوصول إلى حسابك بسهولة',
@@ -24,12 +27,12 @@ export const metadata: Metadata = {
     locale: 'ar',
     url: 'https://aplusplatformsa.com/reset-password',
   },
-}
+};
 
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <ResetPasswordWrapper />
     </Suspense>
-  )
+  );
 }

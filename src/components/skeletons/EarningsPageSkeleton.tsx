@@ -1,4 +1,6 @@
-'use client'
+'use client';
+
+import { Banknote, Calendar, Coins, Info, Shield, Zap } from 'lucide-react';
 
 import {
   Card,
@@ -6,9 +8,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Calendar, Zap, Shield, Coins, Banknote, Info } from 'lucide-react'
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Skeleton loader for the EarningsPage component
@@ -128,7 +129,7 @@ export default function EarningsPageSkeleton() {
                   <Skeleton className="h-6 w-40 bg-gray-300 dark:bg-gray-700" />
                 </div>
                 <ul className="space-y-2">
-                  {[1, 2, 3].map((item) => (
+                  {[1, 2, 3].map(item => (
                     <li key={item} className="flex items-start gap-2">
                       <Skeleton className="mt-2 h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600" />
                       <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
@@ -144,7 +145,7 @@ export default function EarningsPageSkeleton() {
                   <Skeleton className="h-6 w-44 bg-gray-300 dark:bg-gray-700" />
                 </div>
                 <ul className="space-y-2 rounded-xl bg-gray-50 p-4 text-sm dark:bg-gray-800">
-                  {[1, 2, 3].map((item) => (
+                  {[1, 2, 3].map(item => (
                     <li key={item} className="flex items-start gap-2">
                       <Skeleton className="mt-2 h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600" />
                       <Skeleton className="h-4 flex-1 bg-gray-200 dark:bg-gray-600" />
@@ -177,7 +178,7 @@ export default function EarningsPageSkeleton() {
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-50 text-start dark:bg-gray-800">
                   <tr>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((header) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(header => (
                       <th key={header} className="px-4 py-3 text-start">
                         <Skeleton className="h-4 w-20 bg-gray-300 dark:bg-gray-700" />
                       </th>
@@ -185,12 +186,12 @@ export default function EarningsPageSkeleton() {
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {[1, 2, 3].map((row) => (
+                  {[1, 2, 3].map(row => (
                     <tr
                       key={row}
                       className="transition-colors hover:bg-slate-50 dark:hover:bg-gray-800"
                     >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((cell) => (
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(cell => (
                         <td key={cell} className="px-4 py-3">
                           <Skeleton className="h-4 w-16 bg-gray-200 dark:bg-gray-600" />
                         </td>
@@ -209,7 +210,7 @@ export default function EarningsPageSkeleton() {
 
             {/* Mobile Cards Skeleton */}
             <div className="space-y-4 md:hidden">
-              {[1, 2, 3].map((card) => (
+              {[1, 2, 3].map(card => (
                 <div
                   key={card}
                   className="space-y-3 rounded-lg border bg-white p-4 shadow-sm dark:bg-gray-800"
@@ -233,5 +234,5 @@ export default function EarningsPageSkeleton() {
         </Card>
       </section>
     </div>
-  )
+  );
 }

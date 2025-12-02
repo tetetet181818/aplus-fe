@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Skeleton placeholder for StatCard while loading.
@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 export default function StatCardSkeleton({
   compact = false,
 }: {
-  compact?: boolean
+  compact?: boolean;
 }) {
   return (
     <Card className="card-hover from-muted/30 to-muted/50 dark:from-muted/10 dark:to-muted/20 border-0 bg-gradient-to-br shadow-lg">
@@ -39,5 +39,5 @@ export default function StatCardSkeleton({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { Card, CardContent } from '../ui/card'
+import { Card, CardContent } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '../ui/carousel'
-import { Skeleton } from '../ui/skeleton'
+} from '../ui/carousel';
+import { Skeleton } from '../ui/skeleton';
 
 export default function BestSellerNotesSkeleton() {
   return (
@@ -57,5 +57,5 @@ export default function BestSellerNotesSkeleton() {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
-  )
+  );
 }

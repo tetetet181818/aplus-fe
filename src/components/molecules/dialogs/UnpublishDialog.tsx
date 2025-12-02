@@ -1,19 +1,20 @@
+import { Loader } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Loader } from 'lucide-react'
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface UnpublishDialogProps {
-  open: boolean
-  onClose: () => void
-  onConfirm: () => void
-  loading: boolean
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  loading: boolean;
 }
 
 export default function UnpublishDialog({
@@ -35,8 +36,8 @@ export default function UnpublishDialog({
           <Button variant="outline">إلغاء</Button>
           <Button
             onClick={() => {
-              onConfirm()
-              onClose()
+              onConfirm();
+              onClose();
             }}
             disabled={loading}
           >
@@ -52,5 +53,5 @@ export default function UnpublishDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

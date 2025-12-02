@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 
 interface PaginationProps {
   pagination: {
-    page: number
-    limit: number
-    totalPages: number
-    total: number
-    nextPage: () => void
-    prevPage: () => void
-    goToPage: (page: number) => void
-    changeLimit: (limit: number) => void
-  }
+    page: number;
+    limit: number;
+    totalPages: number;
+    total: number;
+    nextPage: () => void;
+    prevPage: () => void;
+    goToPage: (page: number) => void;
+    changeLimit: (limit: number) => void;
+  };
 }
 
 const Pagination = ({ pagination }: PaginationProps) => {
@@ -32,32 +32,32 @@ const Pagination = ({ pagination }: PaginationProps) => {
     prevPage,
     goToPage,
     changeLimit,
-  } = pagination
+  } = pagination;
 
   const getPageNumbers = () => {
-    const pages: (number | string)[] = []
+    const pages: (number | string)[] = [];
 
     if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i)
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
       if (page > 2) {
-        pages.push(1)
-        if (page > 3) pages.push('...')
+        pages.push(1);
+        if (page > 3) pages.push('...');
       }
 
-      const start = Math.max(2, page - 1)
-      const end = Math.min(totalPages - 1, page + 1)
+      const start = Math.max(2, page - 1);
+      const end = Math.min(totalPages - 1, page + 1);
 
-      for (let i = start; i <= end; i++) pages.push(i)
+      for (let i = start; i <= end; i++) pages.push(i);
 
       if (page < totalPages - 1) {
-        if (page < totalPages - 2) pages.push('...')
-        pages.push(totalPages)
+        if (page < totalPages - 2) pages.push('...');
+        pages.push(totalPages);
       }
     }
 
-    return pages
-  }
+    return pages;
+  };
 
   return (
     <div className="mt-10 flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -100,7 +100,7 @@ const Pagination = ({ pagination }: PaginationProps) => {
 
         <Select
           value={limit.toString()}
-          onValueChange={(val) => changeLimit(Number(val))}
+          onValueChange={val => changeLimit(Number(val))}
         >
           <SelectTrigger className="w-24">
             <SelectValue placeholder="عدد العناصر" />
@@ -114,7 +114,7 @@ const Pagination = ({ pagination }: PaginationProps) => {
         </Select>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

@@ -1,5 +1,6 @@
-import { TrendingUp } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { TrendingUp } from 'lucide-react';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function StatCard({
   title,
@@ -10,13 +11,13 @@ export default function StatCard({
   color = 'blue',
   compact = false,
 }: {
-  title: string
-  value: number | string
-  icon: React.ComponentType<{ className?: string }>
-  trend?: string
-  description?: string
-  color?: 'blue' | 'green' | 'purple' | 'orange' | 'red'
-  compact?: boolean
+  title: string;
+  value: number | string;
+  icon: React.ComponentType<{ className?: string }>;
+  trend?: string;
+  description?: string;
+  color?: 'blue' | 'green' | 'purple' | 'orange' | 'red';
+  compact?: boolean;
 }) {
   const colorClasses = {
     blue: {
@@ -49,7 +50,7 @@ export default function StatCard({
       iconColor: 'text-red-600 dark:text-red-400',
       textColor: 'text-red-700 dark:text-red-300',
     },
-  }
+  };
 
   return (
     <Card
@@ -88,5 +89,5 @@ export default function StatCard({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

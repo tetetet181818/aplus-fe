@@ -1,8 +1,8 @@
-import { withdrawalData } from "@/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { withdrawalData } from '@/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
+  process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
@@ -11,49 +11,49 @@ const baseUrl =
  * - Fetch, create, update, and delete withdrawal requests
  */
 export const withdrawalApi = createApi({
-  reducerPath: "withdrawalApi",
+  reducerPath: 'withdrawalApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/withdrawals`,
-    credentials: "include",
+    credentials: 'include',
   }),
-  tagTypes: ["Withdrawal"],
+  tagTypes: ['Withdrawal'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     /** Fetch withdrawals of the current user */
     getMeWithdrawals: builder.query({
       query: () => ({
-        url: "/me",
-        method: "GET",
+        url: '/me',
+        method: 'GET',
       }),
-      providesTags: ["Withdrawal"],
+      providesTags: ['Withdrawal'],
     }),
 
     /** Create a new withdrawal request */
     createWithdrawal: builder.mutation({
       query: ({ withdrawalData }: { withdrawalData: withdrawalData }) => ({
-        url: "/create",
-        method: "POST",
+        url: '/create',
+        method: 'POST',
         body: withdrawalData,
       }),
-      invalidatesTags: ["Withdrawal"],
+      invalidatesTags: ['Withdrawal'],
     }),
 
     /** Fetch all withdrawals (admin use) */
     getAllWithdrawals: builder.query({
       query: () => ({
-        url: "/",
-        method: "GET",
+        url: '/',
+        method: 'GET',
       }),
-      providesTags: ["Withdrawal"],
+      providesTags: ['Withdrawal'],
     }),
 
     /** Fetch a single withdrawal by ID */
     getSingleWithdrawal: builder.query({
       query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Withdrawal"],
+      providesTags: ['Withdrawal'],
     }),
 
     /** Update a withdrawal by ID */
@@ -66,19 +66,19 @@ export const withdrawalApi = createApi({
         updateData: withdrawalData;
       }) => ({
         url: `/update/${withdrawalId}`,
-        method: "PUT",
+        method: 'PUT',
         body: updateData,
       }),
-      invalidatesTags: ["Withdrawal"],
+      invalidatesTags: ['Withdrawal'],
     }),
 
     /** Delete a withdrawal by ID */
     deleteWithdrawal: builder.mutation({
       query: ({ withdrawalId }: { withdrawalId: string }) => ({
         url: `/${withdrawalId}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Withdrawal"],
+      invalidatesTags: ['Withdrawal'],
     }),
 
     addAdminNote: builder.mutation({
@@ -90,10 +90,10 @@ export const withdrawalApi = createApi({
         updateData: { adminNotes: string };
       }) => ({
         url: `/add-admin-note/${withdrawalId}`,
-        method: "PUT",
+        method: 'PUT',
         body: updateData,
       }),
-      invalidatesTags: ["Withdrawal"],
+      invalidatesTags: ['Withdrawal'],
     }),
   }),
 });

@@ -1,11 +1,12 @@
-import { Star } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Star } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
 
 interface StarRatingInputProps {
-  rating: number
-  setRating: (value: number) => void
-  maxRating?: number
-  size?: string
+  rating: number;
+  setRating: (value: number) => void;
+  maxRating?: number;
+  size?: string;
 }
 
 const StarRatingInput = ({
@@ -17,7 +18,7 @@ const StarRatingInput = ({
   return (
     <div className="flex items-center gap-1" dir="ltr">
       {[...Array(maxRating)].map((_, index) => {
-        const starValue = index + 1
+        const starValue = index + 1;
         return (
           <button
             type="button"
@@ -34,10 +35,10 @@ const StarRatingInput = ({
           >
             <Star className="fill-current" />
           </button>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default StarRatingInput
+export default StarRatingInput;

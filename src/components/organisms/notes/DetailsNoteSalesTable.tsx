@@ -1,6 +1,16 @@
 /**
  * Notes sales table with pagination (supports dark & light mode)
  */
+import { Sale } from '@/types';
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -8,28 +18,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationLink,
-} from '@/components/ui/pagination'
-import { Sale } from '@/types'
-import formatArabicDate from '@/utils/formateTime'
+} from '@/components/ui/table';
+
+import formatArabicDate from '@/utils/formateTime';
 
 interface DetailsNoteSalesTableProps {
-  sales: Sale[]
+  sales: Sale[];
   pagination: {
-    page: number
-    limit: number
-    totalPages: number
-    totalItems: number
-  }
-  onNextPage: () => void
-  onPrevPage: () => void
+    page: number;
+    limit: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  onNextPage: () => void;
+  onPrevPage: () => void;
 }
 
 export default function DetailsNoteSalesTable({
@@ -38,7 +40,7 @@ export default function DetailsNoteSalesTable({
   onNextPage,
   onPrevPage,
 }: DetailsNoteSalesTableProps) {
-  const { page, totalPages, totalItems, limit } = pagination
+  const { page, totalPages, totalItems, limit } = pagination;
 
   return (
     <div className="col-span-2 mt-8">
@@ -63,7 +65,7 @@ export default function DetailsNoteSalesTable({
 
         {/* Body */}
         <TableBody className="dark:bg-gray-900">
-          {sales.map((sale) => (
+          {sales.map(sale => (
             <TableRow
               key={sale._id}
               className="transition hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -135,5 +137,5 @@ export default function DetailsNoteSalesTable({
         </Pagination>
       )}
     </div>
-  )
+  );
 }

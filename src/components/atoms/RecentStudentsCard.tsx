@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
+import { Student } from '@/types';
+
+import { Avatar } from '@/components/ui/avatar';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Avatar } from '@/components/ui/avatar'
-import { Student } from '@/types'
+} from '@/components/ui/card';
 
 /**
  * Show list of recent students.
@@ -16,7 +17,7 @@ import { Student } from '@/types'
 export default function RecentStudentsCard({
   students,
 }: {
-  students: Student[]
+  students: Student[];
 }) {
   return (
     <Card className="card-hover border-0 shadow-lg">
@@ -47,5 +48,5 @@ export default function RecentStudentsCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

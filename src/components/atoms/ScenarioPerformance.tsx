@@ -1,4 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { SalesUser } from '@/types';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -6,17 +8,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import useSales from '@/hooks/useSales'
-import SalesClientTableSkeleton from '../skeletons/SalesClientTableSkeleton'
-import formatArabicDate from '@/utils/formateTime'
-import { SalesUser } from '@/types'
+} from '@/components/ui/table';
+
+import useSales from '@/hooks/useSales';
+
+import formatArabicDate from '@/utils/formateTime';
+
+import SalesClientTableSkeleton from '../skeletons/SalesClientTableSkeleton';
 
 export default function SalesPerformance() {
-  const { userStatisticsSales, userStatisticsSalesLoading } = useSales()
+  const { userStatisticsSales, userStatisticsSalesLoading } = useSales();
 
   if (userStatisticsSalesLoading) {
-    return <SalesClientTableSkeleton />
+    return <SalesClientTableSkeleton />;
   }
 
   return (
@@ -173,5 +177,5 @@ export default function SalesPerformance() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

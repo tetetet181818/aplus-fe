@@ -1,37 +1,40 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Eye, Heart, Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import useNotes from '@/hooks/useNotes'
-import NoResults from '@/components/atoms/NoResults'
-import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton'
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { motion } from 'framer-motion';
+import { Eye, Heart, Loader2 } from 'lucide-react';
+
+import NoResults from '@/components/atoms/NoResults';
+import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+
+import useNotes from '@/hooks/useNotes';
 
 interface Note {
-  _id: string
-  title: string
-  description: string
-  cover_url: string
-  price: number
-  university: string
-  college: string
+  _id: string;
+  title: string;
+  description: string;
+  cover_url: string;
+  price: number;
+  university: string;
+  college: string;
 }
 
 const NotesLikedTab = ({
   notes,
   authLoading,
 }: {
-  notes: Note[]
-  authLoading: boolean
+  notes: Note[];
+  authLoading: boolean;
 }) => {
-  const { removeNoteFromLikeList, unlikeLoading } = useNotes()
+  const { removeNoteFromLikeList, unlikeLoading } = useNotes();
 
   if (authLoading) {
-    return <NoteCardSkeleton />
+    return <NoteCardSkeleton />;
   }
 
   if (notes?.length === 0) {
@@ -46,11 +49,11 @@ const NotesLikedTab = ({
           </Button>
         }
       />
-    )
+    );
   }
   return (
     <div className="space-y-6">
-      {notes?.map((note) => (
+      {notes?.map(note => (
         <motion.div
           key={note._id}
           initial={{ opacity: 0, y: 20 }}
@@ -166,7 +169,7 @@ const NotesLikedTab = ({
         </motion.div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default NotesLikedTab
+export default NotesLikedTab;

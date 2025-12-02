@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Skeleton loader for the ProfileInfoTab component
@@ -51,7 +51,7 @@ export default function ProfileInfoSkeleton() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 /**
@@ -67,4 +67,4 @@ const InfoFieldSkeleton = () => (
       <Skeleton className="h-5 w-40 bg-gray-300 dark:bg-gray-700" />
     </div>
   </div>
-)
+);

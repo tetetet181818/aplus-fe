@@ -1,19 +1,21 @@
-'use client'
+'use client';
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import StarRatingInput from '@/components/atoms/StarRatingInput';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import useNotes from '@/hooks/useNotes'
-import StarRatingInput from '@/components/atoms/StarRatingInput'
-import { Label } from '@/components/ui/label'
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+
+import useNotes from '@/hooks/useNotes';
 
 /**
  * Props for UpdateReviewsDialog component
@@ -36,12 +38,12 @@ export default function UpdateReviewsDialog({
   noteId,
   reviewId,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  noteId: string
-  reviewId: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  noteId: string;
+  reviewId: string;
 }) {
-  const { handleUpdateReview } = useNotes()
+  const { handleUpdateReview } = useNotes();
 
   /** Initialize formik with validation and submit logic */
   const formik = useFormik({
@@ -65,13 +67,13 @@ export default function UpdateReviewsDialog({
           noteId,
           reviewId,
           reviewData: values,
-        })
-        if (res) resetForm()
-        onOpenChange(false)
+        });
+        if (res) resetForm();
+        onOpenChange(false);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {}
     },
-  })
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -96,7 +98,7 @@ export default function UpdateReviewsDialog({
             </Label>
             <StarRatingInput
               rating={formik.values.rating}
-              setRating={(value) => formik.setFieldValue('rating', value)}
+              setRating={value => formik.setFieldValue('rating', value)}
             />
             {formik.touched.rating && formik.errors.rating && (
               <p className="mt-1 text-sm text-red-500">
@@ -140,5 +142,5 @@ export default function UpdateReviewsDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

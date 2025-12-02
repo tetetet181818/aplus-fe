@@ -4,8 +4,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Skeleton } from '../ui/skeleton'
+} from '@/components/ui/card';
+
+import { Skeleton } from '../ui/skeleton';
 
 /**
  * Skeleton placeholder for RecentStudentsCard while loading.
@@ -34,5 +35,5 @@ export default function RecentStudentsCardSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

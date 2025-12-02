@@ -1,17 +1,18 @@
-'use client'
+'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import BestSellerNotes from '@/components/molecules/BestSellerNotes'
-import BestSellerUsers from '@/components/molecules/BestSellerUsers'
-import useNotes from '@/hooks/useNotes'
-import useAuth from '@/hooks/useAuth'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import BestSellerNotes from '@/components/molecules/BestSellerNotes';
+import BestSellerUsers from '@/components/molecules/BestSellerUsers';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import useAuth from '@/hooks/useAuth';
+import useNotes from '@/hooks/useNotes';
 
 export default function BestSellerSection() {
-  const { bestSellerNotes, bestSellerNotesLoading } = useNotes()
-  const { getBestSellerUsers, getBestSellerUsersLoading } = useAuth()
+  const { bestSellerNotes, bestSellerNotesLoading } = useNotes();
+  const { getBestSellerUsers, getBestSellerUsersLoading } = useAuth();
   if (getBestSellerUsersLoading || bestSellerNotesLoading) {
-    return <LoadingSpinner message="" />
+    return <LoadingSpinner message="" />;
   }
   return (
     <section className="mx-auto w-full overflow-x-hidden py-10 dark:bg-gradient-to-l dark:from-gray-900 dark:to-gray-800">
@@ -57,5 +58,5 @@ export default function BestSellerSection() {
         </TabsContent>
       </Tabs>
     </section>
-  )
+  );
 }

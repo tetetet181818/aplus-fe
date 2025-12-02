@@ -1,19 +1,20 @@
-'use client'
+'use client';
 
+import { useFormik } from 'formik';
+import { Loader2 } from 'lucide-react';
+import * as Yup from 'yup';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 // ----------------- Validation Schema -----------------
 const validationSchema = Yup.object({
@@ -22,14 +23,14 @@ const validationSchema = Yup.object({
     .required('يجب إدخال الملاحظة')
     .min(5, 'الملاحظة يجب أن تكون أطول من 5 أحرف')
     .max(500, 'الملاحظة لا يمكن أن تتجاوز 500 حرف'),
-})
+});
 
 interface AddAdminNotesDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  withdrawalId: string
-  handleAddAdminNote: (id: string, note: string) => void
-  addAdminNoteLoading: boolean
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  withdrawalId: string;
+  handleAddAdminNote: (id: string, note: string) => void;
+  addAdminNoteLoading: boolean;
 }
 
 export default function AddAdminNotesDialog({
@@ -45,11 +46,11 @@ export default function AddAdminNotesDialog({
     validateOnChange: false,
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      await handleAddAdminNote(withdrawalId, values.note)
-      resetForm()
-      onOpenChange(false)
+      await handleAddAdminNote(withdrawalId, values.note);
+      resetForm();
+      onOpenChange(false);
     },
-  })
+  });
 
   const {
     values,
@@ -60,7 +61,7 @@ export default function AddAdminNotesDialog({
     isValid,
     dirty,
     isSubmitting,
-  } = formik
+  } = formik;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -113,5 +114,5 @@ export default function AddAdminNotesDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

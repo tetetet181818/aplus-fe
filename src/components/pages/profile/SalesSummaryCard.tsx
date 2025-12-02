@@ -1,31 +1,33 @@
-'use client'
+'use client';
 
-import { BarChart3, ChevronDown } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import Image from 'next/image';
+
+import { BarChart3, ChevronDown } from 'lucide-react';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import Image from 'next/image'
+} from '@/components/ui/accordion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // 1. تعريف أنواع البيانات
 interface SoldNoteDetail {
-  id: string
-  title: string
-  previewImage?: string
-  price: number
-  salesCount: number
-  totalFromNote: number
+  id: string;
+  title: string;
+  previewImage?: string;
+  price: number;
+  salesCount: number;
+  totalFromNote: number;
 }
 
 interface SalesSummaryCardProps {
-  availableBalance: number
-  platformFee: number
-  netEarnings: number
-  soldNotesDetails: SoldNoteDetail[]
+  availableBalance: number;
+  platformFee: number;
+  netEarnings: number;
+  soldNotesDetails: SoldNoteDetail[];
 }
 
 // 2. بيانات ثابتة للتجربة
@@ -57,7 +59,7 @@ const staticSoldNotes: SoldNoteDetail[] = [
     salesCount: 15,
     totalFromNote: 300,
   },
-]
+];
 
 // 3. الكومبوننت الرئيسي
 export default function SalesSummaryCard({
@@ -103,14 +105,14 @@ export default function SalesSummaryCard({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 // 4. الأكوردين لعرض تفاصيل المبيعات
 const SalesDetailsAccordion = ({
   soldNotesDetails,
 }: {
-  soldNotesDetails: SoldNoteDetail[]
+  soldNotesDetails: SoldNoteDetail[];
 }) => (
   <Accordion type="single" collapsible className="w-full pt-3">
     <AccordionItem value="sales-details">
@@ -123,7 +125,7 @@ const SalesDetailsAccordion = ({
       <AccordionContent className="pt-4">
         <ScrollArea className="h-[300px] pr-3">
           <div className="space-y-4">
-            {soldNotesDetails.map((note) => (
+            {soldNotesDetails.map(note => (
               <NoteSaleItem key={note.id} note={note} />
             ))}
           </div>
@@ -131,7 +133,7 @@ const SalesDetailsAccordion = ({
       </AccordionContent>
     </AccordionItem>
   </Accordion>
-)
+);
 
 // 5. عنصر المبيعات لكل ملخص
 const NoteSaleItem = ({ note }: { note: SoldNoteDetail }) => (
@@ -144,7 +146,7 @@ const NoteSaleItem = ({ note }: { note: SoldNoteDetail }) => (
       width={64}
       height={64}
       onError={(e: any) => {
-        e.currentTarget.src = '/default-note-image.jpg'
+        e.currentTarget.src = '/default-note-image.jpg';
       }}
     />
     <div className="flex-grow">
@@ -164,4 +166,4 @@ const NoteSaleItem = ({ note }: { note: SoldNoteDetail }) => (
       </p>
     </div>
   </div>
-)
+);

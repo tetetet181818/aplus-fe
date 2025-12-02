@@ -1,5 +1,6 @@
-import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
 
 export const metadata: Metadata = {
   title: 'سياسة الخصوصية – منصة أ+',
@@ -32,12 +33,12 @@ export const metadata: Metadata = {
     locale: 'ar_SA',
     type: 'article',
   },
-}
+};
 
 export default function PrivacyPolicy() {
   return (
     <>
       <PrivacyPolicyPage />
     </>
-  )
+  );
 }

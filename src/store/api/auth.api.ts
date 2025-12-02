@@ -1,88 +1,88 @@
-import { UpdateUserInfo } from "@/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { UpdateUserInfo } from '@/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
+  process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
 export const authApi = createApi({
-  reducerPath: "authApi",
+  reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/auth`,
-    credentials: "include",
+    credentials: 'include',
   }),
-  tagTypes: ["Auth", "User"],
-  endpoints: (builder) => ({
+  tagTypes: ['Auth', 'User'],
+  endpoints: builder => ({
     checkAuth: builder.query({
       query: () => ({
         url: `/check-auth`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Auth", "User"],
+      providesTags: ['Auth', 'User'],
       keepUnusedDataFor: 300,
     }),
 
     verify: builder.mutation({
       query: ({ token }: { token: string }) => `/verify?token=${token}`,
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     register: builder.mutation({
-      query: (credentials) => ({
-        url: "/register",
-        method: "POST",
+      query: credentials => ({
+        url: '/register',
+        method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     login: builder.mutation({
-      query: (credentials) => ({
-        url: "/login",
-        method: "POST",
+      query: credentials => ({
+        url: '/login',
+        method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     getUser: builder.query({
-      query: (id) => `users/${id}`,
-      providesTags: ["Auth", "User"],
+      query: id => `users/${id}`,
+      providesTags: ['Auth', 'User'],
     }),
 
     deleteAccount: builder.mutation({
       query: () => ({
-        url: "/delete-account",
-        method: "DELETE",
+        url: '/delete-account',
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     logout: builder.mutation({
       query: () => ({
-        url: "/logout",
-        method: "POST",
+        url: '/logout',
+        method: 'POST',
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     updateUserInfo: builder.mutation({
       query: (data: UpdateUserInfo) => ({
         url: `/update-user`,
-        method: "PUT",
+        method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     forgetPassword: builder.mutation({
-      query: (email) => ({
-        url: "/forget-password",
-        method: "POST",
+      query: email => ({
+        url: '/forget-password',
+        method: 'POST',
         body: email,
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     resetPassword: builder.mutation({
@@ -96,18 +96,18 @@ export const authApi = createApi({
         newPassword: string;
       }) => ({
         url: `/reset-password`,
-        method: "POST",
+        method: 'POST',
         body: { userId, resetPasswordToken, newPassword },
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     getUserById: builder.query({
       query: ({ id }: { id: string }) => ({
         url: `/${id}`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Auth", "User"],
+      providesTags: ['Auth', 'User'],
     }),
 
     getAllUsers: builder.query({
@@ -121,17 +121,17 @@ export const authApi = createApi({
         fullName: string;
       }) => ({
         url: `/all-users?page=${page}&limit=${limit}&fullName=${fullName}`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Auth", "User"],
+      providesTags: ['Auth', 'User'],
     }),
 
     getBestSellerUsers: builder.query({
       query: () => ({
         url: `/best-sellers`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Auth", "User"],
+      providesTags: ['Auth', 'User'],
     }),
   }),
 });

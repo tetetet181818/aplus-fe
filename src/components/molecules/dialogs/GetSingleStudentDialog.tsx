@@ -1,35 +1,36 @@
-'use client'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
+'use client';
+import { Student } from '@/types';
+import { motion } from 'framer-motion';
+import { DollarSign, Mail, School, User } from 'lucide-react';
+
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
-import { User, Mail, School, DollarSign } from 'lucide-react'
-import { motion } from 'framer-motion'
-import { Student } from '@/types'
+} from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function GetSingleStudentDialog({
   open,
   onClose,
   student,
 }: {
-  open: boolean
-  onClose: () => void
-  student: Student
+  open: boolean;
+  onClose: () => void;
+  student: Student;
 }) {
   const infoItemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
-  }
+  };
 
   const Variants = {
     hidden: { opacity: 0 },
@@ -40,7 +41,7 @@ export default function GetSingleStudentDialog({
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -125,5 +126,5 @@ export default function GetSingleStudentDialog({
         </motion.div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

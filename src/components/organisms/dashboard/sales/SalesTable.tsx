@@ -1,4 +1,6 @@
 'use client';
+import { JSX } from 'react';
+
 import { Sale } from '@/types';
 
 import {
@@ -19,7 +21,7 @@ export default function SalesTable({
 }: {
   sales: Sale[];
   handleSort: (key: string) => void;
-  renderSortIcon: (key: string) => string;
+  renderSortIcon: (key: string) => string | JSX.Element;
   onShowDetails: (id: string) => void;
 }) {
   return (

@@ -1,46 +1,49 @@
-'use client'
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import {
-  DollarSign,
-  Info,
-  CreditCard,
-  Calendar,
-  Zap,
-  Shield,
-  Coins,
-  Edit,
-  Trash2,
-} from 'lucide-react'
-import formatArabicDate from '@/utils/formateTime'
+import { useState } from 'react';
+
 import {
   paymentProcessingPercent,
   platformFeePercent,
   safeValue,
   statusLabelMap,
   statusVariantMap,
-} from '@/constants'
-import { Withdrawal } from '@/types'
-import { Button } from '@/components/ui/button'
-import EditWithdrawalDialog from '@/components/molecules/dialogs/EditWithdrawalDialog'
-import { useState } from 'react'
+} from '@/constants';
+import { Withdrawal } from '@/types';
+import {
+  Calendar,
+  Coins,
+  CreditCard,
+  DollarSign,
+  Edit,
+  Info,
+  Shield,
+  Trash2,
+  Zap,
+} from 'lucide-react';
+
+import EditWithdrawalDialog from '@/components/molecules/dialogs/EditWithdrawalDialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+import formatArabicDate from '@/utils/formateTime';
 
 /**
  * Props for FinanceDashboard component
  */
 interface EarningsInfoProps {
-  availableBalance: number
-  meWithdrawals: Withdrawal[]
-  loading: boolean
-  handelDeleteWithdrawal: (withdrawalId: string) => void
-  deleteWithdrawalLoading: boolean
+  availableBalance: number;
+  meWithdrawals: Withdrawal[];
+  loading: boolean;
+  handelDeleteWithdrawal: (withdrawalId: string) => void;
+  deleteWithdrawalLoading: boolean;
 }
 
 /**
@@ -52,13 +55,13 @@ export default function FinanceDashboard({
   handelDeleteWithdrawal,
   deleteWithdrawalLoading,
 }: EarningsInfoProps) {
-  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectWithdrawal, SetSelectWithdrawal] = useState<Withdrawal | null>(
     null
-  )
+  );
 
   const formatCurrency = (amount: number) =>
-    amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
   const getStatusBadge = (status: string) => {
     return (
@@ -70,8 +73,8 @@ export default function FinanceDashboard({
         {statusLabelMap[status as keyof typeof statusLabelMap] ||
           safeValue(status)}
       </Badge>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -274,8 +277,8 @@ export default function FinanceDashboard({
                             </Button>
                             <Button
                               onClick={() => {
-                                SetSelectWithdrawal(w)
-                                setOpenEditDialog(true)
+                                SetSelectWithdrawal(w);
+                                setOpenEditDialog(true);
                               }}
                               variant="outline"
                               size="sm"
@@ -316,8 +319,8 @@ export default function FinanceDashboard({
                       <div className="flex justify-end gap-2">
                         <Button
                           onClick={() => {
-                            setOpenEditDialog(true)
-                            SetSelectWithdrawal(w)
+                            setOpenEditDialog(true);
+                            SetSelectWithdrawal(w);
                           }}
                           variant="outline"
                           size="sm"
@@ -350,5 +353,5 @@ export default function FinanceDashboard({
         />
       )}
     </>
-  )
+  );
 }

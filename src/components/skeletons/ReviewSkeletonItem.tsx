@@ -21,5 +21,5 @@ export default function ReviewSkeletonItem() {
         <div className="h-2 w-1/4 rounded bg-gray-200 dark:bg-gray-700"></div>
       </div>
     </div>
-  )
+  );
 }

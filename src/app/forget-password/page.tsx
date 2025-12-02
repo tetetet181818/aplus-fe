@@ -1,5 +1,6 @@
-import ForgetPassword from '@/components/pages/ForgetPassword'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import ForgetPassword from '@/components/pages/ForgetPassword';
 
 export const metadata: Metadata = {
   title: 'استعادة كلمة المرور | نسيت كلمة المرور لحسابك بسهولة',
@@ -23,8 +24,8 @@ export const metadata: Metadata = {
     locale: 'ar',
     url: 'https://aplusplatformsa.com/forget-password',
   },
-}
+};
 
 export default function page() {
-  return <ForgetPassword />
+  return <ForgetPassword />;
 }

@@ -1,34 +1,36 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Card, CardFooter } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { Note } from '@/types';
 import {
-  Edit,
-  Trash,
-  PlusCircle,
-  Eye,
-  Download,
-  Loader,
   BookOpen,
+  Download,
+  Edit,
+  Eye,
   ListCollapse,
-} from 'lucide-react'
-import NoResults from '@/components/atoms/NoResults'
-import Image from 'next/image'
-import { Note } from '@/types'
-import { useRouter } from 'next/navigation'
-import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton'
-import Link from 'next/link'
+  Loader,
+  PlusCircle,
+  Trash,
+} from 'lucide-react';
+
+import NoResults from '@/components/atoms/NoResults';
+import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardFooter } from '@/components/ui/card';
 
 interface UserNotesTabProps {
-  notes: Note[]
-  onDeleteRequest: (noteId: string) => void
-  router: ReturnType<typeof useRouter>
-  onDownloadRequest: (note: Note) => void
+  notes: Note[];
+  onDeleteRequest: (noteId: string) => void;
+  router: ReturnType<typeof useRouter>;
+  onDownloadRequest: (note: Note) => void;
 
   /** Loading state for download actions */
-  loading: boolean
-  authLoading: boolean
+  loading: boolean;
+  authLoading: boolean;
 }
 
 /**
@@ -66,16 +68,16 @@ const UserNotesTab = ({
           </Button>
         }
       />
-    )
+    );
   }
 
   if (authLoading) {
-    return <NoteCardSkeleton />
+    return <NoteCardSkeleton />;
   }
 
   return (
     <div className="space-y-6">
-      {notes.map((note) => (
+      {notes.map(note => (
         <Card
           key={note?._id}
           className="overflow-hidden bg-white py-0 shadow-md transition-all duration-300 hover:shadow-xl dark:bg-gray-800 dark:shadow-gray-900/20 dark:hover:shadow-gray-900/30"
@@ -211,7 +213,7 @@ const UserNotesTab = ({
         </Card>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default UserNotesTab
+export default UserNotesTab;

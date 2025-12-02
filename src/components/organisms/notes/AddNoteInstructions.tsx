@@ -1,30 +1,31 @@
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+  ALLOWED_FILE_TYPES_STRING,
+  MAX_FILE_SIZE_MB,
+  MAX_NOTES_PER_USER,
+  MAX_PAGES_PER_NOTE,
+} from '@/constants/index';
 import {
-  Lightbulb,
-  CheckCircle,
   AlertTriangle,
+  CheckCircle,
   FileText,
-  Users,
   FileUp,
   Info,
-} from 'lucide-react'
+  Lightbulb,
+  Users,
+} from 'lucide-react';
+
 import {
-  MAX_NOTES_PER_USER,
-  MAX_FILE_SIZE_MB,
-  MAX_PAGES_PER_NOTE,
-  ALLOWED_FILE_TYPES_STRING,
-} from '@/constants/index'
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 interface InstructionItemProps {
-  icon: React.ReactNode
-  title: string
-  children: React.ReactNode
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
 }
 
 const InstructionItem = ({ icon, title, children }: InstructionItemProps) => (
@@ -35,7 +36,7 @@ const InstructionItem = ({ icon, title, children }: InstructionItemProps) => (
       <p className="text-sm text-gray-600 dark:text-gray-400">{children}</p>
     </div>
   </div>
-)
+);
 
 const AddNoteInstructions = () => {
   return (
@@ -137,7 +138,7 @@ const AddNoteInstructions = () => {
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default AddNoteInstructions
+export default AddNoteInstructions;

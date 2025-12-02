@@ -1,15 +1,17 @@
-'use client'
+'use client';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog'
-import formatArabicDate from '@/utils/formateTime'
-import { statusLabelMap } from '@/constants/index'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useGetSingleWithdrawalQuery } from '@/store/api/dashboard.api'
+import { statusLabelMap } from '@/constants/index';
+import { useGetSingleWithdrawalQuery } from '@/store/api/dashboard.api';
+
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import formatArabicDate from '@/utils/formateTime';
 
 interface Props {
-  open: boolean
-  onClose: () => void
-  selectedWithdrawal: string | null
+  open: boolean;
+  onClose: () => void;
+  selectedWithdrawal: string | null;
 }
 
 /**
@@ -25,17 +27,17 @@ export default function WithdrawalDetailsDialog({
 }: Props) {
   const { data, isLoading } = useGetSingleWithdrawalQuery({
     id: selectedWithdrawal || '',
-  })
+  });
 
-  const singleWithdrawal = data?.data?.withdrawal
-  const user = data?.data?.user
+  const singleWithdrawal = data?.data?.withdrawal;
+  const user = data?.data?.user;
 
   const safeValue = (value: string): string =>
     value === null || value === undefined || value === ''
       ? 'A/N'
-      : String(value)
+      : String(value);
 
-  if (!selectedWithdrawal) return null
+  if (!selectedWithdrawal) return null;
 
   /** Withdrawal detail list */
   const withdrawalDetails = [
@@ -71,7 +73,7 @@ export default function WithdrawalDetailsDialog({
       label: 'تاريخ التحويل',
       value: safeValue(formatArabicDate(singleWithdrawal?.routingDate)),
     },
-  ]
+  ];
 
   /** User detail list */
   const userDetails = [
@@ -79,7 +81,7 @@ export default function WithdrawalDetailsDialog({
     { label: 'البريد الإلكتروني', value: safeValue(user?.email) },
     { label: 'الجامعة', value: safeValue(user?.university) },
     { label: 'الرصيد الحالي', value: `${safeValue(user?.balance)} ر.س` },
-  ]
+  ];
 
   /** Render skeleton or real value */
   const renderDetailValue = (value: string) =>
@@ -87,7 +89,7 @@ export default function WithdrawalDetailsDialog({
       <Skeleton className="h-4 w-full" />
     ) : (
       <span className="text-sm font-semibold">{value}</span>
-    )
+    );
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -165,5 +167,5 @@ export default function WithdrawalDetailsDialog({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

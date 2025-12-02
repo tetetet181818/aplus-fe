@@ -1,22 +1,25 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import AddNoteForm from './AddNoteForm'
-import AddNoteLoginPrompt from './AddNoteLoginPrompt'
-import AddNotePageHeader from './AddNotePageHeader'
-import useAuth from '@/hooks/useAuth'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+import { useRouter } from 'next/navigation';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+
+import useAuth from '@/hooks/useAuth';
+
+import AddNoteForm from './AddNoteForm';
+import AddNoteLoginPrompt from './AddNoteLoginPrompt';
+import AddNotePageHeader from './AddNotePageHeader';
 
 const AddNotePage = () => {
-  const router = useRouter()
-  const { user, loading } = useAuth()
+  const router = useRouter();
+  const { user, loading } = useAuth();
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (!user) {
-    return <AddNoteLoginPrompt onNavigate={router.push} />
+    return <AddNoteLoginPrompt onNavigate={router.push} />;
   }
 
   return (
@@ -25,7 +28,7 @@ const AddNotePage = () => {
 
       <AddNoteForm />
     </div>
-  )
-}
+  );
+};
 
-export default AddNotePage
+export default AddNotePage;

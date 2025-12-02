@@ -1,14 +1,16 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import Cropper from 'react-easy-crop'
-import { X } from 'lucide-react'
+import React, { useState } from 'react';
+
+import { X } from 'lucide-react';
+import Cropper from 'react-easy-crop';
+
+import { Button } from '@/components/ui/button';
 
 interface ImageEditorProps {
-  imageUrl: string
-  onSave: (croppedImage: string) => void
-  onCancel: () => void
+  imageUrl: string;
+  onSave: (croppedImage: string) => void;
+  onCancel: () => void;
 }
 
 export default function ImageEditor({
@@ -16,13 +18,13 @@ export default function ImageEditor({
   onSave,
   onCancel,
 }: ImageEditorProps) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(0)
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
 
   const handleSave = () => {
-    onSave(imageUrl)
-  }
+    onSave(imageUrl);
+  };
 
   return (
     <div className="mx-auto w-full">
@@ -57,5 +59,5 @@ export default function ImageEditor({
         </Button>
       </div>
     </div>
-  )
+  );
 }

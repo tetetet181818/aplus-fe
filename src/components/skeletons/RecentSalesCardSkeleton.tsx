@@ -1,12 +1,12 @@
-'use client'
+'use client';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Skeleton placeholder for RecentSalesCard while loading.
@@ -40,5 +40,5 @@ export default function RecentSalesCardSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

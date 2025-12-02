@@ -1,5 +1,7 @@
-import ContactUsPage from '@/components/pages/ContactUsPage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import ContactUsPage from '@/components/pages/ContactUsPage';
+
 export const metadata: Metadata = {
   title: 'اتصل بنا | منصة أ+',
   description:
@@ -12,8 +14,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://aplusplatformsa.com/contact-us',
   },
-}
+};
 
 export default function ContactUs() {
-  return <ContactUsPage />
+  return <ContactUsPage />;
 }

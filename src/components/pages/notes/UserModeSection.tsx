@@ -1,16 +1,18 @@
-import Link from 'next/link'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { User } from '@/types'
-import UserCardSkeleton from '@/components/skeletons/UserCardSkeleton'
+import Link from 'next/link';
+
+import { User } from '@/types';
+
+import UserCardSkeleton from '@/components/skeletons/UserCardSkeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Props {
-  usersLoading: boolean
-  allUsers: User[]
-  totalUsers: number
-  currentPageUser: number
-  totalPages: number
-  handlePrevPage: () => void
-  handleNextPage: () => void
+  usersLoading: boolean;
+  allUsers: User[];
+  totalUsers: number;
+  currentPageUser: number;
+  totalPages: number;
+  handlePrevPage: () => void;
+  handleNextPage: () => void;
 }
 
 export default function UserModeSection({
@@ -88,5 +90,5 @@ export default function UserModeSection({
         </>
       )}
     </div>
-  )
+  );
 }

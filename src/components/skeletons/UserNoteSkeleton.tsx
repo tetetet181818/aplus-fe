@@ -1,6 +1,7 @@
-import React from 'react'
-import { Card } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import React from 'react';
+
+import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Skeleton loader for the note card component
@@ -59,5 +60,5 @@ export default function NoteCardSkeleton() {
         </Card>
       ))}
     </div>
-  )
+  );
 }

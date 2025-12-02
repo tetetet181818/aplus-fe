@@ -1,26 +1,31 @@
-'use client'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { ArrowRight, AlertTriangle } from 'lucide-react'
-import NoResults from '@/components/atoms/NoResults'
+'use client';
+import { useState } from 'react';
+
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+
+import { AlertTriangle, ArrowRight } from 'lucide-react';
+
+import NoResults from '@/components/atoms/NoResults';
+import ReviewDialog from '@/components/molecules/dialogs/ReviewDialog';
 import {
+  NoteActions,
+  NoteAuthorInfo,
+  NoteDescription,
   NoteHeader,
   NoteImage,
-  NoteDescription,
   NoteMeta,
-  NoteAuthorInfo,
-  NoteActions,
   NotePurchaseConfirmationDialog,
-} from '@/components/organisms/notes/NoteDetailComponents'
-import ReviewDialog from '@/components/molecules/dialogs/ReviewDialog'
-import Head from 'next/head'
-import NoteReviews from '@/components/organisms/notes/NoteReviews'
-import useNoteDetail from '@/hooks/useNoteDetail'
-import { Skeleton } from '@/components/ui/skeleton'
-import useAuth from '@/hooks/useAuth'
-import { useState } from 'react'
-import useNotes from '@/hooks/useNotes'
-import { downloadFile } from '@/utils/downloadFile'
+} from '@/components/organisms/notes/NoteDetailComponents';
+import NoteReviews from '@/components/organisms/notes/NoteReviews';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import useAuth from '@/hooks/useAuth';
+import useNoteDetail from '@/hooks/useNoteDetail';
+import useNotes from '@/hooks/useNotes';
+
+import { downloadFile } from '@/utils/downloadFile';
 
 /**
  * Note detail page component with skeleton loader and error handling.
@@ -45,18 +50,18 @@ const NoteDetailPage = ({ id }: { id: string }) => {
     confirmPurchase,
     isPurchaseConfirmOpen,
     setIsPurchaseConfirmOpen,
-  } = useNoteDetail(id)
-  const { user, isAuthenticated } = useAuth()
-  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
+  } = useNoteDetail(id);
+  const { user, isAuthenticated } = useAuth();
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     handelAddReviewToNote,
     addReviewLoading,
     handelRemoveReviewFromNote,
     removeReviewLoading,
-  } = useNotes()
+  } = useNotes();
   if (!loading && !note) {
     return (
       <NoResults
@@ -69,7 +74,7 @@ const NoteDetailPage = ({ id }: { id: string }) => {
           </Button>
         }
       />
-    )
+    );
   }
 
   if (loading) {
@@ -93,9 +98,9 @@ const NoteDetailPage = ({ id }: { id: string }) => {
           </div>
         </div>
       </main>
-    )
+    );
   }
-  const isOwner = note?.owner_id === user?._id
+  const isOwner = note?.owner_id === user?._id;
 
   return (
     <>
@@ -209,14 +214,14 @@ const NoteDetailPage = ({ id }: { id: string }) => {
             noteTitle={note.title}
             noteId={note._id}
             addReviewToNote={async (noteId, reviewData) => {
-              handelAddReviewToNote({ noteId, reviewData })
+              handelAddReviewToNote({ noteId, reviewData });
             }}
             loading={addReviewLoading}
           />
         )}
       </main>
     </>
-  )
-}
+  );
+};
 
-export default NoteDetailPage
+export default NoteDetailPage;

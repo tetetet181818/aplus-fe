@@ -1,19 +1,21 @@
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { Button } from '@/components/ui/button'
+import { useFormik } from 'formik';
+import { Loader2 } from 'lucide-react';
+import * as yup from 'yup';
+
+import StarRatingInput from '@/components/atoms/StarRatingInput';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import StarRatingInput from '@/components/atoms/StarRatingInput'
-import { Loader2 } from 'lucide-react'
-import useCustomerRating from '@/hooks/useCustomerRating'
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+
+import useCustomerRating from '@/hooks/useCustomerRating';
 
 const validationSchema = yup.object().shape({
   rating: yup
@@ -21,12 +23,12 @@ const validationSchema = yup.object().shape({
     .min(1, 'يرجى تحديد تقييم (عدد النجوم).')
     .required('التقييم مطلوب.'),
   comment: yup.string().trim().required('يرجى كتابة تعليق.'),
-})
+});
 
 interface ReviewDialogProps {
-  isOpen: boolean
-  onOpenChange: (value: boolean) => void
-  loading: boolean
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
+  loading: boolean;
 }
 
 const AddCoustomerRateDialog = ({
@@ -34,7 +36,7 @@ const AddCoustomerRateDialog = ({
   onOpenChange,
   loading,
 }: ReviewDialogProps) => {
-  const { handelCreateCustomerRating } = useCustomerRating()
+  const { handelCreateCustomerRating } = useCustomerRating();
   const formik = useFormik({
     initialValues: {
       rating: 0,
@@ -45,22 +47,22 @@ const AddCoustomerRateDialog = ({
       const reviewData = {
         rating: values.rating,
         comment: values.comment,
-      }
+      };
       try {
-        const res = await handelCreateCustomerRating(reviewData)
+        const res = await handelCreateCustomerRating(reviewData);
         if (res) {
-          resetForm()
-          onOpenChange(false)
+          resetForm();
+          onOpenChange(false);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {}
     },
-  })
+  });
 
   const handleClose = () => {
-    formik.resetForm()
-    onOpenChange(false)
-  }
+    formik.resetForm();
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -81,7 +83,7 @@ const AddCoustomerRateDialog = ({
             </Label>
             <StarRatingInput
               rating={formik.values.rating}
-              setRating={(value) => formik.setFieldValue('rating', value)}
+              setRating={value => formik.setFieldValue('rating', value)}
             />
             {formik.touched.rating && formik.errors.rating && (
               <p className="mt-1 text-sm text-red-500">
@@ -139,7 +141,7 @@ const AddCoustomerRateDialog = ({
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddCoustomerRateDialog
+export default AddCoustomerRateDialog;

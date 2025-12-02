@@ -1,15 +1,16 @@
-import { DollarSign } from 'lucide-react'
+import { DollarSign } from 'lucide-react';
+
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 interface BalanceCardProps {
-  netEarnings: number
-  platformFeePercentage: number
+  netEarnings: number;
+  platformFeePercentage: number;
 }
 
 export default function BalanceCard({
@@ -38,5 +39,5 @@ export default function BalanceCard({
         </p>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,5 +1,6 @@
-import NotesListPage from '@/components/pages/notes/NotesListPage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import NotesListPage from '@/components/pages/notes/NotesListPage';
 
 export const metadata: Metadata = {
   title: 'الملخصات | منصة أ+',
@@ -20,8 +21,8 @@ export const metadata: Metadata = {
     'إدارة الملخصات الدراسية',
     'إنشاء ملخص دراسي',
   ],
-}
+};
 
 export default function Notes() {
-  return <NotesListPage />
+  return <NotesListPage />;
 }

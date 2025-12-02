@@ -1,18 +1,42 @@
-'use client'
+'use client';
 
-import { useState, type ReactNode } from 'react'
+import { type ReactNode, useState } from 'react';
+
+import Link from 'next/link';
+
+import { universities } from '@/constants';
+import { Student } from '@/types';
 import {
-  Eye,
-  Trash2,
   Calendar,
-  School,
-  LinkIcon,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+  Eye,
+  LinkIcon,
+  School,
+  Trash2,
+} from 'lucide-react';
+
+import SectionHeader from '@/components/atoms/SectionHeader';
+import ConfirmDialog from '@/components/molecules/dialogs/ConfirmDialog';
+import GetSingleStudentDialog from '@/components/molecules/dialogs/GetSingleStudentDialog';
+import ChartLineStudents from '@/components/organisms/dashboard/ChartLineStudents';
+import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComp } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -20,37 +44,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Calendar as CalendarComp } from '@/components/ui/calendar'
+} from '@/components/ui/table';
 
-import SectionHeader from '@/components/atoms/SectionHeader'
-import GetSingleStudentDialog from '@/components/molecules/dialogs/GetSingleStudentDialog'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import Link from 'next/link'
-import ConfirmDialog from '@/components/molecules/dialogs/ConfirmDialog'
-import { Student } from '@/types'
-import useDashboard from '@/hooks/useDashboard'
-import { Skeleton } from '@/components/ui/skeleton'
-import ChartLineStudents from '@/components/organisms/dashboard/ChartLineStudents'
-import { universities } from '@/constants'
-import formatArabicDate from '@/utils/formateTime'
+import useDashboard from '@/hooks/useDashboard';
+
+import formatArabicDate from '@/utils/formateTime';
 
 type ColumnConfig = {
-  header: string
-  accessor: keyof Student
-  customRender?: (value: Student[keyof Student], user: Student) => ReactNode
-}
+  header: string;
+  accessor: keyof Student;
+  customRender?: (value: Student[keyof Student], user: Student) => ReactNode;
+};
 
 /**
  * Responsive Students Dashboard
@@ -74,14 +78,14 @@ export default function StudentsDashboard() {
     handleDeleteUser,
     usersStats,
     setEmailFilter,
-  } = useDashboard()
+  } = useDashboard();
 
-  const [dateFilter, setDateFilter] = useState<Date | null>(null)
-  const [showUser, setShowUser] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<Student | null>(null)
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [dateFilter, setDateFilter] = useState<Date | null>(null);
+  const [showUser, setShowUser] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<Student | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const loadingState = usersLoading
+  const loadingState = usersLoading;
 
   const columns: ColumnConfig[] = [
     { header: 'الطالب', accessor: 'fullName' },
@@ -90,7 +94,7 @@ export default function StudentsDashboard() {
     {
       header: 'الرصيد',
       accessor: 'balance',
-      customRender: (v) => `${v} ر.س`,
+      customRender: v => `${v} ر.س`,
     },
     {
       header: 'عرض الملف الشخصي',
@@ -104,7 +108,7 @@ export default function StudentsDashboard() {
         </Link>
       ),
     },
-  ]
+  ];
 
   return (
     <>
@@ -123,17 +127,15 @@ export default function StudentsDashboard() {
               <Input
                 placeholder="ابحث بالاسم / البريد / الجامعة..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value)
-                  setEmailFilter(e.target.value)
+                onChange={e => {
+                  setSearchQuery(e.target.value);
+                  setEmailFilter(e.target.value);
                 }}
                 className="w-full flex-1 sm:w-auto"
               />
               <Select
                 value={universityFilter ?? 'all'}
-                onValueChange={(v) =>
-                  setUniversityFilter(v === 'all' ? null : v)
-                }
+                onValueChange={v => setUniversityFilter(v === 'all' ? null : v)}
               >
                 <SelectTrigger className="w-full sm:w-[180px]">
                   <School className="mr-2 h-4 w-4" />
@@ -141,7 +143,7 @@ export default function StudentsDashboard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">كل الجامعات</SelectItem>
-                  {universities.map((uni) => (
+                  {universities.map(uni => (
                     <SelectItem key={uni} value={uni}>
                       {uni}
                     </SelectItem>
@@ -226,8 +228,8 @@ export default function StudentsDashboard() {
                               variant="default"
                               size="sm"
                               onClick={() => {
-                                setShowUser(true)
-                                setSelectedUser(s)
+                                setShowUser(true);
+                                setSelectedUser(s);
                               }}
                               title="عرض التفاصيل"
                             >
@@ -237,8 +239,8 @@ export default function StudentsDashboard() {
                               variant="destructive"
                               size="sm"
                               onClick={() => {
-                                setConfirmDelete(true)
-                                setSelectedUser(s)
+                                setConfirmDelete(true);
+                                setSelectedUser(s);
                               }}
                               title="حذف"
                             >
@@ -295,8 +297,8 @@ export default function StudentsDashboard() {
                           variant="default"
                           size="sm"
                           onClick={() => {
-                            setShowUser(true)
-                            setSelectedUser(s)
+                            setShowUser(true);
+                            setSelectedUser(s);
                           }}
                         >
                           <Eye className="size-4" />
@@ -305,8 +307,8 @@ export default function StudentsDashboard() {
                           variant="destructive"
                           size="sm"
                           onClick={() => {
-                            setConfirmDelete(true)
-                            setSelectedUser(s)
+                            setConfirmDelete(true);
+                            setSelectedUser(s);
                           }}
                         >
                           <Trash2 className="size-4" />
@@ -351,7 +353,7 @@ export default function StudentsDashboard() {
                   </Button>
                   <Select
                     value={String(userLimit)}
-                    onValueChange={(v) => changeUserLimit(Number(v))}
+                    onValueChange={v => changeUserLimit(Number(v))}
                   >
                     <SelectTrigger className="w-[80px]">
                       <SelectValue />
@@ -388,5 +390,5 @@ export default function StudentsDashboard() {
         description="هل أنت متأكد من الحذف؟"
       />
     </>
-  )
+  );
 }

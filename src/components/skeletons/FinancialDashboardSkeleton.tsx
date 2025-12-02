@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 export default function FinancialDashboardSkeleton() {
   return (
@@ -58,7 +58,7 @@ export default function FinancialDashboardSkeleton() {
                   <div className="h-6 w-40 rounded bg-gray-300"></div>
                 </div>
                 <div className="space-y-3">
-                  {[1, 2, 3].map((item) => (
+                  {[1, 2, 3].map(item => (
                     <div key={item} className="flex items-start gap-2">
                       <div className="mt-2 h-2 w-2 rounded-full bg-gray-300"></div>
                       <div className="h-4 flex-1 rounded bg-gray-200"></div>
@@ -73,7 +73,7 @@ export default function FinancialDashboardSkeleton() {
                   <div className="h-6 w-40 rounded bg-gray-300"></div>
                 </div>
                 <div className="space-y-3 rounded-xl bg-gray-50 p-4">
-                  {[1, 2, 3].map((item) => (
+                  {[1, 2, 3].map(item => (
                     <div key={item} className="flex items-start gap-2">
                       <div className="mt-2 h-2 w-2 rounded-full bg-gray-300"></div>
                       <div className="h-4 flex-1 rounded bg-gray-200"></div>
@@ -162,5 +162,5 @@ export default function FinancialDashboardSkeleton() {
         </Card>
       </section>
     </div>
-  )
+  );
 }

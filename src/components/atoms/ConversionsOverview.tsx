@@ -1,29 +1,33 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChartConfig } from '@/components/ui/chart'
-import { ChartContainer } from '@/components/ui/chart'
-import { ChartTooltip } from '@/components/ui/chart'
-import { ChartTooltipContent } from '@/components/ui/chart'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import useSales from '@/hooks/useSales'
-import LoadingSpinner from './LoadingSpinner'
-import Image from 'next/image'
+import Image from 'next/image';
 
-export const description = 'Sales statistics overview'
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartConfig } from '@/components/ui/chart';
+import { ChartContainer } from '@/components/ui/chart';
+import { ChartTooltip } from '@/components/ui/chart';
+import { ChartTooltipContent } from '@/components/ui/chart';
+
+import useSales from '@/hooks/useSales';
+
+import LoadingSpinner from './LoadingSpinner';
+
+export const description = 'Sales statistics overview';
 
 const chartConfig = {
   sales: {
     label: 'Sales Performance',
     color: 'var(--color-primary)',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export default function SalesOverview() {
-  const { userStatisticsSales, userStatisticsSalesLoading } = useSales()
+  const { userStatisticsSales, userStatisticsSalesLoading } = useSales();
 
   if (userStatisticsSalesLoading) {
-    ;<LoadingSpinner message="" />
+    <LoadingSpinner message="" />;
   }
   return (
     <Card className="gap-3 border-none bg-transparent shadow-none" dir="rtl">
@@ -86,5 +90,5 @@ export default function SalesOverview() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

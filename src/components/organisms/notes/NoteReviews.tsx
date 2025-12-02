@@ -1,31 +1,35 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { useCallback, useState } from 'react';
+
+import { User } from '@/types';
+import { motion } from 'framer-motion';
 import {
-  Star,
-  MessageSquare,
-  ArrowUp,
   ArrowDown,
-  ArrowUpCircle,
   ArrowDownCircle,
+  ArrowUp,
+  ArrowUpCircle,
   Loader2,
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+  MessageSquare,
+  Star,
+} from 'lucide-react';
+
+import UpdateReviewsDialog from '@/components/molecules/dialogs/UpdateReviewsDialog';
+import ReviewSkeletonItem from '@/components/skeletons/ReviewSkeletonItem';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
-import formatArabicDate from '@/utils/formateTime'
-import { User } from '@/types'
-import ReviewSkeletonItem from '@/components/skeletons/ReviewSkeletonItem'
-import UpdateReviewsDialog from '@/components/molecules/dialogs/UpdateReviewsDialog'
+} from '@/components/ui/select';
+
+import { cn } from '@/lib/utils';
+
+import formatArabicDate from '@/utils/formateTime';
 
 /** ===================== Types ===================== */
 
@@ -39,12 +43,12 @@ import UpdateReviewsDialog from '@/components/molecules/dialogs/UpdateReviewsDia
  * @property {string} [userId] - ID of the user who posted the review.
  */
 interface Review {
-  _id: string
-  userName?: string
-  rating: number
-  comment?: string
-  createdAt?: string
-  userId?: string
+  _id: string;
+  userName?: string;
+  rating: number;
+  comment?: string;
+  createdAt?: string;
+  userId?: string;
 }
 
 /**
@@ -57,15 +61,15 @@ interface Review {
  * @property {string} noteId - ID of the note these reviews belong to.
  */
 interface NoteReviewsProps {
-  loading: boolean
-  reviews: Review[]
-  user: User
+  loading: boolean;
+  reviews: Review[];
+  user: User;
   removeReviewFromNote: (params: {
-    noteId: string
-    reviewId: string
-  }) => Promise<void>
-  removeReviewLoading: boolean
-  noteId: string
+    noteId: string;
+    reviewId: string;
+  }) => Promise<void>;
+  removeReviewLoading: boolean;
+  noteId: string;
 }
 
 /** ===================== Review Item ===================== */
@@ -88,15 +92,15 @@ const ReviewItem = ({
   noteId,
   setUpdateReview,
 }: {
-  review: Review
-  user: User
+  review: Review;
+  user: User;
   removeReviewFromNote: (params: {
-    noteId: string
-    reviewId: string
-  }) => Promise<void>
-  removeReviewLoading: boolean
-  noteId: string
-  setUpdateReview: (updateReview: boolean) => void
+    noteId: string;
+    reviewId: string;
+  }) => Promise<void>;
+  removeReviewLoading: boolean;
+  noteId: string;
+  setUpdateReview: (updateReview: boolean) => void;
 }) => {
   return (
     <motion.div
@@ -175,8 +179,8 @@ const ReviewItem = ({
         )}
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
 /** ===================== Sort Selector ===================== */
 
@@ -190,8 +194,8 @@ const SortSelector = ({
   sortOption,
   setSortOption,
 }: {
-  sortOption: string
-  setSortOption: (option: string) => void
+  sortOption: string;
+  setSortOption: (option: string) => void;
 }) => {
   const getDescription = useCallback((option: string): string => {
     const desc: Record<string, string> = {
@@ -199,9 +203,9 @@ const SortSelector = ({
       oldest: 'سيتم عرض أقدم العناصر أولاً',
       highest: 'سيتم عرض أعلى التقييمات أولاً',
       lowest: 'سيتم عرض أدنى التقييمات أولاً',
-    }
-    return desc[option] || desc.latest
-  }, [])
+    };
+    return desc[option] || desc.latest;
+  }, []);
 
   return (
     <div className="rtl flex w-full max-w-xs flex-col space-y-2">
@@ -252,8 +256,8 @@ const SortSelector = ({
         {getDescription(sortOption)}
       </p>
     </div>
-  )
-}
+  );
+};
 
 /** ===================== NoteReviews ===================== */
 
@@ -270,27 +274,27 @@ const NoteReviews = ({
   noteId,
   removeReviewLoading,
 }: NoteReviewsProps) => {
-  const [sortOption, setSortOption] = useState<string>('latest')
-  const [updateReview, setUpdateReview] = useState(false)
+  const [sortOption, setSortOption] = useState<string>('latest');
+  const [updateReview, setUpdateReview] = useState(false);
 
   /** Sorts reviews according to selected option. */
   const sortedReviews = [...(reviews || [])].sort((a, b) => {
-    const dateA = new Date(a.createdAt ?? '').getTime()
-    const dateB = new Date(b.createdAt ?? '').getTime()
+    const dateA = new Date(a.createdAt ?? '').getTime();
+    const dateB = new Date(b.createdAt ?? '').getTime();
 
     switch (sortOption) {
       case 'latest':
-        return dateB - dateA
+        return dateB - dateA;
       case 'oldest':
-        return dateA - dateB
+        return dateA - dateB;
       case 'highest':
-        return b.rating - a.rating
+        return b.rating - a.rating;
       case 'lowest':
-        return a.rating - b.rating
+        return a.rating - b.rating;
       default:
-        return 0
+        return 0;
     }
-  })
+  });
 
   /** Skeleton loader */
   if (loading) {
@@ -308,7 +312,7 @@ const NoteReviews = ({
           ))}
         </CardContent>
       </Card>
-    )
+    );
   }
 
   /** Empty state */
@@ -327,7 +331,7 @@ const NoteReviews = ({
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   /** Render list */
@@ -366,7 +370,7 @@ const NoteReviews = ({
         ))}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default NoteReviews
+export default NoteReviews;

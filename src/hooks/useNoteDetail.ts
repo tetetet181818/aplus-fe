@@ -1,4 +1,8 @@
-'use client'
+'use client';
+
+import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
 
 import {
   useCreatePaymentLinkMutation,
@@ -8,32 +12,34 @@ import {
   useMakeUnlikeNoteMutation,
   useToggleLikeQuery,
   useUpdateNoteMutation,
-} from '@/store/api/note.api'
-import { downloadFile } from '@/utils/downloadFile'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { useState } from 'react'
-import useAuth from './useAuth'
-import { UpdateNoteData } from '@/types'
+} from '@/store/api/note.api';
+import { UpdateNoteData } from '@/types';
+import { toast } from 'sonner';
+
+import { downloadFile } from '@/utils/downloadFile';
+
+import useAuth from './useAuth';
 
 /**
  * Custom hook for managing note details, updates, likes, and payments.
  * @param {string} id - The ID of the note.
  */
 export default function useNoteDetail(id: string) {
-  const { isAuthenticated, user } = useAuth()
-  const [isPurchaseConfirmOpen, setIsPurchaseConfirmOpen] = useState(false)
-  const router = useRouter()
+  const { isAuthenticated, user } = useAuth();
+  const [isPurchaseConfirmOpen, setIsPurchaseConfirmOpen] = useState(false);
+  const router = useRouter();
 
-  const { data: note, isLoading: getSingleLoading } = useGetSingleNoteQuery(id)
-  const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation()
+  const { data: note, isLoading: getSingleLoading } = useGetSingleNoteQuery(id);
+  const [makeLikeNote, { isLoading: likeLoading }] = useMakeLikeNoteMutation();
   const [makeUnlikeNote, { isLoading: unlikeLoading }] =
-    useMakeUnlikeNoteMutation()
-  const [updateNote, { isLoading: updateNoteLoading }] = useUpdateNoteMutation()
+    useMakeUnlikeNoteMutation();
+  const [updateNote, { isLoading: updateNoteLoading }] =
+    useUpdateNoteMutation();
   const [createPaymentLink, { isLoading: createPaymentLinkLoading }] =
-    useCreatePaymentLinkMutation()
-  const { data: toggleLike } = useToggleLikeQuery({ noteId: id })
-  const [deleteNote, { isLoading: deleteNoteLoading }] = useDeleteNoteMutation()
+    useCreatePaymentLinkMutation();
+  const { data: toggleLike } = useToggleLikeQuery({ noteId: id });
+  const [deleteNote, { isLoading: deleteNoteLoading }] =
+    useDeleteNoteMutation();
 
   /**
    * Update note data.
@@ -42,27 +48,27 @@ export default function useNoteDetail(id: string) {
     noteId,
     noteData,
   }: {
-    noteId: string
-    noteData: UpdateNoteData
+    noteId: string;
+    noteData: UpdateNoteData;
   }) => {
-    const res = await updateNote({ noteId, noteData })
+    const res = await updateNote({ noteId, noteData });
     if (res?.data) {
-      toast.success(res.data.message)
-      router.push('/profile?tab=my-notes')
+      toast.success(res.data.message);
+      router.push('/profile?tab=my-notes');
     }
-    return res?.data
-  }
+    return res?.data;
+  };
 
   /**
    * Open purchase confirmation modal.
    */
   const handlePurchase = () => {
     if (!isAuthenticated) {
-      toast.error('يجب تسجيل الدخول أولاً لإتمام عملية الشراء')
-      return router.push(`/notes/${id}`)
+      toast.error('يجب تسجيل الدخول أولاً لإتمام عملية الشراء');
+      return router.push(`/notes/${id}`);
     }
-    setIsPurchaseConfirmOpen(true)
-  }
+    setIsPurchaseConfirmOpen(true);
+  };
 
   /**
    * Confirm purchase and redirect to checkout.
@@ -70,8 +76,8 @@ export default function useNoteDetail(id: string) {
   const confirmPurchase = () => {
     router.push(
       `/checkout?userId=${user?._id}&noteId=${note?.data?._id}&amount=${note?.data?.price}`
-    )
-  }
+    );
+  };
 
   /**
    * Create a payment link for the note.
@@ -81,16 +87,16 @@ export default function useNoteDetail(id: string) {
     noteId,
     amount,
   }: {
-    userId: string
-    noteId: string
-    amount: string
+    userId: string;
+    noteId: string;
+    amount: string;
   }) => {
-    const res = await createPaymentLink({ userId, noteId, amount })
+    const res = await createPaymentLink({ userId, noteId, amount });
     if (res?.data) {
-      toast.success(res.data.message)
-      router.push(res.data.data.url)
+      toast.success(res.data.message);
+      router.push(res.data.data.url);
     }
-  }
+  };
 
   /**
    * Download note file.
@@ -99,36 +105,36 @@ export default function useNoteDetail(id: string) {
     noteUrl,
     noteName,
   }: {
-    noteUrl: string
-    noteName?: string
-  }) => downloadFile({ noteUrl, noteName })
+    noteUrl: string;
+    noteName?: string;
+  }) => downloadFile({ noteUrl, noteName });
 
   /**
    * Delete note.
    */
   const handleDeleteNote = async ({ noteId }: { noteId: string }) => {
-    const res = await deleteNote({ noteId })
+    const res = await deleteNote({ noteId });
     if (res) {
-      toast.success(res?.data?.message)
-      router.push('/profile?tab=my-notes')
+      toast.success(res?.data?.message);
+      router.push('/profile?tab=my-notes');
     }
-  }
+  };
 
   /**
    * Add note to liked list.
    */
   const addNoteToLikeList = async ({ noteId }: { noteId: string }) => {
-    const res = await makeLikeNote({ noteId })
-    if (res) toast.success(res?.data?.message)
-  }
+    const res = await makeLikeNote({ noteId });
+    if (res) toast.success(res?.data?.message);
+  };
 
   /**
    * Remove note from liked list.
    */
   const removeNoteFromLikeList = async ({ noteId }: { noteId: string }) => {
-    const res = await makeUnlikeNote({ noteId })
-    if (res) toast.success(res?.data?.message)
-  }
+    const res = await makeUnlikeNote({ noteId });
+    if (res) toast.success(res?.data?.message);
+  };
 
   return {
     note: note?.data,
@@ -149,5 +155,5 @@ export default function useNoteDetail(id: string) {
     createPaymentLinkLoading,
     updateNoteLoading,
     toggleLike: toggleLike?.data,
-  }
+  };
 }

@@ -1,17 +1,20 @@
-'use client'
+'use client';
 
-import { X, Bell, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { useState } from 'react';
+
+import { notificationType } from '@/types';
+import { Bell, Loader2, X } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-} from '@/components/ui/dropdown-menu'
-import { useState } from 'react'
-import { notificationType } from '@/types'
-import NotificationItem from './NotificationItem'
-import NotificationSkeleton from '../skeletons/NotificationSkeleton'
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import NotificationSkeleton from '../skeletons/NotificationSkeleton';
+import NotificationItem from './NotificationItem';
 
 export function NotificationBell({
   notifications,
@@ -20,14 +23,14 @@ export function NotificationBell({
   onClearAll,
   handleMakeNotificationRead,
 }: {
-  notifications: notificationType[]
-  notificationLoading: boolean
-  onReadAll: () => void
-  onClearAll: () => void
-  handleMakeNotificationRead: (id: string) => void
+  notifications: notificationType[];
+  notificationLoading: boolean;
+  onReadAll: () => void;
+  onClearAll: () => void;
+  handleMakeNotificationRead: (id: string) => void;
 }) {
-  const [open, setOpen] = useState(false)
-  const unreadCount = notifications?.filter((n) => !n.read)?.length || 0
+  const [open, setOpen] = useState(false);
+  const unreadCount = notifications?.filter(n => !n.read)?.length || 0;
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -68,7 +71,7 @@ export function NotificationBell({
         />
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 /** 📜 Notification Dropdown Content */
@@ -80,12 +83,12 @@ function NotificationPanel({
   onClearAll,
   handleMakeNotificationRead,
 }: {
-  onClose: () => void
-  notifications: notificationType[]
-  notificationLoading: boolean
-  onReadAll: () => void
-  onClearAll: () => void
-  handleMakeNotificationRead: (id: string) => void
+  onClose: () => void;
+  notifications: notificationType[];
+  notificationLoading: boolean;
+  onReadAll: () => void;
+  onClearAll: () => void;
+  handleMakeNotificationRead: (id: string) => void;
 }) {
   return (
     <div className="w-full">
@@ -96,7 +99,7 @@ function NotificationPanel({
           <h3 className="text-sm font-semibold sm:text-lg">الإشعارات</h3>
           {!!notifications?.length && (
             <Badge variant="secondary" className="text-[10px] sm:text-xs">
-              {notifications.filter((n) => !n.read)?.length} جديد
+              {notifications.filter(n => !n.read)?.length} جديد
             </Badge>
           )}
         </div>
@@ -147,7 +150,7 @@ function NotificationPanel({
             <NotificationSkeleton key={i} />
           ))
         ) : notifications?.length > 0 ? (
-          notifications.map((n) => (
+          notifications.map(n => (
             <NotificationItem
               key={n._id}
               id={n._id}
@@ -167,5 +170,5 @@ function NotificationPanel({
         )}
       </div>
     </div>
-  )
+  );
 }

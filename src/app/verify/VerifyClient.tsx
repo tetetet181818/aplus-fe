@@ -1,35 +1,39 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { notFound, useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Loader } from 'lucide-react'
-import { useVerifyMutation } from '@/store/api/auth.api'
-import { toast } from 'sonner'
+import { useEffect } from 'react';
+
+import Link from 'next/link';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
+
+import { useVerifyMutation } from '@/store/api/auth.api';
+import { Loader } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
 
 export default function VerifyClient() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
 
-  const [verify, { isLoading, isSuccess, isError, error }] = useVerifyMutation()
+  const [verify, { isLoading, isSuccess, isError, error }] =
+    useVerifyMutation();
 
-  if (!token) notFound()
+  if (!token) notFound();
 
   useEffect(() => {
     const runVerification = async () => {
       try {
-        const res = await verify({ token: token }).unwrap()
-        toast.success(res?.message)
-        setTimeout(() => router.push('/'), 1000)
+        const res = await verify({ token: token }).unwrap();
+        toast.success(res?.message);
+        setTimeout(() => router.push('/'), 1000);
       } catch (err) {
-        toast.error((err as { data?: { message?: string } })?.data?.message)
+        toast.error((err as { data?: { message?: string } })?.data?.message);
       }
-    }
+    };
 
-    runVerification()
-  }, [token, verify, router])
+    runVerification();
+  }, [token, verify, router]);
 
   const bgClass = isLoading
     ? 'from-gray-50 to-gray-100'
@@ -37,7 +41,7 @@ export default function VerifyClient() {
       ? 'from-green-50 to-green-100'
       : isError
         ? 'from-red-50 to-red-100'
-        : 'from-gray-50 to-gray-100'
+        : 'from-gray-50 to-gray-100';
 
   return (
     <div
@@ -112,5 +116,5 @@ export default function VerifyClient() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

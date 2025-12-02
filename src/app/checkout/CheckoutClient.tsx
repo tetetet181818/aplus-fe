@@ -1,29 +1,31 @@
 // CheckoutClient.tsx
-'use client'
+'use client';
 
-import { useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import useNoteDetail from '@/hooks/useNoteDetail'
+import { useSearchParams } from 'next/navigation';
+
+import { Button } from '@/components/ui/button';
+
+import useNoteDetail from '@/hooks/useNoteDetail';
 
 export default function CheckoutClient() {
-  const searchParams = useSearchParams()
-  const noteId = searchParams.get('noteId')
-  const userId = searchParams.get('userId')
-  const amount = searchParams.get('amount')
+  const searchParams = useSearchParams();
+  const noteId = searchParams.get('noteId');
+  const userId = searchParams.get('userId');
+  const amount = searchParams.get('amount');
   const { handleCreatePaymentLink, createPaymentLinkLoading } = useNoteDetail(
     noteId || ''
-  )
+  );
 
   const handlePay = async () => {
     if (!noteId || !userId || !amount) {
-      return
+      return;
     }
     await handleCreatePaymentLink({
       userId,
       noteId,
       amount,
-    })
-  }
+    });
+  };
 
   return (
     <main className="flex min-h-3/6 items-center justify-center p-4">
@@ -57,5 +59,5 @@ export default function CheckoutClient() {
         </p>
       </div>
     </main>
-  )
+  );
 }

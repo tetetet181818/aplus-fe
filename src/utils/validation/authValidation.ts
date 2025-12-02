@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 export const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -9,7 +9,7 @@ export const loginSchema = Yup.object().shape({
     .trim()
     .min(8, 'يجب أن لا تقل كلمة المرور عن 8 أحرف')
     .required('كلمة المرور مطلوبة'),
-})
+});
 
 export const registerSchema = Yup.object({
   fullName: Yup.string()
@@ -35,15 +35,15 @@ export const registerSchema = Yup.object({
       'يجب أن تحتوي كلمة المرور على أحرف وأرقام'
     ),
   university: Yup.string().optional(),
-})
+});
 
 export const updateSchema = Yup.object({
   university: Yup.string().optional(),
-})
+});
 export const passwordSchema = Yup.object({
   password: Yup.string().required('كلمه المرور مطلوبه'),
   confirmPassword: Yup.string().required('تاكيد كلمه المرور مطلوب '),
-})
+});
 export const resetPasswordValidation = Yup.object({
   password: Yup.string()
     .min(6, 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل')
@@ -51,10 +51,10 @@ export const resetPasswordValidation = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'كلمتا المرور غير متطابقتين')
     .required('تأكيد كلمة المرور مطلوب'),
-})
+});
 
 export const validationForgetPassword = Yup.object({
   email: Yup.string()
     .email('يرجى إدخال بريد إلكتروني صحيح')
     .required('البريد الإلكتروني مطلوب'),
-})
+});

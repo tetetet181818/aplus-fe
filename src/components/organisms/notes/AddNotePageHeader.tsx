@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 const AddNotePageHeader = ({ onBack }: { onBack: () => void }) => (
   <div className="mb-8 border-b border-gray-200 pb-6 dark:border-gray-700">
@@ -17,6 +18,6 @@ const AddNotePageHeader = ({ onBack }: { onBack: () => void }) => (
       &quot;شارك معرفتك وساعد زملائك بإضافة ملخص جديد للبيع على المنصة.&quot;
     </p>
   </div>
-)
+);
 
-export default AddNotePageHeader
+export default AddNotePageHeader;

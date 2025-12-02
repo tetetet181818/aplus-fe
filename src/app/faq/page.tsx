@@ -1,21 +1,24 @@
-import React from 'react'
+import React from 'react';
+
+import { Metadata } from 'next';
+import Link from 'next/link';
+
+import {
+  BookOpen,
+  HelpCircle,
+  Palette,
+  Server,
+  Shield,
+  ShoppingCart,
+  User,
+} from 'lucide-react';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import {
-  HelpCircle,
-  ShoppingCart,
-  User,
-  BookOpen,
-  Shield,
-  Server,
-  Palette,
-} from 'lucide-react'
-import Link from 'next/link'
-import { Metadata } from 'next'
+} from '@/components/ui/accordion';
 
 export const metadata: Metadata = {
   title: 'الأسئلة الشائعة – منصة أ+',
@@ -53,7 +56,7 @@ export const metadata: Metadata = {
     description:
       'اطلع على إجابات أهم الأسئلة حول منصة أ+ وكيفية الاستفادة القصوى من خدماتها التعليمية.',
   },
-}
+};
 
 const faqData = [
   {
@@ -160,7 +163,7 @@ const faqData = [
       },
     ],
   },
-]
+];
 
 export default function FAQPage() {
   return (
@@ -227,5 +230,5 @@ export default function FAQPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

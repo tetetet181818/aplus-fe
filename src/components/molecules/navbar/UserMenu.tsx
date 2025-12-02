@@ -1,3 +1,16 @@
+import Link from 'next/link';
+
+import { User } from '@/types/index';
+import {
+  LayoutDashboard,
+  LogOut,
+  PlusCircle,
+  Settings,
+  ShoppingBag,
+} from 'lucide-react';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,22 +18,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import {
-  LogOut,
-  PlusCircle,
-  ShoppingBag,
-  Settings,
-  LayoutDashboard,
-} from 'lucide-react'
-import { User } from '@/types/index'
+} from '@/components/ui/dropdown-menu';
 
 interface UserMenuProps {
-  handleLogout: () => void
-  user: User
+  handleLogout: () => void;
+  user: User;
 }
 
 export default function UserMenu({ handleLogout, user }: UserMenuProps) {
@@ -102,5 +104,5 @@ export default function UserMenu({ handleLogout, user }: UserMenuProps) {
         </DropdownMenu>
       )}
     </>
-  )
+  );
 }

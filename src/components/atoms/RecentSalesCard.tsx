@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
+import { Sale } from '@/types';
+
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Sale } from '@/types'
+} from '@/components/ui/card';
 
 /**
  * Show recent sales card with list of transactions.
@@ -24,7 +25,7 @@ export default function RecentSalesCard({ sales }: { sales: Sale[] }) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {sales?.map((sale, index) => (
+          {sales?.map((sale: Sale, index: number) => (
             <div
               key={sale._id}
               className="bg-muted/30 hover:bg-muted/50 animate-slide-in flex items-center justify-between rounded-lg p-3 transition-colors"
@@ -32,9 +33,6 @@ export default function RecentSalesCard({ sales }: { sales: Sale[] }) {
             >
               <div className="space-y-1">
                 <p className="text-sm font-medium">{sale.note_title}</p>
-                <p className="text-muted-foreground text-xs">
-                  {sale.users?.fullName}
-                </p>
               </div>
               <div className="space-y-1 text-right">
                 <p className="text-sm font-semibold text-green-600">
@@ -52,5 +50,5 @@ export default function RecentSalesCard({ sales }: { sales: Sale[] }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

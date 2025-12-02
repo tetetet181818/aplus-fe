@@ -1,9 +1,9 @@
 interface FormatArabicDateOptions {
-  hijri?: boolean
-  time?: boolean
-  seconds?: boolean
-  weekday?: boolean
-  monthName?: boolean
+  hijri?: boolean;
+  time?: boolean;
+  seconds?: boolean;
+  weekday?: boolean;
+  monthName?: boolean;
 }
 
 export default function formatArabicDate(
@@ -16,12 +16,12 @@ export default function formatArabicDate(
     seconds = false,
     weekday = false,
     monthName = true,
-  } = options
+  } = options;
 
-  const d: Date = date instanceof Date ? date : new Date(date)
+  const d: Date = date instanceof Date ? date : new Date(date);
 
   if (isNaN(d.getTime())) {
-    return 'تاريخ غير صالح'
+    return 'تاريخ غير صالح';
   }
 
   const arabicNumerals: string[] = [
@@ -35,13 +35,13 @@ export default function formatArabicDate(
     '٧',
     '٨',
     '٩',
-  ]
+  ];
 
   const toArabicNumbers = (num: string | number): string => {
     return num
       .toString()
-      .replace(/\d/g, (digit) => arabicNumerals[parseInt(digit, 10)])
-  }
+      .replace(/\d/g, digit => arabicNumerals[parseInt(digit, 10)]);
+  };
 
   const gregorianMonths: string[] = [
     'يناير',
@@ -56,7 +56,7 @@ export default function formatArabicDate(
     'أكتوبر',
     'نوفمبر',
     'ديسمبر',
-  ]
+  ];
 
   const hijriMonths: string[] = [
     'محرم',
@@ -71,7 +71,7 @@ export default function formatArabicDate(
     'شوال',
     'ذو القعدة',
     'ذو الحجة',
-  ]
+  ];
 
   const weekdays: string[] = [
     'الأحد',
@@ -81,88 +81,88 @@ export default function formatArabicDate(
     'الخميس',
     'الجمعة',
     'السبت',
-  ]
+  ];
 
   const formatTime = (): string => {
-    let hours: number = d.getHours()
-    const minutes: number = d.getMinutes()
-    const ampm: string = hours >= 12 ? 'م' : 'ص'
+    let hours: number = d.getHours();
+    const minutes: number = d.getMinutes();
+    const ampm: string = hours >= 12 ? 'م' : 'ص';
 
-    hours = hours % 12
-    hours = hours ? hours : 12
+    hours = hours % 12;
+    hours = hours ? hours : 12;
 
     let timeStr: string = `${toArabicNumbers(hours)}:${toArabicNumbers(
       minutes.toString().padStart(2, '0')
-    )} ${ampm}`
+    )} ${ampm}`;
 
     if (seconds) {
-      const secs: number = d.getSeconds()
+      const secs: number = d.getSeconds();
       timeStr = `${toArabicNumbers(hours)}:${toArabicNumbers(
         minutes.toString().padStart(2, '0')
-      )}:${toArabicNumbers(secs.toString().padStart(2, '0'))} ${ampm}`
+      )}:${toArabicNumbers(secs.toString().padStart(2, '0'))} ${ampm}`;
     }
 
-    return timeStr
-  }
+    return timeStr;
+  };
 
   const formatGregorian = (): string => {
-    const day: number = d.getDate()
-    const month: number = d.getMonth()
-    const year: number = d.getFullYear()
-    const weekdayNum: number = d.getDay()
+    const day: number = d.getDate();
+    const month: number = d.getMonth();
+    const year: number = d.getFullYear();
+    const weekdayNum: number = d.getDay();
 
-    let dateStr = ''
+    let dateStr = '';
 
     if (weekday) {
-      dateStr += `${weekdays[weekdayNum]}، `
+      dateStr += `${weekdays[weekdayNum]}، `;
     }
 
-    dateStr += `${toArabicNumbers(day)} `
+    dateStr += `${toArabicNumbers(day)} `;
 
     if (monthName) {
-      dateStr += `${gregorianMonths[month]} `
+      dateStr += `${gregorianMonths[month]} `;
     } else {
-      dateStr += `${toArabicNumbers(month + 1)}/`
+      dateStr += `${toArabicNumbers(month + 1)}/`;
     }
 
-    dateStr += toArabicNumbers(year)
+    dateStr += toArabicNumbers(year);
 
-    return dateStr
-  }
+    return dateStr;
+  };
 
   const formatHijri = (): string => {
-    const gregDate: Date = new Date(d)
-    const hijriDate: Date = new Date(gregDate.getTime() - 1.5e11) // تقريب تقريبي
+    const gregDate: Date = new Date(d);
+    const hijriDate: Date = new Date(gregDate.getTime() - 1.5e11); // تقريب تقريبي
 
-    const day: number = hijriDate.getDate()
-    const month: number = hijriDate.getMonth()
-    const year: number = hijriDate.getFullYear() - 579 // فرق تقريبي
-    const weekdayNum: number = hijriDate.getDay()
+    const day: number = hijriDate.getDate();
+    const month: number = hijriDate.getMonth();
+    const year: number = hijriDate.getFullYear() - 579; // فرق تقريبي
+    const weekdayNum: number = hijriDate.getDay();
 
-    let dateStr = ''
+    let dateStr = '';
 
     if (weekday) {
-      dateStr += `${weekdays[weekdayNum]}، `
+      dateStr += `${weekdays[weekdayNum]}، `;
     }
 
-    dateStr += `${toArabicNumbers(day)} `
+    dateStr += `${toArabicNumbers(day)} `;
 
     if (monthName) {
-      dateStr += `${hijriMonths[month]} `
+      dateStr += `${hijriMonths[month]} `;
     } else {
-      dateStr += `${toArabicNumbers(month + 1)}/`
+      dateStr += `${toArabicNumbers(month + 1)}/`;
     }
 
-    dateStr += toArabicNumbers(year)
+    dateStr += toArabicNumbers(year);
 
-    return dateStr + ' هـ'
-  }
+    return dateStr + ' هـ';
+  };
 
-  let formattedDate: string = hijri ? formatHijri() : formatGregorian()
+  let formattedDate: string = hijri ? formatHijri() : formatGregorian();
 
   if (time) {
-    formattedDate += ` - ${formatTime()}`
+    formattedDate += ` - ${formatTime()}`;
   }
 
-  return formattedDate
+  return formattedDate;
 }

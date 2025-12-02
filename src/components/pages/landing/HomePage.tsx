@@ -1,11 +1,10 @@
-import HeroSection from '@/components/organisms/home/HeroSection'
-
-import FeaturesSection from '@/components/organisms/home/FeaturesSection'
-import BuyerSellerSection from '@/components/organisms/home/BuyerSellerSection'
-import CallToActionSection from '@/components/organisms/home/CallToActionSection'
-import HowItWorksSection from '@/components/organisms/home/HowItWorksSection'
-import CustomerRating from '@/components/organisms/home/CustomerRating'
-import BestSellerSection from '@/components/organisms/home/BestSellerSection'
+import BestSellerSection from '@/components/organisms/home/BestSellerSection';
+import BuyerSellerSection from '@/components/organisms/home/BuyerSellerSection';
+import CallToActionSection from '@/components/organisms/home/CallToActionSection';
+import CustomerRating from '@/components/organisms/home/CustomerRating';
+import FeaturesSection from '@/components/organisms/home/FeaturesSection';
+import HeroSection from '@/components/organisms/home/HeroSection';
+import HowItWorksSection from '@/components/organisms/home/HowItWorksSection';
 
 export default function HomePage() {
   return (
@@ -20,5 +19,5 @@ export default function HomePage() {
         <CallToActionSection />
       </div>
     </>
-  )
+  );
 }

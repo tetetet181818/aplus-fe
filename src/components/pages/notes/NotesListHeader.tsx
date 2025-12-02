@@ -1,6 +1,7 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { Filter, X } from 'lucide-react'
+'use client';
+import { Filter, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 const NotesListHeader = ({
   onToggleFilters,
@@ -10,12 +11,12 @@ const NotesListHeader = ({
   hasActiveFilters,
   onClearFilters,
 }: {
-  onToggleFilters: () => void
-  showFilters: boolean
-  itemCount: number
-  totalCount: number
-  hasActiveFilters: boolean
-  onClearFilters: () => void
+  onToggleFilters: () => void;
+  showFilters: boolean;
+  itemCount: number;
+  totalCount: number;
+  hasActiveFilters: boolean;
+  onClearFilters: () => void;
 }) => {
   return (
     <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -59,7 +60,7 @@ const NotesListHeader = ({
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NotesListHeader
+export default NotesListHeader;

@@ -1,5 +1,7 @@
-import AddNotePage from '@/components/organisms/notes/AddNotePage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import AddNotePage from '@/components/organisms/notes/AddNotePage';
+
 export const metadata: Metadata = {
   title: 'أضف ملخص جديد',
   description:
@@ -20,8 +22,8 @@ export const metadata: Metadata = {
     'ملخص جاهز',
     'منصة تلخيص',
   ],
-}
+};
 
 export default function AddNote() {
-  return <AddNotePage />
+  return <AddNotePage />;
 }

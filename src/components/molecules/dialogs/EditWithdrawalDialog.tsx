@@ -1,5 +1,11 @@
-'use client'
+'use client';
 
+import { SAUDI_BANKS } from '@/constants';
+import { Withdrawal } from '@/types';
+import { useFormik } from 'formik';
+import { Loader } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,41 +13,38 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Loader } from 'lucide-react'
-import { useFormik } from 'formik'
-import { SAUDI_BANKS } from '@/constants'
-import { editWithdrawalValidationSchema } from '@/utils/validation/editWithdrawalValidation'
-import useWithdrawals from '@/hooks/useWithdrawals'
-import { Withdrawal } from '@/types'
+} from '@/components/ui/select';
+
+import useWithdrawals from '@/hooks/useWithdrawals';
+
+import { editWithdrawalValidationSchema } from '@/utils/validation/editWithdrawalValidation';
 
 /**
  * Type for editing withdrawal fields.
  */
 export interface EditWithdrawalValues {
-  accountName: string
-  bankName: string
-  iban: string
-  amount: number
+  accountName: string;
+  bankName: string;
+  iban: string;
+  amount: number;
 }
 
 /**
  * Props for EditWithdrawalDialog.
  */
 interface EditWithdrawalDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  selectWithdrawal: Withdrawal
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  selectWithdrawal: Withdrawal;
 }
 
 /**
@@ -52,7 +55,7 @@ export default function EditWithdrawalDialog({
   onOpenChange,
   selectWithdrawal,
 }: EditWithdrawalDialogProps) {
-  const { updateWithdrawalLoading, handleUpdateWithdrawal } = useWithdrawals()
+  const { updateWithdrawalLoading, handleUpdateWithdrawal } = useWithdrawals();
   const formik = useFormik<EditWithdrawalValues>({
     initialValues: {
       accountName: selectWithdrawal.accountName || '',
@@ -61,14 +64,14 @@ export default function EditWithdrawalDialog({
       amount: selectWithdrawal.amount || 0,
     },
     validationSchema: editWithdrawalValidationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       await handleUpdateWithdrawal({
         withdrawalId: selectWithdrawal._id,
         updateData: values,
-      })
-      onOpenChange(false)
+      });
+      onOpenChange(false);
     },
-  })
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -111,7 +114,7 @@ export default function EditWithdrawalDialog({
               اسم البنك
             </Label>
             <Select
-              onValueChange={(v) => formik.setFieldValue('bankName', v)}
+              onValueChange={v => formik.setFieldValue('bankName', v)}
               value={formik.values.bankName}
               disabled={updateWithdrawalLoading}
             >
@@ -119,7 +122,7 @@ export default function EditWithdrawalDialog({
                 <SelectValue placeholder="اختر البنك" />
               </SelectTrigger>
               <SelectContent>
-                {SAUDI_BANKS?.map((bank) => (
+                {SAUDI_BANKS?.map(bank => (
                   <SelectItem key={bank.code} value={bank.name}>
                     {bank.name}
                   </SelectItem>
@@ -148,10 +151,10 @@ export default function EditWithdrawalDialog({
                 type="text"
                 className="pl-12"
                 placeholder="XXXXXXXXXXXXXX"
-                onChange={(e) => {
-                  let val = e.target.value.toUpperCase().replace(/\s/g, '')
-                  if (val.startsWith('SA')) val = val.slice(2)
-                  formik.setFieldValue('iban', 'SA' + val)
+                onChange={e => {
+                  let val = e.target.value.toUpperCase().replace(/\s/g, '');
+                  if (val.startsWith('SA')) val = val.slice(2);
+                  formik.setFieldValue('iban', 'SA' + val);
                 }}
                 onBlur={formik.handleBlur}
                 value={formik.values.iban.replace(/^SA/, '')}
@@ -215,5 +218,5 @@ export default function EditWithdrawalDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

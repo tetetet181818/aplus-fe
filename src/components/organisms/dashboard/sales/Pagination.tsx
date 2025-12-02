@@ -1,23 +1,24 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+'use client';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 
 interface PaginationProps {
-  currentPage: number
-  totalPages: number
-  totalItems: number
-  limit: number
-  onNext: () => void
-  onPrev: () => void
-  onLimitChange: (limit: number) => void
-  loading?: boolean
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  limit: number;
+  onNext: () => void;
+  onPrev: () => void;
+  onLimitChange: (limit: number) => void;
+  loading?: boolean;
 }
 
 export default function Pagination({
@@ -43,14 +44,14 @@ export default function Pagination({
         {/* Limit Selector */}
         <Select
           value={limit.toString()}
-          onValueChange={(val) => onLimitChange(parseInt(val))}
+          onValueChange={val => onLimitChange(parseInt(val))}
           disabled={loading}
         >
           <SelectTrigger className="w-24">
             <SelectValue placeholder="عدد العناصر" />
           </SelectTrigger>
           <SelectContent>
-            {[5, 10, 20, 50].map((num) => (
+            {[5, 10, 20, 50].map(num => (
               <SelectItem key={num} value={num.toString()}>
                 {num} / صفحة
               </SelectItem>
@@ -82,5 +83,5 @@ export default function Pagination({
         </div>
       </div>
     </div>
-  )
+  );
 }

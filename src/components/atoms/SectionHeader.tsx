@@ -2,8 +2,8 @@ export default function SectionHeader({
   title,
   description,
 }: {
-  title: string
-  description: string
+  title: string;
+  description: string;
 }) {
   return (
     <div>
@@ -14,5 +14,5 @@ export default function SectionHeader({
         {description}
       </p>
     </div>
-  )
+  );
 }

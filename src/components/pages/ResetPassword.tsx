@@ -1,19 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useFormik } from 'formik'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { ArrowRight, Eye, EyeOff, Loader2, Lock } from 'lucide-react'
-import { resetPasswordValidation } from '@/utils/validation/authValidation'
-import useAuth from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { useFormik } from 'formik';
+import { ArrowRight, Eye, EyeOff, Loader2, Lock } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+import useAuth from '@/hooks/useAuth';
+
+import { resetPasswordValidation } from '@/utils/validation/authValidation';
 
 /** declare props */
 interface ResetPasswordProps {
-  userId: string | null
-  resetPasswordToken: string | null
+  userId: string | null;
+  resetPasswordToken: string | null;
 }
 
 /**
@@ -25,28 +30,28 @@ export default function ResetPassword({
   userId,
   resetPasswordToken,
 }: ResetPasswordProps) {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const { handleResetPassword, resetPasswordLoading } = useAuth()
+  const { handleResetPassword, resetPasswordLoading } = useAuth();
 
   const formik = useFormik({
     initialValues: { password: '', confirmPassword: '' },
     validationSchema: resetPasswordValidation,
     onSubmit: async (values, { resetForm }) => {
       try {
-        resetForm()
+        resetForm();
         handleResetPassword({
           userId: userId || '',
           resetPasswordToken: resetPasswordToken || '',
           newPassword: values.password,
-        })
+        });
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     },
-  })
+  });
 
   return (
     <div className="mx-auto my-20 mt-20 max-w-md rounded-xl border p-6 shadow-sm">
@@ -107,7 +112,7 @@ export default function ResetPassword({
         </Button>
       </form>
     </div>
-  )
+  );
 }
 
 /**
@@ -126,16 +131,16 @@ function PasswordField({
   onBlur,
   disabled,
 }: {
-  id: string
-  label: string
-  placeholder: string
-  value: string
-  error?: string
-  show: boolean
-  disabled?: boolean
-  onToggle: () => void
-  onChange: React.ChangeEventHandler<HTMLInputElement>
-  onBlur: React.FocusEventHandler<HTMLInputElement>
+  id: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  error?: string;
+  show: boolean;
+  disabled?: boolean;
+  onToggle: () => void;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur: React.FocusEventHandler<HTMLInputElement>;
 }) {
   return (
     <div className="space-y-2">
@@ -168,5 +173,5 @@ function PasswordField({
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
-  )
+  );
 }

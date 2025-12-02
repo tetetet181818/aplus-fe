@@ -1,5 +1,6 @@
-import { useState, useCallback, memo } from 'react'
-import { ChevronDown, Check } from 'lucide-react'
+import { memo, useCallback, useState } from 'react';
+
+import { Check, ChevronDown } from 'lucide-react';
 
 /**
  * Sort option interface
@@ -9,9 +10,9 @@ import { ChevronDown, Check } from 'lucide-react'
  * @property {string} icon - Emoji icon
  */
 interface SortOption {
-  value: string
-  label: string
-  icon: string
+  value: string;
+  label: string;
+  icon: string;
 }
 
 /**
@@ -24,11 +25,11 @@ interface SortOption {
  * @property {Function} setMinPrice - Min price setter
  */
 interface NotesSortDropdownProps {
-  sortBy: string
-  onSortChange: (value: string) => void
-  setMaxDownloads: (value: boolean) => void
-  setMaxPrice: (value: boolean) => void
-  setMinPrice: (value: boolean) => void
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  setMaxDownloads: (value: boolean) => void;
+  setMaxPrice: (value: boolean) => void;
+  setMinPrice: (value: boolean) => void;
 }
 
 /** Available sort options */
@@ -38,7 +39,7 @@ const sortOptions: SortOption[] = [
   { value: 'price_asc', label: 'السعر: من الأقل للأعلى', icon: '💰' },
   { value: 'price_desc', label: 'السعر: من الأعلى للأقل', icon: '💎' },
   { value: 'date_desc', label: 'الأحدث', icon: '🆕' },
-]
+];
 
 /**
  * Sort dropdown component with theme support
@@ -53,10 +54,10 @@ const NotesSortDropdown = memo(
     setMaxPrice,
     setMinPrice,
   }: NotesSortDropdownProps) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     const currentOption =
-      sortOptions.find((option) => option.value === sortBy) || sortOptions[0]
+      sortOptions.find(option => option.value === sortBy) || sortOptions[0];
 
     /**
      * Handle sort option selection
@@ -64,27 +65,27 @@ const NotesSortDropdown = memo(
      */
     const handleSelect = useCallback(
       (value: string) => {
-        setMaxDownloads(false)
-        setMaxPrice(false)
-        setMinPrice(false)
+        setMaxDownloads(false);
+        setMaxPrice(false);
+        setMinPrice(false);
 
         switch (value) {
           case 'downloads_desc':
-            setMaxDownloads(true)
-            break
+            setMaxDownloads(true);
+            break;
           case 'price_desc':
-            setMaxPrice(true)
-            break
+            setMaxPrice(true);
+            break;
           case 'price_asc':
-            setMinPrice(true)
-            break
+            setMinPrice(true);
+            break;
         }
 
-        onSortChange(value)
-        setIsOpen(false)
+        onSortChange(value);
+        setIsOpen(false);
       },
       [onSortChange, setMaxDownloads, setMaxPrice, setMinPrice]
-    )
+    );
 
     return (
       <div className="relative w-full cursor-pointer md:w-72">
@@ -122,7 +123,7 @@ const NotesSortDropdown = memo(
                     className="py-1 text-sm text-gray-700 dark:text-gray-300"
                     role="listbox"
                   >
-                    {sortOptions.map((option) => (
+                    {sortOptions.map(option => (
                       <li
                         key={option.value}
                         className={`flex cursor-pointer items-center px-4 py-2 transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 ${
@@ -148,10 +149,10 @@ const NotesSortDropdown = memo(
           </div>
         </div>
       </div>
-    )
+    );
   }
-)
+);
 
-NotesSortDropdown.displayName = 'NotesSortDropdown'
+NotesSortDropdown.displayName = 'NotesSortDropdown';
 
-export default NotesSortDropdown
+export default NotesSortDropdown;

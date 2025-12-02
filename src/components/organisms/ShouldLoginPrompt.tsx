@@ -1,17 +1,18 @@
+import { LogIn } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { LogIn } from 'lucide-react'
+} from '@/components/ui/card';
 
 const ShouldLoginPrompt = ({
   onNavigate,
 }: {
-  onNavigate: (path: string) => void
+  onNavigate: (path: string) => void;
 }) => {
   return (
     <div className="flex min-h-[calc(100vh-200px)] items-center justify-center px-4 py-12 md:px-6">
@@ -44,7 +45,7 @@ const ShouldLoginPrompt = ({
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default ShouldLoginPrompt
+export default ShouldLoginPrompt;

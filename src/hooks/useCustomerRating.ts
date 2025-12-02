@@ -1,4 +1,5 @@
-import { toast } from 'sonner'
+import { toast } from 'sonner';
+
 import {
   useCreateCustomerRatingMutation,
   useDeleteCustomerRatingMutation,
@@ -6,63 +7,63 @@ import {
   useGetRatingDashboardQuery,
   usePublishCustomerRateMutation,
   useUnPublishCustomerRateMutation,
-} from '../store/api/customer-rating.api'
+} from '../store/api/customer-rating.api';
 
 export default function useCustomerRating() {
-  const { data, isLoading } = useGetAllCustomerRatingQuery(undefined)
+  const { data, isLoading } = useGetAllCustomerRatingQuery(undefined);
 
   const [createCustomerRating, { isLoading: isCreating }] =
-    useCreateCustomerRatingMutation()
+    useCreateCustomerRatingMutation();
 
   const [deleteCustomerRating, { isLoading: isDeleting }] =
-    useDeleteCustomerRatingMutation()
+    useDeleteCustomerRatingMutation();
 
   const handelDeleteCustomerRating = async (id: string) => {
-    const res = await deleteCustomerRating(id)
+    const res = await deleteCustomerRating(id);
     if (res?.data) {
-      toast.success('تم حذف التقييم بنجاح')
-      return true
+      toast.success('تم حذف التقييم بنجاح');
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const handelCreateCustomerRating = async (values: {
-    rating: number
-    comment: string
+    rating: number;
+    comment: string;
   }) => {
-    const res = await createCustomerRating(values)
+    const res = await createCustomerRating(values);
     if (res?.data) {
-      toast.success('تم إضافة التقييم بنجاح')
-      return true
+      toast.success('تم إضافة التقييم بنجاح');
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const [publishCustomerRate, { isLoading: isPublishing }] =
-    usePublishCustomerRateMutation()
+    usePublishCustomerRateMutation();
 
   const handelPublishCustomerRate = async (id: string) => {
-    const res = await publishCustomerRate(id)
+    const res = await publishCustomerRate(id);
     if (res?.data) {
-      toast.success('تم نشر التقييم بنجاح')
-      return true
+      toast.success('تم نشر التقييم بنجاح');
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const [unPublishCustomerRate, { isLoading: isUnPublishing }] =
-    useUnPublishCustomerRateMutation()
+    useUnPublishCustomerRateMutation();
 
   const handelUnPublishCustomerRate = async (id: string) => {
-    const res = await unPublishCustomerRate(id)
+    const res = await unPublishCustomerRate(id);
     if (res?.data) {
-      toast.success('تم إلغاء نشر التقييم بنجاح')
-      return true
+      toast.success('تم إلغاء نشر التقييم بنجاح');
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
-  const { data: ratingDashboard } = useGetRatingDashboardQuery(undefined)
+  const { data: ratingDashboard } = useGetRatingDashboardQuery(undefined);
 
   return {
     customerRating: data?.data,
@@ -78,5 +79,5 @@ export default function useCustomerRating() {
     handelPublishCustomerRate,
     handelUnPublishCustomerRate,
     ratingDashboard: ratingDashboard?.data,
-  }
+  };
 }

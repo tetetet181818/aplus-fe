@@ -1,28 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
+
+import Link from 'next/link';
+
+import { useFormik } from 'formik';
+import { Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
+
+import GoogleLoginButton from '@/components/atoms/GoogleLoginButton';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogDescription,
   DialogHeader,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { loginSchema } from '@/utils/validation/authValidation'
-import { useFormik } from 'formik'
-import { Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react'
-import GoogleLoginButton from '@/components/atoms/GoogleLoginButton'
-import Link from 'next/link'
-import useAuth from '@/hooks/useAuth'
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+import useAuth from '@/hooks/useAuth';
+
+import { loginSchema } from '@/utils/validation/authValidation';
 
 /** Props for LoginDialog */
 interface LoginProps {
-  isOpen: boolean
-  onClose: () => void
-  onSwitchToRegister: () => void
+  isOpen: boolean;
+  onClose: () => void;
+  onSwitchToRegister: () => void;
 }
 
 /**
@@ -30,8 +35,8 @@ interface LoginProps {
  * Validates credentials and visually highlights invalid inputs.
  */
 const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
-  const [showPassword, setShowPassword] = useState(false)
-  const { loginUser, loading } = useAuth()
+  const [showPassword, setShowPassword] = useState(false);
+  const { loginUser, loading } = useAuth();
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
@@ -39,19 +44,19 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { resetForm, setErrors }) => {
-      const res = await loginUser(values)
+      const res = await loginUser(values);
       if (!res) {
         // if login fails, show global error or mark both fields red
         setErrors({
           email: 'خطأ في البريد الإلكتروني أو كلمة المرور',
           password: 'خطأ في البريد الإلكتروني أو كلمة المرور',
-        })
-        return
+        });
+        return;
       }
-      resetForm()
-      onClose()
+      resetForm();
+      onClose();
     },
-  })
+  });
 
   /** Conditionally apply red border if error exists */
   const getInputClass = (field: string) =>
@@ -59,7 +64,7 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
       formik.errors[field as keyof typeof formik.errors]
         ? 'border-red-500 focus-visible:ring-red-500'
         : 'border-gray-300 dark:border-gray-700'
-    } `
+    } `;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -187,7 +192,7 @@ const LoginDialog = ({ isOpen, onClose, onSwitchToRegister }: LoginProps) => {
         </div>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default LoginDialog
+export default LoginDialog;

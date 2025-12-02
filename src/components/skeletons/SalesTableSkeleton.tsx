@@ -1,5 +1,6 @@
-'use client'
+'use client';
 
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -7,8 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
+} from '@/components/ui/table';
 
 export default function SalesTableSkeleton() {
   return (
@@ -56,5 +56,5 @@ export default function SalesTableSkeleton() {
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }

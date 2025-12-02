@@ -1,11 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { Upload, BookOpen, CheckCircle } from 'lucide-react'
-import Link from 'next/link'
-import HeroImage from '../../../../public/hero-image.jpeg'
-import Image from 'next/image'
-import { JSX } from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
 
-const HeroSection = (): JSX.Element => {
+import { BookOpen, CheckCircle, Upload } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
+import HeroImage from '../../../../public/hero-image.jpeg';
+
+const HeroSection = () => {
   return (
     <header
       dir="rtl"
@@ -81,7 +83,7 @@ const HeroSection = (): JSX.Element => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;

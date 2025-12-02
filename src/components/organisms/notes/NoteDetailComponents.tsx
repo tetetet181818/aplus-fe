@@ -1,12 +1,34 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { cloneElement, JSX, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { JSX, cloneElement, useState } from 'react';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { User } from '@/types';
+import {
+  BookOpen,
+  CalendarDays,
+  Download,
+  Edit,
+  FileText,
+  Layers,
+  Link2,
+  Loader,
+  Loader2,
+  Mail,
+  Phone,
+  ShoppingCart,
+  Star,
+  Trash,
+  User as UserIcon,
+} from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -14,38 +36,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  Star,
-  Edit,
-  Trash,
-  Download,
-  ShoppingCart,
-  User as UserIcon,
-  CalendarDays,
-  BookOpen,
-  Layers,
-  FileText,
-  Mail,
-  Phone,
-  Loader2,
-  Loader,
-  Link2,
-} from 'lucide-react'
-import { toast } from 'sonner'
-import formatArabicDate from '@/utils/formateTime'
-import { User } from '@/types'
+} from '@/components/ui/dialog';
+
+import formatArabicDate from '@/utils/formateTime';
 
 interface NoteHeaderProps {
-  title: string
-  price?: number
-  rating: number
-  noteId: string
-  addNoteToLikeList: (args: { noteId: string }) => void
-  removeNoteFromLikeList: (args: { noteId: string }) => void
-  likeLoading: boolean
-  user: User
-  toggleLike: boolean
+  title: string;
+  price?: number;
+  rating: number;
+  noteId: string;
+  addNoteToLikeList: (args: { noteId: string }) => void;
+  removeNoteFromLikeList: (args: { noteId: string }) => void;
+  likeLoading: boolean;
+  user: User;
+  toggleLike: boolean;
 }
 
 /** Displays note title, price, rating, and like button */
@@ -69,7 +73,7 @@ export const NoteHeader = ({
           </CardTitle>
         </CardHeader>
       </Card>
-    )
+    );
   }
 
   return (
@@ -121,17 +125,17 @@ export const NoteHeader = ({
         </div>
       </CardHeader>
     </Card>
-  )
-}
+  );
+};
 
 interface NoteImageProps {
-  src: string
-  alt: string
+  src: string;
+  alt: string;
 }
 
 /** Displays note cover image with error fallback */
 export const NoteImage = ({ src, alt }: NoteImageProps) => {
-  const [imageError, setImageError] = useState(false)
+  const [imageError, setImageError] = useState(false);
 
   return (
     <Card className="overflow-hidden border-gray-200 bg-white py-0 shadow-lg dark:border-gray-700 dark:bg-gray-900">
@@ -154,11 +158,11 @@ export const NoteImage = ({ src, alt }: NoteImageProps) => {
         )}
       </div>
     </Card>
-  )
-}
+  );
+};
 
 interface NoteDescriptionProps {
-  description?: string
+  description?: string;
 }
 
 /** Displays note description with fallback message */
@@ -183,18 +187,18 @@ export const NoteDescription = ({ description }: NoteDescriptionProps) => {
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 interface NoteMetaProps {
-  university: string
-  college: string
-  subject: string
-  pages: number
-  year: number
-  createdAt: string
-  downloads: number
-  rating: number
+  university: string;
+  college: string;
+  subject: string;
+  pages: number;
+  year: number;
+  createdAt: string;
+  downloads: number;
+  rating: number;
 }
 
 /** Displays note metadata (university, college, pages, etc.) */
@@ -241,14 +245,14 @@ export const NoteMeta = ({
         />
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 interface MetaItemProps {
-  icon: JSX.Element
-  label: string
-  value: string | number | undefined
-  defaultValue?: string | number
+  icon: JSX.Element;
+  label: string;
+  value: string | number | undefined;
+  defaultValue?: string | number;
 }
 
 /** Renders a single metadata item with icon */
@@ -264,13 +268,13 @@ const MetaItem = ({
     })}
     <strong>{label}:</strong> {value ?? defaultValue}
   </div>
-)
+);
 
 interface NoteAuthorInfoProps {
-  authorId: string
-  authorName: string
-  isOwner: boolean
-  user: User
+  authorId: string;
+  authorName: string;
+  isOwner: boolean;
+  user: User;
 }
 
 /** Displays author/seller information with avatar */
@@ -295,7 +299,7 @@ export const NoteAuthorInfo = ({
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -333,26 +337,26 @@ export const NoteAuthorInfo = ({
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 interface NoteActionsProps {
-  isOwner: boolean
-  hasPurchased: boolean
-  price: number
-  onPurchase: () => void
-  onEdit: () => void
-  onDelete: () => void
-  onDownload: () => void
-  onReview: () => void
-  alreadyReviewed: boolean
-  isAuthenticated: boolean
-  contactMethod: string
-  downloadLoading: boolean
-  deleteLoading: boolean
-  noteId: string
-  noteTitle: string
-  noteDescription?: string
+  isOwner: boolean;
+  hasPurchased: boolean;
+  price: number;
+  onPurchase: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onDownload: () => void;
+  onReview: () => void;
+  alreadyReviewed: boolean;
+  isAuthenticated: boolean;
+  contactMethod: string;
+  downloadLoading: boolean;
+  deleteLoading: boolean;
+  noteId: string;
+  noteTitle: string;
+  noteDescription?: string;
 }
 
 /** Renders action buttons (buy, download, edit, delete, share) */
@@ -375,31 +379,31 @@ export const NoteActions = ({
   noteDescription,
 }: NoteActionsProps) => {
   const handleShare = async () => {
-    const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`
+    const shareText = `${noteTitle}\n\n${noteDescription}\n\n📚 اقرأ المزيد هنا:\nhttps://www.aplusplatformsa.com/notes/${noteId}`;
 
     try {
       if (navigator.share) {
         await navigator.share({
           text: shareText,
           url: `https://www.aplusplatformsa.com/notes/${noteId}`,
-        })
+        });
       } else {
-        await navigator.clipboard.writeText(shareText)
-        toast.success('تم نسخ معلومات الملخص بنجاح')
+        await navigator.clipboard.writeText(shareText);
+        toast.success('تم نسخ معلومات الملخص بنجاح');
       }
     } catch (err) {
-      console.error('Share error:', err)
-      toast.error('حدث خطأ أثناء المشاركة')
+      console.error('Share error:', err);
+      toast.error('حدث خطأ أثناء المشاركة');
     }
-  }
+  };
 
   const safeExecute = (action: () => void) => {
     try {
-      action?.()
+      action?.();
     } catch (error) {
-      console.error('Action error:', error)
+      console.error('Action error:', error);
     }
-  }
+  };
 
   return (
     <Card className="border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
@@ -538,19 +542,20 @@ export const NoteActions = ({
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 interface ContactMethodProps {
-  method?: string
+  method?: string;
 }
 
 /** Displays seller contact information (email/phone) */
 export const ContactMethod = ({ method }: ContactMethodProps) => {
-  if (!method) return null
+  if (!method) return null;
 
-  const isEmail = method.includes('@')
-  const isPhone = !isEmail && /^(\+?\d{1,3}[- ]?)?\d{8,15}$/.test(method.trim())
+  const isEmail = method.includes('@');
+  const isPhone =
+    !isEmail && /^(\+?\d{1,3}[- ]?)?\d{8,15}$/.test(method.trim());
 
   return (
     <div className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -581,15 +586,15 @@ export const ContactMethod = ({ method }: ContactMethodProps) => {
         <p className="break-all text-gray-800 dark:text-gray-200">{method}</p>
       )}
     </div>
-  )
-}
+  );
+};
 
 interface NotePurchaseConfirmationDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  onConfirm: () => void
-  noteTitle: string
-  notePrice: number
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+  noteTitle: string;
+  notePrice: number;
 }
 
 /** Confirmation dialog for note purchase */
@@ -602,13 +607,13 @@ export const NotePurchaseConfirmationDialog = ({
 }: NotePurchaseConfirmationDialogProps) => {
   const handleConfirm = () => {
     try {
-      onConfirm?.()
+      onConfirm?.();
     } catch (error) {
-      console.error('Purchase confirmation error:', error)
+      console.error('Purchase confirmation error:', error);
     } finally {
-      onOpenChange(false)
+      onOpenChange(false);
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -641,5 +646,5 @@ export const NotePurchaseConfirmationDialog = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

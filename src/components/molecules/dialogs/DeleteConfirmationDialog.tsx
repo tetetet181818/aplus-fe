@@ -1,20 +1,21 @@
-import { Button } from '@/components/ui/button'
+import { AlertTriangle, Loader2 } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { AlertTriangle, Loader2 } from 'lucide-react'
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface DeleteConfirmationDialogProps {
-  isOpen: boolean
-  onOpenChange: (value: boolean) => void
-  onConfirm: () => void
-  itemName?: string
-  loading?: boolean
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
+  onConfirm: () => void;
+  itemName?: string;
+  loading?: boolean;
 }
 
 const DeleteConfirmationDialog = ({
@@ -25,9 +26,9 @@ const DeleteConfirmationDialog = ({
   loading,
 }: DeleteConfirmationDialogProps) => {
   const handleConfirm = async () => {
-    await onConfirm()
-    onOpenChange(false)
-  }
+    await onConfirm();
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -68,6 +69,6 @@ const DeleteConfirmationDialog = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
-export default DeleteConfirmationDialog
+  );
+};
+export default DeleteConfirmationDialog;

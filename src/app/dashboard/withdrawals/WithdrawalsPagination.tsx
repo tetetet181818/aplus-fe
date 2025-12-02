@@ -1,24 +1,26 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Button } from '@/components/ui/button'
+import React from 'react';
+
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-} from 'lucide-react'
+} from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 interface WithdrawalsPaginationProps {
   pagination?: {
-    page: number
-    totalPages: number
-  }
-  loading?: boolean
-  onNext?: () => void
-  onPrev?: () => void
-  onFirst?: () => void
-  onLast?: () => void
+    page: number;
+    totalPages: number;
+  };
+  loading?: boolean;
+  onNext?: () => void;
+  onPrev?: () => void;
+  onFirst?: () => void;
+  onLast?: () => void;
 }
 
 /**
@@ -33,20 +35,20 @@ export default function WithdrawalsPagination({
   onFirst,
   onLast,
 }: WithdrawalsPaginationProps) {
-  if (!pagination || pagination.totalPages <= 1) return null
+  if (!pagination || pagination.totalPages <= 1) return null;
 
-  const { page, totalPages } = pagination
+  const { page, totalPages } = pagination;
 
   /** Render numbered page buttons dynamically */
   const renderPageNumbers = () => {
-    const pages = []
-    const maxVisiblePages = 5
+    const pages = [];
+    const maxVisiblePages = 5;
 
-    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
     for (let i = startPage; i <= endPage; i++) {
@@ -58,17 +60,17 @@ export default function WithdrawalsPagination({
           className="h-9 min-w-9 p-0"
           disabled={loading || i === page}
           onClick={() => {
-            if (i < page) onPrev?.()
-            else if (i > page) onNext?.()
+            if (i < page) onPrev?.();
+            else if (i > page) onNext?.();
           }}
         >
           {i}
         </Button>
-      )
+      );
     }
 
-    return pages
-  }
+    return pages;
+  };
 
   return (
     <div className="flex items-center justify-between px-2 py-4">
@@ -120,5 +122,5 @@ export default function WithdrawalsPagination({
         </Button>
       </div>
     </div>
-  )
+  );
 }

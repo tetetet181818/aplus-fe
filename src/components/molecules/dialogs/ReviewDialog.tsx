@@ -1,18 +1,19 @@
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { Button } from '@/components/ui/button'
+import { useFormik } from 'formik';
+import { Loader2 } from 'lucide-react';
+import * as yup from 'yup';
+
+import StarRatingInput from '@/components/atoms/StarRatingInput';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import StarRatingInput from '@/components/atoms/StarRatingInput'
-import { Loader2 } from 'lucide-react'
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 const validationSchema = yup.object().shape({
   rating: yup
@@ -20,18 +21,18 @@ const validationSchema = yup.object().shape({
     .min(1, 'يرجى تحديد تقييم (عدد النجوم).')
     .required('التقييم مطلوب.'),
   comment: yup.string().trim().required('يرجى كتابة تعليق.'),
-})
+});
 
 interface ReviewDialogProps {
-  isOpen: boolean
-  onOpenChange: (value: boolean) => void
-  noteTitle: string
-  noteId: string
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
+  noteTitle: string;
+  noteId: string;
   addReviewToNote: (
     noteId: string,
     reviewData: { rating: number; comment: string }
-  ) => Promise<void>
-  loading: boolean
+  ) => Promise<void>;
+  loading: boolean;
 }
 
 /**
@@ -57,17 +58,17 @@ const ReviewDialog = ({
       const reviewData = {
         rating: values.rating,
         comment: values.comment,
-      }
-      await addReviewToNote(noteId, reviewData)
-      resetForm()
-      onOpenChange(false)
+      };
+      await addReviewToNote(noteId, reviewData);
+      resetForm();
+      onOpenChange(false);
     },
-  })
+  });
 
   const handleClose = () => {
-    formik.resetForm()
-    onOpenChange(false)
-  }
+    formik.resetForm();
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -87,7 +88,7 @@ const ReviewDialog = ({
             </Label>
             <StarRatingInput
               rating={formik.values.rating}
-              setRating={(value) => formik.setFieldValue('rating', value)}
+              setRating={value => formik.setFieldValue('rating', value)}
             />
             {formik.touched.rating && formik.errors.rating && (
               <p className="mt-1 text-sm text-red-500">
@@ -142,7 +143,7 @@ const ReviewDialog = ({
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ReviewDialog
+export default ReviewDialog;

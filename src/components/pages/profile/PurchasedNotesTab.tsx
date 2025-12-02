@@ -1,24 +1,26 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Eye, Download, ShoppingBag } from 'lucide-react'
-import NoResults from '@/components/atoms/NoResults'
-import Image from 'next/image'
-import { Note } from '@/types'
-import { useRouter } from 'next/navigation'
-import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { Note } from '@/types';
+import { Download, Eye, ShoppingBag } from 'lucide-react';
+
+import NoResults from '@/components/atoms/NoResults';
+import { NoteCardSkeleton } from '@/components/skeletons/NoteCardSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface PurchasedNote extends Note {
-  saleId: string
+  saleId: string;
 }
 
 interface PurchasedNotesTabProps {
-  notes: PurchasedNote[]
-  router: ReturnType<typeof useRouter>
-  onDownload: (note: PurchasedNote) => void
-  loading: boolean
+  notes: PurchasedNote[];
+  router: ReturnType<typeof useRouter>;
+  onDownload: (note: PurchasedNote) => void;
+  loading: boolean;
 }
 
 const PurchasedNotesTab = ({
@@ -37,16 +39,16 @@ const PurchasedNotesTab = ({
           <Button onClick={() => router.push('/notes')}>تصفح الملخصات</Button>
         }
       />
-    )
+    );
   }
 
   if (loading) {
-    return <NoteCardSkeleton />
+    return <NoteCardSkeleton />;
   }
 
   return (
     <div className="space-y-6">
-      {notes?.map((note) => (
+      {notes?.map(note => (
         <Card
           key={note._id}
           className="overflow-hidden py-0 shadow-md transition-shadow duration-300 hover:shadow-lg"
@@ -120,7 +122,7 @@ const PurchasedNotesTab = ({
         </Card>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default PurchasedNotesTab
+export default PurchasedNotesTab;

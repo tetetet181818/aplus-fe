@@ -1,16 +1,17 @@
-'use client'
+'use client';
 
-import { Input } from '@/components/ui/input'
+import { staticWithdrawalStatuses } from '@/constants';
+import { Search, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Search, X } from 'lucide-react'
-import { staticWithdrawalStatuses } from '@/constants'
+} from '@/components/ui/select';
 
 /**
  * Withdrawal Filtration Component
@@ -31,30 +32,30 @@ export default function FiltrationOperation({
   setSortOrder,
   refetchWithdrawals,
 }: {
-  withdrawalStatus: string
-  setWithdrawalStatus: (value: string) => void
-  ibanFilter: string
-  setIbanFilter: (value: string) => void
-  startDate: string
-  setStartDate: (value: string) => void
-  endDate: string
-  setEndDate: (value: string) => void
-  sortBy: string
-  setSortBy: (value: string) => void
-  sortOrder: 'asc' | 'desc'
-  setSortOrder: (value: 'asc' | 'desc') => void
-  refetchWithdrawals: () => void
+  withdrawalStatus: string;
+  setWithdrawalStatus: (value: string) => void;
+  ibanFilter: string;
+  setIbanFilter: (value: string) => void;
+  startDate: string;
+  setStartDate: (value: string) => void;
+  endDate: string;
+  setEndDate: (value: string) => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  sortOrder: 'asc' | 'desc';
+  setSortOrder: (value: 'asc' | 'desc') => void;
+  refetchWithdrawals: () => void;
 }) {
   /** Reset filters */
   const handleReset = () => {
-    setWithdrawalStatus('all')
-    setIbanFilter('')
-    setStartDate('')
-    setEndDate('')
-    setSortBy('createdAt')
-    setSortOrder('desc')
-    refetchWithdrawals()
-  }
+    setWithdrawalStatus('all');
+    setIbanFilter('');
+    setStartDate('');
+    setEndDate('');
+    setSortBy('createdAt');
+    setSortOrder('desc');
+    refetchWithdrawals();
+  };
 
   return (
     <div className="bg-card mb-6 flex flex-col gap-6 rounded-lg border p-4 shadow-sm">
@@ -65,7 +66,7 @@ export default function FiltrationOperation({
           placeholder="ابحث برقم الـ IBAN..."
           className="w-full py-2 pr-4 pl-10"
           value={ibanFilter}
-          onChange={(e) => setIbanFilter(e.target.value)}
+          onChange={e => setIbanFilter(e.target.value)}
         />
       </div>
 
@@ -75,14 +76,14 @@ export default function FiltrationOperation({
         <div className="w-full sm:w-[180px]">
           <Select
             value={withdrawalStatus}
-            onValueChange={(v) => setWithdrawalStatus(v)}
+            onValueChange={v => setWithdrawalStatus(v)}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="كل الحالات" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">كل الحالات</SelectItem>
-              {staticWithdrawalStatuses?.map((status) => (
+              {staticWithdrawalStatuses?.map(status => (
                 <SelectItem key={status} value={status}>
                   {status === 'pending'
                     ? 'قيد الانتظار'
@@ -106,21 +107,21 @@ export default function FiltrationOperation({
             placeholder="من تاريخ"
             className="w-full sm:w-[150px]"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={e => setStartDate(e.target.value)}
           />
           <Input
             type="date"
             placeholder="إلى تاريخ"
             className="w-full sm:w-[150px]"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            onChange={e => setEndDate(e.target.value)}
             min={startDate}
           />
         </div>
 
         {/* Sort by */}
         <div className="flex w-full flex-col gap-3 sm:w-[260px] sm:flex-row">
-          <Select value={sortBy} onValueChange={(v) => setSortBy(v)}>
+          <Select value={sortBy} onValueChange={v => setSortBy(v)}>
             <SelectTrigger className="w-full sm:w-[130px]">
               <SelectValue placeholder="ترتيب حسب" />
             </SelectTrigger>
@@ -165,5 +166,5 @@ export default function FiltrationOperation({
         </div>
       </div>
     </div>
-  )
+  );
 }

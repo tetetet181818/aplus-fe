@@ -1,11 +1,14 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { PlusCircle } from 'lucide-react'
-import UserMenu from './UserMenu'
-import { NotificationBell } from '@/components/atoms/NotificationBell'
-import { notificationType, User } from '@/types'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
+import Link from 'next/link';
+
+import { User, notificationType } from '@/types';
+import { PlusCircle } from 'lucide-react';
+
+import { NotificationBell } from '@/components/atoms/NotificationBell';
+import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import UserMenu from './UserMenu';
 
 /**
  * Desktop navigation bar.
@@ -13,16 +16,16 @@ import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
  * Waits for token readiness before deciding what to show.
  */
 interface DesktopNavProps {
-  user: User | null
-  onLoginOpen: () => void
-  onRegisterOpen: () => void
-  handleLogout: () => void
-  notificationLoading: boolean
-  handleReadAllNotification: () => void
-  handelClearAllNotification: () => void
-  handleMakeNotificationRead: (id: string) => void
-  notifications: notificationType[]
-  loading: boolean
+  user: User | null;
+  onLoginOpen: () => void;
+  onRegisterOpen: () => void;
+  handleLogout: () => void;
+  notificationLoading: boolean;
+  handleReadAllNotification: () => void;
+  handelClearAllNotification: () => void;
+  handleMakeNotificationRead: (id: string) => void;
+  notifications: notificationType[];
+  loading: boolean;
 }
 
 const DesktopNav = ({
@@ -43,7 +46,7 @@ const DesktopNav = ({
         <Skeleton className="h-10 w-32 rounded-md" />
         <Skeleton className="h-10 w-32 rounded-md" />
       </div>
-    )
+    );
   }
   return (
     <nav className="hidden items-center gap-3 md:flex">
@@ -94,7 +97,7 @@ const DesktopNav = ({
         </>
       )}
     </nav>
-  )
-}
+  );
+};
 
-export default DesktopNav
+export default DesktopNav;

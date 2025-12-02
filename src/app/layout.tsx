@@ -1,9 +1,13 @@
-import type { Metadata } from 'next'
-import '../styles/globals.css'
-import { Providers } from '@/utils/Providers'
-import Layout from '@/components/templates/Layout'
-import { Tajawal } from 'next/font/google'
-import { ThemeProvider } from '@/components/atoms/ThemeProvider'
+import type { Metadata } from 'next';
+import { Tajawal } from 'next/font/google';
+
+import { ThemeProvider } from '@/components/atoms/ThemeProvider';
+import Layout from '@/components/templates/Layout';
+
+import { Providers } from '@/utils/Providers';
+
+import '../styles/globals.css';
+
 export const metadata: Metadata = {
   title: 'سوق الملخصات الجامعية',
   description:
@@ -44,19 +48,19 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
-}
+};
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
   variable: '--font-tajawal',
   weight: ['400', '500', '700', '800'],
   display: 'swap',
-})
+});
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="ar" dir="rtl">
@@ -76,5 +80,5 @@ export default async function RootLayout({
         </Providers>
       </body>
     </html>
-  )
+  );
 }

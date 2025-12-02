@@ -1,25 +1,27 @@
+import { useEffect } from 'react';
+
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useEffect } from 'react'
+} from '@/components/ui/dialog';
+
 export default function SuccessUploadNoteDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   useEffect(() => {
     if (open) {
       const timer = setTimeout(() => {
-        onOpenChange(false)
-      }, 2300)
-      return () => clearTimeout(timer)
+        onOpenChange(false);
+      }, 2300);
+      return () => clearTimeout(timer);
     }
-  }, [open, onOpenChange])
+  }, [open, onOpenChange]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-4xl" showCloseButton={false}>
@@ -32,5 +34,5 @@ export default function SuccessUploadNoteDialog({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

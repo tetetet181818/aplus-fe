@@ -1,8 +1,8 @@
-import { CreateNoteData, ReviewData } from "@/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { CreateNoteData, ReviewData } from '@/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
+  process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
@@ -11,14 +11,14 @@ const baseUrl =
  * Handles fetching, creating, updating, liking, purchasing, and reviewing notes.
  */
 export const noteApi = createApi({
-  reducerPath: "noteApi",
+  reducerPath: 'noteApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/notes`,
-    credentials: "include",
+    credentials: 'include',
   }),
-  tagTypes: ["Note"],
+  tagTypes: ['Note'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     /** Get all notes with filters and pagination */
     getAllNotes: builder.query({
       query: ({
@@ -34,19 +34,19 @@ export const noteApi = createApi({
         minPrice,
       }) => ({
         url: `/?page=${page}&sortOrder=${sortOrder}&limit=${limit}&title=${title}&university=${university}&collage=${collage}&year=${year}&maxDownloads=${maxDownloads}&maxPrice=${maxPrice}&minPrice=${minPrice}`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Note"],
+      providesTags: ['Note'],
     }),
 
     /** Create a new note */
     createNote: builder.mutation({
       query: ({ noteData }: { noteData: CreateNoteData }) => ({
         url: `/create`,
-        method: "POST",
+        method: 'POST',
         body: noteData,
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Purchase a note */
@@ -63,30 +63,30 @@ export const noteApi = createApi({
         message: string;
       }) => ({
         url: `/${noteId}/purchase`,
-        method: "POST",
+        method: 'POST',
         body: { invoice_id, status, message },
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Get a single note by ID */
     getSingleNote: builder.query({
       query: (noteId: string) => `/${noteId}`,
-      providesTags: ["Note"],
+      providesTags: ['Note'],
     }),
 
     /** Like a note */
     makeLikeNote: builder.mutation({
       query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/like`,
-        method: "POST",
+        method: 'POST',
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     getBestSellerNotes: builder.query({
-      query: () => "/best-sellers-notes",
-      providesTags: ["Note"],
+      query: () => '/best-sellers-notes',
+      providesTags: ['Note'],
     }),
 
     /** Toggle note like state */
@@ -94,37 +94,37 @@ export const noteApi = createApi({
       query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/toggle-like`,
       }),
-      providesTags: ["Note"],
+      providesTags: ['Note'],
     }),
 
     /** Unlike a note */
     makeUnlikeNote: builder.mutation({
       query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}/unlike`,
-        method: "POST",
+        method: 'POST',
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Delete a note */
     deleteNote: builder.mutation({
       query: ({ noteId }: { noteId: string }) => ({
         url: `/${noteId}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Get notes created by the current user */
     getUserNotes: builder.query({
       query: () => ({ url: `/my-notes` }),
-      providesTags: ["Note"],
+      providesTags: ['Note'],
     }),
 
     /** Get notes liked by the current user */
     getLikedNotes: builder.query({
       query: () => ({ url: `/likes-notes` }),
-      providesTags: ["Note"],
+      providesTags: ['Note'],
     }),
 
     /** Add a review to a note */
@@ -137,19 +137,19 @@ export const noteApi = createApi({
         reviewData: ReviewData;
       }) => ({
         url: `/${noteId}/add-review`,
-        method: "POST",
+        method: 'POST',
         body: reviewData,
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Remove a review from a note */
     removeReviewFromNote: builder.mutation({
       query: ({ noteId, reviewId }: { noteId: string; reviewId: string }) => ({
         url: `/${noteId}/reviews/${reviewId}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Update a review on a note */
@@ -164,10 +164,10 @@ export const noteApi = createApi({
         reviewData: ReviewData;
       }) => ({
         url: `/${noteId}/reviews/${reviewId}`,
-        method: "PUT",
+        method: 'PUT',
         body: reviewData,
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Create a payment link for a note purchase */
@@ -182,9 +182,9 @@ export const noteApi = createApi({
         amount: string;
       }) => ({
         url: `/create-payment-link?userId=${userId}&noteId=${noteId}&amount=${amount}`,
-        method: "POST",
+        method: 'POST',
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
 
     /** Update an existing note */
@@ -197,10 +197,10 @@ export const noteApi = createApi({
         noteData: CreateNoteData;
       }) => ({
         url: `update/${noteId}`,
-        method: "PUT",
+        method: 'PUT',
         body: noteData,
       }),
-      invalidatesTags: ["Note"],
+      invalidatesTags: ['Note'],
     }),
   }),
 });

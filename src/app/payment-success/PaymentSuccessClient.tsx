@@ -1,10 +1,14 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
-import useNotes from '@/hooks/useNotes'
-import { toast } from 'sonner'
+import { useEffect } from 'react';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { toast } from 'sonner';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+
+import useNotes from '@/hooks/useNotes';
 
 /**
  * Handles the client-side confirmation of a successful payment.
@@ -12,16 +16,16 @@ import { toast } from 'sonner'
  * and redirects the user to their purchased note.
  */
 const PaymentSuccessClient = () => {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const { handlePurchaseNote, purchaseLoading } = useNotes()
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { handlePurchaseNote, purchaseLoading } = useNotes();
 
   // Extract query parameters
-  const noteId = searchParams.get('noteId')
-  const userId = searchParams.get('userId')
-  const invoice_id = searchParams.get('invoice_id')
-  const status = searchParams.get('status')
-  const message = searchParams.get('message')
+  const noteId = searchParams.get('noteId');
+  const userId = searchParams.get('userId');
+  const invoice_id = searchParams.get('invoice_id');
+  const status = searchParams.get('status');
+  const message = searchParams.get('message');
 
   useEffect(() => {
     /**
@@ -30,8 +34,8 @@ const PaymentSuccessClient = () => {
      */
     const confirmPurchase = async () => {
       if (!noteId || !userId) {
-        toast.error('بيانات الدفع غير صالحة.')
-        return
+        toast.error('بيانات الدفع غير صالحة.');
+        return;
       }
 
       try {
@@ -40,20 +44,20 @@ const PaymentSuccessClient = () => {
           invoice_id: invoice_id || '',
           status: status || 'completed',
           message: message || 'Payment confirmed successfully',
-        })
+        });
 
         if (res?.data) {
-          router.push(`/notes/${noteId}`)
+          router.push(`/notes/${noteId}`);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        toast.error('حدث خطأ أثناء تأكيد عملية الدفع.')
+        toast.error('حدث خطأ أثناء تأكيد عملية الدفع.');
       }
-    }
+    };
 
-    confirmPurchase()
+    confirmPurchase();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [noteId, userId])
+  }, [noteId, userId]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-6 dark:bg-gray-900">
@@ -76,7 +80,7 @@ const PaymentSuccessClient = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default PaymentSuccessClient
+export default PaymentSuccessClient;

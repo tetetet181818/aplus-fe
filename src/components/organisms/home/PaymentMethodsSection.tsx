@@ -1,13 +1,15 @@
-import visaImage from '../../../public/visa.png'
-import mada_image from '../../../public/mada.svg'
-import mastercard_image from '../../../public/MasterCard-logo.webp'
-import Image from 'next/image'
-import { JSX } from 'react'
+import { JSX } from 'react';
+
+import Image from 'next/image';
+
+import mastercard_image from '../../../public/MasterCard-logo.webp';
+import mada_image from '../../../public/mada.svg';
+import visaImage from '../../../public/visa.png';
 
 interface PaymentMethod {
-  name: string
-  icon: JSX.Element
-  description: string
+  name: string;
+  icon: JSX.Element;
+  description: string;
 }
 
 const PaymentMethodsSection = (): JSX.Element => {
@@ -54,7 +56,7 @@ const PaymentMethodsSection = (): JSX.Element => {
         />
       ),
     },
-  ]
+  ];
 
   return (
     <section aria-labelledby="payment-methods-heading">
@@ -66,7 +68,7 @@ const PaymentMethodsSection = (): JSX.Element => {
       </h3>
 
       <div className="flex gap-2" role="list" aria-label="Payment methods">
-        {paymentMethods.map((method) => (
+        {paymentMethods.map(method => (
           <div
             key={method.name}
             className="flex flex-1 flex-col items-center justify-center rounded-md bg-gray-100 p-3 text-center dark:bg-gray-800"
@@ -96,13 +98,13 @@ const PaymentMethodsSection = (): JSX.Element => {
             name: 'طرق الدفع المتاحة',
             description: 'خيارات الدفع الآمنة والمشفرة المتاحة للعملاء',
             paymentAccepted: paymentMethods
-              .map((method) => method.name)
+              .map(method => method.name)
               .join(', '),
           }),
         }}
       />
     </section>
-  )
-}
+  );
+};
 
-export default PaymentMethodsSection
+export default PaymentMethodsSection;

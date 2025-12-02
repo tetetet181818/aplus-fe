@@ -1,13 +1,16 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Award } from 'lucide-react'
-import PaymentMethodsSection from '@/components/atoms/PaymentMethodsSection'
-import sudia_busniess_center from '../../../../public/sudia_busniess_center.jpeg'
-import Image from 'next/image'
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Award } from 'lucide-react';
+
+import PaymentMethodsSection from '@/components/atoms/PaymentMethodsSection';
+
+import sudia_busniess_center from '../../../../public/sudia_busniess_center.jpeg';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   const footerLinks = [
     {
@@ -29,7 +32,7 @@ const Footer = () => {
         { href: '/contact-us', text: 'اتصل بنا' },
       ],
     },
-  ]
+  ];
 
   return (
     <footer className="border-t bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
@@ -59,13 +62,13 @@ const Footer = () => {
           </div>
 
           {/* Links */}
-          {footerLinks.map((section) => (
+          {footerLinks.map(section => (
             <div key={section.title}>
               <h3 className="text-foreground mb-4 text-lg font-semibold">
                 {section.title}
               </h3>
               <ul className="space-y-2">
-                {section.links.map((link) => (
+                {section.links.map(link => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -91,7 +94,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

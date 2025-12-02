@@ -1,38 +1,41 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import Link from 'next/link';
+
+import { FormikProps } from 'formik';
 import {
+  AlertCircle,
   ArrowRight,
   CheckCircle2,
-  AlertCircle,
   FileText,
   ImageIcon,
   Loader2,
-} from 'lucide-react'
-import { FormikProps } from 'formik'
-import { AddNoteValues } from './AddNoteForm'
-import Link from 'next/link'
+} from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+
+import { AddNoteValues } from './AddNoteForm';
 
 /** Props for ReviewNote component */
 interface ReviewNoteProps {
-  formik: FormikProps<AddNoteValues>
-  prevTab: () => void
-  loading: boolean
+  formik: FormikProps<AddNoteValues>;
+  prevTab: () => void;
+  loading: boolean;
 }
 
 /** Info item for summary section */
 interface SummaryItem {
-  label: string
-  value: string | number
+  label: string;
+  value: string | number;
 }
 
 /** File upload status item */
 interface FileItem {
-  label: string
-  value: string
-  ok: boolean
-  icon: typeof FileText
+  label: string;
+  value: string;
+  ok: boolean;
+  icon: typeof FileText;
 }
 
 /** Final review step with dark mode support */
@@ -41,7 +44,7 @@ export default function ReviewNote({
   prevTab,
   loading,
 }: ReviewNoteProps) {
-  const { basic, file, cover, review } = formik.values
+  const { basic, file, cover, review } = formik.values;
 
   const summaryItems: SummaryItem[] = [
     { label: 'العنوان', value: basic.title },
@@ -53,7 +56,7 @@ export default function ReviewNote({
     { label: 'عدد الصفحات', value: basic.pagesNumber },
     { label: 'السنة', value: basic.year || '' },
     { label: 'طريقة التواصل', value: basic.contactMethod },
-  ]
+  ];
 
   const fileItems: FileItem[] = [
     {
@@ -68,7 +71,7 @@ export default function ReviewNote({
       ok: !!cover.cover,
       icon: ImageIcon,
     },
-  ]
+  ];
 
   return (
     <div
@@ -87,7 +90,7 @@ export default function ReviewNote({
         <div className="space-y-6">
           <TermsCard
             accepted={review.termsAccepted}
-            onAcceptChange={(v) =>
+            onAcceptChange={v =>
               formik.setFieldValue('review.termsAccepted', v === true)
             }
           />
@@ -99,7 +102,7 @@ export default function ReviewNote({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 /** Review header with icon and text */
@@ -116,7 +119,7 @@ function Header() {
         تأكد من صحة جميع البيانات قبل تأكيد الإرسال
       </p>
     </div>
-  )
+  );
 }
 
 /** Card displaying basic note information */
@@ -140,7 +143,7 @@ function BasicInfoCard({ items }: { items: SummaryItem[] }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 /** Card showing uploaded files status */
@@ -156,15 +159,15 @@ function UploadedFilesCard({ items }: { items: FileItem[] }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 /** Single file status indicator */
 function FileStatusItem({ item }: { item: FileItem }) {
-  const Icon = item.icon
+  const Icon = item.icon;
   const statusColors = item.ok
     ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-    : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+    : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400';
 
   return (
     <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3 transition-colors dark:bg-gray-700/50">
@@ -185,7 +188,7 @@ function FileStatusItem({ item }: { item: FileItem }) {
         <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
       )}
     </div>
-  )
+  );
 }
 
 /** Terms and conditions acceptance card */
@@ -193,8 +196,8 @@ function TermsCard({
   accepted,
   onAcceptChange,
 }: {
-  accepted: boolean
-  onAcceptChange: (v: boolean) => void
+  accepted: boolean;
+  onAcceptChange: (v: boolean) => void;
 }) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800">
@@ -215,12 +218,12 @@ function TermsCard({
         <Checkbox
           id="terms"
           checked={accepted}
-          onCheckedChange={(v) => onAcceptChange(v === true)}
+          onCheckedChange={v => onAcceptChange(v === true)}
           className="h-8 w-8 flex-shrink-0 border-gray-300 bg-white data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:data-[state=checked]:border-blue-500 dark:data-[state=checked]:bg-blue-600"
         />
       </div>
     </div>
-  )
+  );
 }
 
 /** Submit and back navigation buttons */
@@ -229,9 +232,9 @@ function ActionButtons({
   loading,
   onPrevClick,
 }: {
-  termsAccepted: boolean
-  loading: boolean
-  onPrevClick: () => void
+  termsAccepted: boolean;
+  loading: boolean;
+  onPrevClick: () => void;
 }) {
   return (
     <div className="space-y-4">
@@ -263,5 +266,5 @@ function ActionButtons({
         <ArrowRight className="h-4 w-4" /> السابق
       </Button>
     </div>
-  )
+  );
 }

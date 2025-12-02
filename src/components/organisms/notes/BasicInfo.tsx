@@ -1,37 +1,41 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { FormikProps } from 'formik'
+import { useState } from 'react';
+
+import { universityColleges } from '@/constants';
+import { FormikProps } from 'formik';
+import { ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { ArrowLeft } from 'lucide-react'
-import { Switch } from '@/components/ui/switch'
-import useAuth from '@/hooks/useAuth'
-import { universityColleges } from '@/constants'
-import { Button } from '@/components/ui/button'
-import AddNoteInstructions from './AddNoteInstructions'
-import { AddNoteValues } from './AddNoteForm'
-import { toast } from 'sonner'
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+
+import useAuth from '@/hooks/useAuth';
+
+import { AddNoteValues } from './AddNoteForm';
+import AddNoteInstructions from './AddNoteInstructions';
 
 /** ========== Basic Info Step (Updated) ========== */
 export default function BasicInfo({
   formik,
   nextTab,
 }: {
-  formik: FormikProps<AddNoteValues>
-  nextTab: () => Promise<void> | void
+  formik: FormikProps<AddNoteValues>;
+  nextTab: () => Promise<void> | void;
 }) {
-  const { user } = useAuth()
-  const [isUsingRegisteredEmail, setIsUsingRegisteredEmail] = useState(false)
-  const [email, setEmail] = useState('')
+  const { user } = useAuth();
+  const [isUsingRegisteredEmail, setIsUsingRegisteredEmail] = useState(false);
+  const [email, setEmail] = useState('');
 
   // safely get nested Formik errors and touched
   const err = (path: string): string | undefined | { [key: string]: any } =>
@@ -40,7 +44,7 @@ export default function BasicInfo({
       .reduce(
         (acc: any, k: string) => (acc ? acc[k] : undefined),
         formik.errors
-      )
+      );
 
   const touched = (
     path: string
@@ -50,41 +54,41 @@ export default function BasicInfo({
       .reduce(
         (acc: any, k: string) => (acc ? acc[k] : undefined),
         formik.touched
-      )
+      );
 
   const handleToggleEmail = () => {
-    const next = !isUsingRegisteredEmail
-    setIsUsingRegisteredEmail(next)
+    const next = !isUsingRegisteredEmail;
+    setIsUsingRegisteredEmail(next);
 
-    const newEmail = next ? user?.email || '' : ''
-    setEmail(newEmail)
+    const newEmail = next ? user?.email || '' : '';
+    setEmail(newEmail);
 
-    formik.setFieldValue('basic.contactMethod', newEmail)
-  }
+    formik.setFieldValue('basic.contactMethod', newEmail);
+  };
 
-  const selectedUniversity = formik.values.basic.university
+  const selectedUniversity = formik.values.basic.university;
   const selectedKey = formik.values.basic.university as
     | keyof typeof universityColleges
-    | ''
+    | '';
   const colleges =
     selectedKey && selectedKey in universityColleges
       ? universityColleges[selectedKey]
-      : []
+      : [];
 
   /** Handle step validation before moving forward */
   const handleNext = async () => {
     try {
-      await formik.validateForm()
-      const errors = await formik.validateForm()
+      await formik.validateForm();
+      const errors = await formik.validateForm();
       if (Object.keys(errors).length > 0) {
-        toast.error('تحقق من البيانات قبل المتابعة')
-        return
+        toast.error('تحقق من البيانات قبل المتابعة');
+        return;
       }
-      await nextTab()
+      await nextTab();
     } catch {
-      toast.error('حدث خطأ أثناء التحقق من البيانات')
+      toast.error('حدث خطأ أثناء التحقق من البيانات');
     }
-  }
+  };
 
   return (
     <div dir="rtl" className="grid grid-cols-1 md:grid-cols-4">
@@ -164,16 +168,16 @@ export default function BasicInfo({
             </Label>
             <Select
               value={formik.values.basic.university}
-              onValueChange={(v) => {
-                formik.setFieldValue('basic.university', v)
-                formik.setFieldValue('basic.college', '') // reset college
+              onValueChange={v => {
+                formik.setFieldValue('basic.university', v);
+                formik.setFieldValue('basic.college', ''); // reset college
               }}
             >
               <SelectTrigger className="w-full rounded-3xl border-2 px-5 py-6">
                 <SelectValue placeholder="اختر الجامعة" />
               </SelectTrigger>
               <SelectContent>
-                {Object.keys(universityColleges).map((uni) => (
+                {Object.keys(universityColleges).map(uni => (
                   <SelectItem key={uni} value={uni}>
                     {uni}
                   </SelectItem>
@@ -194,7 +198,7 @@ export default function BasicInfo({
             </Label>
             <Select
               value={formik.values.basic.college}
-              onValueChange={(v) => formik.setFieldValue('basic.college', v)}
+              onValueChange={v => formik.setFieldValue('basic.college', v)}
               disabled={!selectedUniversity}
             >
               <SelectTrigger className="w-full rounded-3xl border-2 px-5 py-6">
@@ -307,9 +311,9 @@ export default function BasicInfo({
                 ? email || (user?.email ?? '')
                 : formik.values.basic.contactMethod
             }
-            onChange={(e) => {
-              setEmail(e.target.value)
-              formik.setFieldValue('basic.contactMethod', e.target.value)
+            onChange={e => {
+              setEmail(e.target.value);
+              formik.setFieldValue('basic.contactMethod', e.target.value);
             }}
             onBlur={formik.handleBlur}
             className="rounded-3xl border-2 px-5 py-6"
@@ -336,5 +340,5 @@ export default function BasicInfo({
       {/* قسم التعليمات */}
       <AddNoteInstructions />
     </div>
-  )
+  );
 }

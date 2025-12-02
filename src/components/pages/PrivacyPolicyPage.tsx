@@ -1,32 +1,34 @@
-'use client'
-import { motion } from 'framer-motion'
+'use client';
+import React from 'react';
+
+import Head from 'next/head';
+
+import { motion } from 'framer-motion';
 import {
-  Shield,
-  FileText,
-  User,
-  Database,
-  Share2,
   CheckCircle,
   Cookie,
+  Database,
+  FileText,
   RefreshCcw,
-} from 'lucide-react'
-import Head from 'next/head'
-import React from 'react'
+  Share2,
+  Shield,
+  User,
+} from 'lucide-react';
 
 const PrivacyPolicyPage = () => {
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  }
+  };
 
   const ListItem = ({
     icon,
     title,
     children,
   }: {
-    icon?: React.ReactElement<{ className?: string }>
-    title: string
-    children: React.ReactNode
+    icon?: React.ReactElement<{ className?: string }>;
+    title: string;
+    children: React.ReactNode;
   }) => (
     <motion.div variants={sectionVariants} className="mb-8">
       <div className="flex items-start gap-4">
@@ -43,7 +45,7 @@ const PrivacyPolicyPage = () => {
         </div>
       </div>
     </motion.div>
-  )
+  );
 
   return (
     <>
@@ -169,7 +171,7 @@ const PrivacyPolicyPage = () => {
         </div>
       </motion.main>
     </>
-  )
-}
+  );
+};
 
-export default PrivacyPolicyPage
+export default PrivacyPolicyPage;

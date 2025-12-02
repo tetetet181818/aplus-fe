@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 
 import {
-  FileText,
-  Users,
-  UploadCloud,
-  ShieldCheck,
-  CreditCard,
-  Book,
-  UserX,
-  MessageSquare,
-  CheckSquare,
   AlertTriangle,
-} from 'lucide-react'
+  Book,
+  CheckSquare,
+  CreditCard,
+  FileText,
+  MessageSquare,
+  ShieldCheck,
+  UploadCloud,
+  UserX,
+  Users,
+} from 'lucide-react';
 
 const TermsOfServicePage = () => {
   const ListItem = ({
@@ -19,9 +19,9 @@ const TermsOfServicePage = () => {
     title,
     children,
   }: {
-    icon?: React.ReactElement<{ className?: string }>
-    title: string
-    children: React.ReactNode
+    icon?: React.ReactElement<{ className?: string }>;
+    title: string;
+    children: React.ReactNode;
   }) => (
     <div className="mb-8">
       <div className="flex items-start">
@@ -44,7 +44,7 @@ const TermsOfServicePage = () => {
         </div>
       </div>
     </div>
-  )
+  );
 
   return (
     <div className="mx-auto min-h-screen bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 px-4 py-12 md:px-6 dark:from-slate-900 dark:via-gray-800 dark:to-gray-900">
@@ -345,7 +345,7 @@ const TermsOfServicePage = () => {
         </ListItem>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TermsOfServicePage
+export default TermsOfServicePage;

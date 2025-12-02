@@ -1,37 +1,41 @@
-'use client'
+'use client';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+
+import { navigationItems } from '@/constants/index';
+import { Activity } from 'lucide-react';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import AccessDeniedPage from '@/components/organisms/AccessDeniedPage';
+import AppSidebar from '@/components/organisms/AppSidebar';
+import ShouldLoginPrompt from '@/components/organisms/ShouldLoginPrompt';
+import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/components/ui/sidebar'
-import { navigationItems } from '@/constants/index'
-import AppSidebar from '@/components/organisms/AppSidebar'
-import { Separator } from '@/components/ui/separator'
-import { Activity } from 'lucide-react'
-import Head from 'next/head'
-import useAuth from '@/hooks/useAuth'
-import ShouldLoginPrompt from '@/components/organisms/ShouldLoginPrompt'
-import AccessDeniedPage from '@/components/organisms/AccessDeniedPage'
-import { useRouter } from 'next/navigation'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
+} from '@/components/ui/sidebar';
+
+import useAuth from '@/hooks/useAuth';
+
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const router = useRouter()
-  const { user, isAuthenticated, loading } = useAuth()
+  const router = useRouter();
+  const { user, isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (!isAuthenticated) {
-    return <ShouldLoginPrompt onNavigate={router.push} />
+    return <ShouldLoginPrompt onNavigate={router.push} />;
   }
 
   if (user?.role !== 'admin') {
-    return <AccessDeniedPage onNavigate={router.push} />
+    return <AccessDeniedPage onNavigate={router.push} />;
   }
 
   return (
@@ -59,5 +63,5 @@ export default function DashboardLayout({
         </div>
       </SidebarProvider>
     </div>
-  )
+  );
 }

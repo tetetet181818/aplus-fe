@@ -1,6 +1,8 @@
-import { Mail, Clock, Info, AlertTriangle, Send } from 'lucide-react'
-import Image from 'next/image'
-import { Button } from '../ui/button'
+import Image from 'next/image';
+
+import { AlertTriangle, Clock, Info, Mail, Send } from 'lucide-react';
+
+import { Button } from '../ui/button';
 
 const ContactUsPage = () => {
   return (
@@ -105,7 +107,7 @@ const ContactUsPage = () => {
         </section>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default ContactUsPage
+export default ContactUsPage;

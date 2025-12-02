@@ -1,9 +1,11 @@
-import { motion } from 'framer-motion'
-import visaImage from '../../../public/visa.png'
-import mada_image from '../../../public/mada.svg'
-import mastercard_image from '../../../public/MasterCard-logo.webp'
-import applepay_image from '../../../public/apple_pay_logo.png'
-import Image from 'next/image'
+import Image from 'next/image';
+
+import { motion } from 'framer-motion';
+
+import mastercard_image from '../../../public/MasterCard-logo.webp';
+import applepay_image from '../../../public/apple_pay_logo.png';
+import mada_image from '../../../public/mada.svg';
+import visaImage from '../../../public/visa.png';
 
 const PaymentMethodsSection = () => {
   const paymentMethods = [
@@ -51,7 +53,7 @@ const PaymentMethodsSection = () => {
         />
       ),
     },
-  ]
+  ];
 
   const sectionVariants = {
     hidden: { opacity: 0 },
@@ -62,12 +64,12 @@ const PaymentMethodsSection = () => {
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  }
+  };
 
   return (
     <div>
@@ -80,7 +82,7 @@ const PaymentMethodsSection = () => {
         initial="hidden"
         animate="visible"
       >
-        {paymentMethods.map((method) => (
+        {paymentMethods.map(method => (
           <motion.div
             key={method.name}
             variants={itemVariants}
@@ -102,7 +104,7 @@ const PaymentMethodsSection = () => {
         جميع المعاملات مشفرة وآمنة.
       </motion.p>
     </div>
-  )
-}
+  );
+};
 
-export default PaymentMethodsSection
+export default PaymentMethodsSection;

@@ -1,17 +1,18 @@
 import {
-  Bell,
-  CheckCircle,
   AlertCircle,
   AlertTriangle,
-  Info,
-  Users,
-  FileText,
+  Bell,
+  CheckCircle,
   DollarSign,
+  FileText,
+  Info,
   Settings,
-} from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+  Users,
+} from 'lucide-react';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 /** 🔔 Single notification card with icon-type badge */
 export default function NotificationItem({
@@ -24,38 +25,38 @@ export default function NotificationItem({
   id,
   handleMakeNotificationRead,
 }: {
-  title: string
-  body: string
-  type: string
-  user: string
-  date: string
-  read: boolean
-  id: string
-  handleMakeNotificationRead: (id: string) => void
+  title: string;
+  body: string;
+  type: string;
+  user: string;
+  date: string;
+  read: boolean;
+  id: string;
+  handleMakeNotificationRead: (id: string) => void;
 }) {
   /** Return icon by type */
   const getIcon = (size = 'h-4 w-4 sm:h-5 sm:w-5') => {
     switch (type) {
       case 'withdrawal':
-        return <CheckCircle className={`${size} text-green-500`} />
+        return <CheckCircle className={`${size} text-green-500`} />;
       case 'error':
-        return <AlertCircle className={`${size} text-red-500`} />
+        return <AlertCircle className={`${size} text-red-500`} />;
       case 'warning':
-        return <AlertTriangle className={`${size} text-yellow-500`} />
+        return <AlertTriangle className={`${size} text-yellow-500`} />;
       case 'auth':
-        return <Info className={`${size} text-blue-500`} />
+        return <Info className={`${size} text-blue-500`} />;
       case 'note':
-        return <Users className={`${size} text-purple-500`} />
+        return <Users className={`${size} text-purple-500`} />;
       case 'purchase':
-        return <FileText className={`${size} text-indigo-500`} />
+        return <FileText className={`${size} text-indigo-500`} />;
       case 'sales':
-        return <DollarSign className={`${size} text-green-500`} />
+        return <DollarSign className={`${size} text-green-500`} />;
       case 'info':
-        return <Settings className={`${size} text-gray-500`} />
+        return <Settings className={`${size} text-gray-500`} />;
       default:
-        return <Bell className={`${size} text-primary`} />
+        return <Bell className={`${size} text-primary`} />;
     }
-  }
+  };
 
   /** Pick color tone for the badge background */
   const badgeStyle =
@@ -68,7 +69,7 @@ export default function NotificationItem({
       purchase: 'bg-indigo-100 text-indigo-600 border-indigo-300',
       sales: 'bg-emerald-100 text-emerald-600 border-emerald-300',
       info: 'bg-gray-100 text-gray-600 border-gray-300',
-    }[type] || 'bg-primary/10 text-primary border-primary/30'
+    }[type] || 'bg-primary/10 text-primary border-primary/30';
 
   return (
     <Card
@@ -111,5 +112,5 @@ export default function NotificationItem({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

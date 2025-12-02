@@ -1,5 +1,6 @@
-import NoteDetailPage from '@/components/pages/notes/NoteDetailPage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import NoteDetailPage from '@/components/pages/notes/NoteDetailPage';
 
 export const metadata: Metadata = {
   title: 'تفاصيل الملخص',
@@ -14,13 +15,13 @@ export const metadata: Metadata = {
     'ملخص جاهز',
     'منصة تلخيص',
   ],
-}
+};
 
 export default async function NoteDetail({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
-  const { id } = await params
-  return <NoteDetailPage id={id} />
+  const { id } = await params;
+  return <NoteDetailPage id={id} />;
 }

@@ -1,12 +1,14 @@
-'use client'
-import React from 'react'
-import Navbar from '../molecules/navbar/Navbar'
-import Footer from '../molecules/footer/Footer'
-import { Toaster } from '../ui/sonner'
-import useNotifications from '@/hooks/useNotifications'
+'use client';
+import React from 'react';
+
+import useNotifications from '@/hooks/useNotifications';
+
+import Footer from '../molecules/footer/Footer';
+import Navbar from '../molecules/navbar/Navbar';
+import { Toaster } from '../ui/sonner';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  useNotifications()
+  useNotifications();
   return (
     <>
       <Navbar />
@@ -14,5 +16,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Toaster richColors position="top-right" />
       <Footer />
     </>
-  )
+  );
 }

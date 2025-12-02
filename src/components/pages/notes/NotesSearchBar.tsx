@@ -1,11 +1,12 @@
-import { FileText, Search as SearchIcon, User } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { FileText, Search as SearchIcon, User } from 'lucide-react';
+
+import { Input } from '@/components/ui/input';
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select'
+  SelectTrigger,
+} from '@/components/ui/select';
 
 export default function NotesSearchBar({
   searchQuery,
@@ -13,14 +14,14 @@ export default function NotesSearchBar({
   setSearchType,
   searchType,
 }: {
-  searchQuery: string
-  setSearchQuery: (query: string) => void
-  setSearchType: (type: string) => void
-  searchType: string
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  setSearchType: (type: string) => void;
+  searchType: string;
 }) {
   const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
   return (
     <form
       onSubmit={handleSearchSubmit}
@@ -38,11 +39,11 @@ export default function NotesSearchBar({
           }
           className="flex-grow border-none bg-transparent pr-8 shadow-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:outline-none"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
         />
       </div>
 
-      <Select onValueChange={(value) => setSearchType(value)}>
+      <Select onValueChange={value => setSearchType(value)}>
         <SelectTrigger className="w-[60px]">
           <SearchIcon className="size-5" />
         </SelectTrigger>
@@ -58,5 +59,5 @@ export default function NotesSearchBar({
         </SelectContent>
       </Select>
     </form>
-  )
+  );
 }

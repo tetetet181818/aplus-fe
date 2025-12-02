@@ -1,12 +1,13 @@
-'use client'
+'use client';
 
-import { Provider } from 'react-redux'
-import store from '@/store'
-import { ReactNode } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { ReactNode } from 'react';
+
+import store from '@/store';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Provider } from 'react-redux';
 
 interface ProvidersProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 function ErrorFallback({ error }: { error: Error }) {
@@ -30,7 +31,7 @@ function ErrorFallback({ error }: { error: Error }) {
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 export function Providers({ children }: ProvidersProps) {
@@ -38,5 +39,5 @@ export function Providers({ children }: ProvidersProps) {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Provider store={store}>{children}</Provider>
     </ErrorBoundary>
-  )
+  );
 }

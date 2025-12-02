@@ -1,35 +1,49 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { universities } from '@/constants';
+import { RegisterCredentials } from '@/types';
+import { useFormik } from 'formik';
+import {
+  Building2,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  User,
+} from 'lucide-react';
+
+import GoogleLoginButton from '@/components/atoms/GoogleLoginButton';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useFormik } from 'formik'
-import { registerSchema } from '@/utils/validation/authValidation'
-import { Building2, Eye, EyeOff, Loader2, Lock, Mail, User } from 'lucide-react'
-import GoogleLoginButton from '@/components/atoms/GoogleLoginButton'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { universities } from '@/constants'
-import Link from 'next/link'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
-import Image from 'next/image'
-import successImage from '../../../../public/success-icon.png'
-import useAuth from '@/hooks/useAuth'
-import { RegisterCredentials } from '@/types'
+} from '@/components/ui/select';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+
+import useAuth from '@/hooks/useAuth';
+
+import { registerSchema } from '@/utils/validation/authValidation';
+
+import successImage from '../../../../public/success-icon.png';
 
 /**
  * Registration dialog component.
@@ -37,9 +51,9 @@ import { RegisterCredentials } from '@/types'
  * All inputs and selects are disabled when loading is true.
  */
 interface RegisterProps {
-  isOpen: boolean
-  onClose: () => void
-  onSwitchToLogin: () => void
+  isOpen: boolean;
+  onClose: () => void;
+  onSwitchToLogin: () => void;
 }
 
 const initialValues: RegisterCredentials = {
@@ -47,20 +61,20 @@ const initialValues: RegisterCredentials = {
   email: '',
   password: '',
   university: '',
-}
+};
 
 const RegisterDialog = ({
   isOpen,
   onClose,
   onSwitchToLogin,
 }: RegisterProps) => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [termsAccepted, setTermsAccepted] = useState(false)
-  const [activeTab, setActiveTab] = useState('register')
-  const [registeredEmail, setRegisteredEmail] = useState('')
-  const { registerUser, loading } = useAuth()
+  const [showPassword, setShowPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [activeTab, setActiveTab] = useState('register');
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const { registerUser, loading } = useAuth();
 
-  const togglePassword = useCallback(() => setShowPassword((prev) => !prev), [])
+  const togglePassword = useCallback(() => setShowPassword(prev => !prev), []);
 
   const formik = useFormik({
     initialValues,
@@ -68,18 +82,18 @@ const RegisterDialog = ({
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values, { resetForm }) => {
-      if (!termsAccepted) return
-      setRegisteredEmail(values.email)
-      const res = await registerUser(values)
+      if (!termsAccepted) return;
+      setRegisteredEmail(values.email);
+      const res = await registerUser(values);
       if (res) {
-        resetForm()
-        setActiveTab('verify')
+        resetForm();
+        setActiveTab('verify');
       }
     },
-  })
+  });
 
   const disabledClass =
-    'opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300'
+    'opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -146,7 +160,7 @@ const RegisterDialog = ({
                   <Building2 className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <Select
                     value={formik.values.university}
-                    onValueChange={(val) =>
+                    onValueChange={val =>
                       formik.setFieldValue('university', val)
                     }
                     disabled={loading}
@@ -158,7 +172,7 @@ const RegisterDialog = ({
                       <SelectValue placeholder="اختر الجامعة" />
                     </SelectTrigger>
                     <SelectContent>
-                      {universities.map((uni) => (
+                      {universities.map(uni => (
                         <SelectItem key={uni} value={uni}>
                           {uni}
                         </SelectItem>
@@ -221,7 +235,7 @@ const RegisterDialog = ({
                 <Checkbox
                   id="terms"
                   checked={termsAccepted}
-                  onCheckedChange={(checked) => setTermsAccepted(!!checked)}
+                  onCheckedChange={checked => setTermsAccepted(!!checked)}
                   disabled={loading}
                 />
                 <label
@@ -317,7 +331,7 @@ const RegisterDialog = ({
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default RegisterDialog
+export default RegisterDialog;

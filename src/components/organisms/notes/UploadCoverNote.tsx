@@ -1,43 +1,46 @@
-'use client'
+'use client';
 
-import React, { useRef, useState, useCallback } from 'react'
-import Cropper from 'react-easy-crop'
-import { FormikProps } from 'formik'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
+import React, { useCallback, useRef, useState } from 'react';
+
+import { FormikProps } from 'formik';
 import {
   ArrowLeft,
   ArrowRight,
+  Crop,
   ImageUp,
+  RefreshCw,
+  RotateCcw,
+  RotateCw,
   Upload,
   X,
   ZoomIn,
   ZoomOut,
-  RotateCw,
-  RotateCcw,
-  RefreshCw,
-  Crop,
-} from 'lucide-react'
-import { toast } from 'sonner'
-import 'react-easy-crop/react-easy-crop.css'
-import { AddNoteValues } from './AddNoteForm'
+} from 'lucide-react';
+import Cropper from 'react-easy-crop';
+import 'react-easy-crop/react-easy-crop.css';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+
+import { AddNoteValues } from './AddNoteForm';
 
 interface CropArea {
-  x: number
-  y: number
-  width: number
-  height: number
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 /** Creates an image element from URL */
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', error => reject(error));
+    image.setAttribute('crossOrigin', 'anonymous');
+    image.src = url;
+  });
 
 /** Crops and rotates image, returns blob */
 async function getCroppedImg(
@@ -45,48 +48,48 @@ async function getCroppedImg(
   pixelCrop: CropArea,
   rotation = 0
 ): Promise<Blob | null> {
-  const image = await createImage(imageSrc)
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
-  if (!ctx) return null
+  if (!ctx) return null;
 
-  const maxSize = Math.max(image.width, image.height)
-  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
+  const maxSize = Math.max(image.width, image.height);
+  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
 
-  canvas.width = safeArea
-  canvas.height = safeArea
+  canvas.width = safeArea;
+  canvas.height = safeArea;
 
-  ctx.translate(safeArea / 2, safeArea / 2)
-  ctx.rotate((rotation * Math.PI) / 180)
-  ctx.translate(-safeArea / 2, -safeArea / 2)
+  ctx.translate(safeArea / 2, safeArea / 2);
+  ctx.rotate((rotation * Math.PI) / 180);
+  ctx.translate(-safeArea / 2, -safeArea / 2);
 
   ctx.drawImage(
     image,
     safeArea / 2 - image.width * 0.5,
     safeArea / 2 - image.height * 0.5
-  )
+  );
 
-  const data = ctx.getImageData(0, 0, safeArea, safeArea)
+  const data = ctx.getImageData(0, 0, safeArea, safeArea);
 
-  canvas.width = pixelCrop.width
-  canvas.height = pixelCrop.height
+  canvas.width = pixelCrop.width;
+  canvas.height = pixelCrop.height;
 
   ctx.putImageData(
     data,
     Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
     Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
-  )
+  );
 
-  return new Promise((resolve) => {
-    canvas.toBlob((file) => resolve(file), 'image/jpeg', 0.95)
-  })
+  return new Promise(resolve => {
+    canvas.toBlob(file => resolve(file), 'image/jpeg', 0.95);
+  });
 }
 
 interface UploadCoverNoteProps {
-  formik: FormikProps<AddNoteValues>
-  prevTab: () => void
-  nextTab: () => void
+  formik: FormikProps<AddNoteValues>;
+  prevTab: () => void;
+  nextTab: () => void;
 }
 
 /** Cover image upload with cropping and editing tools */
@@ -95,117 +98,117 @@ export default function UploadCoverNote({
   prevTab,
   nextTab,
 }: UploadCoverNoteProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(0)
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
     null
-  )
+  );
 
   const onCropComplete = useCallback(
     (_: CropArea, croppedAreaPixels: CropArea) => {
-      setCroppedAreaPixels(croppedAreaPixels)
+      setCroppedAreaPixels(croppedAreaPixels);
     },
     []
-  )
+  );
 
   /** Resets all editing controls to default */
   const resetControls = () => {
-    setCrop({ x: 0, y: 0 })
-    setZoom(1)
-    setRotation(0)
-  }
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setRotation(0);
+  };
 
   /** Validates and processes selected image file */
   const processFile = (file: File) => {
     if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-      toast.error('الرجاء اختيار صورة بصيغة JPG أو PNG فقط')
-      return
+      toast.error('الرجاء اختيار صورة بصيغة JPG أو PNG فقط');
+      return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('حجم الصورة يجب ألا يتجاوز 5MB')
-      return
+      toast.error('حجم الصورة يجب ألا يتجاوز 5MB');
+      return;
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const result = e.target?.result as string
-      setImageSrc(result)
-      formik.setFieldValue('cover.cover', file)
-      resetControls()
-      toast.success('تم رفع الصورة بنجاح ✅')
-    }
-    reader.readAsDataURL(file)
-  }
+    const reader = new FileReader();
+    reader.onload = e => {
+      const result = e.target?.result as string;
+      setImageSrc(result);
+      formik.setFieldValue('cover.cover', file);
+      resetControls();
+      toast.success('تم رفع الصورة بنجاح ✅');
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) processFile(file)
-  }
+    const file = e.target.files?.[0];
+    if (file) processFile(file);
+  };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const file = e.dataTransfer.files?.[0]
-    if (file) processFile(file)
-  }
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) processFile(file);
+  };
 
   /** Removes uploaded image and resets state */
   const removeImage = () => {
-    setImageSrc(null)
-    formik.setFieldValue('cover.cover', null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
-    resetControls()
-  }
+    setImageSrc(null);
+    formik.setFieldValue('cover.cover', null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    resetControls();
+  };
 
   /** Applies crop and rotation, saves to formik */
   const applyChanges = async () => {
-    if (!imageSrc || !croppedAreaPixels) return
+    if (!imageSrc || !croppedAreaPixels) return;
 
     try {
       const croppedBlob = await getCroppedImg(
         imageSrc,
         croppedAreaPixels,
         rotation
-      )
+      );
 
       if (croppedBlob) {
         const file = new File([croppedBlob], 'cover-edited.jpg', {
           type: 'image/jpeg',
-        })
-        formik.setFieldValue('cover.cover', file)
-        toast.success('تم تطبيق التغييرات بنجاح ✅')
+        });
+        formik.setFieldValue('cover.cover', file);
+        toast.success('تم تطبيق التغييرات بنجاح ✅');
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error('حدث خطأ أثناء معالجة الصورة')
+      toast.error('حدث خطأ أثناء معالجة الصورة');
     }
-  }
+  };
 
   /** Validates and proceeds to next step */
   const handleNext = async () => {
     try {
-      const errors = await formik.validateForm()
+      const errors = await formik.validateForm();
       if (Object.keys(errors).length > 0) {
-        toast.error('تحقق من رفع صورة الغلاف قبل المتابعة')
-        return
+        toast.error('تحقق من رفع صورة الغلاف قبل المتابعة');
+        return;
       }
 
       if (!formik.values.cover.cover) {
-        toast.error('الرجاء رفع صورة الغلاف أولاً')
-        return
+        toast.error('الرجاء رفع صورة الغلاف أولاً');
+        return;
       }
 
-      await nextTab()
+      await nextTab();
     } catch {
-      toast.error('حدث خطأ أثناء التحقق من الصورة')
+      toast.error('حدث خطأ أثناء التحقق من الصورة');
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -213,13 +216,13 @@ export default function UploadCoverNote({
         imageSrc={imageSrc}
         isDragging={isDragging}
         fileInputRef={fileInputRef}
-        onDragOver={(e) => {
-          e.preventDefault()
-          setIsDragging(true)
+        onDragOver={e => {
+          e.preventDefault();
+          setIsDragging(true);
         }}
-        onDragLeave={(e) => {
-          e.preventDefault()
-          setIsDragging(false)
+        onDragLeave={e => {
+          e.preventDefault();
+          setIsDragging(false);
         }}
         onDrop={handleDrop}
         onFileChange={handleFileChange}
@@ -248,18 +251,18 @@ export default function UploadCoverNote({
 
       <NavigationButtons onPrev={prevTab} onNext={handleNext} />
     </div>
-  )
+  );
 }
 
 interface DropZoneProps {
-  imageSrc: string | null
-  isDragging: boolean
-  fileInputRef: React.RefObject<HTMLInputElement>
-  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
-  onDragLeave: (e: React.DragEvent<HTMLDivElement>) => void
-  onDrop: (e: React.DragEvent<HTMLDivElement>) => void
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  children: React.ReactNode
+  imageSrc: string | null;
+  isDragging: boolean;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeave: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  children: React.ReactNode;
 }
 
 /** Drag-and-drop zone for image upload */
@@ -294,21 +297,21 @@ const DropZone = ({
     />
     {children}
   </div>
-)
+);
 
 interface ImageEditorProps {
-  imageSrc: string
-  crop: { x: number; y: number }
-  zoom: number
-  rotation: number
-  onCropChange: (crop: { x: number; y: number }) => void
-  onZoomChange: (zoom: number) => void
-  onRotationChange: (rotation: number) => void
-  onCropComplete: (croppedArea: CropArea, croppedAreaPixels: CropArea) => void
-  onRemove: () => void
-  onReset: () => void
-  onApply: () => void
-  onChangeImage: () => void
+  imageSrc: string;
+  crop: { x: number; y: number };
+  zoom: number;
+  rotation: number;
+  onCropChange: (crop: { x: number; y: number }) => void;
+  onZoomChange: (zoom: number) => void;
+  onRotationChange: (rotation: number) => void;
+  onCropComplete: (croppedArea: CropArea, croppedAreaPixels: CropArea) => void;
+  onRemove: () => void;
+  onReset: () => void;
+  onApply: () => void;
+  onChangeImage: () => void;
 }
 
 /** Image editor with crop, zoom, and rotation controls */
@@ -374,7 +377,7 @@ const ImageEditor = ({
           <ZoomOut className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           <Slider
             value={[zoom]}
-            onValueChange={(v) => onZoomChange(v[0])}
+            onValueChange={v => onZoomChange(v[0])}
             min={1}
             max={3}
             step={0.1}
@@ -394,7 +397,7 @@ const ImageEditor = ({
         </div>
         <Slider
           value={[rotation]}
-          onValueChange={(v) => onRotationChange(v[0])}
+          onValueChange={v => onRotationChange(v[0])}
           min={0}
           max={360}
           step={1}
@@ -459,10 +462,10 @@ const ImageEditor = ({
       ✓ تم رفع الصورة بنجاح
     </p>
   </div>
-)
+);
 
 interface UploadPromptProps {
-  onUploadClick: () => void
+  onUploadClick: () => void;
 }
 
 /** Upload prompt displayed when no image is selected */
@@ -491,7 +494,7 @@ const UploadPrompt = ({ onUploadClick }: UploadPromptProps) => (
       <p>الحجم الأقصى: 5MB</p>
     </div>
   </div>
-)
+);
 
 /** Image specifications guide */
 const ImageSpecs = () => (
@@ -506,11 +509,11 @@ const ImageSpecs = () => (
       <li>الحجم: لا يتجاوز 5MB</li>
     </ul>
   </div>
-)
+);
 
 interface NavigationButtonsProps {
-  onPrev: () => void
-  onNext: () => void
+  onPrev: () => void;
+  onNext: () => void;
 }
 
 /** Navigation buttons for form steps */
@@ -532,4 +535,4 @@ const NavigationButtons = ({ onPrev, onNext }: NavigationButtonsProps) => (
       التالي <ArrowLeft className="h-4 w-4" />
     </Button>
   </div>
-)
+);

@@ -1,16 +1,18 @@
+import { JSX, ReactNode } from 'react';
+
 import {
   Bookmark,
-  TrendingUp,
-  Shield,
-  Users,
-  Rocket,
   DollarSign,
-} from 'lucide-react'
-import { JSX, ReactNode } from 'react'
+  Rocket,
+  Shield,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
+
 interface FeatureCardProps {
-  icon: ReactNode
-  title: string
-  description: string
+  icon: ReactNode;
+  title: string;
+  description: string;
 }
 
 const FeatureCard = ({
@@ -36,12 +38,12 @@ const FeatureCard = ({
       {description}
     </p>
   </article>
-)
+);
 
 interface FeatureItem {
-  icon: JSX.Element
-  title: string
-  description: string
+  icon: JSX.Element;
+  title: string;
+  description: string;
 }
 
 const FeaturesSection = (): JSX.Element => {
@@ -76,7 +78,7 @@ const FeaturesSection = (): JSX.Element => {
       title: 'انطلق نحو التميز',
       description: 'ابدأ رحلتك الأكاديمية مع أدوات ذكية ودعم مستمر',
     },
-  ]
+  ];
 
   return (
     <section
@@ -120,7 +122,7 @@ const FeaturesSection = (): JSX.Element => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default FeaturesSection
+export default FeaturesSection;

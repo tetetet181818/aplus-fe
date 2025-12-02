@@ -1,10 +1,10 @@
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card';
 
 interface NoResultsProps {
-  icon: React.ReactNode
-  title: string
-  message: string
-  actionButton?: React.ReactNode
+  icon: React.ReactNode;
+  title: string;
+  message: string;
+  actionButton?: React.ReactNode;
 }
 
 const NoResults = ({ icon, title, message, actionButton }: NoResultsProps) => {
@@ -19,7 +19,7 @@ const NoResults = ({ icon, title, message, actionButton }: NoResultsProps) => {
         {actionButton}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default NoResults
+export default NoResults;

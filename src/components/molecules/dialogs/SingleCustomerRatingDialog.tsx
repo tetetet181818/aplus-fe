@@ -1,30 +1,33 @@
-'use client'
+'use client';
+
+import React, { JSX } from 'react';
+
+import { CustomerRatingTypes } from '@/types';
+import { Calendar, MessageCircle, Star, User } from 'lucide-react';
 
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Star, User, MessageCircle, Calendar } from 'lucide-react'
-import React, { JSX } from 'react'
-import formatArabicDate from '@/utils/formateTime'
-import { CustomerRatingTypes } from '@/types'
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+
+import formatArabicDate from '@/utils/formateTime';
 
 export default function SingleCustomerRatingDialog({
   open,
   onClose,
   item,
 }: {
-  open: boolean
-  onClose: () => void
-  item: CustomerRatingTypes | null
+  open: boolean;
+  onClose: () => void;
+  item: CustomerRatingTypes | null;
 }): JSX.Element {
-  if (!item) return <></>
+  if (!item) return <></>;
 
-  const { fullName, comment, rating, createdAt } = item
+  const { fullName, comment, rating, createdAt } = item;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -134,5 +137,5 @@ export default function SingleCustomerRatingDialog({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

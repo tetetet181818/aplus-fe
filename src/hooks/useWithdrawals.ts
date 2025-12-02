@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   useCreateWithdrawalMutation,
@@ -6,9 +6,9 @@ import {
   useGetAllWithdrawalsQuery,
   useGetMeWithdrawalsQuery,
   useUpdateWithdrawalMutation,
-} from '@/store/api/withdrawal.api'
-import { withdrawalData } from '@/types'
-import { toast } from 'sonner'
+} from '@/store/api/withdrawal.api';
+import { withdrawalData } from '@/types';
+import { toast } from 'sonner';
 
 /**
  * Custom hook for managing withdrawals:
@@ -18,65 +18,65 @@ import { toast } from 'sonner'
 export default function useWithdrawals() {
   /** Fetch withdrawals for the current user */
   const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
-    useGetMeWithdrawalsQuery({})
+    useGetMeWithdrawalsQuery({});
 
   /** Fetch all withdrawals (admin use) */
   const { data: withdrawals, isLoading: withdrawalsLoading } =
-    useGetAllWithdrawalsQuery({})
+    useGetAllWithdrawalsQuery({});
 
   const [createWithdrawal, { isLoading: createWithdrawalLoading }] =
-    useCreateWithdrawalMutation()
+    useCreateWithdrawalMutation();
 
   /** Create a new withdrawal request */
   const handleCreateWithdrawal = async (withdrawalData: withdrawalData) => {
     try {
-      const res = await createWithdrawal({ withdrawalData })
+      const res = await createWithdrawal({ withdrawalData });
       if (res?.data?.message) {
-        toast.success('تم إضافة السحب بنجاح')
+        toast.success('تم إضافة السحب بنجاح');
       }
-      return res?.data
+      return res?.data;
     } catch (error) {
-      console.log(error)
-      toast.error('حدث خطأ ')
+      console.log(error);
+      toast.error('حدث خطأ ');
     }
-  }
+  };
 
   const [deleteWithdrawal, { isLoading: deleteWithdrawalLoading }] =
-    useDeleteWithdrawalMutation()
+    useDeleteWithdrawalMutation();
 
   const handelDeleteWithdrawal = async (withdrawalId: string) => {
     try {
-      const res = await deleteWithdrawal({ withdrawalId })
+      const res = await deleteWithdrawal({ withdrawalId });
       if (res?.data?.message) {
-        toast.success('تم حذف السحب بنجاح')
+        toast.success('تم حذف السحب بنجاح');
       }
-      return res?.data
+      return res?.data;
     } catch (error) {
-      console.log((error as { message: string })?.message)
-      toast.error((error as { message: string })?.message)
+      console.log((error as { message: string })?.message);
+      toast.error((error as { message: string })?.message);
     }
-  }
+  };
 
   const [updateWithdrawal, { isLoading: updateWithdrawalLoading }] =
-    useUpdateWithdrawalMutation()
+    useUpdateWithdrawalMutation();
 
   const handleUpdateWithdrawal = async ({
     withdrawalId,
     updateData,
   }: {
-    withdrawalId: string
-    updateData: withdrawalData
+    withdrawalId: string;
+    updateData: withdrawalData;
   }) => {
     try {
-      const res = await updateWithdrawal({ withdrawalId, updateData }).unwrap()
+      const res = await updateWithdrawal({ withdrawalId, updateData }).unwrap();
       if (res?.message) {
-        toast.success('تم تحديث السحب بنجاح')
+        toast.success('تم تحديث السحب بنجاح');
       }
-      return res
+      return res;
     } catch (error) {
-      toast.error((error as { message: string })?.message)
+      toast.error((error as { message: string })?.message);
     }
-  }
+  };
 
   return {
     withdrawals: withdrawals?.data,
@@ -89,5 +89,5 @@ export default function useWithdrawals() {
     deleteWithdrawalLoading,
     updateWithdrawalLoading,
     handleUpdateWithdrawal,
-  }
+  };
 }

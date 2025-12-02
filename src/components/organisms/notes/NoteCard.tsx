@@ -1,9 +1,11 @@
-import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Star, BookOpen, Layers, Download } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+
 import { Note } from '@/types';
+import { BookOpen, Download, Layers, Star } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 const NoteCard = ({ note }: { note: Note }) => {
   return (

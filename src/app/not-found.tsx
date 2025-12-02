@@ -1,10 +1,10 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
+import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '404 | الصفحة غير موجودة',
   description: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
-}
+};
 
 export default function NotFound() {
   return (
@@ -36,7 +36,7 @@ export default function NotFound() {
         </Link>
 
         <div className="mt-12 flex justify-center space-x-4">
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3].map(i => (
             <div
               key={i}
               className="h-3 w-3 animate-bounce rounded-full bg-blue-200"
@@ -46,5 +46,5 @@ export default function NotFound() {
         </div>
       </div>
     </div>
-  )
+  );
 }

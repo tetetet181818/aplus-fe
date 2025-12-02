@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 function GoogleLoginButton() {
   const loginWithGoogle = () => {
-    window.open(process.env.NEXT_PUBLIC_GOOGLE_LOGIN, '_self')
-  }
+    window.open(process.env.NEXT_PUBLIC_GOOGLE_LOGIN, '_self');
+  };
   return (
     <button
       onClick={loginWithGoogle}
@@ -33,7 +33,7 @@ function GoogleLoginButton() {
       </svg>
       <span>تسجيل الدخول عبر Google</span>
     </button>
-  )
+  );
 }
 
-export default GoogleLoginButton
+export default GoogleLoginButton;

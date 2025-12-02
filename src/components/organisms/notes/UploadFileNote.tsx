@@ -1,16 +1,19 @@
-'use client'
+'use client';
 
-import { useRef, useState, useEffect } from 'react'
-import { FormikProps } from 'formik'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, FileUp, X, FileText } from 'lucide-react'
-import { toast } from 'sonner'
-import { AddNoteValues } from './AddNoteForm'
+import { useEffect, useRef, useState } from 'react';
+
+import { FormikProps } from 'formik';
+import { ArrowLeft, ArrowRight, FileText, FileUp, X } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+
+import { AddNoteValues } from './AddNoteForm';
 
 interface UploadFileNoteProps {
-  formik: FormikProps<AddNoteValues>
-  prevTab: () => void
-  nextTab: () => Promise<void> | void
+  formik: FormikProps<AddNoteValues>;
+  prevTab: () => void;
+  nextTab: () => Promise<void> | void;
 }
 
 /** File upload step with PDF preview and validation */
@@ -19,76 +22,76 @@ export default function UploadFileNote({
   prevTab,
   nextTab,
 }: UploadFileNoteProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [status, setStatus] = useState<string | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // Generate preview URL for uploaded PDF
   useEffect(() => {
-    const file = formik.values.file?.file
+    const file = formik.values.file?.file;
     if (file instanceof File) {
-      const url = URL.createObjectURL(file)
-      setPreviewUrl(url)
-      return () => URL.revokeObjectURL(url)
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
     }
-    setPreviewUrl(null)
-  }, [formik.values.file?.file])
+    setPreviewUrl(null);
+  }, [formik.values.file?.file]);
 
   /** Validates and handles PDF file selection */
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement | null>) => {
+    const file = e.target.files?.[0];
 
     if (!file) {
-      setStatus('يجب اختيار ملف')
-      formik.setFieldValue('file.file', null)
-      return
+      setStatus('يجب اختيار ملف');
+      formik.setFieldValue('file.file', null);
+      return;
     }
 
     if (file.type === 'application/pdf') {
-      formik.setFieldValue('file.file', file)
-      setStatus('تم رفع الملف بنجاح ✅')
-      toast.success('تم رفع الملف بنجاح')
+      formik.setFieldValue('file.file', file);
+      setStatus('تم رفع الملف بنجاح ✅');
+      toast.success('تم رفع الملف بنجاح');
     } else {
-      formik.setFieldValue('file.file', null)
-      formik.setFieldError('file.file', 'الملف يجب أن يكون بصيغة PDF')
-      setStatus('الملف يجب أن يكون بصيغة PDF ❌')
-      toast.error('الملف يجب أن يكون بصيغة PDF')
+      formik.setFieldValue('file.file', null);
+      formik.setFieldError('file.file', 'الملف يجب أن يكون بصيغة PDF');
+      setStatus('الملف يجب أن يكون بصيغة PDF ❌');
+      toast.error('الملف يجب أن يكون بصيغة PDF');
     }
-  }
+  };
 
   /** Removes uploaded file and resets state */
   const handleRemoveFile = () => {
-    formik.setFieldValue('file.file', null)
-    setStatus(null)
-    setPreviewUrl(null)
+    formik.setFieldValue('file.file', null);
+    setStatus(null);
+    setPreviewUrl(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = '';
     }
-    toast.info('تم إزالة الملف')
-  }
+    toast.info('تم إزالة الملف');
+  };
 
   /** Validates form and proceeds to next step */
   const handleNext = async () => {
     try {
-      const errors = await formik.validateForm()
+      const errors = await formik.validateForm();
       if (Object.keys(errors).length > 0) {
-        toast.error('تحقق من رفع الملف قبل المتابعة')
-        return
+        toast.error('تحقق من رفع الملف قبل المتابعة');
+        return;
       }
 
       if (!formik.values.file.file) {
-        toast.error('الرجاء رفع ملف PDF أولاً')
-        return
+        toast.error('الرجاء رفع ملف PDF أولاً');
+        return;
       }
 
-      await nextTab()
+      await nextTab();
     } catch {
-      toast.error('حدث خطأ أثناء الانتقال للخطوة التالية')
+      toast.error('حدث خطأ أثناء الانتقال للخطوة التالية');
     }
-  }
+  };
 
-  const uploadedFile = formik.values.file?.file
-  const fileError = formik.errors.file?.file
+  const uploadedFile = formik.values.file?.file;
+  const fileError = formik.errors.file?.file;
 
   return (
     <>
@@ -120,13 +123,13 @@ export default function UploadFileNote({
 
       <NavigationButtons onPrev={prevTab} onNext={handleNext} />
     </>
-  )
+  );
 }
 
 interface UploadAreaProps {
-  fileInputRef: React.RefObject<HTMLInputElement>
-  fileError?: string
-  onUploadClick: () => void
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  fileError?: string;
+  onUploadClick: () => void;
 }
 
 /** Upload area displayed when no file is selected */
@@ -158,14 +161,14 @@ const UploadArea = ({ fileError, onUploadClick }: UploadAreaProps) => (
       رفع الملف
     </Button>
   </div>
-)
+);
 
 interface FilePreviewProps {
-  file: File | null
-  previewUrl: string | null
-  status: string | null
-  onRemove: () => void
-  onChangeFile: () => void
+  file: File | null;
+  previewUrl: string | null;
+  status: string | null;
+  onRemove: () => void;
+  onChangeFile: () => void;
 }
 
 /** Displays uploaded file info and PDF preview */
@@ -239,11 +242,11 @@ const FilePreview = ({
       تغيير الملف
     </Button>
   </div>
-)
+);
 
 interface NavigationButtonsProps {
-  onPrev: () => void
-  onNext: () => void
+  onPrev: () => void;
+  onNext: () => void;
 }
 
 /** Navigation buttons for form steps */
@@ -265,4 +268,4 @@ const NavigationButtons = ({ onPrev, onNext }: NavigationButtonsProps) => (
       التالي <ArrowLeft className="h-4 w-4" />
     </Button>
   </div>
-)
+);

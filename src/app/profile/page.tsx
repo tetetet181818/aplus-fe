@@ -1,7 +1,9 @@
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
-import UserDashboardPage from '@/components/pages/profile/UserDashboardPage'
-import { Suspense } from 'react'
-import { Metadata } from 'next'
+import { Suspense } from 'react';
+
+import { Metadata } from 'next';
+
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import UserDashboardPage from '@/components/pages/profile/UserDashboardPage';
 
 export const metadata: Metadata = {
   title: 'تفاصيل حسابك | منصة أ+',
@@ -53,10 +55,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://aplusplatformsa.com'),
   applicationName: 'A+ Platform',
   referrer: 'origin-when-cross-origin',
-}
+};
 
 function ProfileWrapper() {
-  return <UserDashboardPage />
+  return <UserDashboardPage />;
 }
 
 export default function Profile() {
@@ -64,5 +66,5 @@ export default function Profile() {
     <Suspense fallback={<LoadingSpinner />}>
       <ProfileWrapper />
     </Suspense>
-  )
+  );
 }

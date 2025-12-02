@@ -1,28 +1,32 @@
-'use client'
+'use client';
 
 /**
  * CustomerRating Component — displays customer reviews with smooth horizontal scrolling
  * Now with dark mode support
  */
-import React, { useState, useRef, useEffect } from 'react'
-import AddCoustomerRateDialog from '@/components/molecules/dialogs/AddCoustomerRateDialog'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Star, Quote } from 'lucide-react'
-import useCustomerRating from '@/hooks/useCustomerRating'
-import formatArabicDate from '@/utils/formateTime'
-import { CustomerRatingTypes } from '@/types'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useUserRatedBeforeQuery } from '@/store/api/customer-rating.api'
-import useAuth from '@/hooks/useAuth'
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useUserRatedBeforeQuery } from '@/store/api/customer-rating.api';
+import { CustomerRatingTypes } from '@/types';
+import { PlusCircle, Quote, Star } from 'lucide-react';
+
+import AddCoustomerRateDialog from '@/components/molecules/dialogs/AddCoustomerRateDialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import useAuth from '@/hooks/useAuth';
+import useCustomerRating from '@/hooks/useCustomerRating';
+
+import formatArabicDate from '@/utils/formateTime';
 
 export default function CustomerRating() {
-  const [isOpen, setIsOpen] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const { user } = useAuth()
-  const { customerRating, isLoading } = useCustomerRating()
+  const [isOpen, setIsOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+  const { customerRating, isLoading } = useCustomerRating();
   const { data: userRatedBefore, isLoading: userRatedBeforeLoading } =
-    useUserRatedBeforeQuery(undefined)
+    useUserRatedBeforeQuery(undefined);
 
   /** Render stars for each rating */
   const renderStars = (rating: number) =>
@@ -35,7 +39,7 @@ export default function CustomerRating() {
             : 'fill-gray-300 text-gray-300 dark:fill-gray-600 dark:text-gray-600'
         }`}
       />
-    ))
+    ));
 
   /** Skeleton card while loading */
   const RatingCardSkeleton = () => (
@@ -54,33 +58,33 @@ export default function CustomerRating() {
         <Skeleton className="h-10 w-10 rounded-full dark:bg-gray-700" />
       </div>
     </div>
-  )
+  );
 
   /** Allow wheel to scroll horizontally */
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (scrollRef.current) {
-      e.preventDefault()
-      scrollRef.current.scrollLeft += e.deltaY
+      e.preventDefault();
+      scrollRef.current.scrollLeft += e.deltaY;
     }
-  }
+  };
 
   /** Auto-scroll every few seconds */
   useEffect(() => {
     const interval = setInterval(() => {
       if (scrollRef.current) {
-        const container = scrollRef.current
-        const maxScroll = container.scrollWidth - container.clientWidth
+        const container = scrollRef.current;
+        const maxScroll = container.scrollWidth - container.clientWidth;
 
         if (container.scrollLeft >= maxScroll) {
-          container.scrollTo({ left: 0, behavior: 'smooth' })
+          container.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-          container.scrollBy({ left: 500, behavior: 'smooth' })
+          container.scrollBy({ left: 500, behavior: 'smooth' });
         }
       }
-    }, 3000)
+    }, 3000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section
@@ -195,5 +199,5 @@ export default function CustomerRating() {
         loading={isLoading}
       />
     </section>
-  )
+  );
 }

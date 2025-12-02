@@ -1,34 +1,37 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { JSX } from 'react';
+
+import Link from 'next/link';
+
+import { motion } from 'framer-motion';
 import {
-  LogOut,
-  LogIn,
-  UserPlus,
   BookOpen,
-  PlusCircle,
-  ShoppingBag,
-  Settings,
   LayoutDashboard,
-} from 'lucide-react'
-import { motion } from 'framer-motion'
-import { JSX } from 'react'
-import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
+  LogIn,
+  LogOut,
+  PlusCircle,
+  Settings,
+  ShoppingBag,
+  UserPlus,
+} from 'lucide-react';
+
+import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
+import { Button } from '@/components/ui/button';
 
 interface User {
-  role?: string
-  [key: string]: unknown
+  role?: string;
+  [key: string]: unknown;
 }
 
 interface MobileMenuProps {
-  isOpen: boolean
-  onClose: () => void
-  isAuthenticated: boolean
-  onLoginOpen: () => void
-  onRegisterOpen: () => void
-  user?: User | null
-  handleLogout: () => void
+  isOpen: boolean;
+  onClose: () => void;
+  isAuthenticated: boolean;
+  onLoginOpen: () => void;
+  onRegisterOpen: () => void;
+  user?: User | null;
+  handleLogout: () => void;
 }
 
 const MobileMenu = ({
@@ -40,12 +43,12 @@ const MobileMenu = ({
   user,
   handleLogout,
 }: MobileMenuProps): JSX.Element | null => {
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const handleLinkClick = (action?: () => void) => {
-    if (action) action()
-    onClose()
-  }
+    if (action) action();
+    onClose();
+  };
 
   return (
     <motion.nav
@@ -172,7 +175,7 @@ const MobileMenu = ({
         </div>
       </div>
     </motion.nav>
-  )
-}
+  );
+};
 
-export default MobileMenu
+export default MobileMenu;

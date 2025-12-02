@@ -1,5 +1,6 @@
-import { useState, useCallback, memo } from 'react'
-import { ChevronDown, Check } from 'lucide-react'
+import { memo, useCallback, useState } from 'react';
+
+import { Check, ChevronDown } from 'lucide-react';
 
 const sortOptions = [
   { value: 'default', label: 'الافتراضي', icon: '📝' },
@@ -7,28 +8,28 @@ const sortOptions = [
   { value: 'price_asc', label: 'السعر: من الأقل للأعلى', icon: '💰' },
   { value: 'price_desc', label: 'السعر: من الأعلى للأقل', icon: '💎' },
   { value: 'date_desc', label: 'الأحدث', icon: '🆕' },
-]
+];
 
 const NotesSortDropdown = memo(
   ({
     sortBy,
     onSortChange,
   }: {
-    sortBy: string
-    onSortChange: (value: string) => void
+    sortBy: string;
+    onSortChange: (value: string) => void;
   }) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     const currentOption =
-      sortOptions.find((option) => option.value === sortBy) || sortOptions[0]
+      sortOptions.find(option => option.value === sortBy) || sortOptions[0];
 
     const handleSelect = useCallback(
       (value: string) => {
-        onSortChange(value)
-        setIsOpen(false)
+        onSortChange(value);
+        setIsOpen(false);
       },
       [onSortChange]
-    )
+    );
 
     return (
       <div className="relative w-full md:w-64">
@@ -70,7 +71,7 @@ const NotesSortDropdown = memo(
                   className="py-1 text-sm text-gray-700 dark:text-gray-300"
                   role="listbox"
                 >
-                  {sortOptions.map((option) => (
+                  {sortOptions.map(option => (
                     <li
                       key={option.value}
                       className={`flex cursor-pointer items-center px-4 py-2 transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 ${
@@ -95,10 +96,10 @@ const NotesSortDropdown = memo(
           )}
         </div>
       </div>
-    )
+    );
   }
-)
+);
 
-NotesSortDropdown.displayName = 'NotesSortDropdown'
+NotesSortDropdown.displayName = 'NotesSortDropdown';
 
-export default NotesSortDropdown
+export default NotesSortDropdown;

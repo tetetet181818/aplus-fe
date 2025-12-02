@@ -1,5 +1,6 @@
-import HomePage from '@/components/pages/landing/HomePage'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
+
+import HomePage from '@/components/pages/landing/HomePage';
 
 export const metadata: Metadata = {
   title: 'منصة أ+ | منصه الملخصات الجامعية والملفات التعليمية الرقمية',
@@ -54,8 +55,8 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://aplusplatformsa.com'),
   applicationName: 'أ+ Platform',
   referrer: 'origin-when-cross-origin',
-}
+};
 
 export default async function LandingPage() {
-  return <HomePage />
+  return <HomePage />;
 }

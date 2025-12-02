@@ -1,25 +1,26 @@
-'use client'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { BookOpen, School } from 'lucide-react'
-import NoteCard from '@/components/organisms/notes/NoteCard'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useGetUserByIdQuery } from '@/store/api/auth.api'
-import { Note } from '@/types'
+'use client';
+import { useGetUserByIdQuery } from '@/store/api/auth.api';
+import { Note } from '@/types';
+import { BookOpen, School } from 'lucide-react';
+
+import NoteCard from '@/components/organisms/notes/NoteCard';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const SellerProfilePage = ({ userId }: { userId: string }) => {
   const { data, isLoading: loading } = useGetUserByIdQuery({
     id: userId,
-  })
+  });
 
-  const sellerData = data?.data
+  const sellerData = data?.data;
   const seller = {
     fullName: sellerData?.user?.fullName,
     university: sellerData?.user?.university,
     _id: sellerData?.user?._id,
-  }
-  const sellerNotes = sellerData?.notes || []
+  };
+  const sellerNotes = sellerData?.notes || [];
 
   return (
     <div className="px-4 py-12 md:px-6">
@@ -109,7 +110,7 @@ const SellerProfilePage = ({ userId }: { userId: string }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SellerProfilePage
+export default SellerProfilePage;

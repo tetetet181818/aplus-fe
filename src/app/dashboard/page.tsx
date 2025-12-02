@@ -1,15 +1,17 @@
-'use client'
-import { FileText, Users } from 'lucide-react'
-import StatCard from '@/components/atoms/StatCard'
-import RecentStudentsCard from '@/components/atoms/RecentStudentsCard'
-import RecentSalesCard from '@/components/atoms/RecentSalesCard'
-import useDashboard from '@/hooks/useDashboard'
-import StatCardSkeleton from '@/components/skeletons/StatCardSkeleton'
-import RecentStudentsCardSkeleton from '@/components/skeletons/RecentStudentsCardSkeleton'
-import RecentSalesCardSkeleton from '@/components/skeletons/RecentSalesCardSkeleton'
+'use client';
+import { FileText, Users } from 'lucide-react';
+
+import RecentSalesCard from '@/components/atoms/RecentSalesCard';
+import RecentStudentsCard from '@/components/atoms/RecentStudentsCard';
+import StatCard from '@/components/atoms/StatCard';
+import RecentSalesCardSkeleton from '@/components/skeletons/RecentSalesCardSkeleton';
+import RecentStudentsCardSkeleton from '@/components/skeletons/RecentStudentsCardSkeleton';
+import StatCardSkeleton from '@/components/skeletons/StatCardSkeleton';
+
+import useDashboard from '@/hooks/useDashboard';
 
 export default function Dashboard() {
-  const { overviews, overviewLoading } = useDashboard()
+  const { overviews, overviewLoading } = useDashboard();
 
   return (
     <>
@@ -61,5 +63,5 @@ export default function Dashboard() {
         </div>
       </div>
     </>
-  )
+  );
 }

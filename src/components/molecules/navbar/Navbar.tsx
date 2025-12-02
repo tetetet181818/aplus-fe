@@ -1,23 +1,26 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Menu, X, Award } from 'lucide-react'
+import { useState } from 'react';
 
-import DesktopNav from '@/components/molecules/navbar/DesktopNav'
-import MobileMenu from '@/components/molecules/navbar/MobileMenu'
-import LoginDialog from '@/components/molecules/dialogs/LoginDialog'
-import RegisterDialog from '@/components/molecules/dialogs/RegisterDialog'
-import useAuth from '@/hooks/useAuth'
-import useNotifications from '@/hooks/useNotifications'
-import { NotificationBell } from '@/components/atoms/NotificationBell'
+import Link from 'next/link';
+
+import { Award, Menu, X } from 'lucide-react';
+
+import { NotificationBell } from '@/components/atoms/NotificationBell';
+import LoginDialog from '@/components/molecules/dialogs/LoginDialog';
+import RegisterDialog from '@/components/molecules/dialogs/RegisterDialog';
+import DesktopNav from '@/components/molecules/navbar/DesktopNav';
+import MobileMenu from '@/components/molecules/navbar/MobileMenu';
+import { Button } from '@/components/ui/button';
+
+import useAuth from '@/hooks/useAuth';
+import useNotifications from '@/hooks/useNotifications';
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
-  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
-  const { isAuthenticated, handleLogout, user, loading } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
+  const { isAuthenticated, handleLogout, user, loading } = useAuth();
   const {
     notifications,
     notificationLoading,
@@ -25,18 +28,18 @@ export default function Navbar() {
     handleReadAllNotification,
     handelClearAllNotification,
     handleMakeNotificationRead,
-  } = useNotifications()
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  } = useNotifications();
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const switchToRegister = () => {
-    setIsLoginDialogOpen(false)
-    setIsRegisterDialogOpen(true)
-  }
+    setIsLoginDialogOpen(false);
+    setIsRegisterDialogOpen(true);
+  };
 
   const switchToLogin = () => {
-    setIsRegisterDialogOpen(false)
-    setIsLoginDialogOpen(true)
-  }
+    setIsRegisterDialogOpen(false);
+    setIsLoginDialogOpen(true);
+  };
 
   return (
     <header
@@ -105,12 +108,12 @@ export default function Navbar() {
         isAuthenticated={isAuthenticated}
         user={user}
         onLoginOpen={() => {
-          setIsLoginDialogOpen(true)
-          setIsMenuOpen(false)
+          setIsLoginDialogOpen(true);
+          setIsMenuOpen(false);
         }}
         onRegisterOpen={() => {
-          setIsRegisterDialogOpen(true)
-          setIsMenuOpen(false)
+          setIsRegisterDialogOpen(true);
+          setIsMenuOpen(false);
         }}
         handleLogout={handleLogout}
       />
@@ -127,5 +130,5 @@ export default function Navbar() {
         onSwitchToLogin={switchToLogin}
       />
     </header>
-  )
+  );
 }

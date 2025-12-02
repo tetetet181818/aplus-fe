@@ -1,4 +1,4 @@
-import { Skeleton } from '../ui/skeleton'
+import { Skeleton } from '../ui/skeleton';
 
 export function StatisticsCardsSkeleton() {
   return (
@@ -15,5 +15,5 @@ export function StatisticsCardsSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }

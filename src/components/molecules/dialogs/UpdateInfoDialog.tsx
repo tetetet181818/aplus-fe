@@ -1,30 +1,32 @@
+import { universities } from '@/constants/index';
+import { UpdateUserInfo, User } from '@/types';
+import { useFormik } from 'formik';
+import { Building2, Loader2 } from 'lucide-react';
+
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogDescription,
   DialogHeader,
-} from '@/components/ui/dialog'
-import { useFormik } from 'formik'
-import { updateSchema } from '@/utils/validation/authValidation'
-import { Loader2, Building2 } from 'lucide-react'
-import { Label } from '@/components/ui/label'
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { universities } from '@/constants/index'
-import { UpdateUserInfo, User } from '@/types'
+} from '@/components/ui/select';
+
+import { updateSchema } from '@/utils/validation/authValidation';
 
 interface UpdateInfoDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  user: User
-  loading: boolean
-  handelUpdateUserInfo: (data: UpdateUserInfo) => Promise<User>
+  isOpen: boolean;
+  onClose: () => void;
+  user: User;
+  loading: boolean;
+  handelUpdateUserInfo: (data: UpdateUserInfo) => Promise<User>;
 }
 
 export default function UpdateInfoDialog({
@@ -39,17 +41,17 @@ export default function UpdateInfoDialog({
       university: user?.university || '',
     },
     validationSchema: updateSchema,
-    onSubmit: async (values) => {
-      const res = await handelUpdateUserInfo(values)
+    onSubmit: async values => {
+      const res = await handelUpdateUserInfo(values);
       if (res) {
-        onClose()
+        onClose();
       }
     },
-  })
+  });
 
   const handleUniversityChange = (value: string) => {
-    formik.setFieldValue('university', value)
-  }
+    formik.setFieldValue('university', value);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -81,7 +83,7 @@ export default function UpdateInfoDialog({
                   <SelectValue placeholder="اختر الجامعة" />
                 </SelectTrigger>
                 <SelectContent>
-                  {universities?.map((uni) => (
+                  {universities?.map(uni => (
                     <SelectItem key={uni} value={uni}>
                       {uni}
                     </SelectItem>
@@ -111,5 +113,5 @@ export default function UpdateInfoDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

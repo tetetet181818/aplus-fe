@@ -1,15 +1,20 @@
-'use client'
-import { useFormik } from 'formik'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Mail, Loader2, ArrowRight } from 'lucide-react'
-import { validationForgetPassword } from '@/utils/validation/authValidation'
-import useAuth from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
+'use client';
+import { useRouter } from 'next/navigation';
+
+import { useFormik } from 'formik';
+import { ArrowRight, Loader2, Mail } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+import useAuth from '@/hooks/useAuth';
+
+import { validationForgetPassword } from '@/utils/validation/authValidation';
+
 export default function ForgetPassword() {
-  const { forgetPasswordLoading, handleForgetPassword } = useAuth()
-  const router = useRouter()
+  const { forgetPasswordLoading, handleForgetPassword } = useAuth();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -17,12 +22,12 @@ export default function ForgetPassword() {
     },
     validationSchema: validationForgetPassword,
     onSubmit: async (values, { resetForm }) => {
-      const res = await handleForgetPassword({ email: values.email })
+      const res = await handleForgetPassword({ email: values.email });
       if (res) {
-        resetForm()
+        resetForm();
       }
     },
-  })
+  });
 
   return (
     <>
@@ -76,5 +81,5 @@ export default function ForgetPassword() {
         </form>
       </div>
     </>
-  )
+  );
 }

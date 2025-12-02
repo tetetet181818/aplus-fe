@@ -1,25 +1,27 @@
-'use client'
+'use client';
+
+import React, { ReactNode } from 'react';
 
 import {
-  ShoppingCart,
-  Upload,
-  Star,
-  Download,
-  Shield,
-  Wallet,
   BarChart,
-  Settings,
-  Search,
   Bookmark,
-  Tag,
   DollarSign,
-} from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import React, { ReactNode } from 'react'
+  Download,
+  Search,
+  Settings,
+  Shield,
+  ShoppingCart,
+  Star,
+  Tag,
+  Upload,
+  Wallet,
+} from 'lucide-react';
+
+import { Card } from '@/components/ui/card';
 
 interface FeatureItemProps {
-  icon: ReactNode
-  text: string
+  icon: ReactNode;
+  text: string;
 }
 
 const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
@@ -29,7 +31,7 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
     </span>
     <span>{text}</span>
   </li>
-)
+);
 
 const BuyerSellerSection: React.FC = () => {
   return (
@@ -130,7 +132,7 @@ const BuyerSellerSection: React.FC = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default BuyerSellerSection
+export default BuyerSellerSection;

@@ -1,7 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
+  process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
@@ -13,48 +13,48 @@ const baseUrl =
  * - Clear all
  */
 export const notificationsApi = createApi({
-  reducerPath: "notificationsApi",
+  reducerPath: 'notificationsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/notifications`,
-    credentials: "include",
+    credentials: 'include',
   }),
-  tagTypes: ["Notification"],
+  tagTypes: ['Notification'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     /** Fetch all user notifications */
     getUserNotifications: builder.query({
       query: () => ({
         url: `/`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["Notification"],
+      providesTags: ['Notification'],
     }),
 
     /** Mark all notifications as read */
     readAllNotification: builder.mutation({
       query: () => ({
         url: `/read-all`,
-        method: "PATCH",
+        method: 'PATCH',
       }),
-      invalidatesTags: ["Notification"],
+      invalidatesTags: ['Notification'],
     }),
 
     /** Clear all notifications */
     clearAllNotification: builder.mutation({
       query: () => ({
         url: `/clear-all`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Notification"],
+      invalidatesTags: ['Notification'],
     }),
 
     /** Mark a single notification as read */
     makeNotificationRead: builder.mutation({
       query: ({ id }: { id: string }) => ({
         url: `${id}/read`,
-        method: "PATCH",
+        method: 'PATCH',
       }),
-      invalidatesTags: ["Notification"],
+      invalidatesTags: ['Notification'],
     }),
   }),
 });

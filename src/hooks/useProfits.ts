@@ -1,12 +1,13 @@
-'use client'
-import { useGetProfitsQuery } from '@/store/api/profits.api'
-import { useState, useCallback, useMemo } from 'react'
+'use client';
+import { useCallback, useMemo, useState } from 'react';
+
+import { useGetProfitsQuery } from '@/store/api/profits.api';
 
 export default function useProfits() {
-  const [page, setPage] = useState<number>(1)
-  const [limit, setLimit] = useState<number>(10)
-  const [fullName, setFullName] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [fullName, setFullName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
 
   const {
     data: profitsResponse,
@@ -17,7 +18,7 @@ export default function useProfits() {
     limit,
     fullName,
     email,
-  })
+  });
 
   // Pagination data
   const pagination = useMemo(
@@ -31,57 +32,57 @@ export default function useProfits() {
         totalPages: 1,
       },
     [profitsResponse]
-  )
+  );
 
   // Handlers
   const handleNextPage = useCallback(() => {
     if (pagination.hasNextPage) {
-      setPage((prev) => prev + 1)
+      setPage(prev => prev + 1);
     }
-  }, [pagination.hasNextPage])
+  }, [pagination.hasNextPage]);
 
   const handlePrevPage = useCallback(() => {
     if (pagination.hasPrevPage) {
-      setPage((prev) => prev - 1)
+      setPage(prev => prev - 1);
     }
-  }, [pagination.hasPrevPage])
+  }, [pagination.hasPrevPage]);
 
   const handleGoToPage = useCallback(
     (pageNumber: number) => {
       if (pageNumber >= 1 && pageNumber <= pagination.totalPages) {
-        setPage(pageNumber)
+        setPage(pageNumber);
       }
     },
     [pagination.totalPages]
-  )
+  );
 
   const handleChangeLimit = useCallback((newLimit: number) => {
-    setLimit(newLimit)
-    setPage(1) // Reset to first page when changing limit
-  }, [])
+    setLimit(newLimit);
+    setPage(1); // Reset to first page when changing limit
+  }, []);
 
   const handleSearchFullName = useCallback((name: string) => {
-    setFullName(name)
-    setPage(1) // Reset to first page when searching
-  }, [])
+    setFullName(name);
+    setPage(1); // Reset to first page when searching
+  }, []);
 
   const handleSearchEmail = useCallback((emailValue: string) => {
-    setEmail(emailValue)
-    setPage(1) // Reset to first page when searching
-  }, [])
+    setEmail(emailValue);
+    setPage(1); // Reset to first page when searching
+  }, []);
 
   const handleResetFilters = useCallback(() => {
-    setFullName('')
-    setEmail('')
-    setPage(1)
-  }, [])
+    setFullName('');
+    setEmail('');
+    setPage(1);
+  }, []);
 
   const handleRefresh = useCallback(() => {
     // Force refetch by changing page momentarily
-    setPage((prev) => prev)
-  }, [])
+    setPage(prev => prev);
+  }, []);
 
-  console.log(profitsResponse)
+  console.log(profitsResponse);
 
   return {
     // Data
@@ -124,5 +125,5 @@ export default function useProfits() {
 
     // Utility
     handleRefresh,
-  }
+  };
 }

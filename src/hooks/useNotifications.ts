@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
 import {
   useClearAllNotificationMutation,
+  useGetUserNotificationsQuery,
   useMakeNotificationReadMutation,
   useReadAllNotificationMutation,
-  useGetUserNotificationsQuery,
-} from '@/store/api/notification.api'
+} from '@/store/api/notification.api';
 
 /**
  * Custom hook for handling user notifications:
@@ -20,33 +20,33 @@ export default function useNotifications() {
     data: notifications,
     isLoading: notificationLoading,
     refetch,
-  } = useGetUserNotificationsQuery({})
+  } = useGetUserNotificationsQuery({});
 
   const [readAllNotification, { isLoading: readAllLoading }] =
-    useReadAllNotificationMutation()
+    useReadAllNotificationMutation();
 
   const [clearAllNotification, { isLoading: clearAllLoading }] =
-    useClearAllNotificationMutation()
+    useClearAllNotificationMutation();
 
   /** Clear all notifications */
   const handelClearAllNotification = async () => {
-    const res = await clearAllNotification(undefined)
-    if (res) refetch()
-  }
+    const res = await clearAllNotification(undefined);
+    if (res) refetch();
+  };
 
   /** Mark all notifications as read */
   const handleReadAllNotification = async () => {
-    const res = await readAllNotification(undefined)
-    if (res) refetch()
-  }
+    const res = await readAllNotification(undefined);
+    if (res) refetch();
+  };
 
-  const [makeNotificationRead] = useMakeNotificationReadMutation()
+  const [makeNotificationRead] = useMakeNotificationReadMutation();
 
   /** Mark single notification as read */
   const handleMakeNotificationRead = async (id: string) => {
-    const res = await makeNotificationRead({ id })
-    if (res) refetch()
-  }
+    const res = await makeNotificationRead({ id });
+    if (res) refetch();
+  };
 
   return {
     notifications: notifications?.data,
@@ -56,5 +56,5 @@ export default function useNotifications() {
     handleReadAllNotification,
     handelClearAllNotification,
     handleMakeNotificationRead,
-  }
+  };
 }

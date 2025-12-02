@@ -1,35 +1,38 @@
+import Link from 'next/link';
+
+import { Loader2 } from 'lucide-react';
+
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel'
-import { Card, CardContent } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { Badge } from '../ui/badge'
-import Link from 'next/link'
-import { Button } from '../ui/button'
+} from '@/components/ui/carousel';
+
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 
 export default function BestSellerUsers({
   data,
   loading,
 }: {
   data?: {
-    _id: number
-    fullName: string
-    numberOfSales: number
-    university: string
-  }[]
-  loading: boolean
+    _id: number;
+    fullName: string;
+    numberOfSales: number;
+    university: string;
+  }[];
+  loading: boolean;
 }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center">
         <Loader2 className="text-primary dark:text-primary/80 h-8 w-8 animate-spin" />
       </div>
-    )
+    );
   }
 
   if (!data || data.length === 0) {
@@ -37,13 +40,13 @@ export default function BestSellerUsers({
       <div className="flex items-center justify-center py-20 font-medium text-gray-500 dark:text-gray-400">
         لا توجد بيانات للبائعين حتى الآن
       </div>
-    )
+    );
   }
 
   return (
     <Carousel className="mx-auto w-full max-w-6xl">
       <CarouselContent>
-        {data.map((seller) => (
+        {data.map(seller => (
           <CarouselItem
             key={seller._id}
             className="flex basis-full justify-center sm:basis-1/2 md:basis-1/3"
@@ -107,5 +110,5 @@ export default function BestSellerUsers({
       <CarouselPrevious className="dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700" />
       <CarouselNext className="dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700" />
     </Carousel>
-  )
+  );
 }

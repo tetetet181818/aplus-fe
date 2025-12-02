@@ -1,47 +1,51 @@
-'use client'
+'use client';
 
 /**
  * تفاصيل المذكرة مع دعم الوضع الداكن والفاتح.
  * @component
  */
-import useNoteDetail from '@/hooks/useNoteDetail'
+import { useState } from 'react';
+
+import Image from 'next/image';
+
+import { useGetDetailsNoteSalesQuery } from '@/store/api/sales.api';
 import {
-  Loader2,
-  Download,
-  Star,
-  Calendar,
-  FileText,
-  Users,
-  School,
   Building,
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
-import Image from 'next/image'
-import { DetailsNoteSales } from '@/components/organisms/notes/DetailsNoteSales'
-import DetailsNoteSalesTable from '@/components/organisms/notes/DetailsNoteSalesTable'
-import { useGetDetailsNoteSalesQuery } from '@/store/api/sales.api'
-import { useState } from 'react'
+  Calendar,
+  Download,
+  FileText,
+  Loader2,
+  School,
+  Star,
+  Users,
+} from 'lucide-react';
+
+import { DetailsNoteSales } from '@/components/organisms/notes/DetailsNoteSales';
+import DetailsNoteSalesTable from '@/components/organisms/notes/DetailsNoteSalesTable';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+
+import useNoteDetail from '@/hooks/useNoteDetail';
 
 interface DetailsNoteProps {
-  params: { id: string }
+  params: { id: string };
 }
 
 /** ألوان قابلة لإعادة الاستخدام */
-const baseText = 'text-gray-800 dark:text-gray-100'
-const subText = 'text-gray-600 dark:text-gray-400'
+const baseText = 'text-gray-800 dark:text-gray-100';
+const subText = 'text-gray-600 dark:text-gray-400';
 const cardStyle =
-  'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'
-const iconBg = 'bg-gray-50 dark:bg-gray-800'
+  'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900';
+const iconBg = 'bg-gray-50 dark:bg-gray-800';
 
 export default function DetailsNote({ params }: DetailsNoteProps) {
-  const [page, setPage] = useState(1)
-  const [limit] = useState(10)
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
 
-  const { id } = params
-  const { note, loading } = useNoteDetail(id)
+  const { id } = params;
+  const { note, loading } = useNoteDetail(id);
   const { data: detailsNoteSales, isLoading: salesLoading } =
-    useGetDetailsNoteSalesQuery({ noteId: id, page, limit })
+    useGetDetailsNoteSalesQuery({ noteId: id, page, limit });
 
   if (loading || salesLoading) {
     return (
@@ -51,7 +55,7 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
           <p className={subText}>جاري تحميل المذكرة...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!note) {
@@ -59,7 +63,7 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
       <div className="flex min-h-screen items-center justify-center">
         <p className={`${subText} text-lg`}>لا توجد بيانات للمذكرة المطلوبة</p>
       </div>
-    )
+    );
   }
 
   const nextPage = () => {
@@ -67,13 +71,13 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
       detailsNoteSales?.pagination &&
       page < detailsNoteSales.pagination.totalPages
     ) {
-      setPage((prev) => prev + 1)
+      setPage(prev => prev + 1);
     }
-  }
+  };
 
   const prevPage = () => {
-    if (page > 1) setPage((prev) => prev - 1)
-  }
+    if (page > 1) setPage(prev => prev - 1);
+  };
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-4 lg:p-8">
@@ -258,5 +262,5 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

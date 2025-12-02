@@ -1,20 +1,21 @@
-import { BookOpen, FilterX } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import NotesGrid from '@/components/organisms/notes/NotesGrid'
-import NoResults from '@/components/atoms/NoResults'
-import { Note } from '@/types'
+import { Note } from '@/types';
+import { BookOpen, FilterX } from 'lucide-react';
+
+import NoResults from '@/components/atoms/NoResults';
+import NotesGrid from '@/components/organisms/notes/NotesGrid';
+import { Button } from '@/components/ui/button';
 
 export default function NotesResultsSection({
   filteredNotes,
   hasActiveFilters,
   onClearFilters,
 }: {
-  filteredNotes: Note[]
-  hasActiveFilters: boolean
-  onClearFilters: () => void
+  filteredNotes: Note[];
+  hasActiveFilters: boolean;
+  onClearFilters: () => void;
 }) {
   if (filteredNotes?.length > 0) {
-    return <NotesGrid notes={filteredNotes} />
+    return <NotesGrid notes={filteredNotes} />;
   }
 
   if (filteredNotes?.length === 0) {
@@ -40,6 +41,6 @@ export default function NotesResultsSection({
           ) : null
         }
       />
-    )
+    );
   }
 }

@@ -1,5 +1,5 @@
-import ConversionsOverview from '../atoms/ConversionsOverview'
-import ScenarioPerformance from '../atoms/ScenarioPerformance'
+import ConversionsOverview from '../atoms/ConversionsOverview';
+import ScenarioPerformance from '../atoms/ScenarioPerformance';
 
 export default function ScenarioPerformanceAnalytics() {
   return (
@@ -7,5 +7,5 @@ export default function ScenarioPerformanceAnalytics() {
       <ScenarioPerformance />
       <ConversionsOverview />
     </div>
-  )
+  );
 }

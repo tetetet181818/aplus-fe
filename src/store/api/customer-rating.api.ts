@@ -1,82 +1,82 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
+  process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_SERVER_DEVELOPMENT
     : process.env.NEXT_PUBLIC_SERVER_PRODUCTION;
 
 export const customerRatingApi = createApi({
-  reducerPath: "customerRatingApi",
+  reducerPath: 'customerRatingApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/customer-rating`,
-    credentials: "include",
+    credentials: 'include',
   }),
-  tagTypes: ["CustomerRating"],
-  endpoints: (builder) => ({
+  tagTypes: ['CustomerRating'],
+  endpoints: builder => ({
     getAllCustomerRating: builder.query({
       query: () => ({
         url: `/all`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["CustomerRating"],
+      providesTags: ['CustomerRating'],
     }),
 
     createCustomerRating: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `/create`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
-      invalidatesTags: ["CustomerRating"],
+      invalidatesTags: ['CustomerRating'],
     }),
 
     updateCustomerRating: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `/update`,
-        method: "PUT",
+        method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ["CustomerRating"],
+      invalidatesTags: ['CustomerRating'],
     }),
 
     deleteCustomerRating: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/delete/${id}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["CustomerRating"],
+      invalidatesTags: ['CustomerRating'],
     }),
 
     userRatedBefore: builder.query({
       query: () => ({
         url: `/user-rated-before`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["CustomerRating"],
+      providesTags: ['CustomerRating'],
     }),
 
     publishCustomerRate: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `publish/${id}`,
-        method: "PUT",
+        method: 'PUT',
       }),
-      invalidatesTags: ["CustomerRating"],
+      invalidatesTags: ['CustomerRating'],
     }),
 
     unPublishCustomerRate: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `unpublish/${id}`,
-        method: "PUT",
+        method: 'PUT',
       }),
-      invalidatesTags: ["CustomerRating"],
+      invalidatesTags: ['CustomerRating'],
     }),
 
     getRatingDashboard: builder.query({
       query: () => ({
         url: `/get-rating-dashboard`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["CustomerRating"],
+      providesTags: ['CustomerRating'],
     }),
   }),
 });

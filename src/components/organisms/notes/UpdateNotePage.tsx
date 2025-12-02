@@ -1,46 +1,48 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { useFormik, FormikHelpers } from 'formik'
-import * as Yup from 'yup'
+import { useRouter } from 'next/navigation';
 
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner'
-import AddNoteLoginPrompt from './AddNoteLoginPrompt'
-import useNoteDetail from '@/hooks/useNoteDetail'
-import { toast } from 'sonner'
+import { universityData } from '@/constants/index';
+import { FormikHelpers, useFormik } from 'formik';
+import { toast } from 'sonner';
+import * as Yup from 'yup';
 
+import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select'
-import { universityData } from '@/constants/index'
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+
+import useNoteDetail from '@/hooks/useNoteDetail';
+
+import AddNoteLoginPrompt from './AddNoteLoginPrompt';
 
 // ===== Types =====
 interface UpdateNoteFormValues {
-  title: string
-  description: string
-  university: string
-  college: string
-  subject: string
-  year: number | string
-  price: number
-  pagesNumber: number
-  contactMethod: string
-  isPublish: boolean
+  title: string;
+  description: string;
+  university: string;
+  college: string;
+  subject: string;
+  year: number | string;
+  price: number;
+  pagesNumber: number;
+  contactMethod: string;
+  isPublish: boolean;
 }
 
 interface UpdateNotePageProps {
-  edit: string
-  isAuthenticated: boolean
-  loading: boolean
+  edit: string;
+  isAuthenticated: boolean;
+  loading: boolean;
 }
 
 export default function UpdateNotePage({
@@ -48,8 +50,8 @@ export default function UpdateNotePage({
   isAuthenticated,
   loading,
 }: UpdateNotePageProps) {
-  const router = useRouter()
-  const { note, updateNoteLoading, handleUpdateNote } = useNoteDetail(edit)
+  const router = useRouter();
+  const { note, updateNoteLoading, handleUpdateNote } = useNoteDetail(edit);
 
   const formik = useFormik<UpdateNoteFormValues>({
     enableReinitialize: true,
@@ -80,30 +82,30 @@ export default function UpdateNotePage({
       { setSubmitting }: FormikHelpers<UpdateNoteFormValues>
     ) => {
       try {
-        await handleUpdateNote({ noteId: edit, noteData: values })
+        await handleUpdateNote({ noteId: edit, noteData: values });
       } catch (error: unknown) {
         if (error && typeof error === 'object' && 'data' in error) {
-          const err = error as { data?: { messages?: string[] } }
+          const err = error as { data?: { messages?: string[] } };
           const msg =
-            err.data?.messages?.join(', ') ?? 'حدث خطأ أثناء تحديث الملخص'
-          toast.error(msg)
+            err.data?.messages?.join(', ') ?? 'حدث خطأ أثناء تحديث الملخص';
+          toast.error(msg);
         } else {
-          toast.error('حدث خطأ أثناء تحديث الملخص')
+          toast.error('حدث خطأ أثناء تحديث الملخص');
         }
-        console.error(error)
+        console.error(error);
       } finally {
-        setSubmitting(false)
+        setSubmitting(false);
       }
     },
-  })
+  });
 
-  if (loading) return <LoadingSpinner />
-  if (!isAuthenticated) return <AddNoteLoginPrompt onNavigate={router.push} />
+  if (loading) return <LoadingSpinner />;
+  if (!isAuthenticated) return <AddNoteLoginPrompt onNavigate={router.push} />;
 
   const selectedUniversity = universityData.find(
-    (u) => u.name === formik.values.university
-  )
-  const colleges = selectedUniversity?.colleges ?? []
+    u => u.name === formik.values.university
+  );
+  const colleges = selectedUniversity?.colleges ?? [];
 
   return (
     <div className="mx-auto max-w-3xl py-8">
@@ -151,16 +153,16 @@ export default function UpdateNotePage({
               <Label htmlFor="university">الجامعة</Label>
               <Select
                 value={formik.values.university}
-                onValueChange={(value) => {
-                  formik.setFieldValue('university', value)
-                  formik.setFieldValue('college', '')
+                onValueChange={value => {
+                  formik.setFieldValue('university', value);
+                  formik.setFieldValue('college', '');
                 }}
               >
                 <SelectTrigger className="my-2 w-full rounded-3xl px-5 py-6">
                   <SelectValue placeholder="اختر الجامعة" />
                 </SelectTrigger>
                 <SelectContent>
-                  {universityData.map((u) => (
+                  {universityData.map(u => (
                     <SelectItem key={u.id} value={u.name}>
                       {u.name}
                     </SelectItem>
@@ -179,9 +181,7 @@ export default function UpdateNotePage({
               <Label htmlFor="college">الكلية</Label>
               <Select
                 value={formik.values.college}
-                onValueChange={(value) =>
-                  formik.setFieldValue('college', value)
-                }
+                onValueChange={value => formik.setFieldValue('college', value)}
                 disabled={!formik.values.university}
               >
                 <SelectTrigger className="my-2 w-full rounded-3xl px-5 py-6">
@@ -189,7 +189,7 @@ export default function UpdateNotePage({
                 </SelectTrigger>
                 <SelectContent>
                   {colleges.length > 0 ? (
-                    colleges.map((c) => (
+                    colleges.map(c => (
                       <SelectItem key={c} value={c}>
                         {c}
                       </SelectItem>
@@ -289,5 +289,5 @@ export default function UpdateNotePage({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

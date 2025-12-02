@@ -1,19 +1,20 @@
-'use client'
+'use client';
 
-import { ShieldAlert } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ShieldAlert } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 export default function AccessDeniedPage({
   onNavigate,
 }: {
-  onNavigate: (path: string) => void
+  onNavigate: (path: string) => void;
 }) {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 px-4 py-12 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -46,5 +47,5 @@ export default function AccessDeniedPage({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

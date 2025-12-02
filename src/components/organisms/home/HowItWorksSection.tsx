@@ -1,12 +1,13 @@
-import { UserPlus, Upload, GraduationCap, ArrowLeft } from 'lucide-react'
-import { JSX } from 'react'
+import { JSX } from 'react';
+
+import { ArrowLeft, GraduationCap, Upload, UserPlus } from 'lucide-react';
 
 interface StepProps {
-  number: string
-  icon: JSX.Element
-  title: string
-  description: string
-  isLast?: boolean
+  number: string;
+  icon: JSX.Element;
+  title: string;
+  description: string;
+  isLast?: boolean;
 }
 
 const Step = ({ number, icon, title, description, isLast }: StepProps) => (
@@ -46,7 +47,7 @@ const Step = ({ number, icon, title, description, isLast }: StepProps) => (
       <div className="from-primary dark:from-primary/80 absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r to-blue-600 transition-all duration-500 group-hover:w-full dark:to-blue-700"></div>
     </div>
   </div>
-)
+);
 
 const HowItWorksSection = (): JSX.Element => {
   const steps = [
@@ -68,7 +69,7 @@ const HowItWorksSection = (): JSX.Element => {
       title: 'اربح وتعلم',
       description: 'استفد من مشاركة المعرفة، طوّر نفسك، وحقق دخل إضافي.',
     },
-  ]
+  ];
 
   return (
     <section
@@ -112,7 +113,7 @@ const HowItWorksSection = (): JSX.Element => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HowItWorksSection
+export default HowItWorksSection;

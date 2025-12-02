@@ -1,18 +1,21 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { NotebookText } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
-import { NotebookText } from 'lucide-react'
-import useSales from '@/hooks/useSales'
-import LoadingSpinner from './LoadingSpinner'
+} from '@/components/ui/chart';
 
-export const description = 'مخطط المكالمات اليومية للذكاء الاصطناعي'
+import useSales from '@/hooks/useSales';
+
+import LoadingSpinner from './LoadingSpinner';
+
+export const description = 'مخطط المكالمات اليومية للذكاء الاصطناعي';
 
 const chartConfig = {
   desktop: {
@@ -23,13 +26,13 @@ const chartConfig = {
     label: 'الملخصات المعرضه',
     color: 'var(--chart-2)',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export default function DailyAICalls() {
-  const { userStatisticsSales, userStatisticsSalesLoading } = useSales()
+  const { userStatisticsSales, userStatisticsSalesLoading } = useSales();
 
   if (userStatisticsSalesLoading) {
-    return <LoadingSpinner message="" />
+    return <LoadingSpinner message="" />;
   }
 
   return (
@@ -57,7 +60,7 @@ export default function DailyAICalls() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value}
+              tickFormatter={value => value}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
@@ -107,5 +110,5 @@ export default function DailyAICalls() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
