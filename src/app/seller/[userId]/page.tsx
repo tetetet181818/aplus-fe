@@ -21,8 +21,12 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function page({ params }: { params: { userId: string } }) {
-  const { userId } = params;
+export default async function page({
+  params,
+}: {
+  params: Promise<{ userId: string }>;
+}) {
+  const { userId } = await params;
   return (
     <Suspense fallback={<LoadingSpinner message="" />}>
       <SellerProfilePage userId={userId} />

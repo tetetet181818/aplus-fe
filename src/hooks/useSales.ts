@@ -1,22 +1,27 @@
 import { useState } from 'react';
 
-import {
-  useGetSalesUserQuery,
-  useGetUserStatisticsSalesQuery,
-} from '@/store/api/sales.api';
+import { salesService } from '@/services/sales.service';
+import { useQuery } from '@tanstack/react-query';
 
 export default function useSales() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+
   const { data: userStatisticsSales, isLoading: userStatisticsSalesLoading } =
-    useGetUserStatisticsSalesQuery(undefined);
+    useQuery({
+      queryKey: ['userStatisticsSales'],
+      queryFn: () => salesService.getUserStatisticsSales(),
+    });
 
   const {
     data: salesUserResponse,
     isLoading: salesUserLoading,
     isFetching,
     refetch,
-  } = useGetSalesUserQuery({ page: currentPage, limit });
+  } = useQuery({
+    queryKey: ['salesUser', currentPage, limit],
+    queryFn: () => salesService.getSalesUser({ page: currentPage, limit }),
+  });
 
   const totalPages = salesUserResponse?.pagination?.totalPages || 1;
 
@@ -49,5 +54,18 @@ export default function useSales() {
       setLimit,
       refetch,
     },
+  };
+}
+
+export function useSalesDetails(saleId: string | null) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['singleSale', saleId],
+    queryFn: () => salesService.getSingleSale(saleId!),
+    enabled: !!saleId,
+  });
+
+  return {
+    data,
+    isLoading,
   };
 }

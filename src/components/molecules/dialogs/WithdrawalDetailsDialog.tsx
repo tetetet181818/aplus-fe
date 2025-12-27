@@ -1,7 +1,8 @@
 'use client';
 
 import { statusLabelMap } from '@/constants/index';
-import { useGetSingleWithdrawalQuery } from '@/store/api/dashboard.api';
+import { dashboardService } from '@/services/dashboard.service';
+import { useQuery } from '@tanstack/react-query';
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,8 +26,10 @@ export default function WithdrawalDetailsDialog({
   onClose,
   selectedWithdrawal,
 }: Props) {
-  const { data, isLoading } = useGetSingleWithdrawalQuery({
-    id: selectedWithdrawal || '',
+  const { data, isLoading } = useQuery({
+    queryKey: ['singleWithdrawal', selectedWithdrawal],
+    queryFn: () => dashboardService.getSingleWithdrawal(selectedWithdrawal!),
+    enabled: !!selectedWithdrawal,
   });
 
   const singleWithdrawal = data?.data?.withdrawal;

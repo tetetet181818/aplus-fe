@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 
 import Link from 'next/link';
 
-import { useGetSingleSaleQuery } from '@/store/api/sales.api';
 import {
   Calendar,
   Copy,
@@ -29,6 +28,8 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
+
+import { useSalesDetails } from '@/hooks/useSales';
 
 import formatArabicDate from '@/utils/formateTime';
 
@@ -66,9 +67,7 @@ const paymentMethodIcons: Record<string, LucideIcon> = {
 };
 
 export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
-  const { data, isLoading } = useGetSingleSaleQuery({
-    saleId: salesId || '',
-  });
+  const { data, isLoading } = useSalesDetails(salesId!);
 
   const saleData = data?.data?.sale;
   const sellerData = data?.data?.seller;
@@ -135,7 +134,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
     );
   };
 
-  /** Skeleton while loading */
   if (isLoading) {
     return (
       <Dialog open={open} onOpenChange={onClose}>
@@ -169,10 +167,8 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto p-0">
-        {/* Header with gradient background */}
         <DialogHeader className="rounded-t-lg border-b bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 sm:px-6 sm:py-4 dark:from-blue-950/50 dark:to-indigo-950/50">
           <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-800 sm:text-xl dark:text-gray-100">
-            {/* Icon with circular background */}
             <div className="rounded-full bg-blue-100 p-1.5 sm:p-2 dark:bg-blue-900/50">
               <FileText className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5 dark:text-blue-400" />
             </div>
@@ -181,9 +177,7 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
         </DialogHeader>
 
         <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
-          {/* Amount & Status Card */}
           <div className="relative overflow-hidden rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:rounded-2xl sm:p-6 dark:border-blue-800 dark:from-blue-950/30 dark:to-indigo-950/30">
-            {/* Decorative circles */}
             <div className="absolute -top-4 -right-4 h-16 w-16 rounded-full bg-blue-200 opacity-20 sm:h-20 sm:w-20 dark:bg-blue-800"></div>
             <div className="absolute -bottom-6 -left-6 h-12 w-12 rounded-full bg-indigo-200 opacity-30 sm:h-16 sm:w-16 dark:bg-indigo-800"></div>
 
@@ -218,7 +212,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
                         'border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-900/50 dark:text-red-300'
                     )}
                   >
-                    {/* Status indicator dot */}
                     <div
                       className={cn(
                         'mr-2 h-2 w-2 rounded-full',
@@ -237,7 +230,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </div>
           </div>
 
-          {/* Payment Info Section */}
           <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
             <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">
               <div className="rounded-lg bg-blue-100 p-1.5 sm:p-2 dark:bg-blue-900/50">
@@ -267,7 +259,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </div>
           </section>
 
-          {/* Note Info Section */}
           <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
             <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">
               <div className="rounded-lg bg-green-100 p-1.5 sm:p-2 dark:bg-green-900/50">
@@ -292,7 +283,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </div>
           </section>
 
-          {/* Seller Info Section */}
           {sellerData && (
             <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">
@@ -332,7 +322,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </section>
           )}
 
-          {/* Buyer Info Section */}
           {buyerData && (
             <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">
@@ -372,7 +361,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </section>
           )}
 
-          {/* Dates Section */}
           <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
             <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">
               <div className="rounded-lg bg-red-100 p-1.5 sm:p-2 dark:bg-red-900/50">
@@ -402,7 +390,6 @@ export default function SalesDetailsDialog({ open, onClose, salesId }: Props) {
             </div>
           </section>
 
-          {/* Message Section */}
           {saleData.message && (
             <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <h3 className="flex items-center gap-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 sm:pb-3 sm:text-lg dark:border-gray-700 dark:text-gray-200">

@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { notFound, useRouter, useSearchParams } from 'next/navigation';
 
-import { useVerifyMutation } from '@/store/api/auth.api';
+import { authService } from '@/services/auth.service';
+import { useMutation } from '@tanstack/react-query';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -16,24 +17,28 @@ export default function VerifyClient() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const [verify, { isLoading, isSuccess, isError, error }] =
-    useVerifyMutation();
+  const {
+    mutate: verify,
+    isPending: isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: (token: string) => authService.verify(token),
+    onSuccess: res => {
+      toast.success(res?.message);
+      setTimeout(() => router.push('/'), 1000);
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || 'حدث خطأ أثناء التحقق');
+    },
+  });
 
   if (!token) notFound();
 
   useEffect(() => {
-    const runVerification = async () => {
-      try {
-        const res = await verify({ token: token }).unwrap();
-        toast.success(res?.message);
-        setTimeout(() => router.push('/'), 1000);
-      } catch (err) {
-        toast.error((err as { data?: { message?: string } })?.data?.message);
-      }
-    };
-
-    runVerification();
-  }, [token, verify, router]);
+    verify(token);
+  }, [token, verify]);
 
   const bgClass = isLoading
     ? 'from-gray-50 to-gray-100'

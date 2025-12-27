@@ -1,7 +1,8 @@
 'use client';
 import { useCallback, useMemo, useState } from 'react';
 
-import { useGetProfitsQuery } from '@/store/api/profits.api';
+import { profitsService } from '@/services/profits.service';
+import { useQuery } from '@tanstack/react-query';
 
 export default function useProfits() {
   const [page, setPage] = useState<number>(1);
@@ -13,14 +14,17 @@ export default function useProfits() {
     data: profitsResponse,
     isLoading: profitsLoading,
     isFetching,
-  } = useGetProfitsQuery({
-    page,
-    limit,
-    fullName,
-    email,
+  } = useQuery({
+    queryKey: ['profits', page, limit, fullName, email],
+    queryFn: () =>
+      profitsService.getProfits({
+        page,
+        limit,
+        fullName,
+        email,
+      }),
   });
 
-  // Pagination data
   const pagination = useMemo(
     () =>
       profitsResponse?.pagination || {
@@ -34,7 +38,6 @@ export default function useProfits() {
     [profitsResponse]
   );
 
-  // Handlers
   const handleNextPage = useCallback(() => {
     if (pagination.hasNextPage) {
       setPage(prev => prev + 1);
@@ -58,17 +61,17 @@ export default function useProfits() {
 
   const handleChangeLimit = useCallback((newLimit: number) => {
     setLimit(newLimit);
-    setPage(1); // Reset to first page when changing limit
+    setPage(1);
   }, []);
 
   const handleSearchFullName = useCallback((name: string) => {
     setFullName(name);
-    setPage(1); // Reset to first page when searching
+    setPage(1);
   }, []);
 
   const handleSearchEmail = useCallback((emailValue: string) => {
     setEmail(emailValue);
-    setPage(1); // Reset to first page when searching
+    setPage(1);
   }, []);
 
   const handleResetFilters = useCallback(() => {
@@ -78,17 +81,14 @@ export default function useProfits() {
   }, []);
 
   const handleRefresh = useCallback(() => {
-    // Force refetch by changing page momentarily
     setPage(prev => prev);
   }, []);
 
   console.log(profitsResponse);
 
   return {
-    // Data
     profits: profitsResponse?.data || [],
 
-    // Pagination info
     pagination,
     currentPage: pagination.currentPage,
     totalPages: pagination.totalPages,
@@ -97,17 +97,14 @@ export default function useProfits() {
     hasNextPage: pagination.hasNextPage,
     hasPrevPage: pagination.hasPrevPage,
 
-    // Loading states
     isLoading: profitsLoading,
     isFetching,
 
-    // Filter values
     page,
     limit,
     fullName,
     email,
 
-    // Pagination handlers
     handleNextPage,
     handlePrevPage,
     handleGoToPage,
@@ -118,12 +115,10 @@ export default function useProfits() {
     totalProfits: profitsResponse?.statistics?.totalProfits,
     totalUsers: profitsResponse?.statistics?.totalUsers,
 
-    // Filter handlers
     handleSearchFullName,
     handleSearchEmail,
     handleResetFilters,
 
-    // Utility
     handleRefresh,
   };
 }

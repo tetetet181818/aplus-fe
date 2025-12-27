@@ -1,50 +1,55 @@
 'use client';
 
-import {
-  useClearAllNotificationMutation,
-  useGetUserNotificationsQuery,
-  useMakeNotificationReadMutation,
-  useReadAllNotificationMutation,
-} from '@/store/api/notification.api';
+import { notificationService } from '@/services/notification.service';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-/**
- * Custom hook for handling user notifications:
- * - Fetch all notifications
- * - Mark as read
- * - Clear all
- * - Read all
- */
 export default function useNotifications() {
-  /** Fetch user notifications */
+  const queryClient = useQueryClient();
+
   const {
     data: notifications,
     isLoading: notificationLoading,
     refetch,
-  } = useGetUserNotificationsQuery({});
+  } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: notificationService.getUserNotifications,
+  });
 
-  const [readAllNotification, { isLoading: readAllLoading }] =
-    useReadAllNotificationMutation();
+  const { mutateAsync: readAllNotification, isPending: readAllLoading } =
+    useMutation({
+      mutationFn: notificationService.readAllNotification,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      },
+    });
 
-  const [clearAllNotification, { isLoading: clearAllLoading }] =
-    useClearAllNotificationMutation();
+  const { mutateAsync: clearAllNotification, isPending: clearAllLoading } =
+    useMutation({
+      mutationFn: notificationService.clearAllNotification,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      },
+    });
 
-  /** Clear all notifications */
+  const { mutateAsync: makeNotificationRead } = useMutation({
+    mutationFn: notificationService.makeNotificationRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+
   const handelClearAllNotification = async () => {
-    const res = await clearAllNotification(undefined);
+    const res = await clearAllNotification();
     if (res) refetch();
   };
 
-  /** Mark all notifications as read */
   const handleReadAllNotification = async () => {
-    const res = await readAllNotification(undefined);
+    const res = await readAllNotification();
     if (res) refetch();
   };
 
-  const [makeNotificationRead] = useMakeNotificationReadMutation();
-
-  /** Mark single notification as read */
   const handleMakeNotificationRead = async (id: string) => {
-    const res = await makeNotificationRead({ id });
+    const res = await makeNotificationRead(id);
     if (res) refetch();
   };
 

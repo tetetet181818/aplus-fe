@@ -1,22 +1,55 @@
+import { customerRatingService } from '@/services/customer-rating.service';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import {
-  useCreateCustomerRatingMutation,
-  useDeleteCustomerRatingMutation,
-  useGetAllCustomerRatingQuery,
-  useGetRatingDashboardQuery,
-  usePublishCustomerRateMutation,
-  useUnPublishCustomerRateMutation,
-} from '../store/api/customer-rating.api';
-
 export default function useCustomerRating() {
-  const { data, isLoading } = useGetAllCustomerRatingQuery(undefined);
+  const queryClient = useQueryClient();
 
-  const [createCustomerRating, { isLoading: isCreating }] =
-    useCreateCustomerRatingMutation();
+  const { data, isLoading } = useQuery({
+    queryKey: ['customerRating'],
+    queryFn: customerRatingService.getAllCustomerRating,
+  });
 
-  const [deleteCustomerRating, { isLoading: isDeleting }] =
-    useDeleteCustomerRatingMutation();
+  const { mutateAsync: createCustomerRating, isPending: isCreating } =
+    useMutation({
+      mutationFn: customerRatingService.createCustomerRating,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['customerRating'] });
+        queryClient.invalidateQueries({ queryKey: ['ratingDashboard'] });
+      },
+    });
+
+  const { mutateAsync: deleteCustomerRating, isPending: isDeleting } =
+    useMutation({
+      mutationFn: customerRatingService.deleteCustomerRating,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['customerRating'] });
+        queryClient.invalidateQueries({ queryKey: ['ratingDashboard'] });
+      },
+    });
+
+  const { mutateAsync: publishCustomerRate, isPending: isPublishing } =
+    useMutation({
+      mutationFn: customerRatingService.publishCustomerRate,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['customerRating'] });
+        queryClient.invalidateQueries({ queryKey: ['ratingDashboard'] });
+      },
+    });
+
+  const { mutateAsync: unPublishCustomerRate, isPending: isUnPublishing } =
+    useMutation({
+      mutationFn: customerRatingService.unPublishCustomerRate,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['customerRating'] });
+        queryClient.invalidateQueries({ queryKey: ['ratingDashboard'] });
+      },
+    });
+
+  const { data: ratingDashboard } = useQuery({
+    queryKey: ['ratingDashboard'],
+    queryFn: customerRatingService.getRatingDashboard,
+  });
 
   const handelDeleteCustomerRating = async (id: string) => {
     const res = await deleteCustomerRating(id);
@@ -39,9 +72,6 @@ export default function useCustomerRating() {
     return false;
   };
 
-  const [publishCustomerRate, { isLoading: isPublishing }] =
-    usePublishCustomerRateMutation();
-
   const handelPublishCustomerRate = async (id: string) => {
     const res = await publishCustomerRate(id);
     if (res?.data) {
@@ -51,9 +81,6 @@ export default function useCustomerRating() {
     return false;
   };
 
-  const [unPublishCustomerRate, { isLoading: isUnPublishing }] =
-    useUnPublishCustomerRateMutation();
-
   const handelUnPublishCustomerRate = async (id: string) => {
     const res = await unPublishCustomerRate(id);
     if (res?.data) {
@@ -62,8 +89,6 @@ export default function useCustomerRating() {
     }
     return false;
   };
-
-  const { data: ratingDashboard } = useGetRatingDashboardQuery(undefined);
 
   return {
     customerRating: data?.data,

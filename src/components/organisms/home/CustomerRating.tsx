@@ -6,8 +6,9 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useUserRatedBeforeQuery } from '@/store/api/customer-rating.api';
+import { customerRatingService } from '@/services/customer-rating.service';
 import { CustomerRatingTypes } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 import { PlusCircle, Quote, Star } from 'lucide-react';
 
 import AddCoustomerRateDialog from '@/components/molecules/dialogs/AddCoustomerRateDialog';
@@ -25,8 +26,12 @@ export default function CustomerRating() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { customerRating, isLoading } = useCustomerRating();
-  const { data: userRatedBefore, isLoading: userRatedBeforeLoading } =
-    useUserRatedBeforeQuery(undefined);
+  const { data: userRatedBefore, isLoading: userRatedBeforeLoading } = useQuery(
+    {
+      queryKey: ['userRatedBefore'],
+      queryFn: customerRatingService.userRatedBefore,
+    }
+  );
 
   /** Render stars for each rating */
   const renderStars = (rating: number) =>

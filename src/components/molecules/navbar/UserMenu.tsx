@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { User } from '@/types/index';
@@ -35,11 +36,21 @@ export default function UserMenu({ handleLogout, user }: UserMenuProps) {
               variant="ghost"
               className="relative h-10 w-10 rounded-full p-0"
             >
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                  {user?.fullName?.charAt(0)?.toUpperCase() || '?'}
-                </AvatarFallback>
-              </Avatar>
+              {user?.avatar ? (
+                <Image
+                  src={user.avatar}
+                  alt={user.fullName}
+                  width={30}
+                  height={30}
+                  className="h-10 w-10 cursor-pointer rounded-full object-cover"
+                />
+              ) : (
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>
+                    {user?.fullName?.charAt(0)?.toUpperCase() || '?'}
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-60" align="end" forceMount>

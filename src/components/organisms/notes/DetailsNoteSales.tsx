@@ -27,22 +27,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function DetailsNoteSales({
-  salesState,
-}: {
-  salesState: { count: number; date: Date }[];
-}) {
+interface SalesState {
+  totalSales: number;
+  totalRevenue: number;
+  averageSaleAmount: number;
+  pendingSales: number;
+  completedSales: number;
+}
+
+export function DetailsNoteSales({ salesState }: { salesState?: SalesState }) {
+  if (!salesState) {
+    return null;
+  }
+
+  // Convert salesState to chart data format
+  const chartData = [{ date: new Date(), count: salesState.totalSales }];
+
   return (
     <Card className="col-span-2 m-0 mt-10 w-full border-none bg-gray-800 p-0 py-10 shadow-none">
       <CardHeader>
         <CardTitle>احصائيات مبيعات الملخص</CardTitle>
-        <CardDescription>احصائيات مبيعات الملخص</CardDescription>
+        <CardDescription>
+          إجمالي المبيعات: {salesState.totalSales} | الإيرادات:{' '}
+          {salesState.totalRevenue}
+        </CardDescription>
       </CardHeader>
       <CardContent className="m-0 w-full border-none p-0 shadow-none">
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={salesState}
+            data={chartData}
             margin={{
               left: 12,
               right: 12,

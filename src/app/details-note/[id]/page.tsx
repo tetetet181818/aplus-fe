@@ -1,14 +1,12 @@
 'use client';
 
-/**
- * تفاصيل المذكرة مع دعم الوضع الداكن والفاتح.
- * @component
- */
 import { useState } from 'react';
 
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
-import { useGetDetailsNoteSalesQuery } from '@/store/api/sales.api';
+import { salesService } from '@/services/sales.service';
+import { useQuery } from '@tanstack/react-query';
 import {
   Building,
   Calendar,
@@ -27,10 +25,6 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import useNoteDetail from '@/hooks/useNoteDetail';
 
-interface DetailsNoteProps {
-  params: { id: string };
-}
-
 /** ألوان قابلة لإعادة الاستخدام */
 const baseText = 'text-gray-800 dark:text-gray-100';
 const subText = 'text-gray-600 dark:text-gray-400';
@@ -38,14 +32,19 @@ const cardStyle =
   'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900';
 const iconBg = 'bg-gray-50 dark:bg-gray-800';
 
-export default function DetailsNote({ params }: DetailsNoteProps) {
+export default function DetailsNote() {
+  const params = useParams();
+  const id = params.id as string;
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
-  const { id } = params;
   const { note, loading } = useNoteDetail(id);
-  const { data: detailsNoteSales, isLoading: salesLoading } =
-    useGetDetailsNoteSalesQuery({ noteId: id, page, limit });
+  const { data: detailsNoteSales, isLoading: salesLoading } = useQuery({
+    queryKey: ['detailsNoteSales', id, page, limit],
+    queryFn: () =>
+      salesService.getDetailsNoteSales({ noteId: id, page, limit }),
+    enabled: !!id,
+  });
 
   if (loading || salesLoading) {
     return (
@@ -196,7 +195,7 @@ export default function DetailsNote({ params }: DetailsNoteProps) {
                 <DetailsNoteSales salesState={detailsNoteSales?.stateSales} />
 
                 <DetailsNoteSalesTable
-                  sales={detailsNoteSales?.sales}
+                  sales={detailsNoteSales?.sales || []}
                   pagination={detailsNoteSales?.pagination}
                   onNextPage={nextPage}
                   onPrevPage={prevPage}

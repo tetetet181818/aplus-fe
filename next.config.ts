@@ -1,14 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: [
-      'images.unsplash.com',
-      'api.dicebear.com',
-      'res.cloudinary.com',
-      'urlyuofgakgubzsuazhd.supabase.co',
-    ],
     remotePatterns: [
       {
         protocol: 'https',
@@ -22,13 +15,15 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.dicebear.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'urlyuofgakgubzsuazhd.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'aplus-avatars.s3.eu-north-1.amazonaws.com',
+      },
     ],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 

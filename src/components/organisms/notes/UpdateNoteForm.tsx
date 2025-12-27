@@ -13,34 +13,13 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 
 import useNoteDetail from '@/hooks/useNoteDetail';
 
+import { AddNoteValues } from './AddNoteForm';
 import BasicInfo from './BasicInfo';
 import ReviewNote from './ReviewNote';
 import UploadCoverNote from './UploadCoverNote';
 import UploadFileNote from './UploadFileNote';
 
-/** Form value types */
-type UpdateNoteValues = {
-  basic: {
-    title: string;
-    price: number;
-    description: string;
-    university: string;
-    college: string;
-    subject: string;
-    pagesNumber: number;
-    year: number | null;
-    contactMethod: string;
-  };
-  files: {
-    cover: File | null;
-    file: File | null;
-  };
-  review: {
-    termsAccepted: boolean;
-  };
-};
-
-const initialValues: UpdateNoteValues = {
+const initialValues: AddNoteValues = {
   basic: {
     title: '',
     price: 0,
@@ -52,10 +31,8 @@ const initialValues: UpdateNoteValues = {
     year: new Date().getFullYear(),
     contactMethod: '',
   },
-  files: {
-    cover: null,
-    file: null,
-  },
+  file: { file: null },
+  cover: { cover: null },
   review: {
     termsAccepted: true,
   },
@@ -78,9 +55,11 @@ const validationSchemas = {
       .email('البريد الإلكتروني غير صالح')
       .required('طريقة التواصل مطلوبة'),
   }),
-  files: Yup.object({
-    cover: Yup.mixed<File>().nullable(),
+  file: Yup.object({
     file: Yup.mixed<File>().nullable(),
+  }),
+  cover: Yup.object({
+    cover: Yup.mixed<File>().nullable(),
   }),
   review: Yup.object({
     termsAccepted: Yup.boolean().oneOf([true], 'يجب الموافقة على الشروط'),
@@ -88,14 +67,14 @@ const validationSchemas = {
 };
 
 /** Helper to build FormData */
-function buildFormData(values: UpdateNoteValues): FormData {
+function buildFormData(values: AddNoteValues): FormData {
   const formData = new FormData();
   Object.entries(values.basic).forEach(([key, val]) => {
     if (val !== null && val !== undefined) formData.append(key, String(val));
   });
 
-  if (values.files.cover) formData.append('cover', values.files.cover);
-  if (values.files.file) formData.append('file', values.files.file);
+  if (values.file.file) formData.append('file', values.file.file);
+  if (values.cover.cover) formData.append('cover', values.cover.cover);
 
   formData.append('termsAccepted', String(values.review.termsAccepted));
   return formData;
@@ -127,25 +106,24 @@ const UpdateNoteForm = ({ note }: { note: Note }) => {
           year: note.year || new Date().getFullYear(),
           contactMethod: note.contactMethod || '',
         },
-        files: {
-          cover: null,
-          file: null,
-        },
+        file: { file: null },
+        cover: { cover: null },
         review: { termsAccepted: true },
       });
     }
   }, [note]);
 
-  const formik = useFormik<UpdateNoteValues>({
+  const formik = useFormik<AddNoteValues>({
     enableReinitialize: true,
     initialValues: formInitials,
     validationSchema: Yup.object({
       basic: validationSchemas.basic,
-      files: validationSchemas.files,
+      file: validationSchemas.file,
+      cover: validationSchemas.cover,
       review: validationSchemas.review,
     }),
     onSubmit: async values => {
-      const formData: UpdateNoteData = buildFormData(values);
+      const formData = buildFormData(values);
       const res = await handleUpdateNote({
         noteId: note._id,
         noteData: formData,

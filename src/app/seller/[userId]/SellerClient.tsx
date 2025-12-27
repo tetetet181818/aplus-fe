@@ -1,6 +1,8 @@
 'use client';
-import { useGetUserByIdQuery } from '@/store/api/auth.api';
+
+import { authService } from '@/services/auth.service';
 import { Note } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 import { BookOpen, School } from 'lucide-react';
 
 import NoteCard from '@/components/organisms/notes/NoteCard';
@@ -10,8 +12,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const SellerProfilePage = ({ userId }: { userId: string }) => {
-  const { data, isLoading: loading } = useGetUserByIdQuery({
-    id: userId,
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ['userById', userId],
+    queryFn: () => authService.getUserById(userId),
+    enabled: !!userId,
   });
 
   const sellerData = data?.data;

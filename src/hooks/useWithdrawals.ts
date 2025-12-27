@@ -1,64 +1,83 @@
 'use client';
 
-import {
-  useCreateWithdrawalMutation,
-  useDeleteWithdrawalMutation,
-  useGetAllWithdrawalsQuery,
-  useGetMeWithdrawalsQuery,
-  useUpdateWithdrawalMutation,
-} from '@/store/api/withdrawal.api';
+import { withdrawalService } from '@/services/withdrawals.service';
 import { withdrawalData } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-/**
- * Custom hook for managing withdrawals:
- * - Fetch user and admin withdrawals
- * - Create new withdrawal requests
- */
 export default function useWithdrawals() {
-  /** Fetch withdrawals for the current user */
-  const { data: meWithdrawals, isLoading: meWithdrawalsLoading } =
-    useGetMeWithdrawalsQuery({});
+  const queryClient = useQueryClient();
 
-  /** Fetch all withdrawals (admin use) */
-  const { data: withdrawals, isLoading: withdrawalsLoading } =
-    useGetAllWithdrawalsQuery({});
+  const { data: meWithdrawals, isLoading: meWithdrawalsLoading } = useQuery({
+    queryKey: ['meWithdrawals'],
+    queryFn: () => withdrawalService.getMeWithdrawals(),
+  });
 
-  const [createWithdrawal, { isLoading: createWithdrawalLoading }] =
-    useCreateWithdrawalMutation();
+  const { data: withdrawals, isLoading: withdrawalsLoading } = useQuery({
+    queryKey: ['withdrawals'],
+    queryFn: () => withdrawalService.getAllWithdrawals(),
+  });
 
-  /** Create a new withdrawal request */
+  const { mutateAsync: createWithdrawal, isPending: createWithdrawalLoading } =
+    useMutation({
+      mutationFn: (withdrawalData: withdrawalData) =>
+        withdrawalService.createWithdrawal(withdrawalData),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['meWithdrawals'] });
+        queryClient.invalidateQueries({ queryKey: ['withdrawals'] });
+      },
+    });
+
   const handleCreateWithdrawal = async (withdrawalData: withdrawalData) => {
     try {
-      const res = await createWithdrawal({ withdrawalData });
-      if (res?.data?.message) {
+      const res = await createWithdrawal(withdrawalData);
+      if (res?.message) {
         toast.success('تم إضافة السحب بنجاح');
       }
-      return res?.data;
+      return res;
     } catch (error) {
       console.log(error);
       toast.error('حدث خطأ ');
     }
   };
 
-  const [deleteWithdrawal, { isLoading: deleteWithdrawalLoading }] =
-    useDeleteWithdrawalMutation();
+  const { mutateAsync: deleteWithdrawal, isPending: deleteWithdrawalLoading } =
+    useMutation({
+      mutationFn: (withdrawalId: string) =>
+        withdrawalService.deleteWithdrawal(withdrawalId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['meWithdrawals'] });
+        queryClient.invalidateQueries({ queryKey: ['withdrawals'] });
+      },
+    });
 
   const handelDeleteWithdrawal = async (withdrawalId: string) => {
     try {
-      const res = await deleteWithdrawal({ withdrawalId });
-      if (res?.data?.message) {
+      const res = await deleteWithdrawal(withdrawalId);
+      if (res?.message) {
         toast.success('تم حذف السحب بنجاح');
       }
-      return res?.data;
+      return res;
     } catch (error) {
       console.log((error as { message: string })?.message);
       toast.error((error as { message: string })?.message);
     }
   };
 
-  const [updateWithdrawal, { isLoading: updateWithdrawalLoading }] =
-    useUpdateWithdrawalMutation();
+  const { mutateAsync: updateWithdrawal, isPending: updateWithdrawalLoading } =
+    useMutation({
+      mutationFn: ({
+        withdrawalId,
+        updateData,
+      }: {
+        withdrawalId: string;
+        updateData: withdrawalData;
+      }) => withdrawalService.updateWithdrawal(withdrawalId, updateData),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['meWithdrawals'] });
+        queryClient.invalidateQueries({ queryKey: ['withdrawals'] });
+      },
+    });
 
   const handleUpdateWithdrawal = async ({
     withdrawalId,
@@ -68,7 +87,7 @@ export default function useWithdrawals() {
     updateData: withdrawalData;
   }) => {
     try {
-      const res = await updateWithdrawal({ withdrawalId, updateData }).unwrap();
+      const res = await updateWithdrawal({ withdrawalId, updateData });
       if (res?.message) {
         toast.success('تم تحديث السحب بنجاح');
       }

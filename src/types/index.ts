@@ -15,6 +15,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   badgeSales: boolean;
+  avatar?: string;
 };
 
 export interface RegisterCredentials {
@@ -237,6 +238,6 @@ export type NoteData = {
   pagesNumber: number;
   year: number | null;
   contactMethod: string;
-  cover: File | null | Object;
-  file: File | null | Object;
+  cover: File | null | object;
+  file: File | null | object;
 };

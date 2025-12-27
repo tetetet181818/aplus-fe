@@ -4,61 +4,94 @@ import { useCallback, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  useCheckAuthQuery,
-  useDeleteAccountMutation,
-  useForgetPasswordMutation,
-  useGetAllUsersQuery,
-  useGetBestSellerUsersQuery,
-  useLoginMutation,
-  useLogoutMutation,
-  useRegisterMutation,
-  useResetPasswordMutation,
-  useUpdateUserInfoMutation,
-} from '@/store/api/auth.api';
+import { authService } from '@/services/auth.service';
 import { LoginCredentials, RegisterCredentials, UpdateUserInfo } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-/**
- * Hook for real-time user authentication and management.
- * Reacts to token updates, syncs across tabs, and keeps user data fresh.
- */
 export default function useAuth() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [currentPageUser, setCurrentPageUser] = useState(1);
   const [currentUsersLimit, setCurrentUsersLimit] = useState(5);
   const [filterFullName, setFilterFullName] = useState('');
-  const { data: authData, isLoading: isCheckAuthLoading } = useCheckAuthQuery(
-    undefined,
-    {
-      refetchOnMountOrArgChange: false,
-      refetchOnFocus: false,
-      refetchOnReconnect: false,
-    }
-  );
-  /** Mutations */
-  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
-  const [deleteAccount, { isLoading: deleteAccountLoading }] =
-    useDeleteAccountMutation();
-  const [updateUserInfo, { isLoading: updateUserInfoLoading }] =
-    useUpdateUserInfoMutation();
-  const [forgetPassword, { isLoading: forgetPasswordLoading }] =
-    useForgetPasswordMutation();
-  const [resetPassword, { isLoading: resetPasswordLoading }] =
-    useResetPasswordMutation();
 
-  /** All users list (for admins) */
+  const { data: authData, isLoading: isCheckAuthLoading } = useQuery({
+    queryKey: ['auth'],
+    queryFn: authService.checkAuth,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+  });
+
+  const { mutateAsync: login, isPending: isLoginLoading } = useMutation({
+    mutationFn: authService.login,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+    },
+  });
+
+  const { mutateAsync: register, isPending: isRegisterLoading } = useMutation({
+    mutationFn: authService.register,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+    },
+  });
+
+  const { mutateAsync: deleteAccount, isPending: deleteAccountLoading } =
+    useMutation({
+      mutationFn: authService.deleteAccount,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['auth'] });
+      },
+    });
+
+  const { mutateAsync: updateUserInfo, isPending: updateUserInfoLoading } =
+    useMutation({
+      mutationFn: authService.updateUserInfo,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['auth'] });
+      },
+    });
+
+  const { mutateAsync: forgetPassword, isPending: forgetPasswordLoading } =
+    useMutation({
+      mutationFn: (email: string) => authService.forgetPassword(email),
+    });
+
+  const { mutateAsync: resetPassword, isPending: resetPasswordLoading } =
+    useMutation({
+      mutationFn: authService.resetPassword,
+    });
+
+  const { mutateAsync: logout, isPending: isLogoutLoading } = useMutation({
+    mutationFn: authService.logout,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+    },
+  });
+
   const {
     data: allUsers,
     isLoading: usersLoading,
     refetch: refetchUsers,
-  } = useGetAllUsersQuery({
-    page: currentPageUser,
-    limit: currentUsersLimit,
-    fullName: filterFullName,
+  } = useQuery({
+    queryKey: ['users', currentPageUser, currentUsersLimit, filterFullName],
+    queryFn: () =>
+      authService.getAllUsers({
+        page: currentPageUser,
+        limit: currentUsersLimit,
+        fullName: filterFullName,
+      }),
   });
+
+  const { data: getBestSellerUsers, isLoading: getBestSellerUsersLoading } =
+    useQuery({
+      queryKey: ['bestSellerUsers'],
+      queryFn: authService.getBestSellerUsers,
+    });
 
   const totalUsers = allUsers?.total || 0;
   const totalPages = Math.ceil(totalUsers / currentUsersLimit) || 1;
@@ -66,30 +99,26 @@ export default function useAuth() {
   const handleNextPage = () => {
     if (currentPageUser < totalPages) {
       setCurrentPageUser(prev => prev + 1);
-      refetchUsers();
     }
   };
 
   const handlePrevPage = () => {
     if (currentPageUser > 1) {
       setCurrentPageUser(prev => prev - 1);
-      refetchUsers();
     }
   };
-
-  /** === Auth actions === */
 
   const registerUser = useCallback(
     async (credentials: RegisterCredentials) => {
       try {
-        const response = await register(credentials).unwrap();
+        const response = await register(credentials);
         toast.success(response?.message);
         return response;
       } catch (error) {
         console.log('Register Error:', error);
         toast.error(
-          (error as { data?: { message?: string } })?.data?.message ||
-            'حدث خطأ أثناء التسجيل'
+          (error as { response?: { data?: { message?: string } } })?.response
+            ?.data?.message || 'حدث خطأ أثناء التسجيل'
         );
       }
     },
@@ -98,17 +127,20 @@ export default function useAuth() {
 
   const loginUser = async (credentials: LoginCredentials) => {
     try {
-      const response = await login(credentials).unwrap();
+      const response = await login(credentials);
       toast.success(response?.message);
       return response;
     } catch (error) {
-      toast.error((error as { data: { message?: string } })?.data?.message);
+      toast.error(
+        (error as { response?: { data: { message?: string } } })?.response?.data
+          ?.message
+      );
     }
   };
 
   const handleDeleteAccount = useCallback(async () => {
     try {
-      const response = await deleteAccount(undefined).unwrap();
+      const response = await deleteAccount();
       toast.success(response?.message);
       return response;
     } catch (error) {
@@ -119,7 +151,7 @@ export default function useAuth() {
   const handleForgetPassword = useCallback(
     async ({ email }: { email: string }) => {
       try {
-        const response = await forgetPassword({ email }).unwrap();
+        const response = await forgetPassword(email);
         toast.success(response?.message);
         return response;
       } catch (error) {
@@ -132,7 +164,7 @@ export default function useAuth() {
   const handleUpdateUserInfo = useCallback(
     async (data: UpdateUserInfo) => {
       try {
-        const response = await updateUserInfo(data).unwrap();
+        const response = await updateUserInfo(data);
         toast.success(response?.message);
         return response;
       } catch (error) {
@@ -157,7 +189,7 @@ export default function useAuth() {
           userId,
           resetPasswordToken,
           newPassword,
-        }).unwrap();
+        });
         toast.success(response?.message);
         if (response?.data) {
           router.push('/');
@@ -169,15 +201,12 @@ export default function useAuth() {
     },
     [resetPassword, router]
   );
-  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+
   const handleLogout = async () => {
-    const res = await logout(undefined).unwrap();
+    const res = await logout();
     toast.success(res?.message);
     window.location.reload();
   };
-
-  const { data: getBestSellerUsers, isLoading: getBestSellerUsersLoading } =
-    useGetBestSellerUsersQuery(undefined);
 
   const loading =
     isCheckAuthLoading ||
@@ -188,13 +217,11 @@ export default function useAuth() {
     isLogoutLoading;
 
   return {
-    /** Auth state */
     user: authData?.data,
     isAuthenticated: !!authData?.data,
     isCheckAuthLoading,
     loading,
 
-    /** User management */
     allUsers: allUsers?.data?.data,
     getBestSellerUsers: getBestSellerUsers?.data,
     getBestSellerUsersLoading,
@@ -211,7 +238,6 @@ export default function useAuth() {
     handlePrevPage,
     refetchUsers,
 
-    /** Actions */
     registerUser,
     loginUser,
     handleDeleteAccount,

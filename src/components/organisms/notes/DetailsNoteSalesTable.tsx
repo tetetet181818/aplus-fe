@@ -24,8 +24,8 @@ import formatArabicDate from '@/utils/formateTime';
 
 interface DetailsNoteSalesTableProps {
   sales: Sale[];
-  pagination: {
-    page: number;
+  pagination?: {
+    currentPage: number;
     limit: number;
     totalPages: number;
     totalItems: number;
@@ -40,7 +40,13 @@ export default function DetailsNoteSalesTable({
   onNextPage,
   onPrevPage,
 }: DetailsNoteSalesTableProps) {
-  const { page, totalPages, totalItems, limit } = pagination;
+  const {
+    currentPage = 1,
+    totalPages = 1,
+    totalItems = 0,
+    limit = 10,
+  } = pagination || {};
+  const page = currentPage;
 
   return (
     <div className="col-span-2 mt-8">
