@@ -1,60 +1,75 @@
-import * as Yup from 'yup';
+import { z } from 'zod';
 
-export const loginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('البريد الإلكتروني غير صالح')
+export const loginSchema = z.object({
+  email: z
+    .string()
     .trim()
-    .required('البريد الإلكتروني مطلوب'),
-  password: Yup.string()
+    .min(1, 'البريد الإلكتروني مطلوب')
+    .email('البريد الإلكتروني غير صالح'),
+  password: z
+    .string()
     .trim()
-    .min(8, 'يجب أن لا تقل كلمة المرور عن 8 أحرف')
-    .required('كلمة المرور مطلوبة'),
+    .min(1, 'كلمة المرور مطلوبة')
+    .min(8, 'يجب أن لا تقل كلمة المرور عن 8 أحرف'),
 });
 
-export const registerSchema = Yup.object({
-  fullName: Yup.string()
+export const registerSchema = z.object({
+  fullName: z
+    .string()
     .trim()
-    .required('اسم المستخدم مطلوب')
-    .matches(
+    .min(1, 'اسم المستخدم مطلوب')
+    .min(4, 'يجب أن يكون اسم المستخدم 4 أحرف على الأقل')
+    .max(15, 'يجب أن لا يتجاوز اسم المستخدم 15 حرف')
+    .regex(
       /^[a-z\u0600-\u06FF ]+$/i,
       'يجب أن يحتوي الاسم على حروف فقط بدون أرقام أو رموز'
-    )
-    .min(4, 'يجب أن يكون اسم المستخدم 4 أحرف على الأقل')
-    .max(15, 'يجب أن لا يتجاوز اسم المستخدم 15 حرف'),
-
-  email: Yup.string()
+    ),
+  email: z
+    .string()
     .trim()
-    .email('البريد الإلكتروني غير صالح')
-    .required('البريد الإلكتروني مطلوب'),
-  password: Yup.string()
+    .min(1, 'البريد الإلكتروني مطلوب')
+    .email('البريد الإلكتروني غير صالح'),
+  password: z
+    .string()
     .trim()
-    .required('كلمة المرور مطلوبة')
+    .min(1, 'كلمة المرور مطلوبة')
     .min(8, 'يجب أن تكون كلمة المرور8 أحرف على الأقل')
-    .matches(
+    .regex(
       /^(?=.*[a-zA-Z])(?=.*[0-9])/,
       'يجب أن تحتوي كلمة المرور على أحرف وأرقام'
     ),
-  university: Yup.string().optional(),
+  university: z.string().optional(),
 });
 
-export const updateSchema = Yup.object({
-  university: Yup.string().optional(),
-});
-export const passwordSchema = Yup.object({
-  password: Yup.string().required('كلمه المرور مطلوبه'),
-  confirmPassword: Yup.string().required('تاكيد كلمه المرور مطلوب '),
-});
-export const resetPasswordValidation = Yup.object({
-  password: Yup.string()
-    .min(6, 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل')
-    .required('كلمة المرور مطلوبة'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'كلمتا المرور غير متطابقتين')
-    .required('تأكيد كلمة المرور مطلوب'),
+export const updateSchema = z.object({
+  university: z.string().optional(),
 });
 
-export const validationForgetPassword = Yup.object({
-  email: Yup.string()
-    .email('يرجى إدخال بريد إلكتروني صحيح')
-    .required('البريد الإلكتروني مطلوب'),
+export const passwordSchema = z.object({
+  password: z.string().min(1, 'كلمه المرور مطلوبه'),
+  confirmPassword: z.string().min(1, 'تاكيد كلمه المرور مطلوب '),
 });
+
+export const resetPasswordValidation = z
+  .object({
+    password: z
+      .string()
+      .min(1, 'كلمة المرور مطلوبة')
+      .min(6, 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل'),
+    confirmPassword: z.string().min(1, 'تأكيد كلمة المرور مطلوب'),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'كلمتا المرور غير متطابقتين',
+    path: ['confirmPassword'],
+  });
+
+export const validationForgetPassword = z.object({
+  email: z
+    .string()
+    .min(1, 'البريد الإلكتروني مطلوب')
+    .email('يرجى إدخال بريد إلكتروني صحيح'),
+});
+
+// Type exports
+export type LoginFormData = z.infer<typeof loginSchema>;
+export type RegisterFormData = z.infer<typeof registerSchema>;

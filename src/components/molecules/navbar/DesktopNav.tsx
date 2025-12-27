@@ -17,8 +17,6 @@ import UserMenu from './UserMenu';
  */
 interface DesktopNavProps {
   user: User | null;
-  onLoginOpen: () => void;
-  onRegisterOpen: () => void;
   handleLogout: () => void;
   notificationLoading: boolean;
   handleReadAllNotification: () => void;
@@ -30,8 +28,6 @@ interface DesktopNavProps {
 
 const DesktopNav = ({
   user,
-  onLoginOpen,
-  onRegisterOpen,
   handleLogout,
   notifications,
   notificationLoading,
@@ -78,22 +74,24 @@ const DesktopNav = ({
         </>
       ) : (
         <>
-          <Button
-            variant="outline"
-            onClick={onLoginOpen}
-            className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-base"
-            aria-label="تسجيل الدخول"
-          >
-            تسجيل الدخول
-          </Button>
+          <Link href="/login">
+            <Button
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-base"
+              aria-label="تسجيل الدخول"
+            >
+              تسجيل الدخول
+            </Button>
+          </Link>
 
-          <Button
-            onClick={onRegisterOpen}
-            className="bg-primary hover:bg-primary/90 text-base"
-            aria-label="إنشاء حساب"
-          >
-            إنشاء حساب
-          </Button>
+          <Link href="/register">
+            <Button
+              className="bg-primary hover:bg-primary/90 text-base"
+              aria-label="إنشاء حساب"
+            >
+              إنشاء حساب
+            </Button>
+          </Link>
         </>
       )}
     </nav>

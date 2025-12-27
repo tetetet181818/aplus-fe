@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import ForgetPassword from '@/components/pages/ForgetPassword';
+import ForgetPasswordForm from '@/components/molecules/forms/ForgetPasswordForm';
 
 export const metadata: Metadata = {
   title: 'استعادة كلمة المرور | نسيت كلمة المرور لحسابك بسهولة',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'إعادة تعيين كلمة المرور',
     'تغيير كلمة السر',
     'الدخول إلى الحساب',
-    'استرجاع حسابي',
+    'است رجاع حسابي',
     'مشاكل تسجيل الدخول',
     'نسيت كلمة السر',
   ],
@@ -26,6 +26,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function page() {
-  return <ForgetPassword />;
+export default function ForgetPasswordPage() {
+  return <ForgetPasswordForm />;
 }

@@ -7,8 +7,6 @@ import Link from 'next/link';
 import { Award, Menu, X } from 'lucide-react';
 
 import { NotificationBell } from '@/components/atoms/NotificationBell';
-import LoginDialog from '@/components/molecules/dialogs/LoginDialog';
-import RegisterDialog from '@/components/molecules/dialogs/RegisterDialog';
 import DesktopNav from '@/components/molecules/navbar/DesktopNav';
 import MobileMenu from '@/components/molecules/navbar/MobileMenu';
 import { Button } from '@/components/ui/button';
@@ -18,8 +16,6 @@ import useNotifications from '@/hooks/useNotifications';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
-  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
   const { isAuthenticated, handleLogout, user, loading } = useAuth();
   const {
     notifications,
@@ -30,16 +26,6 @@ export default function Navbar() {
     handleMakeNotificationRead,
   } = useNotifications();
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-  const switchToRegister = () => {
-    setIsLoginDialogOpen(false);
-    setIsRegisterDialogOpen(true);
-  };
-
-  const switchToLogin = () => {
-    setIsRegisterDialogOpen(false);
-    setIsLoginDialogOpen(true);
-  };
 
   return (
     <header
@@ -63,8 +49,6 @@ export default function Navbar() {
 
         <DesktopNav
           user={user}
-          onLoginOpen={() => setIsLoginDialogOpen(true)}
-          onRegisterOpen={() => setIsRegisterDialogOpen(true)}
           handleLogout={handleLogout}
           notifications={notifications}
           notificationLoading={notificationLoading}
@@ -107,27 +91,7 @@ export default function Navbar() {
         onClose={() => setIsMenuOpen(false)}
         isAuthenticated={isAuthenticated}
         user={user}
-        onLoginOpen={() => {
-          setIsLoginDialogOpen(true);
-          setIsMenuOpen(false);
-        }}
-        onRegisterOpen={() => {
-          setIsRegisterDialogOpen(true);
-          setIsMenuOpen(false);
-        }}
         handleLogout={handleLogout}
-      />
-
-      {/* Auth Dialogs */}
-      <LoginDialog
-        isOpen={isLoginDialogOpen}
-        onClose={() => setIsLoginDialogOpen(false)}
-        onSwitchToRegister={switchToRegister}
-      />
-      <RegisterDialog
-        isOpen={isRegisterDialogOpen}
-        onClose={() => setIsRegisterDialogOpen(false)}
-        onSwitchToLogin={switchToLogin}
       />
     </header>
   );

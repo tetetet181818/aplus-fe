@@ -28,8 +28,6 @@ interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   isAuthenticated: boolean;
-  onLoginOpen: () => void;
-  onRegisterOpen: () => void;
   user?: User | null;
   handleLogout: () => void;
 }
@@ -38,8 +36,6 @@ const MobileMenu = ({
   isOpen,
   onClose,
   isAuthenticated,
-  onLoginOpen,
-  onRegisterOpen,
   user,
   handleLogout,
 }: MobileMenuProps): JSX.Element | null => {
@@ -147,29 +143,33 @@ const MobileMenu = ({
             </>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                className="w-full justify-start py-3 text-base"
-                onClick={() => handleLinkClick(onLoginOpen)}
-              >
-                <LogIn
-                  className="text-muted-foreground ml-3 h-5 w-5"
-                  aria-hidden="true"
-                />
-                تسجيل الدخول
-              </Button>
+              <Link href="/login">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start py-3 text-base"
+                  onClick={() => handleLinkClick()}
+                >
+                  <LogIn
+                    className="text-muted-foreground ml-3 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  تسجيل الدخول
+                </Button>
+              </Link>
 
-              <Button
-                variant="ghost"
-                className="w-full justify-start py-3 text-base"
-                onClick={() => handleLinkClick(onRegisterOpen)}
-              >
-                <UserPlus
-                  className="text-muted-foreground ml-3 h-5 w-5"
-                  aria-hidden="true"
-                />
-                إنشاء حساب
-              </Button>
+              <Link href="/register">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start py-3 text-base"
+                  onClick={() => handleLinkClick()}
+                >
+                  <UserPlus
+                    className="text-muted-foreground ml-3 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  إنشاء حساب
+                </Button>
+              </Link>
             </>
           )}
         </div>

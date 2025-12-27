@@ -21,7 +21,7 @@ export interface RegisterCredentials {
   fullName: string;
   email: string;
   password: string;
-  university: string;
+  university?: string;
 }
 
 export interface LoginCredentials {

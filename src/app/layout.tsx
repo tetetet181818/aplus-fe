@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Tajawal } from 'next/font/google';
+import { Cairo } from 'next/font/google';
 
 import { ThemeProvider } from '@/components/atoms/ThemeProvider';
 import Layout from '@/components/templates/Layout';
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   },
 };
 
-const tajawal = Tajawal({
+const cairo = Cairo({
   subsets: ['arabic'],
-  variable: '--font-tajawal',
+  variable: '--font-cairo',
   weight: ['400', '500', '700', '800'],
   display: 'swap',
 });
@@ -66,7 +66,7 @@ export default async function RootLayout({
     <html lang="ar" dir="rtl">
       <body
         dir="rtl"
-        className={`${tajawal.className} w-screen overflow-x-hidden`}
+        className={`${cairo.className} w-screen overflow-x-hidden`}
       >
         <Providers>
           <ThemeProvider
