@@ -51,7 +51,6 @@ export default function DetailsNoteSalesTable({
   return (
     <div className="col-span-2 mt-8">
       <Table className="w-full overflow-hidden rounded-lg border dark:border-gray-700">
-        {/* Header */}
         <TableHeader className="bg-gray-200 dark:bg-gray-800">
           <TableRow>
             <TableHead className="text-start font-semibold dark:text-gray-100">
@@ -69,7 +68,6 @@ export default function DetailsNoteSalesTable({
           </TableRow>
         </TableHeader>
 
-        {/* Body */}
         <TableBody className="dark:bg-gray-900">
           {sales.map(sale => (
             <TableRow
@@ -91,7 +89,6 @@ export default function DetailsNoteSalesTable({
             </TableRow>
           ))}
 
-          {/* No results */}
           {sales.length === 0 && (
             <TableRow>
               <TableCell
@@ -105,11 +102,9 @@ export default function DetailsNoteSalesTable({
         </TableBody>
       </Table>
 
-      {/* Pagination */}
       {totalItems > limit && (
         <Pagination className="mt-6 flex justify-center">
           <PaginationContent className="flex gap-2">
-            {/* Previous */}
             <PaginationItem onClick={onPrevPage}>
               <PaginationPrevious
                 href="#"
@@ -119,7 +114,6 @@ export default function DetailsNoteSalesTable({
               />
             </PaginationItem>
 
-            {/* Current Page */}
             <PaginationItem>
               <PaginationLink
                 isActive
@@ -130,7 +124,6 @@ export default function DetailsNoteSalesTable({
               </PaginationLink>
             </PaginationItem>
 
-            {/* Next */}
             <PaginationItem onClick={onNextPage}>
               <PaginationNext
                 href="#"

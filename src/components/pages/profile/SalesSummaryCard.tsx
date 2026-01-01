@@ -13,7 +13,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-// 1. تعريف أنواع البيانات
 interface SoldNoteDetail {
   id: string;
   title: string;
@@ -30,7 +29,6 @@ interface SalesSummaryCardProps {
   soldNotesDetails: SoldNoteDetail[];
 }
 
-// 2. بيانات ثابتة للتجربة
 const staticSoldNotes: SoldNoteDetail[] = [
   {
     id: '1',
@@ -61,7 +59,6 @@ const staticSoldNotes: SoldNoteDetail[] = [
   },
 ];
 
-// 3. الكومبوننت الرئيسي
 export default function SalesSummaryCard({
   availableBalance = 840,
   platformFee = 120,
@@ -108,7 +105,6 @@ export default function SalesSummaryCard({
   );
 }
 
-// 4. الأكوردين لعرض تفاصيل المبيعات
 const SalesDetailsAccordion = ({
   soldNotesDetails,
 }: {
@@ -135,7 +131,6 @@ const SalesDetailsAccordion = ({
   </Accordion>
 );
 
-// 5. عنصر المبيعات لكل ملخص
 const NoteSaleItem = ({ note }: { note: SoldNoteDetail }) => (
   <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-gray-50/50 p-3 transition-shadow hover:shadow-sm dark:border-gray-700/50 dark:bg-gray-800/30">
     <Image

@@ -133,7 +133,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          {/* Full Name */}
           <FormField
             control={form.control}
             name="fullName"
@@ -156,7 +155,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
             )}
           />
 
-          {/* Email */}
           <FormField
             control={form.control}
             name="email"
@@ -180,7 +178,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
             )}
           />
 
-          {/* University */}
           <FormField
             control={form.control}
             name="university"
@@ -215,7 +212,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
             )}
           />
 
-          {/* Password */}
           <FormField
             control={form.control}
             name="password"
@@ -290,7 +286,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
             </label>
           </div>
 
-          {/* Submit */}
           <Button
             type="submit"
             className="w-full rounded-lg shadow-md transition-all hover:shadow-lg"
@@ -308,7 +303,6 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
         </form>
       </Form>
 
-      {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -318,12 +312,10 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
         </div>
       </div>
 
-      {/* Google Button */}
       <div className={loading ? 'pointer-events-none opacity-60' : ''}>
         <GoogleLoginButton />
       </div>
 
-      {/* Switch to login */}
       <p className="text-center text-sm text-gray-600 dark:text-gray-400">
         لديك حساب؟{' '}
         {onSwitchToLogin ? (

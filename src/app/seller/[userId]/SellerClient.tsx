@@ -28,7 +28,6 @@ const SellerProfilePage = ({ userId }: { userId: string }) => {
 
   return (
     <div className="px-4 py-12 md:px-6">
-      {/* ================== Seller Header ================== */}
       <Card className="mb-8 overflow-hidden shadow-lg">
         <div className="h-10"></div>
         <CardContent className="-mt-16 p-6 pt-0">
@@ -72,10 +71,8 @@ const SellerProfilePage = ({ userId }: { userId: string }) => {
         </CardContent>
       </Card>
 
-      {/* ================== Seller Notes Section ================== */}
       <div>
         {loading ? (
-          // Skeleton for Notes Grid
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
               <Card key={i}>
@@ -92,14 +89,12 @@ const SellerProfilePage = ({ userId }: { userId: string }) => {
             ))}
           </div>
         ) : sellerNotes.length > 0 ? (
-          // Notes Grid
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {sellerNotes.map((note: Note) => (
               <NoteCard key={note._id} note={note} />
             ))}
           </div>
         ) : (
-          // Empty State
           <Card className="p-8 text-center">
             <div className="mb-4 flex justify-center">
               <div className="rounded-full bg-gray-100 p-4">

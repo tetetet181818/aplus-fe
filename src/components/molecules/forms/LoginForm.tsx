@@ -24,7 +24,6 @@ import useAuth from '@/hooks/useAuth';
 
 import { LoginFormData, loginSchema } from '@/utils/validation/authValidation';
 
-/** Props for LoginForm */
 interface LoginFormProps {
   onSuccess?: () => void;
   onSwitchToRegister?: () => void;
@@ -44,14 +43,13 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
       email: '',
       password: '',
     },
-    mode: 'onBlur', // Validate on blur
-    reValidateMode: 'onChange', // Revalidate on change after first blur
+    mode: 'onSubmit', 
+    reValidateMode: 'onSubmit',
   });
 
   const onSubmit = async (values: LoginFormData) => {
     const res = await loginUser(values);
     if (!res) {
-      // if login fails, set errors on both fields
       form.setError('email', {
         message: 'خطأ في البريد الإلكتروني أو كلمة المرور',
       });
@@ -75,7 +73,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
         </p>
       </div>
 
-      {/* Google Button */}
       <div className="space-y-3">
         <p className="text-muted-foreground text-center text-sm">
           سجّل دخولك بواسطة Google
@@ -83,7 +80,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
         <GoogleLoginButton />
       </div>
 
-      {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -93,10 +89,8 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
         </div>
       </div>
 
-      {/* Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          {/* Email */}
           <FormField
             control={form.control}
             name="email"
@@ -119,7 +113,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
             )}
           />
 
-          {/* Password */}
           <FormField
             control={form.control}
             name="password"
@@ -156,7 +149,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
             )}
           />
 
-          {/* Submit */}
           <Button
             type="submit"
             className="w-full rounded-lg shadow-md transition-all hover:shadow-lg"
@@ -174,7 +166,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
         </form>
       </Form>
 
-      {/* Links */}
       <div className="space-y-3 text-center">
         <Link
           href="/forget-password"

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Award } from 'lucide-react';
+import { Award, Building2, Mail, Phone } from 'lucide-react';
 
 import PaymentMethodsSection from '@/components/atoms/PaymentMethodsSection';
 
@@ -35,46 +35,71 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="border-t bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
-      <div className="px-10 py-5 pt-20">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
+    <footer className="relative overflow-hidden border-t bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/20">
+      <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-blue-400/5 blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-purple-400/5 blur-3xl"></div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-20">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
           {/* Logo + About */}
-          <div className="space-y-4 lg:col-span-2">
-            <div className="flex items-center gap-2">
-              <Award className="text-primary h-7 w-7" aria-hidden="true" />
-              <span className="text-foreground text-xl font-bold">منصة أ+</span>
+          <div className="space-y-6 lg:col-span-2">
+            <div className="flex items-center gap-3">
+              <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 p-2.5 shadow-lg">
+                <Award className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-2xl font-extrabold text-transparent">
+                منصة أ+
+              </span>
             </div>
-            <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
+            <p className="max-w-md text-base leading-relaxed text-gray-600 dark:text-gray-300">
               منصة لبيع وشراء الملخصات الجامعية بين الطلاب — وفر وقتك، تعلم من
               خبرات زملائك، وشارك معرفتك بسهولة.
             </p>
-            <div className="rounded-lg border bg-white p-3 text-center shadow-sm dark:bg-gray-800">
-              <Image
-                loading="lazy"
-                src={sudia_busniess_center}
-                alt="السجل التجاري منصة أ+"
-                className="h-auto w-full rounded-md"
-              />
-              <h2 className="text-primary mt-3 text-lg font-semibold">
-                السجل التجاري: 7050237267
-              </h2>
+            
+            <div className="group relative overflow-hidden rounded-2xl border-2 border-gray-200/50 bg-gradient-to-br from-white to-gray-50/50 p-4 shadow-lg transition-all duration-500 hover:border-blue-300 hover:shadow-xl dark:border-gray-700/50 dark:from-gray-800 dark:to-gray-900/50 dark:hover:border-blue-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-purple-50/0 to-pink-50/0 transition-all duration-500 group-hover:from-blue-50/50 group-hover:via-purple-50/30 group-hover:to-pink-50/50 dark:group-hover:from-blue-950/20 dark:group-hover:via-purple-950/10 dark:group-hover:to-pink-950/20"></div>
+              
+              <div className="relative z-10">
+                <div className="mb-3 flex items-center justify-center gap-2">
+                  <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    السجل التجاري
+                  </span>
+                </div>
+                <Image
+                  loading="lazy"
+                  src={sudia_busniess_center}
+                  alt="السجل التجاري منصة أ+"
+                  className="h-auto w-full rounded-xl transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-2 dark:from-blue-950/30 dark:to-purple-950/30">
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    رقم السجل:
+                  </span>
+                  <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                    7050237267
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Links */}
-          {footerLinks.map(section => (
-            <div key={section.title}>
-              <h3 className="text-foreground mb-4 text-lg font-semibold">
+          {footerLinks.map((section, sectionIndex) => (
+            <div key={section.title} className="space-y-4">
+              <h3 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
                 {section.title}
               </h3>
-              <ul className="space-y-2">
-                {section.links.map(link => (
+              <ul className="space-y-3">
+                {section.links.map((link, linkIndex) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-muted-foreground hover:text-primary transition-colors duration-200"
+                      className="group relative inline-flex items-center gap-2 text-base text-gray-600 transition-all duration-300 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                      style={{ animationDelay: `${(sectionIndex * 100) + (linkIndex * 50)}ms` }}
                     >
-                      {link.text}
+                      <span className="absolute right-0 h-0.5 w-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="relative">{link.text}</span>
                     </Link>
                   </li>
                 ))}
@@ -89,8 +114,23 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="text-muted-foreground mt-12 border-t pt-6 text-center text-sm">
-          <p>© {currentYear} منصة أ+. جميع الحقوق محفوظة.</p>
+        <div className="mt-16 border-t-2 border-gray-200/50 pt-8 dark:border-gray-800/50">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <span>© {currentYear}</span>
+              <span className="font-semibold text-blue-600 dark:text-blue-400">
+                منصة أ+
+              </span>
+              <span>جميع الحقوق محفوظة.</span>
+            </div>
+            
+            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                <span>الدعم الفني</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

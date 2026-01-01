@@ -40,7 +40,6 @@ export function DetailsNoteSales({ salesState }: { salesState?: SalesState }) {
     return null;
   }
 
-  // Convert salesState to chart data format
   const chartData = [{ date: new Date(), count: salesState.totalSales }];
 
   return (

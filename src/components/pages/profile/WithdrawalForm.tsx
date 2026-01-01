@@ -100,8 +100,6 @@ export default function WithdrawalForm({
   );
 }
 
-/* ----------------- Subcomponents ----------------- */
-
 const FormField = ({
   label,
   id,

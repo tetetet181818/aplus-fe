@@ -13,10 +13,8 @@ export const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor for adding auth tokens if needed
 axiosInstance.interceptors.request.use(
   config => {
-    // You can add auth tokens here if needed
     return config;
   },
   error => {
@@ -24,11 +22,9 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor for handling errors globally
 axiosInstance.interceptors.response.use(
   response => response,
   error => {
-    // Global error handling can be added here
     return Promise.reject(error);
   }
 );

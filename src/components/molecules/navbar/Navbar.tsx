@@ -31,18 +31,19 @@ export default function Navbar() {
     <header
       dir="rtl"
       role="banner"
-      className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/90 px-6 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 md:px-10 dark:border-gray-800 dark:bg-gray-900"
+      className="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/95 px-4 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/80 md:px-8 dark:border-gray-800/50 dark:bg-gray-900/95"
     >
-      <div className="flex h-16 items-center justify-between">
-        {/* Logo */}
+      <div className="mx-auto flex h-16 px-10 items-center justify-between">
         <Link
           href="/"
-          className="flex items-center gap-2 transition-opacity hover:opacity-90"
+          className="group flex items-center gap-2.5 transition-all duration-300 hover:scale-105"
           onClick={() => setIsMenuOpen(false)}
           aria-label="الانتقال إلى الصفحة الرئيسية"
         >
-          <Award className="text-primary h-7 w-7 drop-shadow-sm" />
-          <span className="text-xl font-bold text-gray-900 dark:text-white">
+          <div className="rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 shadow-lg transition-all duration-300 group-hover:shadow-blue-500/50">
+            <Award className="h-6 w-6 text-white drop-shadow-sm" />
+          </div>
+          <span className="bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-xl font-extrabold text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-purple-700">
             منصة أ+
           </span>
         </Link>
@@ -58,8 +59,7 @@ export default function Navbar() {
           loading={loading}
         />
 
-        {/* Mobile Hamburger */}
-        <div className="flex items-center justify-end md:hidden">
+        <div className="flex items-center justify-end gap-2 md:hidden">
           {isAuthenticated && (
             <NotificationBell
               notifications={notifications}
@@ -72,14 +72,14 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-lg bg-gray-200 transition-colors hover:bg-gray-100"
+            className="relative rounded-xl border-2 border-gray-200 bg-white transition-all duration-300 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500 dark:hover:bg-gray-700"
             onClick={toggleMenu}
             aria-label="فتح وإغلاق القائمة"
           >
             {isMenuOpen ? (
-              <X className="h-6 w-6" aria-hidden="true" />
+              <X className="h-5 w-5 text-gray-700 transition-transform duration-300 dark:text-gray-300" aria-hidden="true" />
             ) : (
-              <Menu className="h-6 w-6" aria-hidden="true" />
+              <Menu className="h-5 w-5 text-gray-700 transition-transform duration-300 dark:text-gray-300" aria-hidden="true" />
             )}
           </Button>
         </div>

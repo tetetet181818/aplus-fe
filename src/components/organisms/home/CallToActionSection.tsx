@@ -9,47 +9,64 @@ import { Button } from '@/components/ui/button';
 const CallToActionSection = (): JSX.Element => {
   return (
     <section
-      className="from-primary bg-gradient-to-br to-blue-600 py-16 text-white md:py-24 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
+      className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 py-20 text-white md:py-32 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
       role="region"
       aria-labelledby="cta-heading"
     >
-      <div className="mx-auto max-w-6xl px-4 text-center md:px-6">
-        {/* Heading */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_70%)]"></div>
+      </div>
+      
+      <div className="relative z-10 mx-auto max-w-6xl px-4 text-center md:px-6">
+        <div className="mb-6 inline-block rounded-full bg-white/20 px-4 py-2 text-sm font-semibold backdrop-blur-sm">
+          ابدأ الآن
+        </div>
+        
         <h2
           id="cta-heading"
-          className="mb-6 text-3xl leading-tight font-extrabold md:text-4xl lg:text-5xl dark:text-white"
+          className="mb-6 text-4xl leading-tight font-extrabold md:text-5xl lg:text-6xl"
         >
-          هل أنت مستعد لمشاركة معرفتك أو العثور على أفضل الملخصات؟
+          هل أنت مستعد لمشاركة{' '}
+          <span className="bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
+            معرفتك
+          </span>{' '}
+          أو العثور على أفضل الملخصات؟
         </h2>
 
-        {/* Subtext */}
-        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl dark:text-gray-300">
+        <p className="mx-auto mb-12 max-w-2xl text-xl leading-relaxed text-white/95 md:text-2xl dark:text-gray-200">
           انضم إلى مجتمعنا اليوم وابدأ رحلتك نحو التميز الأكاديمي. شارك ملخصاتك،
           ساعد الآخرين، وحقق دخلاً إضافياً.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row md:gap-6">
-          <Link href="/notes">
+        <div className="flex flex-col items-center justify-center gap-6 sm:flex-row md:gap-8">
+          <Link href="/notes" className="group">
             <Button
               size="lg"
-              className="text-primary flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold shadow-lg transition-all hover:scale-105 hover:bg-gray-50 hover:shadow-2xl sm:w-auto dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white"
+              className="relative overflow-hidden bg-white px-10 py-6 text-lg font-bold text-blue-600 shadow-2xl transition-all hover:scale-110 hover:shadow-blue-500/50 sm:w-auto"
               aria-label="تصفح الملخصات المتاحة على المنصة"
             >
-              <BookOpen className="mr-2 h-5 w-5" aria-hidden="true" />
-              تصفح الملخصات
+              <span className="relative z-10 flex items-center gap-3">
+                <BookOpen className="h-6 w-6 transition-transform group-hover:rotate-12" aria-hidden="true" />
+                تصفح الملخصات
+              </span>
+              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 transition-opacity group-hover:opacity-100"></div>
             </Button>
           </Link>
 
-          <Link href="/add-note">
+          <Link href="/add-note" className="group">
             <Button
               size="lg"
               variant="outline"
-              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-transparent px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-white/10 hover:shadow-2xl sm:w-auto dark:border-gray-300 dark:text-gray-100 dark:hover:border-white dark:hover:bg-white/20"
+              className="relative overflow-hidden border-2 border-white/50 bg-white/10 px-10 py-6 text-lg font-bold text-white backdrop-blur-sm shadow-2xl transition-all hover:scale-110 hover:border-white hover:bg-white/20 hover:shadow-white/50 sm:w-auto"
               aria-label="أضف ملخصك الآن إلى منصة أ+"
             >
-              <PlusCircle className="mr-2 h-5 w-5" aria-hidden="true" />
-              أضف ملخصك الآن
+              <span className="relative z-10 flex items-center gap-3">
+                <PlusCircle className="h-6 w-6 transition-transform group-hover:rotate-90" aria-hidden="true" />
+                أضف ملخصك الآن
+              </span>
+              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-white/10 to-white/5 opacity-0 transition-opacity group-hover:opacity-100"></div>
             </Button>
           </Link>
         </div>

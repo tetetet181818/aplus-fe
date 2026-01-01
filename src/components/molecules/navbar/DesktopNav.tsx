@@ -47,18 +47,28 @@ const DesktopNav = ({
   return (
     <nav className="hidden items-center gap-3 md:flex">
       <ThemeSwitcher />
+      
       <Link href="/notes">
-        <Button variant="outline" className="hover:bg-primary/10 text-base">
-          تصفح الملخصات
+        <Button 
+          variant="outline" 
+          className="group relative overflow-hidden border-2 border-gray-200 bg-white px-5 py-2.5 text-base font-semibold transition-all duration-300 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500 dark:hover:bg-gray-700"
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            <span>تصفح الملخصات</span>
+          </span>
+          <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-50/0 to-blue-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
         </Button>
       </Link>
 
       {user ? (
         <>
           <Link href="/add-note">
-            <Button className="bg-primary hover:bg-primary/90 text-base">
-              <PlusCircle size={18} className="ml-2" />
-              إضافة ملخص
+            <Button className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-2.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl">
+              <span className="relative z-10 flex items-center gap-2">
+                <PlusCircle size={18} className="transition-transform duration-300 group-hover:rotate-90" />
+                <span>إضافة ملخص</span>
+              </span>
+              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-pink-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
             </Button>
           </Link>
 
@@ -77,19 +87,21 @@ const DesktopNav = ({
           <Link href="/login">
             <Button
               variant="outline"
-              className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-base"
+              className="cursor-pointer group relative overflow-hidden border-2 border-blue-200 bg-white px-6 py-2.5 text-base font-semibold text-blue-600 transition-all duration-300 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md dark:border-blue-700 dark:bg-gray-800 dark:text-blue-400 dark:hover:border-blue-500 dark:hover:bg-gray-700"
               aria-label="تسجيل الدخول"
             >
-              تسجيل الدخول
+              <span className="relative z-10">تسجيل الدخول</span>
+              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-50/0 to-purple-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
             </Button>
           </Link>
 
           <Link href="/register">
             <Button
-              className="bg-primary hover:bg-primary/90 text-base"
-              aria-label="إنشاء حساب"
+              className="cursor-pointer group relative overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-blue-700 hover:shadow-xl"
+              aria-label="إنشاء حساب" 
             >
-              إنشاء حساب
+              <span className="relative z-10">إنشاء حساب</span>
+              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
             </Button>
           </Link>
         </>

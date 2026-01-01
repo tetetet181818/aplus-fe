@@ -2,8 +2,6 @@ import { Sale } from '@/types';
 
 import { axiosInstance } from '@/utils/apiConfig';
 
-// ============= Types & Interfaces =============
-
 export interface SalesUser {
   id: string;
   name: string;
@@ -98,8 +96,6 @@ export interface SalesUserStatsResponse {
     revenue: number;
   }>;
 }
-
-// ============= Service Functions =============
 
 export const salesService = {
   /**
