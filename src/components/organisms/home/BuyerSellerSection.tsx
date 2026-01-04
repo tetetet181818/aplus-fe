@@ -26,7 +26,10 @@ interface FeatureItemProps {
 
 const FeatureItem: React.FC<FeatureItemProps> = ({ icon, text }) => (
   <li className="group/item flex items-start gap-4 rounded-lg p-2 transition-all hover:bg-white/50 dark:hover:bg-gray-700/30">
-    <span className="text-primary mt-0.5 transition-transform group-hover/item:scale-110" aria-hidden="true">
+    <span
+      className="text-primary mt-0.5 transition-transform group-hover/item:scale-110"
+      aria-hidden="true"
+    >
       {icon}
     </span>
     <span className="flex-1">{text}</span>
@@ -49,13 +52,13 @@ const BuyerSellerSection: React.FC = () => {
             للمشترين والبائعين
           </span>
         </div>
-        
+
         <h2
           id="features-heading"
           className="mb-16 text-center text-4xl font-extrabold text-gray-800 md:text-5xl dark:text-white"
         >
           مميزات{' '}
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
             المنصة
           </span>
         </h2>
@@ -63,7 +66,7 @@ const BuyerSellerSection: React.FC = () => {
         <div className="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-2">
           <Card className="group relative overflow-hidden border-2 border-blue-200/50 bg-white p-8 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:border-blue-400 hover:shadow-2xl md:p-10 dark:border-blue-800/50 dark:bg-gray-800 dark:hover:border-blue-600">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-blue-50/0 to-blue-50/0 transition-all duration-500 group-hover:from-blue-50/50 group-hover:via-blue-50/30 group-hover:to-blue-50/50 dark:group-hover:from-blue-950/20 dark:group-hover:via-blue-950/10 dark:group-hover:to-blue-950/20"></div>
-            
+
             <header className="relative z-10 mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-white shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 dark:from-blue-600 dark:to-blue-700">
                 <ShoppingCart className="h-7 w-7" aria-hidden="true" />
@@ -99,13 +102,13 @@ const BuyerSellerSection: React.FC = () => {
                 text="سهولة التواصل مع البائع عبر البريد أو الجوال (إن وُفر)"
               />
             </ul>
-            
+
             <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500 group-hover:w-full"></div>
           </Card>
 
           <Card className="group relative overflow-hidden border-2 border-green-200/50 bg-white p-8 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:border-green-400 hover:shadow-2xl md:p-10 dark:border-green-800/50 dark:bg-gray-800 dark:hover:border-green-600">
             <div className="absolute inset-0 bg-gradient-to-br from-green-50/0 via-green-50/0 to-green-50/0 transition-all duration-500 group-hover:from-green-50/50 group-hover:via-green-50/30 group-hover:to-green-50/50 dark:group-hover:from-green-950/20 dark:group-hover:via-green-950/10 dark:group-hover:to-green-950/20"></div>
-            
+
             <header className="relative z-10 mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-4 text-white shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 dark:from-green-600 dark:to-green-700">
                 <Upload className="h-7 w-7" aria-hidden="true" />
@@ -137,7 +140,7 @@ const BuyerSellerSection: React.FC = () => {
                 text="إحصائيات الأداء (عدد مرات التحميل، المبيعات...)"
               />
             </ul>
-            
+
             <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-green-500 to-green-600 transition-all duration-500 group-hover:w-full"></div>
           </Card>
         </div>

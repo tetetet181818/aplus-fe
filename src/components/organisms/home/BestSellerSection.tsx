@@ -1,6 +1,6 @@
 'use client';
 
-import { Trophy, Star, TrendingUp } from 'lucide-react';
+import { Star, TrendingUp, Trophy } from 'lucide-react';
 
 import LoadingSpinner from '@/components/atoms/LoadingSpinner';
 import BestSellerNotes from '@/components/molecules/BestSellerNotes';
@@ -40,13 +40,13 @@ export default function BestSellerSection() {
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-extrabold text-gray-900 md:text-5xl dark:text-white">
             الأكثر مبيعًا في منصة{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
               أ+
             </span>
           </h2>
           <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600 md:text-xl dark:text-gray-300">
             تصفّح قائمة منتجاتنا وخدماتنا الأكثر رواجًا بين المستخدمين في منصة{' '}
-            <span className="font-semibold text-blue-600 dark:text-blue-400">
+            <span className="font-semibold text-blue-600 dark:text-blue-500">
               أ+
             </span>
             ، حيث الجودة تلتقي بالثقة، والتجربة تثبت تميزنا يومًا بعد يوم.
@@ -57,7 +57,7 @@ export default function BestSellerSection() {
           <div className="mb-10 flex justify-center">
             <TabsList className="group relative inline-flex h-14 w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-gray-100/80 p-1.5 backdrop-blur-sm dark:bg-gray-800/80">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-purple-500/0 transition-all duration-500 group-hover:from-blue-500/5 group-hover:via-blue-500/5 group-hover:to-purple-500/5"></div>
-              
+
               <TabsTrigger
                 value="notes"
                 className="group/trigger relative z-10 flex-1 rounded-xl px-6 py-3 text-base font-semibold transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:bg-white/50 data-[state=inactive]:hover:text-gray-900 dark:data-[state=inactive]:text-gray-400 dark:data-[state=inactive]:hover:bg-gray-700/50 dark:data-[state=inactive]:hover:text-white"
@@ -82,7 +82,7 @@ export default function BestSellerSection() {
 
           <TabsContent
             value="sellers"
-            className="mt-8 animate-fade-in data-[state=active]:animate-fade-in"
+            className="animate-fade-in data-[state=active]:animate-fade-in mt-8"
           >
             <BestSellerUsers
               data={getBestSellerUsers}
@@ -92,7 +92,7 @@ export default function BestSellerSection() {
 
           <TabsContent
             value="notes"
-            className="mt-8 animate-fade-in data-[state=active]:animate-fade-in"
+            className="animate-fade-in data-[state=active]:animate-fade-in mt-8"
           >
             <BestSellerNotes
               data={bestSellerNotes}
