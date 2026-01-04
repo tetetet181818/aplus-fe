@@ -1,14 +1,6 @@
-import { withdrawalData } from '@/types';
+import { Withdrawal, withdrawalData } from '@/types';
 
 import { axiosInstance } from '@/utils/apiConfig';
-
-export interface Withdrawal {
-  id: string;
-  amount: number;
-  status: string;
-  userId: string;
-  createdAt: string;
-}
 
 export interface WithdrawalsResponse {
   data: Withdrawal[];

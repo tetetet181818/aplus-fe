@@ -57,7 +57,7 @@ const Footer = () => {
             </p>
 
             <div className="group relative overflow-hidden rounded-2xl border-2 border-gray-200/50 bg-gradient-to-br from-white to-gray-50/50 p-4 shadow-lg transition-all duration-500 hover:border-blue-300 hover:shadow-xl dark:border-gray-700/50 dark:from-gray-800 dark:to-gray-900/50 dark:hover:border-blue-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-purple-50/0 to-pink-50/0 transition-all duration-500 group-hover:from-blue-50/50 group-hover:via-purple-50/30 group-hover:to-pink-50/50 dark:group-hover:from-blue-950/20 dark:group-hover:via-purple-950/10 dark:group-hover:to-pink-950/20"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-blue-50/0 via-purple-50/0 to-pink-50/0 transition-all duration-500 group-hover:from-blue-50/50 group-hover:via-purple-50/30 group-hover:to-pink-50/50 dark:group-hover:from-blue-950/20 dark:group-hover:via-purple-950/10 dark:group-hover:to-pink-950/20"></div>
 
               <div className="relative z-10">
                 <div className="mb-3 flex items-center justify-center gap-2">

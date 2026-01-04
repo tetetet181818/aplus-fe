@@ -71,7 +71,7 @@ const EarningsTab = ({ currentUser, authLoading }: EarningsTabProps) => {
     <div className="space-y-6 sm:px-0 lg:px-10">
       <FinanceDashboard
         availableBalance={availableBalance}
-        meWithdrawals={meWithdrawals}
+        meWithdrawals={meWithdrawals || []}
         loading={meWithdrawalsLoading}
         handelDeleteWithdrawal={handelDeleteWithdrawal}
         deleteWithdrawalLoading={deleteWithdrawalLoading}

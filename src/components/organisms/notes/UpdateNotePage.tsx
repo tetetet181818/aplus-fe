@@ -82,7 +82,11 @@ export default function UpdateNotePage({
       { setSubmitting }: FormikHelpers<UpdateNoteFormValues>
     ) => {
       try {
-        await handleUpdateNote({ noteId: edit, noteData: values });
+        const formData = new FormData();
+        Object.entries(values).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
+        await handleUpdateNote({ noteId: edit, noteData: formData });
       } catch (error: unknown) {
         if (error && typeof error === 'object' && 'data' in error) {
           const err = error as { data?: { messages?: string[] } };
