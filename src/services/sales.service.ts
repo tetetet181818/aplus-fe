@@ -12,6 +12,26 @@ export interface UserStatisticsSales {
   totalSales: number;
   revenue: number;
   conversion: number;
+  salesCount: number;
+  totalAmount: number;
+  noteCount: number;
+  globalRating: number;
+  stateSales: Array<{
+    date: string;
+    count: number;
+  }>;
+  stateNotes: Array<{
+    date: string;
+    sale: number;
+    note: number;
+  }>;
+  sales: Array<{
+    _id: string;
+    date: string;
+    note_title: string;
+    totalProfit: number;
+    count: number;
+  }>;
 }
 
 export interface PaginationParams {

@@ -263,7 +263,9 @@ export default function WithdrawalHistoryTable({
                         {columns.map(c => (
                           <TableCell key={c.header}>
                             {c.customRender
-                              ? c.customRender(w[c.accessor as keyof typeof w])
+                              ? (c.customRender as any)(
+                                  w[c.accessor as keyof typeof w]
+                                )
                               : safeValue(
                                   w[c.accessor as keyof typeof w] || ''
                                 )}

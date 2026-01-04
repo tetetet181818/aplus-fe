@@ -381,7 +381,7 @@ export default function StudentsDashboard() {
               data={usersStats}
             />
 
-            {/* Filters and Controls */}
+
             <div className="mt-3 flex flex-col flex-wrap gap-3 sm:flex-row">
               <div className="relative w-full flex-1 sm:w-auto">
                 <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
